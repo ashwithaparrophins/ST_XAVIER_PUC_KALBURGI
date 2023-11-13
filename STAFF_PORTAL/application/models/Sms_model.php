@@ -123,7 +123,7 @@
     public function getSMSSentReportCount($filter) {
        
         $this->db->from('tbl_student_bulk_sms_log as log');
-        $this->db->join('tbl_students_info as std', 'std.student_id = log.application_no','left');
+        $this->db->join('tbl_students_info as std', 'std.application_no = log.application_no','left');
        // $this->db->join('tbl_student_academic_info as acdmic', 'acdmic.application_no = std.application_no','left');
         if(!empty($filter['term_name'])){
             $this->db->where('std.term_name', $filter['term_name']);
@@ -174,7 +174,7 @@
             log.message, 
             log.status');
         $this->db->from('tbl_student_bulk_sms_log as log');
-         $this->db->join('tbl_students_info as std', 'std.student_id = log.application_no','left');
+         $this->db->join('tbl_students_info as std', 'std.application_no = log.application_no','left');
         //$this->db->join('tbl_student_academic_info as acdmic', 'acdmic.application_no = std.application_no','left');
         if(!empty($filter['term_name'])){
             $this->db->where('std.term_name', $filter['term_name']);
