@@ -595,7 +595,7 @@ public function updateCoursePaymentLogByRowId($paymentInfo,$order_id) {
             }
             $this->db->where('notification.is_deleted', 0);
             $this->db->order_by("notification.row_id","DESC");
-            $this->db->limit(50);
+            //$this->db->limit(50);
             $query = $this->db->get(); 
             return $query->result();
         }
@@ -621,14 +621,14 @@ public function updateCoursePaymentLogByRowId($paymentInfo,$order_id) {
             }
             $this->db->where('notification.is_deleted', 0);
             $this->db->order_by("date_time","DESC");
-            $this->db->limit(50);
+           // $this->db->limit(50);
             $query = $this->db->get(); 
             return $query->result();
         }
 
         public function getRemarkInfoApi($row_id){
             $this->db->select('student.student_name,student.row_id as stdrowid,Observation.student_id,Observation.date,
-            Observation.type_id,Observation.file_path,Observation.year,Observation.description,
+            Observation.type_id,Observation.file_path,Observation.year,Observation.description,Observation.created_date_time,
             type.row_id as typRowid,type.remark_name,Observation.remarks');
             $this->db->from('tbl_student_remark_info as Observation'); 
             $this->db->join('tbl_students_info as student', 'student.row_id = Observation.student_id','left');
@@ -753,7 +753,7 @@ public function updateCoursePaymentLogByRowId($paymentInfo,$order_id) {
         return $query->result();
     }
 
-    public function getStudentBulkNotificationsApi($todayDate,$studentRowId){  
+    public function getStudentBulkNotificationsApi($studentRowId){  
         
         $this->db->from('tbl_student_bulk_notification as notification');
         if(!empty($studentRowId)){
@@ -768,6 +768,64 @@ public function updateCoursePaymentLogByRowId($paymentInfo,$order_id) {
         $query = $this->db->get(); 
         return($query->result());
     }
+
+    public function getStudentfeedNotifications($term_name,$section_name,$stream_name){
+        $this->db->from('tbl_student_notifications as notification');
+        if(!empty($term_name)){
+            $this->db->where_in('notification.term_name',array($term_name,"ALL"));
+        }else{
+            $this->db->where('notification.term_name',"ALL");
+        }
+        if(!empty($stream_name)){
+            $this->db->where_in('notification.stream_name',array($stream_name,"ALL"));
+        }else{
+            $this->db->where('notification.stream_name',"ALL");
+        }
+        if(!empty($section_name)){
+            $this->db->where_in('notification.section_name',array($section_name,"ALL"));
+        }else{
+            $this->db->where('notification.section_name',"ALL");
+        }
+        $this->db->where('notification.is_deleted', 0);
+        $this->db->where('DATE(notification.date_time)',date('Y-m-d'));
+        $this->db->order_by("notification.row_id","DESC");
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function getStudentfeedBulkNotificationsApi($studentRowId){  
+       
+        $this->db->from('tbl_student_bulk_notification as notification');
+        if(!empty($studentRowId)){
+            $this->db->where_in('notification.userId',array($studentRowId,"ALL"));
+        }else{
+            $this->db->where('notification.userId',"ALL");
+        }
+       // $this->db->where('notification.active_date >=', date('Y-m-d',strtotime($todayDate)));
+        $this->db->where('DATE(notification.updated_date_time)',date('Y-m-d'));
+        $this->db->order_by("notification.row_id","DESC");
+        $this->db->where('notification.is_deleted',0);
+        $this->db->limit($limit);
+        $query = $this->db->get();
+        return($query->result());
+    }
+    public function getabsentDetailsfeed($student_id){
+        $this->db->select('attendance.absent_date,sub.name,time.start_time,time.end_time');
+        $this->db->from('tbl_student_attendance_details as attendance');
+        $this->db->join('tbl_subjects as sub','sub.subject_code = attendance.subject_code');
+        $this->db->join('tbl_class_timings as time','time.row_id = attendance.time_row_id');
+        $this->db->where('attendance.student_id', $student_id);
+        $this->db->where('attendance.year',CURRENT_YEAR);
+        $this->db->where('attendance.is_deleted',0);
+        $this->db->where('sub.is_deleted',0);
+        $this->db->where('time.is_deleted',0);
+        $this->db->where('attendance.absent_date',date('Y-m-d'));
+        // $this->db->where('attendance.office_verified_status',1);
+        $this->db->order_by('attendance.absent_date', 'DESC');
+        $query = $this->db->get();
+        $result = $query->result();
+        return $result;
+    }
+
 
     public function getCurrentStudentInfoForTrans()
     {

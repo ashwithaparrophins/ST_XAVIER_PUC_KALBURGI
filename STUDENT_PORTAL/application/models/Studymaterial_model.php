@@ -2,8 +2,10 @@
 
 class Studymaterial_model extends CI_Model
 {
-    public function getStudyMaterial($filter){
+    public function getStudyMaterial($filter,$filterDate,$filterType,$filterSub){
         $study_year = array('2021','2022','2023');
+        $this->db->select('study.subject_name,study.type,study.description,study.document_name_url,study.created_date_time,staff.name');
+        $this->db->join('tbl_staff as staff','staff.staff_id = study.created_by');
         $this->db->from('tbl_study_material as study');
         $this->db->where('study.term_name', $filter['term_name']);
         $this->db->where_in('study.stream_name',array($filter['stream_name'], $filter['stream_name1']));
@@ -19,6 +21,15 @@ class Studymaterial_model extends CI_Model
         if(!empty($study_year)){
             $likeCriteria = "(study.created_date_time  LIKE '%" . $study_year . "%')";
             $this->db->where_in($likeCriteria);
+        }
+        if(!empty($filterDate)){
+            $this->db->where('DATE(study.created_date_time)', $filterDate);
+        }
+        if(!empty($filterType)){
+            $this->db->where('study.type', $filterType);
+        }
+        if(!empty($filterSub)){
+            $this->db->where('study.subject_name', $filterSub);
         }
         $this->db->where('study.is_deleted',0);
         // $this->db->like('study.created_date_time', '2021');

@@ -235,3 +235,7 @@ $route['apigetStudentId'] = "api/getStudentId";
 $route['apimyRemarks'] = "api/myRemarks";
 //changepassword
 $route['apicheckpassword'] = "api/checkpassword";
+
+$route['apigetSubjectNames'] = "api/getSubjectNames";
+
+$route['apiviewNotificationFeed'] = "api/viewNotificationFeed";

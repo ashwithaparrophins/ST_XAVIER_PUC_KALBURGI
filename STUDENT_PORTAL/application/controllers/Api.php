@@ -254,6 +254,7 @@ class Api extends CI_Controller
         $obj = json_decode($json,true);
         $student_id = $obj['student_id'];
         $studentInfo = $this->student_model->getStudentInfoByStudentId($student_id);
+        $studentInfo->mobile = 'Father: ' . $studentInfo->father_mobile . ' Mother: ' . $studentInfo->mother_mobile;
         $data["active"] = $active;
         $data = json_encode($studentInfo);
         echo $data; 
@@ -305,6 +306,8 @@ class Api extends CI_Controller
             //     );
             //     $this->student_model->updateSuggestionInfoById($suggestion->row_id,$tempData);
             // }
+            $suggestion->date = date('d-m-Y h:i A',strtotime($suggestion->date));
+            $suggestion->updatedTime = date('d-m-Y h:i A', strtotime($suggestion->updated_date_time));
             $db_data[] = $suggestion;
         }
         // log_message('debug','ee='.print_r($data['suggestionInfo'],true));
@@ -504,7 +507,7 @@ public function collegeNotificationsApi(){
         $student = $this->student_model->getStudentInfoBystudId($student_id);
         $notifications = $this->student_model->getStudentNotifications($student->term_name,$student->section_name,$student->stream_name);
 
-         $bulkNotifications = $this->student_model->getStudentBulkNotificationsApi($date,$student_id);        
+         $bulkNotifications = $this->student_model->getStudentBulkNotificationsApi($student_id);        
         $db_data = $data1 = $data2= array();
             foreach($bulkNotifications as $info){
                 if($info->active_date!=null){
@@ -545,7 +548,7 @@ public function collegeNotificationsApi(){
        // $notificationMsg = $this->student_model->getNotification($student_id,$date);
         //log_message('debug','sass'.print_r($obj,true));
         
-        $bulkNotifications = $this->student_model->getStudentBulkNotificationsApi($date,$student_id); 
+        $bulkNotifications = $this->student_model->getStudentBulkNotificationsApi($student_id); 
         //log_message('debug','bulkNotifications->'.print_r($bulkNotifications,true));
          
         $db_data = array();
@@ -584,16 +587,24 @@ public function collegeNotificationsApi(){
     //---------------STUDY MATERIAL--------------------
     public function viewstudyMaterials(){
         $filter = array();
-        $json = file_get_contents('php://input'); 
+        $json = file_get_contents('php://input');
         $obj = json_decode($json,true);
         $student_id = $obj['student_id'];
         $term_name = $obj['term_name'];
         $stream_name = $obj['stream_name'];
+        $date = $obj['dob'];
         // $student = $this->student_model->getStudentInfoById($student_id,$term_name);
         $filter['term_name'] = $term_name;
         $filter['stream_name'] = $stream_name;
         $filter['stream_name1'] = 'ALL';
-        $studyMaterialInfo = $this->studymaterial_model->getStudyMaterial($filter);
+        $filter_type = $obj['type'];
+        $filter_subject= $obj['subject'];
+     
+        $formattedDate = date('Y-m-d', strtotime($date));
+        if($formattedDate=='1970-01-01'){
+            $formattedDate='';
+        }
+        $studyMaterialInfo = $this->studymaterial_model->getStudyMaterial($filter,$formattedDate,$filter_type,$filter_subject);
         $db_data = array();
         foreach($studyMaterialInfo as $info){
             if($info->created_date_time!=null){
@@ -604,6 +615,60 @@ public function collegeNotificationsApi(){
         $data = json_encode($db_data);
         echo $data;
     }
+
+    public function getSubjectNames(){
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json,true);
+        $student_id = $obj['student_id'];
+        $term_name = $obj['term_name'];
+        $filter['student_id'] = $student_id;
+
+        $student = $this->student_model->getStudentInfoBystudId($student_id);
+        $filter = array();
+
+        $subject_attendance = array();
+        $total_class_held = 0;
+        $total_class_attended = 0;
+        $total_attendance_percentage = 0;
+        $filter['stream_name'] = $student->stream_name;
+        if($student->section_name != ''){
+            $filter['section_name'] = $student->section_name;
+        }else{
+            $filter['section_name'] = 'ALL';
+        }
+        $filter['subject_type'] = 'THEORY';
+        $filter['term_name'] = $student->term_name;
+        $subjects_code = array();
+        $elective_sub = strtoupper($student->elective_sub);
+        if($elective_sub == "KANNADA"){
+            array_push($subjects_code, '01');
+        }else if($elective_sub == 'HINDI'){
+            array_push($subjects_code, '03');
+        } else if($elective_sub == 'FRENCH'){
+            array_push($subjects_code, '12');
+        }else{
+            // array_push($subject_mark_chart,0);
+            // array_push($subject_names, 'EXM');
+        }
+        array_push($subjects_code, '02');
+        $subjects = $this->getSubjectCodes(strtoupper($student->stream_name));
+        $subjects_code = array_merge($subjects_code,$subjects);
+       
+        $subject_info_list = array();
+       
+        for ($i = 0; $i < count($subjects_code); $i++) {
+            $absent_count = 0;
+            $absent_count_lab = 0;
+            $batch_name = '';
+            $subject_info = $this->attendance_model->getSubjectInfo($subjects_code[$i]);
+            // Add the subject info to the list
+            $subject_info_list[] = $subject_info;
+        }
+       
+        $data = json_encode($subject_info_list);
+        echo $data;
+    }
+
 
     public function viewYoutubeVideos(){
 
@@ -621,6 +686,58 @@ public function collegeNotificationsApi(){
         $data = json_encode($videoInfo);
         echo $data;
     }
+    public function viewNotificationFeed(){
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json,true);
+        $term_name=$obj['term_name'];
+        $section_name=$obj['section_name'];
+        $stream_name = $obj['stream_name'];
+        $student_id = $obj['user_id'];
+        $row_id = $obj['row_id'];
+        $student = $this->student_model->getStudentInfoBystudId($student_id);
+        $notifications = $this->student_model->getStudentfeedNotifications($student->term_name,$student->section_name,$student->stream_name);
+        log_message('debug','notification'.print_r($notifications,true));
+        $bulkNotifications = $this->student_model->getStudentfeedBulkNotificationsApi($student_id);  
+        log_message('debug',' $bulkNotifications '.print_r( $bulkNotifications ,true));
+       
+        $absentInfo= $this->student_model->getabsentDetailsfeed($student_id);
+        $data1 = array();
+        foreach($bulkNotifications as $info){
+                $info->date =date('d-m-Y h:i A',strtotime($info->updated_date_time));
+                $info->subject = "Class Notification";
+                $info->view = 'class1';    
+            $data1[] = $info;
+        }
+        $data2 = array();
+        foreach($notifications as $info){
+           
+                $info->date =date('d-m-Y h:i A',strtotime($info->date_time));
+                $info->view='noti';
+           
+            $data2[] = $info;
+        }
+        $data3 = array();
+        foreach($absentInfo  as $info){
+         
+                $info->subject = 'Absent';    
+                $info->message = 'Your ward is absent for '.$info->name.' on '.date('d-m-Y');
+                $info->view='';
+                $info->date='';
+                $data3[] = $info;
+               
+        }
+
+        $db_data = array_merge($data1,$data2,$data3);
+        usort($db_data,function ($element1,$element2) {
+        $datetime1 = strtotime($element1->date);
+        $datetime2 = strtotime($element2->date);
+        return $datetime2 - $datetime1;
+       });
+         $data = json_encode($db_data);
+         //log_message('debug','hh'.print_r($data,true));
+         echo $data;
+
+        }
 
     //----------NEWS FEED---------
     public function viewNewsFeed(){
