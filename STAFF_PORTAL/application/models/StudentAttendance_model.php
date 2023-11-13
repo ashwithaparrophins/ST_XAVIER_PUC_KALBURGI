@@ -723,8 +723,8 @@ class StudentAttendance_model extends CI_Model{
         if(!empty($filter['preference'])){
             $this->db->where('class.stream_name',$filter['preference']); 
         }
-        if(!empty($filter['section'])){
-            $this->db->where('class.section_name',$filter['section']); 
+        if(!empty($filter['section_name'])){
+            $this->db->where('class.section_name',$filter['section_name']); 
         }
         if(!empty($filter['std_batch'])){
             $this->db->where('class.batch',$filter['std_batch']); 
@@ -758,8 +758,8 @@ class StudentAttendance_model extends CI_Model{
         if(!empty($filter['preference'])){
             $this->db->where('class.stream_name',$filter['preference']); 
         }
-        if(!empty($filter['section'])){
-            $this->db->where('class.section_name',$filter['section']); 
+        if(!empty($filter['section_name'])){
+            $this->db->where('class.section_name',$filter['section_name']); 
         }
         if(!empty($filter['std_batch'])){
             $this->db->where('class.batch',$filter['std_batch']); 
@@ -774,7 +774,7 @@ class StudentAttendance_model extends CI_Model{
 
     public function isStudentIsAbsentForClassPrevious($student_id, $subject_code, $filter,$type){
         $this->db->from('tbl_student_attendance_details as abclass');
-        $this->db->join('tbl_staff_teaching_subjects as staff_sub', 'staff_sub.row_id = abclass.staff_subject_row_id','left');
+        $this->db->join('tbl_class_completed_by_staff as class', 'class.row_id = abclass.class_row_id','left');
         // if(!empty($filter['date_from']) && !empty($filter['date_to'])){
         //     $this->db->where('abclass.absent_date >=',$filter['date_from']);
         //     $this->db->where('abclass.absent_date <=',$filter['date_to']); 
@@ -800,7 +800,7 @@ class StudentAttendance_model extends CI_Model{
 
     public function isStudentIsAbsentForClassCurrent($student_id, $subject_code, $filter,$type,$date){
         $this->db->from('tbl_student_attendance_details as abclass');
-        $this->db->join('tbl_staff_teaching_subjects as staff_sub', 'staff_sub.row_id = abclass.staff_subject_row_id','left');
+        $this->db->join('tbl_class_completed_by_staff as class', 'class.row_id = abclass.class_row_id','left');
         // if(!empty($filter['date_from']) && !empty($filter['date_to'])){
         //     $this->db->where('abclass.absent_date >=',$filter['date_from']);
         //     $this->db->where('abclass.absent_date <=',$filter['date_to']); 

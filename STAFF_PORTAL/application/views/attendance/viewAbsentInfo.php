@@ -528,10 +528,11 @@ if ($error) {
                         <select class="form-control input-sm" id="section_nameNew" name="section_name"
                             autocomplete="off">
                             <option value="">Select Section</option>
+                            <!-- <option value="ALL">ALL</option>
                             <option value="A">A</option>
                             <option value="B">B</option>
                             <option value="C">C</option>
-                            <option value="D">D</option>
+                            <option value="D">D</option> -->
                             <!-- <option value="E">E</option>
                             <option value="F">F</option>
                             <option value="G">G</option>
@@ -575,6 +576,46 @@ if ($error) {
 <script type="text/javascript">
 var loader = '<img height="70" src="<?php echo base_url(); ?>/assets/images/loader.gif"/>';
 jQuery(document).ready(function() {
+    var streamName = $("#streamNameNew").val();
+    var term_name = $("#term_nameNew").val();
+
+    $('#section_nameNew option:not(:first)').remove();
+    // second_stream_name_selected.value = "";
+    // if(second_programName == ""){
+    //     $('#second_stream_name').attr('readonly',true);
+    // } 
+    // $('#second_stream_name option:not(:first)').remove();
+    $.ajax({
+        url: '<?php echo base_url(); ?>/getFormInformation3',
+        type: 'POST',
+        data: {
+            streamName: streamName,
+            term_name: term_name,
+        },
+        success: function(data) {
+            var newHtml = "";
+            // $("#coverScreen").hide();
+            var count = data.subjectInfo.length;
+            for (var i = 0; i < count; i++) {
+                console.log(data.subjectInfo[i].sub_name);
+                // newHtml += '<option>'+data.subjectInfo[i].sub_name +'</option>';
+                $("#section_nameNew").append(
+                    `<option value="${data.subjectInfo[i].section_name}">${data.subjectInfo[i].section_name}</option>`
+                );
+                //    $("#subject_name").append(new Option(data.subjectInfo[i].semester +' - '+ data.subjectInfo[i].specialization+' - '+ data.subjectInfo[i].sub_name,data.subjectInfo[i].subject_code));
+            }
+            // $("#subjectList").html(newHtml);
+        },
+        error: function(result) {
+            alert("Retry Again! Something Went Wrong");
+        },
+        fail: (function(status) {
+            alert("Retry Again! Something Went Wrong");
+        }),
+        beforeSend: function(d) {
+            // $("#coverScreen").show();
+        }
+    });
     // $('select').selectpicker();
 
     jQuery('ul.pagination li a').click(function(e) {
@@ -688,6 +729,8 @@ jQuery(document).ready(function() {
         }
         if (term_name == "") {
             alert("Term is Empty!!");
+        }else if(section_name == ""){
+                alert("Select Section!!");
             }else if(date_from == ""){
                 alert("Select Date From!!");
             }else if(date_to == ""){
@@ -798,6 +841,96 @@ jQuery(document).ready(function() {
             });
         }
     });
+
+
+    $("#streamNameNew").on('change', function() {
+    var streamName = $("#streamNameNew").val();
+    var term_name = $("#term_nameNew").val();
+
+    $('#section_nameNew option:not(:first)').remove();
+    // second_stream_name_selected.value = "";
+    // if(second_programName == ""){
+    //     $('#second_stream_name').attr('readonly',true);
+    // } 
+    // $('#second_stream_name option:not(:first)').remove();
+    $.ajax({
+        url: '<?php echo base_url(); ?>/getFormInformation3',
+        type: 'POST',
+        data: {
+            streamName: streamName,
+            term_name: term_name,
+        },
+        success: function(data) {
+            var newHtml = "";
+            // $("#coverScreen").hide();
+            var count = data.subjectInfo.length;
+            for (var i = 0; i < count; i++) {
+                console.log(data.subjectInfo[i].sub_name);
+                // newHtml += '<option>'+data.subjectInfo[i].sub_name +'</option>';
+                $("#section_nameNew").append(
+                    `<option value="${data.subjectInfo[i].section_name}">${data.subjectInfo[i].section_name}</option>`
+                );
+                //    $("#subject_name").append(new Option(data.subjectInfo[i].semester +' - '+ data.subjectInfo[i].specialization+' - '+ data.subjectInfo[i].sub_name,data.subjectInfo[i].subject_code));
+            }
+            // $("#subjectList").html(newHtml);
+        },
+        error: function(result) {
+            alert("Retry Again! Something Went Wrong");
+        },
+        fail: (function(status) {
+            alert("Retry Again! Something Went Wrong");
+        }),
+        beforeSend: function(d) {
+            // $("#coverScreen").show();
+        }
+    });
+});
+
+
+
+$("#term_nameNew").on('change', function() {
+    var streamName = $("#streamNameNew").val();
+    var term_name = $("#term_nameNew").val();
+
+    $('#section_nameNew option:not(:first)').remove();
+    // second_stream_name_selected.value = "";
+    // if(second_programName == ""){
+    //     $('#second_stream_name').attr('readonly',true);
+    // } 
+    // $('#second_stream_name option:not(:first)').remove();
+    $.ajax({
+        url: '<?php echo base_url(); ?>/getFormInformation3',
+        type: 'POST',
+        data: {
+            streamName: streamName,
+            term_name: term_name,
+        },
+        success: function(data) {
+            var newHtml = "";
+            // $("#coverScreen").hide();
+            var count = data.subjectInfo.length;
+            for (var i = 0; i < count; i++) {
+                console.log(data.subjectInfo[i].sub_name);
+                // newHtml += '<option>'+data.subjectInfo[i].sub_name +'</option>';
+                $("#section_nameNew").append(
+                    `<option value="${data.subjectInfo[i].section_name}">${data.subjectInfo[i].section_name}</option>`
+                );
+                //    $("#subject_name").append(new Option(data.subjectInfo[i].semester +' - '+ data.subjectInfo[i].specialization+' - '+ data.subjectInfo[i].sub_name,data.subjectInfo[i].subject_code));
+            }
+            // $("#subjectList").html(newHtml);
+        },
+        error: function(result) {
+            alert("Retry Again! Something Went Wrong");
+        },
+        fail: (function(status) {
+            alert("Retry Again! Something Went Wrong");
+        }),
+        beforeSend: function(d) {
+            // $("#coverScreen").show();
+        }
+    });
+});
+
 
 
 });

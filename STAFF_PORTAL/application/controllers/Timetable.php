@@ -346,5 +346,23 @@ class Timetable extends BaseController
         } 
     }
 
+
+
+    function getFormInformation3(){
+        $streamName = $this->security->xss_clean($this->input->post('streamName'));
+        $term_name = $this->security->xss_clean($this->input->post('term_name'));
+        $filter = array();
+        $filter['by_term'] = $term_name;
+        $filter['by_stream'] = $streamName;
+
+        $data['subjectInfo'] = $this->settings->getSectionInfo($filter);
+        //$data['courseInfo']= $this->settings->getAllCourseInfo();
+        header('Content-type: text/plain'); 
+        // set json non IE
+        header('Content-type: application/json'); 
+        echo json_encode($data);
+        exit(0);
+    }
+
 }
 ?>

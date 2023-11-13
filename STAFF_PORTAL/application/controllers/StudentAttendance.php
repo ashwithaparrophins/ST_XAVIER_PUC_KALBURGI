@@ -947,11 +947,11 @@ class StudentAttendance extends BaseController
             $stream_name = $this->security->xss_clean($this->input->post('stream_name'));
             $subject_code = $this->security->xss_clean($this->input->post('subject_code'));
 
-            if($section_name == ""){
-                $section_name_display = "ALL";
-            }else{
-                $section_name_display = $section_name;
-            }
+            // if($section_name == ""){
+            //     $section_name_display = "ALL";
+            // }else{
+            //     $section_name_display = $section_name;
+            // }
             $filter = array();
             $filter['term'] = $term_name;
             $filter['term_name'] = $term_name;
@@ -1006,7 +1006,7 @@ class StudentAttendance extends BaseController
             $this->excel->getActiveSheet()->getPageSetup()->setPrintArea('A1:U500');
             $this->excel->getActiveSheet()->setCellValue('A1', EXCEL_TITLE);
             $this->excel->getActiveSheet()->setCellValue('A2', "Attendance Report - ".date('F', strtotime($date_to))." - 2023");
-            $this->excel->getActiveSheet()->setCellValue('A3', $term_name . ' - ' . $stream_name . ' - ' . $section_name_display .' - ' . $subjectDisplay->sub_name);
+            $this->excel->getActiveSheet()->setCellValue('A3', $term_name . ' - ' . $stream_name . ' - ' . $section_name .' - ' . $subjectDisplay->sub_name);
             $this->excel->getActiveSheet()->setCellValue('A4', "Report Date: " . $date_description);
 
             $this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(18);
