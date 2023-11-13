@@ -1005,7 +1005,7 @@ class StudentAttendance extends BaseController
             $this->excel->getActiveSheet()->setTitle($stream_name);
             $this->excel->getActiveSheet()->getPageSetup()->setPrintArea('A1:U500');
             $this->excel->getActiveSheet()->setCellValue('A1', EXCEL_TITLE);
-            $this->excel->getActiveSheet()->setCellValue('A2', "Attendance Report - ".date('F', strtotime($date_to))." - 2023");
+            $this->excel->getActiveSheet()->setCellValue('A2', "Attendance Report - 2023");
             $this->excel->getActiveSheet()->setCellValue('A3', $term_name . ' - ' . $stream_name . ' - ' . $section_name .' - ' . $subjectDisplay->sub_name);
             $this->excel->getActiveSheet()->setCellValue('A4', "Report Date: " . $date_description);
 
@@ -1024,7 +1024,7 @@ class StudentAttendance extends BaseController
             $this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(18);
 
             $this->excel->setActiveSheetIndex($sheet)->setCellValue('A6', 'SL. NO.');
-            $this->excel->setActiveSheetIndex($sheet)->setCellValue('B6', 'Register No.');
+            $this->excel->setActiveSheetIndex($sheet)->setCellValue('B6', 'Student Id');
             $this->excel->setActiveSheetIndex($sheet)->setCellValue('C6', 'Name');
             $this->excel->setActiveSheetIndex($sheet)->setCellValue('D6', 'Present');
             $this->excel->setActiveSheetIndex($sheet)->setCellValue('E6', 'Present.%');
@@ -1169,7 +1169,7 @@ class StudentAttendance extends BaseController
                 $total_attd_class_std = 0;
 
                 $this->excel->setActiveSheetIndex($sheet)->setCellValue('A' . $excel_row, $j++);
-                $this->excel->setActiveSheetIndex($sheet)->setCellValue('B' . $excel_row, $student->register_no);
+                $this->excel->setActiveSheetIndex($sheet)->setCellValue('B' . $excel_row, $student->student_id);
                 $this->excel->setActiveSheetIndex($sheet)->setCellValue('C' . $excel_row, $student->student_name);
                 
                 $i = 0;
