@@ -1147,14 +1147,14 @@ class StudentAttendance extends BaseController
 
             foreach ($students as $student) {
                 if(strtoupper($subjectDisplay->sub_name) == 'HINDI'){
-                    if(strtoupper($student->elective_language) == 'HINDI'){
+                    if(strtoupper($student->elective_sub) == 'HINDI'){
                        
                     } else{
                         continue;
                         
                     }
                 } else if(strtoupper($subjectDisplay->sub_name) == 'KANNADA'){
-                    if(strtoupper($student->elective_language) == 'KANNADA'){
+                    if(strtoupper($student->elective_sub) == 'KANNADA'){
 
                      } else{
                         continue;
