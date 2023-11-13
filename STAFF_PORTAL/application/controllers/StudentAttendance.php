@@ -933,6 +933,389 @@ class StudentAttendance extends BaseController
     }
 
 
+
+    public function downloadClassCompletedReportNew()
+    {
+        if ($this->isAdmin() == TRUE) {
+            $this->loadThis();
+        } else {
+            set_time_limit(0);
+            $term_name = $this->security->xss_clean($this->input->post('term_name'));
+            $section_name = $this->security->xss_clean($this->input->post('section_name')); 
+            $date_from = $this->security->xss_clean($this->input->post('date_from'));
+            $date_to = $this->security->xss_clean($this->input->post('date_to'));
+            $stream_name = $this->security->xss_clean($this->input->post('stream_name'));
+            $subject_code = $this->security->xss_clean($this->input->post('subject_code'));
+
+            if($section_name == ""){
+                $section_name_display = "ALL";
+            }else{
+                $section_name_display = $section_name;
+            }
+            $filter = array();
+            $filter['term'] = $term_name;
+            $filter['term_name'] = $term_name;
+            $filter['preference'] = $stream_name;
+            $filter['section_name'] = $section_name;
+
+            if (!empty($date_from)) {
+                $filter['date_from'] = date('Y-m-d', strtotime($date_from));
+                $filter['date_from_month'] = date('m', strtotime($date_from));
+            }
+            if (!empty($date_to)) {
+                $filter['date_to'] = date('Y-m-d', strtotime($date_to));
+                $filter['date_to_month'] = date('m', strtotime($date_to));
+            }
+
+                // $fromDate = '2023-07-01';
+                // $toDate = '2023-07-10';
+
+                $currentDate = new DateTime($filter['date_from']);
+                $endDate = new DateTime($filter['date_to']);
+
+                // while ($currentDate <= $endDate) {
+                //      log_message('debug','curentDate'.$currentDate->format('Y-m-d'));
+                //     $currentDate->modify('+1 day');
+                // }
+
+
+            $subjectInfo = $this->subject->getSubjectInfoById($subject_code);
+           
+
+            // $sections = array($section_name);
+            if (!empty($date_from) && !empty($date_to)) {
+                $date_description = $date_from . ' To ' . $date_to;
+            } else {
+                $date_description = "Upto Today Date";
+            }
+
+            $class_held_cell_name = array("F", "G", "H", "I", "J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP","AQ","AR","AS","AT","AU","AV","AW","AX","AY","AZ");
+            $class_attended_cell_name = array("G", "H", "I", "J", "K");
+            $class_percentage_cell_name = array("H", "I", "J", "K", "L");
+
+            // $subject_info_header = $this->getSubjectCodes($stream_name);
+             $subjectDisplay = $this->subject->getAllSubjectByID($subject_code);
+
+            $sheet = 0;
+            $j = 1;
+            $excel_row = 8;
+            // $class_section = $applied_course[$sheet];
+            $this->excel->setActiveSheetIndex($sheet);
+            //name the worksheet
+            $this->excel->getActiveSheet()->setTitle($stream_name);
+            $this->excel->getActiveSheet()->getPageSetup()->setPrintArea('A1:U500');
+            $this->excel->getActiveSheet()->setCellValue('A1', EXCEL_TITLE);
+            $this->excel->getActiveSheet()->setCellValue('A2', "Attendance Report - ".date('F', strtotime($date_to))." - 2023");
+            $this->excel->getActiveSheet()->setCellValue('A3', $term_name . ' - ' . $stream_name . ' - ' . $section_name_display .' - ' . $subjectDisplay->sub_name);
+            $this->excel->getActiveSheet()->setCellValue('A4', "Report Date: " . $date_description);
+
+            $this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(18);
+            $this->excel->getActiveSheet()->getStyle('A2')->getFont()->setSize(16);
+            $this->excel->getActiveSheet()->getStyle('A3')->getFont()->setSize(14);
+            $this->excel->getActiveSheet()->mergeCells('A1:F1');
+            $this->excel->getActiveSheet()->mergeCells('A2:F2');
+            $this->excel->getActiveSheet()->getStyle('A1:F5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $this->excel->getActiveSheet()->getStyle('A1:F1')->getFont()->setBold(true);
+
+            $this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(8);
+            $this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(18);
+            $this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+            $this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(18);
+            $this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(18);
+
+            $this->excel->setActiveSheetIndex($sheet)->setCellValue('A6', 'SL. NO.');
+            $this->excel->setActiveSheetIndex($sheet)->setCellValue('B6', 'Register No.');
+            $this->excel->setActiveSheetIndex($sheet)->setCellValue('C6', 'Name');
+            $this->excel->setActiveSheetIndex($sheet)->setCellValue('D6', 'Present');
+            $this->excel->setActiveSheetIndex($sheet)->setCellValue('E6', 'Present.%');
+            // $this->excel->setActiveSheetIndex($sheet)->setCellValue('S4', 'OA.%');
+
+            $this->excel->getActiveSheet()->getStyle('A6:G6')->getAlignment()->setWrapText(true);
+            $this->excel->getActiveSheet()->getStyle('A6:G6')->getFont()->setBold(true);
+            $this->excel->getActiveSheet()->getStyle('A6:G6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+
+            $this->excel->getActiveSheet()->mergeCells('A6:A7');
+            $this->excel->getActiveSheet()->mergeCells('B6:B7');
+            $this->excel->getActiveSheet()->mergeCells('C6:C7');
+            $this->excel->getActiveSheet()->mergeCells('D6:D7');
+            $this->excel->getActiveSheet()->mergeCells('E6:E7');
+
+            $styleBorderArray = array('borders' => array('allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN)));
+
+            // $this->excel->getActiveSheet()->mergeCells('F4:F5');
+
+            $s = 0;
+            $da = 0;
+            $ta = 0;
+            $va = 0;
+            $subjects = $this->subject->getAllSubjectByIDResult($subject_code);
+ 
+            //  for($sub=0; $sub<count($subjects); $sub++){
+            foreach ($subjects as $sub) {
+            
+             
+                $sub_codes = $sub->subject_code;
+                
+                if($sub->lab_status =='true'){
+                  $type="LAB";
+                }else{
+                  $type="THEORY";  
+                }
+                $filter['class_batch'] = '';
+                if($applied_course=='BA' && ($sub->lab_status)=='true'){
+                    // $lab_status=
+                    $filter['lab_status'] = 'true';
+                    $filter['class_batch'] = $class_batch;
+                }
+                $class_held_1 = 0;
+                // $class_held = $this->attendance->getClassInfoAttendanceReportStudentReportDetails($sub_codes, $filter,$type);
+            //    $class_held = $this->attendance->getClassInfoAttendanceReportStudentReportDetailsMonthWise($sub_codes, $filter,$type);
+             //   $All_class_held = $this->attendance->getClassInfoAttendanceReportStudentReportDetailsMonthWise($sub_codes, $filter,$type);
+
+                 $class_held_previous = $this->attendance->getClassInfoAttendanceReportStudentReportDetailsMonthWisePR($sub_codes, $filter,$type);
+
+                // foreach($class_held as $class){
+                //  $class_held_date[date('d',strtotime($class->date))] = $this->attendance->getClassInfoAttendanceReportStudentReportSingle($sub_codes, $filter,$type, date('d',strtotime($class->date)));
+                // }
+
+                $check1 = 0;
+                while ($currentDate <= $endDate) {
+                  $dateCheck = $currentDate->format('Y-m-d');
+                  $isClass_held = $this->attendance->getClassInfoAttendanceReportStudentReportSingle($sub_codes, $filter,$type, $dateCheck);
+                if(!empty($isClass_held)){
+                if($check1 == 0){
+                  $class_attended_value[date('d-m-Y',strtotime($dateCheck))] = $isClass_held + $class_held_previous;
+                }else{
+                  $class_attended_value[date('d-m-Y',strtotime($dateCheck))] = $isClass_held;  
+                }
+                  $class_held_1+= $class_attended_value[date('d-m-Y',strtotime($dateCheck))];
+                  $class_held_value[date('d-m-Y',strtotime($dateCheck))] = $class_held_1;
+                  $check1++;
+                }
+                $currentDate->modify('+1 day');
+
+                }
+                // ksort($class_held_value);
+
+                // log_message('debug','classHelddd'.print_r($class_held_value,true));
+                $this->excel->getActiveSheet()->getColumnDimension($class_held_cell_name[$s])->setWidth(7);
+                $this->excel->getActiveSheet()->getColumnDimension($class_attended_cell_name[$s])->setWidth(7);
+                $this->excel->getActiveSheet()->getColumnDimension($class_percentage_cell_name[$s])->setWidth(7);
+                // $this->excel->getActiveSheet()->mergeCells($class_held_cell_name[$s] . '4:' . $class_percentage_cell_name[$s] . '4');
+
+                foreach($class_held_value as $class){
+                $this->excel->setActiveSheetIndex($sheet)->setCellValue($class_held_cell_name[$da] . '5', $class);
+                $da++;
+                }
+                foreach ($class_held_value as $index => $value) {
+                $this->excel->setActiveSheetIndex($sheet)->setCellValue($class_held_cell_name[$ta] . '6', $index);
+                $this->excel->getActiveSheet()->mergeCells($class_held_cell_name[$ta] . '6:'.$class_held_cell_name[$ta] . '7');
+                $this->excel->getActiveSheet()->getStyle('A1:'.$class_held_cell_name[$ta] . '7')->applyFromArray($styleBorderArray);
+                $this->excel->getActiveSheet()->getStyle('A4:'.$class_held_cell_name[$ta] . '7')->getFont()->setBold(true);
+                $this->excel->getActiveSheet()->getStyle('A4:'.$class_held_cell_name[$ta] . '7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $this->excel->getActiveSheet()->mergeCells('A1:'.$class_held_cell_name[$ta] . '1');
+                $this->excel->getActiveSheet()->mergeCells('A2:'.$class_held_cell_name[$ta] . '2');
+                $this->excel->getActiveSheet()->mergeCells('A3:'.$class_held_cell_name[$ta] . '3');
+                $this->excel->getActiveSheet()->mergeCells('A4:'.$class_held_cell_name[$ta] . '4');
+                $this->excel->getActiveSheet()->getColumnDimension($class_held_cell_name[$ta])->setWidth(12);
+                $ta++;
+                }
+                // $this->excel->setActiveSheetIndex($sheet)->setCellValue($class_held_cell_name[$s] . '6', 'CH');
+                // $this->excel->setActiveSheetIndex($sheet)->setCellValue($class_attended_cell_name[$s] . '6', 'CA');
+                // $this->excel->setActiveSheetIndex($sheet)->setCellValue($class_percentage_cell_name[$s] . '6', 'A%');
+
+                $s++;
+            }
+
+            $this->excel->getActiveSheet()->getStyle('A4:F5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $this->excel->getActiveSheet()->getStyle('A4:F5')->getFont()->setBold(true);
+
+            $this->excel->getActiveSheet()->mergeCells('A3:F3');
+            $this->excel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            // $this->excel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
+
+            $this->excel->getActiveSheet()->mergeCells('A4:F4');
+            $this->excel->getActiveSheet()->getStyle('A4:F4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $this->excel->getActiveSheet()->getStyle('A4:Z4')->getFont()->setBold(true);
+            // $this->excel->getActiveSheet()->setCellValue('A5', "Report Date: " . $date_description);
+
+
+            $students = $this->student->getStudentInfoForReportDownload($filter);
+            // log_message('debug','students'.print_r($students,true));
+
+            foreach ($students as $student) {
+                if(strtoupper($subjectDisplay->sub_name) == 'HINDI'){
+                    if(strtoupper($student->elective_language) == 'HINDI'){
+                       
+                    } else{
+                        continue;
+                        
+                    }
+                } else if(strtoupper($subjectDisplay->sub_name) == 'KANNADA'){
+                    if(strtoupper($student->elective_language) == 'KANNADA'){
+
+                     } else{
+                        continue;
+                     }
+                }
+                $va = 0;
+                $class_total_absent = 0;
+                $std_batch = $student->batch;
+
+                // $subjects_code = array();
+                $total_class_held_per_std = 0;
+                $total_attd_class_std = 0;
+
+                $this->excel->setActiveSheetIndex($sheet)->setCellValue('A' . $excel_row, $j++);
+                $this->excel->setActiveSheetIndex($sheet)->setCellValue('B' . $excel_row, $student->register_no);
+                $this->excel->setActiveSheetIndex($sheet)->setCellValue('C' . $excel_row, $student->student_name);
+                
+                $i = 0;
+                foreach ($subjects as $sub) {
+                    $class_held = 0;
+                    $class_absent = 0;
+                    $class_held_lab = 0;
+                    $class_absent_lab = 0;
+                    if(strtoupper($sub->sub_name) == 'HINDI'){
+                        if(strtoupper($student->elective_language) == 'HINDI'){
+                           $sub_codes = $sub->subject_code;
+                        } else{
+                            $sub_codes = '';
+                        }
+                    } else if(strtoupper($sub->sub_name) == 'KANNADA'){
+                        if(strtoupper($student->elective_language) == 'KANNADA'){
+                            $sub_codes = $sub->subject_code;
+                         } else{
+                             $sub_codes = '';
+                         }
+                    } else{
+                        $sub_codes = $sub->subject_code;
+                    }
+                    $type="THEORY";
+                    $filter['class_batch'] = '';
+                
+                    // $class_held = $this->attendance->getClassInfoAttendanceReportStudentReport($sub_codes, $filter,$type);
+                    $type="LAB";
+                    $filter['class_batch'] = $std_batch;
+                
+                    // $class_held_lab = $this->attendance->getClassInfoAttendanceReportStudentReport($sub_codes, $filter,$type);
+
+                    $class_held+= $class_held_lab;
+
+                    $type="THEORY";
+                    // $class_absent = $this->attendance->isStudentIsAbsentForClassReport($student->row_id, $sub->subject_code, $filter, $type);
+
+                    $type="LAB";
+                    // $class_absent_lab = $this->attendance->isStudentIsAbsentForClassReport($student->row_id, $sub->subject_code, $filter, $type);
+                    
+                    $class_absent+= $class_absent_lab;
+
+                    $class_present = $class_held - $class_absent;
+
+                    if ($class_held != 0) {
+                        $avg = $class_present / $class_held;
+                        $percentage = round($avg * 100, 2);
+                    } else {
+                        $percentage = 0;
+                    }
+                    $total_class_held_per_std += $class_held;
+                    $total_attd_class_std += $class_absent;
+
+                    if($sub->lab_status =='true'){
+                        $type="LAB";
+                      }else{
+                        $type="THEORY";  
+                      }
+
+                    $class_attended_previous = $this->attendance->isStudentIsAbsentForClassPrevious($student->student_id, $sub->subject_code, $filter, $type);
+
+                    $check1 = 0;
+                    foreach ($class_held_value as $index => $value) {
+                    $class_attended_current[date('d-m-Y',strtotime($index))] = $this->attendance->isStudentIsAbsentForClassCurrent($student->student_id, $sub->subject_code, $filter, $type,date('Y-m-d',strtotime($index)));
+                    if($check1 == 0){
+                    $class_attended_current[date('d-m-Y',strtotime($index))] = $class_attended_current[date('d-m-Y',strtotime($index))] + $class_attended_previous;
+                    }
+                    // $class_held_1+= $class_attended_current[date('d',strtotime($class->date))];
+                    $class_total_absent+=  $class_attended_current[date('d-m-Y',strtotime($index))]; 
+                    if($check1 == 0){
+                      $class_attended_current_display[date('d-m-Y',strtotime($index))] = $class_held_value[date('d-m-Y',strtotime($index))] - $class_total_absent;
+                      if($class_attended_current_display[date('d-m-Y',strtotime($index))] == 0){
+                         $class_attended_current_display[date('d-m-Y',strtotime($index))] = "AB";
+                      }
+                    }else{
+                        if($class_attended_current[date('d-m-Y',strtotime($index))] == 1){
+                           $class_attended_current_display[date('d-m-Y',strtotime($index))] = "AB"; 
+                         }else{
+                           $class_attended_current_display[date('d-m-Y',strtotime($index))] = $class_held_value[date('d-m-Y',strtotime($index))] - $class_total_absent; 
+                         } 
+                    }
+                    if($class_attended_current_display[date('d-m-Y',strtotime($index))]!= "AB"){
+                       $class_total_absent_calculate =  $class_attended_current_display[date('d-m-Y',strtotime($index))];
+                    }
+                    $check1++;
+                    }
+                    // ksort($class_attended_current_display);
+
+                    foreach($class_attended_current_display as $class){
+                     $this->excel->setActiveSheetIndex($sheet)->setCellValue($class_held_cell_name[$va] . $excel_row, $class);
+                     $this->excel->getActiveSheet()->getStyle('A' . $excel_row . ':'.$class_held_cell_name[$va] . $excel_row)->applyFromArray($styleBorderArray);
+                     $this->excel->getActiveSheet()->getStyle('A' . $excel_row . ':'.$class_held_cell_name[$va] . $excel_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+                     $va++;
+                    }
+                    // $this->excel->setActiveSheetIndex($sheet)->setCellValue($class_held_cell_name[$i] . $excel_row, $class_held);
+                    // $this->excel->setActiveSheetIndex($sheet)->setCellValue($class_attended_cell_name[$i] . $excel_row, $class_present);
+                    // $this->excel->setActiveSheetIndex($sheet)->setCellValue($class_percentage_cell_name[$i] . $excel_row, $percentage);
+                    $i++;
+                }
+                $percentage_calculate = ($class_total_absent_calculate * 100) /  $class_held_1;
+                $percentage_calculate = round($percentage_calculate, 2);
+                $this->excel->setActiveSheetIndex($sheet)->setCellValue('D' . $excel_row, $class_total_absent_calculate);
+                $this->excel->setActiveSheetIndex($sheet)->setCellValue('E' . $excel_row, $percentage_calculate);
+
+                //total subject percentage
+
+                if ($total_class_held_per_std != 0) {
+                    $avg = ($total_class_held_per_std - $total_attd_class_std) / $total_class_held_per_std;
+                    $percentage = round($avg * 100, 2);
+                } else {
+                    $percentage = 0;
+                }
+
+                // $this->excel->setActiveSheetIndex($sheet)->setCellValue('Y' . $excel_row, $percentage);
+                $this->excel->getActiveSheet()->getStyle('A' . $excel_row . ':F' . $excel_row)->applyFromArray($styleBorderArray);
+                $this->excel->getActiveSheet()->getStyle('A' . $excel_row . ':B' . $excel_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $this->excel->getActiveSheet()->getStyle('D' . $excel_row . ':F' . $excel_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $excel_row++;
+            }
+
+            $filename = 'just_some_random_name.xls'; //save our workbook as this file name
+            header('Content-Type: application/vnd.ms-excel'); //mime type
+            header('Content-Disposition: attachment;filename="' . $filename . '"'); //tell browser what's the file name
+            header('Cache-Control: max-age=0'); //no cache
+            $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+            ob_start();
+            $objWriter->save("php://output");
+            $xlsData = ob_get_contents();
+            ob_end_clean();
+
+            $response =  array(
+                'op' => 'ok',
+                'file' => "data:application/vnd.ms-excel;base64," . base64_encode($xlsData)
+            );
+            die(json_encode($response));
+        }
+    }
+
+
+
+
+
+
+
+
     
     // verify attendance
     public function verifyStudentAttendance(){
@@ -1281,6 +1664,19 @@ class StudentAttendance extends BaseController
             }
         }
     } 
+
+
+
+
+  
+
+
+
+
+
+
+
+
     
     
     public function getSubjectCodes($stream_name){

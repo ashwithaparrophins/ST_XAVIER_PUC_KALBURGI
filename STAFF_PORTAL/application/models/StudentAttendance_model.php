@@ -701,5 +701,127 @@ class StudentAttendance_model extends CI_Model{
         $query = $this->db->get();
         return $query->row();
     }
+
+
+
+    public function getClassInfoAttendanceReportStudentReportDetailsMonthWisePR($subject_code,$filter,$type){
+        $this->db->from('tbl_class_completed_by_staff as class');
+        $this->db->where('class.subject_code', $subject_code);
+    
+        // if(!empty($filter['doj'])){
+        //     $this->db->where('class.date >=',$filter['doj']);
+        // }else{
+        //     $this->db->where('class.date >=',$filter['date_from']);
+
+        // }
+        // if(!empty($filter['date_to'])){
+        //     $this->db->where('class.date <=',$filter['date_to']);
+        // }
+        if(!empty($filter['term'])){
+            $this->db->where('class.term_name',$filter['term']); 
+        }
+        if(!empty($filter['preference'])){
+            $this->db->where('class.stream_name',$filter['preference']); 
+        }
+        if(!empty($filter['section'])){
+            $this->db->where('class.section_name',$filter['section']); 
+        }
+        if(!empty($filter['std_batch'])){
+            $this->db->where('class.batch',$filter['std_batch']); 
+        }
+        $this->db->where('class.date <',  $filter['date_from']);
+        $this->db->where('class.class_year', 2023);
+        $this->db->where('class.is_deleted', 0);
+        // $this->db->where('class.subject_type', $type);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+
+
+    public function getClassInfoAttendanceReportStudentReportSingle($subject_code, $filter,$subject_type,$date){
+        $this->db->from('tbl_class_completed_by_staff as class');
+        $this->db->where('class.subject_code', $subject_code);
+    
+        // if(!empty($filter['doj'])){
+        //     $this->db->where('class.date >=',$filter['doj']);
+        // }else{
+        //     $this->db->where('class.date >=',$filter['date_from']);
+
+        // }
+        // if(!empty($filter['date_to'])){
+        //     $this->db->where('class.date <=',$filter['date_to']);
+        // }
+        if(!empty($filter['term'])){
+            $this->db->where('class.term_name',$filter['term']); 
+        }
+        if(!empty($filter['preference'])){
+            $this->db->where('class.stream_name',$filter['preference']); 
+        }
+        if(!empty($filter['section'])){
+            $this->db->where('class.section_name',$filter['section']); 
+        }
+        if(!empty($filter['std_batch'])){
+            $this->db->where('class.batch',$filter['std_batch']); 
+        }
+        $this->db->where('class.date',  $date);
+        $this->db->where('class.class_year', 2023);
+        $this->db->where('class.is_deleted', 0);
+        // $this->db->where('class.subject_type', $type);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function isStudentIsAbsentForClassPrevious($student_id, $subject_code, $filter,$type){
+        $this->db->from('tbl_student_attendance_details as abclass');
+        $this->db->join('tbl_staff_teaching_subjects as staff_sub', 'staff_sub.row_id = abclass.staff_subject_row_id','left');
+        // if(!empty($filter['date_from']) && !empty($filter['date_to'])){
+        //     $this->db->where('abclass.absent_date >=',$filter['date_from']);
+        //     $this->db->where('abclass.absent_date <=',$filter['date_to']); 
+        // }
+        // if(!empty($filter['date_from'])){
+        //     $this->db->where('abclass.absent_date >=',$filter['date_from']);
+        // }
+        // if(!empty($filter['date_to'])){
+        //     $this->db->where('abclass.absent_date <=',$filter['date_to']);
+        // }
+        // $this->db->where('staff_sub.subject_type',$type);
+        $this->db->where('abclass.student_id', $student_id);
+        $this->db->where('abclass.subject_code', $subject_code);
+        // $this->db->where('abclass.absent_date', date("Y-m-d", strtotime($date)));
+        // $this->db->where('abclass.office_verified_status', 0);
+        $this->db->where('abclass.year', 2023);
+        $this->db->where('abclass.is_deleted', 0);
+        $this->db->where('abclass.absent_date <',  $filter['date_from']);
+        $query = $this->db->get();
+        return $query->num_rows();  
+    }
+
+
+    public function isStudentIsAbsentForClassCurrent($student_id, $subject_code, $filter,$type,$date){
+        $this->db->from('tbl_student_attendance_details as abclass');
+        $this->db->join('tbl_staff_teaching_subjects as staff_sub', 'staff_sub.row_id = abclass.staff_subject_row_id','left');
+        // if(!empty($filter['date_from']) && !empty($filter['date_to'])){
+        //     $this->db->where('abclass.absent_date >=',$filter['date_from']);
+        //     $this->db->where('abclass.absent_date <=',$filter['date_to']); 
+        // }
+        // if(!empty($filter['date_from'])){
+        //     $this->db->where('abclass.absent_date >=',$filter['date_from']);
+        // }
+        // if(!empty($filter['date_to'])){
+        //     $this->db->where('abclass.absent_date <=',$filter['date_to']);
+        // }
+        // $this->db->where('staff_sub.subject_type',$type);
+        $this->db->where('abclass.student_id', $student_id);
+        $this->db->where('abclass.subject_code', $subject_code);
+        // $this->db->where('abclass.absent_date', date("Y-m-d", strtotime($date)));
+        // $this->db->where('abclass.office_verified_status', 0);
+        $this->db->where('abclass.year', 2023);
+        $this->db->where('abclass.is_deleted', 0);
+        $this->db->where('abclass.absent_date', $date);
+        $query = $this->db->get();
+        return $query->num_rows();  
+    }
+
 }
 ?>

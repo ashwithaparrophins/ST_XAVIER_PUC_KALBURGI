@@ -1089,3 +1089,4 @@ $route['get_sms_response'] = "SMS/get_sms_response";
 
 $route['downloadStaffLeaveReport'] = "reports/downloadStaffLeaveReport";
 $route['downloadStaffLeavePendingReport'] = "reports/downloadStaffLeavePendingReport";
+$route['downloadClassCompletedReportNew'] = "studentAttendance/downloadClassCompletedReportNew";

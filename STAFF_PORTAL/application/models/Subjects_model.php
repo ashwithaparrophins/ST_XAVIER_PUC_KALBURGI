@@ -67,6 +67,17 @@ class Subjects_model extends CI_Model
         return $query->row();
     }
 
+    public function getAllSubjectByIDResult($sub_code) {
+        $this->db->select('sub.row_id,sub.subject_code,sub.department_id,dept.name,sub.name as sub_name,sub.sub_type,sub.lab_status');
+        $this->db->from($this->_table_name. ' as sub'); 
+        $this->db->join('tbl_department as dept', 'sub.department_id = dept.dept_id','left');
+        $this->db->where('sub.subject_code', $sub_code);
+        $this->db->where('sub.is_deleted', 0);
+        $this->db->group_by('sub.subject_code');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     
     public function getStaffSubjectsbyStaffId($staff_id){
         $this->db->select('sub.department_id, 
