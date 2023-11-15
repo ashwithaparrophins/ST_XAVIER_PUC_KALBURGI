@@ -2841,7 +2841,7 @@ public function processTheFeePayment(){
 
             $feeInfo = $this->fee->getFeeInfoByReceiptNum($row_id);
             $student_row_id = $feeInfo->application_no;
-            $isExist = $this->fee->checkReceiptNoExists($receipt_no);
+            $isExist = $this->fee->checkReceiptNoExists($receipt_no,$feeInfo->payment_year);
            
             if(!empty($isExist)){
               
