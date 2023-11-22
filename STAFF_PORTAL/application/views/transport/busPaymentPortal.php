@@ -261,10 +261,19 @@ if ($error) {
                                                         <tr class="bg-danger text-white">
                                                             <th class="text-left" scope="col">Pending Balance</th>
                                                             <th class="text-left" scope="col">
-                                                                <?php echo number_format($fee_amount,2); ?>
+                                                            <?php if($studentData->cancel_bus_status == 1 && $year == CURRENT_YEAR){echo number_format(0,2); }else{echo number_format($fee_amount,2); }?>
+                                                            
                                                             </th>
                                                         </tr>
                                                         <?php //} ?>
+                                                        <?php if($studentData->cancel_bus_status == 1  && $year == CURRENT_YEAR){ ?>
+                                                        <tr class="bg-secondary text-white">
+                                                            <th class="text-left" scope="col">Remark</th>
+                                                            <th class="text-left" scope="col">
+                                                                <?php echo "Bus Facility Cancelled"; ?>
+                                                            </th>
+                                                        </tr>
+                                                        <?php } ?>
                                                     </thead>
 
                                                 </table>
@@ -280,7 +289,7 @@ if ($error) {
                                         <div class="card border-success mb-3">
                                             <div class="card-header bg-transparent border-success">Payment Info</div>
                                             <div class="card-body">
-                                            <?php if($fee_amount != 0){ ?>
+                                            <?php if($fee_amount != 0 && ($studentData->cancel_bus_status == 0  || ($studentData->cancel_bus_status == 1 && $year != CURRENT_YEAR))){ ?>
                                                 <div class="form-group">
                                                     <label for="usr">Transaction Date</label>
                                                     <input type="text" name="transaction_date" 
@@ -288,24 +297,7 @@ if ($error) {
                                                         Placeholder="Transaction Date" id="transaction_date_first"
                                                         autocomplete="off" readonly>
                                                 </div>
-                                                <!-- <div class="form-group  mb-2 month_wise">
-                                                    <select class="form-control text-dark" id="month"
-                                                        name="month">
-                                                        <option value="">Select Month</option>
-                                                        <option value="January">January</option>
-                                                        <option value="February">February</option>
-                                                        <option value="March">March</option>
-                                                        <option value="April">April</option>
-                                                        <option value="May">May</option>
-                                                        <option value="June">June</option>
-                                                        <option value="July">July</option>
-                                                        <option value="August">August</option>
-                                                        <option value="September">September</option>
-                                                        <option value="October">October</option>
-                                                        <option value="November">November</option>
-                                                        <option value="December">December</option>
-                                                    </select>
-                                                </div> -->
+                                               
                                                 <?php if($year == CURRENT_YEAR){ ?>
                                                     <div class="row mt-2">
                                                         <div class="col-6">
@@ -332,7 +324,7 @@ if ($error) {
                                                         <label for="month_difference">Months</label>
                                                         <input type="text" class="form-control" id="month_difference" readonly>
                                                     </div>
-                                            <?php } ?>
+                                                <?php } ?>
                                                 <div class="form-group mb-2">
                                                     <input type="text" class="form-control reference_receipt_no" id="receipt_number"
                                                         name="receipt_number" placeholder="Reference Receipt No."

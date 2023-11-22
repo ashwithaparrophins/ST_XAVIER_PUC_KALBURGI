@@ -970,6 +970,12 @@
                                 <span>Transport Fee Paid</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo base_url(); ?>cancelBusListing">
+                                <i class="material-icons">directions_bus</i>
+                                <span>Cancelled Bus Detail</span>
+                            </a>
+                        </li>
                         <!-- <li class="nav-item">
                             <a class="nav-link" href="<?php echo base_url(); ?>viewTransportSettings">
                                 <i class="material-icons">settings</i>

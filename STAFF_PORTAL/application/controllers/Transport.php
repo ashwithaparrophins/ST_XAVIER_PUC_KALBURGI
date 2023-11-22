@@ -1460,4 +1460,125 @@ class Transport extends BaseController
             exit(0);
         }
     }
+
+    function cancelBusListing()
+    {
+        if ($this->isAdmin() == TRUE) {
+            $this->loadThis();
+        } else {
+            $filter = array();
+            $sat_number = $this->security->xss_clean($this->input->post('sat_number'));
+            $std_name = $this->security->xss_clean($this->input->post('std_name'));
+            $class = $this->security->xss_clean($this->input->post('class'));
+            $route_from = $this->security->xss_clean($this->input->post('route_from'));
+            $join_date = $this->security->xss_clean($this->input->post('join_date'));
+            $end_date = $this->security->xss_clean($this->input->post('end_date'));
+
+          
+            $data['sat_number'] = $sat_number;
+            $filter['sat_number'] = $sat_number;
+            $data['std_name'] = $std_name;
+            $filter['std_name'] = $std_name;
+            $data['class'] = $class;
+            $filter['class'] = $class;
+            $data['route_from'] = $route_from;
+            $filter['route_from'] = $route_from;
+            $data['route_from'] = $route_from;
+            $filter['route_from'] = $route_from;
+
+            if (!empty($join_date)) {
+                $filter['join_date'] = date('Y-m-d', strtotime($join_date));
+                $data['join_date'] = date('d-m-Y', strtotime($join_date));
+            } else {
+                $data['join_date'] = '';
+            }
+
+            if (!empty($end_date)) {
+                $filter['end_date'] = date('Y-m-d', strtotime($end_date));
+                $data['end_date'] = date('d-m-Y', strtotime($end_date));
+            } else {
+                $data['end_date'] = '';
+            }
+   
+            $this->load->library('pagination');
+            $count = $this->transport->getAllCancelledBusCount($filter);
+            $returns = $this->paginationCompress("cancelBusListing/", $count, 100);
+            $data['totalBusCount'] = $count;
+            // $data['termInfo'] = $this->student->getTermInfo();
+            $data['routeInfo'] = $this->transport->getRouteInfo();
+
+            $data['studentInfo'] = $this->student->getCurrentStudentInfoForTrans();
+            $filter['page'] = $returns["page"];
+            $filter['segment'] = $returns["segment"];
+            $data['BusInfo'] = $this->transport->getAllCancelledBusInfo($filter, $returns["page"], $returns["segment"]);
+            // log_message('debug','routbus'.print_r($data['BusInfo'],true));
+
+            $this->global['pageTitle'] = '' . TAB_TITLE . ' : Bus Details';
+            $this->loadViews("transport/cancelBusDetails.php", $this->global, $data, NULL);
+        }
+    }
+
+    public function updateCancelBus()
+    {
+        if ($this->isAdmin() == true) {
+            $this->loadThis();
+        } else {
+           
+                $row_id = $this->security->xss_clean($this->input->post('row_id'));
+                $join_date = $this->security->xss_clean($this->input->post('join_date'));
+                $end_date = $this->security->xss_clean($this->input->post('end_date'));
+                
+                    if (!empty($join_date)) {
+                        $filter['join_date'] = date('Y-m-d', strtotime($join_date));
+                        $data['join_date'] = date('d-m-Y', strtotime($join_date));
+                    } else {
+                        $data['join_date'] = '';
+                    }
+                    if (!empty($end_date)) {
+                        $filter['end_date'] = date('Y-m-d', strtotime($end_date));
+                        $data['end_date'] = date('d-m-Y', strtotime($end_date));
+                    } else {
+                        $data['end_date'] = '';
+                    }
+
+                log_message('debug','row'.$row_id);
+                $busInfo = array(
+                    'cancel_bus_status' => 1,
+                    'bus_joined_date' => date('Y-m-d',strtotime($join_date)),
+                    'bus_end_date' => date('Y-m-d',strtotime($end_date)),
+                    'updated_by' => $this->staff_id,
+                    'updated_date_time' => date('Y-m-d H:i:s')
+                );
+                $return_id = $this->student->updateStudentInfo($busInfo, $row_id);
+
+                if ($return_id) {
+                    $this->session->set_flashdata('success', 'Cancelled Bus Info Updated Successfully');
+                } else {
+                    $this->session->set_flashdata('error', 'Cancelled Bus Info Update failed');
+                }
+                redirect('cancelBusListing');
+            
+        }
+    }
+
+    public function deleteCancelBus()
+    {
+        if ($this->isAdmin() == TRUE) {
+            $this->loadThis();
+        } else {
+            $row_id = $this->input->post('row_id');
+           
+            $busInfo = array(
+                'cancel_bus_status' => 0,
+                'updated_date_time' => date('Y-m-d H:i:s'),
+                'updated_by' => $this->staff_id
+            );
+            $result = $this->student->updateStudentInfo($busInfo, $row_id);
+            if ($result == true) {
+                echo (json_encode(array('status' => true)));
+            } else {
+                echo (json_encode(array('status' => false)));
+            }
+        }
+    }
 }

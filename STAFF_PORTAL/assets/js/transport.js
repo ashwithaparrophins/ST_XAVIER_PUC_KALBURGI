@@ -28,6 +28,32 @@ $(document).ready(function(){
         }
     });
 
+    //delete a Bus
+			jQuery(document).on("click", ".deleteCancelBus", function(){
+			
+				var row_id = $(this).data("row_id"),
+					hitURL = baseURL + "deleteCancelBus",
+					currentRow = $(this);
+				
+				var confirmation = confirm("Are you sure to delete this Student ?");
+				
+				if(confirmation)
+				{
+					jQuery.ajax({
+					type : "POST",
+					dataType : "json",
+					url : hitURL,
+					data : { row_id : row_id } 
+					}).done(function(data){
+							
+						currentRow.parents('tr').remove();
+						if(data.status = true) { alert("Cancel Bus Info successfully deleted"); }
+						else if(data.status = false) { alert("Cancel Bus Info deletion failed"); }
+						else { alert("Access denied..!"); }
+					});
+				}
+			});
+
     //delete a Tyre Info
     jQuery(document).on("click", ".deleteTyre", function(){
         

@@ -943,6 +943,82 @@ class Transport_model extends CI_Model
         $query = $this->db->get();
         return $query->row();
     }
+
+    public function getAllCancelledBusInfo($filter=''){
+        $this->db->select('std.sat_number,std.student_name, std.student_name,std.cancel_bus_status,std.student_id,std.term_name,
+        std.row_id,transName.name as route_name,transName.rate,std.bus_joined_date,std.bus_end_date,std.row_id');
+        $this->db->from('tbl_students_info as std'); 
+        // $this->db->join('tbl_student_academic_info as academic', 'academic.rel_student_row_id = std.row_id');
+        $this->db->join('tbl_student_transport_rate_info as transName','transName.row_id = std.route_id','left');
+
+        if(!empty($filter['sat_number'])){
+            $likeCriteria = "(std.student_id  LIKE '%" . $filter['sat_number'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['std_name'])){
+            $likeCriteria = "(std.student_name  LIKE '%" . $filter['std_name'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['class'])){
+            $this->db->where('std.term_name', $filter['class']);
+        }
+        if(!empty($filter['route_from'])){
+            $likeCriteria = "(transName.name  LIKE '%" . $filter['route_from'] . "%')";
+            $this->db->where($likeCriteria);
+
+        }
+        if(!empty($filter['join_date'])){
+            $this->db->where('std.bus_joined_date', $filter['join_date']);
+        }
+        if(!empty($filter['end_date'])){
+            $this->db->where('std.bus_end_date', $filter['end_date']);
+        }
+        
+       
+        $this->db->where('std.cancel_bus_status', 1);
+        $this->db->where('std.is_deleted', 0);
+        $this->db->limit($filter['page'], $filter['segment']);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function getAllCancelledBusCount($filter=''){
+     
+        $this->db->from('tbl_students_info as std'); 
+        // $this->db->join('tbl_student_academic_info as academic', 'academic.rel_student_row_id = std.row_id');
+        $this->db->join('tbl_student_transport_rate_info as transName','transName.row_id = std.route_id','left');
+      
+        if(!empty($filter['route'])){
+            $likeCriteria = "(bus.route  LIKE '%" . $filter['route'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        
+        if(!empty($filter['sat_number'])){
+            $likeCriteria = "(std.student_id  LIKE '%" . $filter['sat_number'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['std_name'])){
+            $likeCriteria = "(std.student_name  LIKE '%" . $filter['std_name'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['class'])){
+            $this->db->where('std.term_name', $filter['class']);
+        }
+        if(!empty($filter['route_from'])){
+            $likeCriteria = "(transName.name  LIKE '%" . $filter['route_from'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['join_date'])){
+            $this->db->where('std.bus_joined_date', $filter['join_date']);
+        }
+        if(!empty($filter['end_date'])){
+            $this->db->where('std.bus_end_date', $filter['end_date']);
+        }
+        $this->db->where('std.cancel_bus_status', 1);
+        $this->db->where('std.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
     
 }
 ?>

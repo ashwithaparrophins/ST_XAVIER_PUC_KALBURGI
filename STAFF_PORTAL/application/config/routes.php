@@ -511,6 +511,12 @@ $route['downloadBulkFeeReport'] = "reports/downloadBulkFeeReport";
 $route['downloadArrearFeeInfoReport'] = "reports/downloadArrearFeeInfoReport";
 $route['downloadTransportBulkFeeReport'] = "reports/downloadTransportBulkFeeReport";
 
+//cancel bus
+$route['cancelBusListing'] = "transport/cancelBusListing";
+$route['cancelBusListing/(:any)'] = "transport/cancelBusListing/$1";
+$route['updateCancelBus'] = "transport/updateCancelBus";
+$route['deleteCancelBus'] = "transport/deleteCancelBus";
+
 // this routes for Push Notification
 $route['pushNotification'] = 'push_Notification';
 $route['push_notification/sendNotification'] = "push_Notification/validateForm"; 
