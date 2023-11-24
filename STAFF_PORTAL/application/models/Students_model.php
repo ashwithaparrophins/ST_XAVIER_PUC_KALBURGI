@@ -1725,6 +1725,7 @@ class students_model extends CI_Model
 
     public function getStudentInfoForTransReport($filter)
     {
+        $this->db->select('student.row_id,student.student_name,student.student_id,student.term_name,student.stream_name,student.route_id');
        
         $this->db->from('tbl_students_info as student'); 
         $this->db->join('tbl_student_transport_rate_info as route','route.row_id  = student.route_id','left');
