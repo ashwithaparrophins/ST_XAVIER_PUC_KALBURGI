@@ -2032,6 +2032,12 @@ class Students extends BaseController
             return $barcodePath.$code.'.png';
         }
 
+        
+    public function redirectStudentView(){
+        $std_row_id = $this->security->xss_clean($this->input->post('student_id'));
+        redirect('viewStudentInfoById/'.$std_row_id);
+    }
+
     
 }
 

@@ -1098,3 +1098,5 @@ $route['downloadStaffLeavePendingReport'] = "reports/downloadStaffLeavePendingRe
 $route['downloadClassCompletedReportNew'] = "studentAttendance/downloadClassCompletedReportNew";
 
 $route['getFormInformation3'] = "timetable/getFormInformation3";
+
+$route['redirectStudentView'] = "students/redirectStudentView";
