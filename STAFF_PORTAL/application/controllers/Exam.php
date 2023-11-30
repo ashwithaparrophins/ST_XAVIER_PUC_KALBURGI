@@ -548,7 +548,6 @@ function getInternalMarkSheet(){
         $this->excel->getActiveSheet()->getStyle('J8:Y900')->getFont()->setBold(true);
         $this->excel->getActiveSheet()->getStyle('N8:Y999')->getFont()->setBold(true);
         $this->cellColor('A6:Y7', 'D5DBDB');
-        $total_max_mark = 0;
         //first subject heading
         for($i=0; $i<4; $i++){
             $subjectInfo = $this->subjects->getAllSubjectByID($subjects[$i]);
@@ -583,7 +582,6 @@ function getInternalMarkSheet(){
 
             }else{
             }
-            $total_max_mark +=  $calculate_mark;
             $this->excel->getActiveSheet()->getColumnDimension($first_cell[$i])->setWidth(6);
             $this->excel->getActiveSheet()->getColumnDimension($middle_cell[$i])->setWidth(6);
             $this->excel->getActiveSheet()->getColumnDimension($last_cell[$i])->setWidth(8);
@@ -629,6 +627,7 @@ function getInternalMarkSheet(){
             $total_marks_overall = 0;
             $fail_flag = false;
             $student_status = 0;
+            $total_max_mark = 0;
            
             $exam_year = EXAM_YEAR;
             $data['studentsMarks'] = $this->exams->getFullMarksOfStudentInternal($row->student_id,$exam_type);
@@ -848,7 +847,8 @@ function getInternalMarkSheet(){
                     }
                 }
             }
-            
+            $total_max_mark +=  $calculate_mark;
+
             }
 
             // if($first_language_total >= 35 && (int)$second_lang_mark >= 35){
@@ -918,6 +918,9 @@ function getInternalMarkSheet(){
                         $total_max_mark = 470;
                 }
             }
+            // if($exam_type == 'II_UNIT_TEST'){
+            //     $total_max_mark += 70;
+            // }
             $total_percentage = ($total_marks_overall / $total_max_mark) * 100;
             $this->excel->setActiveSheetIndex($sheet)->setCellValue('V'.$excel_row, $total_theory_marks_subjects);
             $this->excel->setActiveSheetIndex($sheet)->setCellValue('W'.$excel_row, $total_marks_overall);

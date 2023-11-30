@@ -135,9 +135,8 @@ input[type=number]::-webkit-outer-spin-button {
                                 <?php } ?>
                                 <option value="">Select Exam</option>
                                 <option value="I_UNIT_TEST">I UNIT TEST</option>
-                                <option value="MID_TERM_EXAM">MID TERM</option>
-                                <!-- 
-                                <option value="II_UNIT_TEST">II UNIT TEST</option> -->
+                                <option value="MID_TERM_EXAM">MID TERM</option>                       
+                                <option value="II_UNIT_TEST">II UNIT TEST</option>
                             </select>
                         </div>
                         <div class="col-lg-3 col-md-3 col-12">

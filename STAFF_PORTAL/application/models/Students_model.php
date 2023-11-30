@@ -595,7 +595,7 @@ class students_model extends CI_Model
         $this->db->where('exam.student_id', $student_id);
         $this->db->where('exam.subject_code', $subjects_code);
         $this->db->where('exam.exam_type', 'II_UNIT_TEST');
-        $this->db->where('exam.exam_year', '2022-23');
+        $this->db->where('exam.exam_year', '2023-24');
         $this->db->where('exam.is_deleted', 0);
         $query = $this->db->get();
         return $query->row();

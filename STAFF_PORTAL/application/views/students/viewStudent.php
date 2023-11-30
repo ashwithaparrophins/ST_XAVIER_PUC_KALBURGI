@@ -63,20 +63,22 @@
                                             </a>
                                         </li> 
                                         <li class="nav-item">
+                                            <a class="nav-link" id="second_unit_test-tab" data-toggle="tab" href="#second_unit_test"
+                                                role="tab" aria-controls="second_unit_test" aria-selected="true">II Unit Test
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a class="nav-link" id="paidInfo-tab" data-toggle="tab" href="#paidInfo"
                                                 role="tab" aria-controls="paidInfo" aria-selected="true">Fee Paid Info</a>
                                         </li>
+                                        
                                         <!-- <li class="nav-item">
                                             <a class="nav-link" id="first_term-tab" data-toggle="tab" href="#first_term"
                                                 role="tab" aria-controls="first_term" aria-selected="true">I Term
                                             </a>
                                         </li> -->
                                         <!-- 
-                                         <li class="nav-item">
-                                            <a class="nav-link" id="second_unit_test-tab" data-toggle="tab" href="#second_unit_test"
-                                                role="tab" aria-controls="second_unit_test" aria-selected="true">II Unit Test
-                                            </a>
-                                        </li>
+                                        
                                         <li class="nav-item">
                                             <a class="nav-link" id="preparatory-tab" data-toggle="tab" href="#preparatory"
                                                 role="tab" aria-controls="preparatory" aria-selected="true">Preparatory
@@ -507,8 +509,8 @@
                                                             $max_mark = 35;
                                                             $min_mark_pass = 12;
                                                         }else{
-                                                            $max_mark = 50;
-                                                            $min_mark_pass = 18;
+                                                            $max_mark = 40;
+                                                            $min_mark_pass = 14;
                                                         }
                                                         $total_max_mark += $max_mark;
                                                         $total_min_mark += $min_mark_pass;
