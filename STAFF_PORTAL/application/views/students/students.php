@@ -821,8 +821,8 @@ if ($error) {
                                 <option value="">Select Examination Name</option>
                                 <option value="I_UNIT_TEST" selected><strong>I UNIT TEST</strong></option>
                                 <option value="MID_TERM_EXAM"><strong>MID TERM</strong></option>
-                                <!-- <option value="II_UNIT_TEST"><strong>II UNIT TEST</strong></option>
-                                <option value="I_PREPARATORY"><strong>PREPARATORY</strong></option> -->
+                                <option value="II_UNIT_TEST"><strong>II UNIT TEST</strong></option>
+                                 <!--<option value="I_PREPARATORY"><strong>PREPARATORY</strong></option> -->
                             </select>
                         </div>
 
