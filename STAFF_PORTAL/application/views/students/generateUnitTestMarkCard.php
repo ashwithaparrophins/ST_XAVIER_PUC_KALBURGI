@@ -186,11 +186,11 @@ color: #000 !important;
                     $total_students_selected--;
 
                     if($exam_type == 'I_UNIT_TEST'){
-                      $exam_name = 'I UNIT TEST AUGUST 2023';
+                      $exam_name = 'I UNIT TEST AUGUST-2023';
                     }else if($exam_type == 'MID_TERM'){
                       $exam_name = 'MID-TERM EXAMINATION DECEMBER-2022';
                   }else if($exam_type == 'II_UNIT_TEST'){
-                    $exam_name = 'II UNIT TEST DECEMBER 2023';
+                    $exam_name = 'II UNIT TEST NOVEMBER-2023';
                   }else if($exam_type == 'I_PREPARATORY'){
                     $exam_name = 'PREPARATORY EXAMINATION JAN & FEB 2023';
                   }
