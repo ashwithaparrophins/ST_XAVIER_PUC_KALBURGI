@@ -338,12 +338,7 @@ $base_url = 'https://sjpuc.schoolphins.com/student/'; ?>
                                             role="tab" aria-controls="profile" aria-selected="false">I Unit Test</a>
 
                                     </li>
-                                    <li class="nav-item">
-
-                                        <a class="nav-link" id="secondTest-tab" data-toggle="tab" href="#secondTest"
-                                            role="tab" aria-controls="secondTest" aria-selected="false">II Unit Test</a>
-
-                                    </li>
+                                    
 
                                     <!-- <li class="nav-item">
 
@@ -352,6 +347,13 @@ $base_url = 'https://sjpuc.schoolphins.com/student/'; ?>
                                         role="tab" aria-controls="family" aria-selected="true">Mid Term Exam</a>
 
                                 </li> -->
+
+                                <!-- <li class="nav-item">
+
+                                        <a class="nav-link" id="secondTest-tab" data-toggle="tab" href="#secondTest"
+                                            role="tab" aria-controls="secondTest" aria-selected="false">II Unit Test</a>
+
+                                    </li> -->
 
                                     <?php //} ?>
 
@@ -1014,7 +1016,7 @@ if($total_mark_obtained != 0){
 
                                                     <tr>
 
-                                                        <th colspan="4" class="table_title text-center">II Unit Test
+                                                        <th colspan="4" class="table_title text-center">SECOND UNIT TEST
                                                             2023</th>
 
                                                     </tr>
