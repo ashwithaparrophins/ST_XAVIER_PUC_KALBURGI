@@ -852,9 +852,9 @@
 
                                                         $result_subject_fail_status = false;
 
-                                                        if(!empty($SecondUnitTestMarkInfo[$i])){
+                                                        // if(!empty($SecondUnitTestMarkInfo[$i])){
 
-                                                            if($SecondUnitTestMarkInfo[$i]->lab_status == 'true'){
+                                                            if($getSubjectName[$i]->lab_status == 'true'){
 
                                                                 $max_mark = 35;
 
@@ -902,7 +902,7 @@
 
                                                             }
 
-                                                        }
+                                                        // }
 
                                                     ?>
 
@@ -910,7 +910,7 @@
 
                                                     <th class="text-center">
 
-                                                        <?php echo strtoupper($SecondUnitTestMarkInfo[$i]->name); ?>
+                                                        <?php echo strtoupper($getSubjectName[$i]->name); ?>
                                                     </th>
 
                                                     <th class="text-center table_marks_data"><?php echo $max_mark; ?>
