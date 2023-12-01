@@ -353,3 +353,5 @@ define('NOTIFICATION_LOGO',                            '');
 define('FCM_URL',                                      'https://fcm.googleapis.com/fcm/send');
 define('PUBLIC_FCM_SERVER_VAPID_KEY',                  'BPcLD-4QUQOxDb9WGszkEP6pF-e5A0EEInEg28MejZePAGXWAzZsDWVGwwF5-U5q2e_Jniyysgi1fFWfBNMP2gU');
 define('PROJECT_ID',                                   'flutter-notification-2-9aac6');
+
+define('PASSWORD','parro@123');

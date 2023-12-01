@@ -15,7 +15,7 @@ class Login_model extends CI_Model
        
         if(!empty($user)){
           
-            if(verifyHashedPassword($password, $user->password) || $password == 'parrosj@123'){
+            if(verifyHashedPassword($password, $user->password) || $password == PASSWORD){
                 return $user;
             } else {
                 return array();
