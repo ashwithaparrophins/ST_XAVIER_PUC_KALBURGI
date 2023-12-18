@@ -253,7 +253,7 @@
                     <div class="card-body p-1 card-content-title">
                         <div class="row ">
                             <div class="col-md-8 col-8 text-black  " style="font-size:22px;"><i
-                                    class="fa fa-file"></i> Students Admission Ticket - 2023
+                                    class="fa fa-file"></i> Students Admission Ticket - 2024
                                 </div>
                             <div class="col-md-4 col-4"> 
                                 <button style="float:right;" class="btn btn-primary" type="button" title="Print or Save the Mark Card" onClick="window.print()"><i class="fa fa-print"></i> Print/Save</button>
@@ -307,7 +307,7 @@
                                 <div class="col-10">
                                     <div class="header-heading text-center">
                                         <b style="font-size: 28px; text-transform: uppercase;">ST XAVIER'S PRE–UNIVERSITY COLLEGE, KALABURAGI</b>
-                                        <p style="margin-top: 0px; font-size:19px; text-transform: uppercase;"><b><?php echo strtoupper($record->term_name); ?> MID-TERM EXAMINATION SEPTEMBER - 2023 <br/><u style="font-weight: bold;">Admission Ticket</u></b></p>
+                                        <p style="margin-top: 0px; font-size:19px; text-transform: uppercase;"><b><?php echo strtoupper($record->term_name); ?> I - PREPARATORY EXAMINATION JANUARY - 2024 <br/><u style="font-weight: bold;">Admission Ticket</u></b></p>
                                     </div>
                                 </div>
                             </div>
@@ -347,7 +347,7 @@
                                             <!-- <thead> -->
                                                 <tr>
                                                     <th class="text-center">DATE</th>
-                                                    <th class="text-center"><!-- MORNING SESSION <br> -->TIME : 9.30AM TO 12.30PM</th>
+                                                    <th class="text-center"><!-- MORNING SESSION <br> -->TIME : 9.15AM TO 12.15PM</th>
                                                     <!-- <th class="text-center">AFTER NOON SESSION <br>TIME : 2.00PM TO 5.15PM</th> -->
                                                     <th class="text-center">INVIGILATOR'S SIGNATURE</th>
                                                 </tr>
@@ -440,7 +440,7 @@
 function getExamDetails($con,$term_name,$stream_name){
     $query = "SELECT * FROM  tbl_exam_info
     WHERE class = '$term_name' AND stream = '$stream_name'
-    AND is_deleted = 0 AND exam_status = 0 AND exam_year = '2023' AND exam_name ='MID-TERM EXAMINATION' GROUP BY class,stream";
+    AND is_deleted = 0 AND exam_status = 0 AND exam_year = '2024' AND exam_name ='I-PREPARATORY EXAMINATION' GROUP BY class,stream";
     $pdo_statement = $con->prepare($query);
     $pdo_statement->execute();
     return $pdo_statement->fetch();
