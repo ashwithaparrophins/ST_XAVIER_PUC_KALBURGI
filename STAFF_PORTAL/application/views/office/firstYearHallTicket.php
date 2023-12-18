@@ -279,6 +279,7 @@
                             $studentCount++;
                             $total_students_selected--;
                             $examDetails = getExamDetails($con,$record->term_name,$record->stream_name);
+                            log_message('debug','dddd'.print_r($examDetails,true));
                             $subjects_code = array();
                             $elective_sub = strtoupper($record->elective_sub);
                             if($elective_sub == "KANNADA"){
@@ -355,7 +356,10 @@
                                             <!-- </thead>
                                             <tbody> -->
                                                  <!-- foreach($subjects_code as $sub){  -->
-                                                    <?php $examInfo = $examData->getExamInfo($record->term_name,$record->stream_name,$subjects_code);
+                                                    <?php 
+                                                    $exam_name = 'I-PREPARATORY EXAMINATION';
+                                                    $examInfo = $examData->getExamInfo($record->term_name,$record->stream_name,$subjects_code,$exam_name);
+                                                    // log_message('debug','fffff'.print_r($examInfo,true));
                                                     foreach($examInfo as $exam){  
                                                         if($exam->time == 'Morning session'){ ?>
                                                         <tr>
@@ -440,7 +444,7 @@
 function getExamDetails($con,$term_name,$stream_name){
     $query = "SELECT * FROM  tbl_exam_info
     WHERE class = '$term_name' AND stream = '$stream_name'
-    AND is_deleted = 0 AND exam_status = 0 AND exam_year = '2024' AND exam_name ='I-PREPARATORY EXAMINATION' GROUP BY class,stream";
+    AND is_deleted = 0 AND exam_status = 0 AND exam_year = '2023' AND exam_name ='I-PREPARATORY EXAMINATION' GROUP BY class,stream";
     $pdo_statement = $con->prepare($query);
     $pdo_statement->execute();
     return $pdo_statement->fetch();

@@ -1060,7 +1060,7 @@ class students_model extends CI_Model
         return $query->result();
     }
 
-    function getExamInfo($term_name,$stream_name,$subject_code){
+    function getExamInfo($term_name,$stream_name,$subject_code,$exam_name){
         $this->db->select('sub.name,exam.exam_date,exam.time,exam.subject_code');
         $this->db->from('tbl_exam_info as exam'); 
         $this->db->join('tbl_subjects as sub','sub.subject_code = exam.subject_code','left');
@@ -1068,6 +1068,7 @@ class students_model extends CI_Model
         $this->db->where('exam.stream', $stream_name);
         $this->db->where_in('exam.subject_code', $subject_code);
         $this->db->where('exam.exam_year', '2023');
+        $this->db->where('exam.exam_name', $exam_name);
         $this->db->where('exam.is_deleted', 0);
         $this->db->where('exam.exam_status', 0);
         $this->db->where('sub.is_deleted', 0);
