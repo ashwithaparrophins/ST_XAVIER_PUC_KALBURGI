@@ -396,7 +396,7 @@
                             ?>
                                 <div class="page-break"></div>
                             <?php } else {
-                                echo '<br><br>';
+                                echo '<br><br><br><br><br><br>';
                             } ?>
                         <?php } ?>
                     <?php  } ?>
