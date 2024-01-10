@@ -213,7 +213,7 @@ class Exam extends BaseController {
                         'exam_name' => $exam_name,
                         'exam_type' => $exam_type,
                         'subject_code' => $subject_name,
-                        'exam_year' => date('Y'),
+                        'exam_year' => CURRENT_YEAR,
                         'created_by' => $this->staff_id,
                         'created_date_time' => date('Y-m-d h:i:s'));
                     $return_id = $this->exams->addExam($examInfo);

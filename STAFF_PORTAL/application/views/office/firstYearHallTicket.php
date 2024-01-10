@@ -279,7 +279,7 @@
                             $studentCount++;
                             $total_students_selected--;
                             $examDetails = getExamDetails($con,$record->term_name,$record->stream_name);
-                            log_message('debug','dddd'.print_r($examDetails,true));
+                            //log_message('debug','dddd'.print_r($examDetails,true));
                             $subjects_code = array();
                             $elective_sub = strtoupper($record->elective_sub);
                             if($elective_sub == "KANNADA"){
@@ -308,7 +308,7 @@
                                 <div class="col-10">
                                     <div class="header-heading text-center">
                                         <b style="font-size: 28px; text-transform: uppercase;">ST XAVIER'S PRE–UNIVERSITY COLLEGE, KALABURAGI</b>
-                                        <p style="margin-top: 0px; font-size:19px; text-transform: uppercase;"><b><?php echo strtoupper($record->term_name); ?> I - PREPARATORY EXAMINATION JANUARY - 2024 <br/><u style="font-weight: bold;">Admission Ticket</u></b></p>
+                                        <p style="margin-top: 0px; font-size:19px; text-transform: uppercase;"><b><?php echo strtoupper($record->term_name); ?> II - PREPARATORY EXAMINATION JANUARY - 2024 <br/><u style="font-weight: bold;">Admission Ticket</u></b></p>
                                     </div>
                                 </div>
                             </div>
@@ -348,7 +348,7 @@
                                             <!-- <thead> -->
                                                 <tr>
                                                     <th class="text-center">DATE</th>
-                                                    <th class="text-center"><!-- MORNING SESSION <br> -->TIME : 9.15AM TO 12.15PM</th>
+                                                    <th class="text-center"><!-- MORNING SESSION <br> -->TIME : 10.15 AM TO 01.30 PM</th>
                                                     <!-- <th class="text-center">AFTER NOON SESSION <br>TIME : 2.00PM TO 5.15PM</th> -->
                                                     <th class="text-center">INVIGILATOR'S SIGNATURE</th>
                                                 </tr>
@@ -357,7 +357,7 @@
                                             <tbody> -->
                                                  <!-- foreach($subjects_code as $sub){  -->
                                                     <?php 
-                                                    $exam_name = 'I-PREPARATORY EXAMINATION';
+                                                    $exam_name = 'II-PREPARATORY EXAMINATION';
                                                     $examInfo = $examData->getExamInfo($record->term_name,$record->stream_name,$subjects_code,$exam_name);
                                                     // log_message('debug','fffff'.print_r($examInfo,true));
                                                     foreach($examInfo as $exam){  
@@ -441,15 +441,23 @@
 //     return $pdo_statement->fetchAll();
 // }
 
+// function getExamDetails($con,$term_name,$stream_name){
+//     $query = "SELECT * FROM  tbl_exam_info
+//     WHERE class = '$term_name' AND stream = '$stream_name'
+//     AND is_deleted = 0 AND exam_status = 0 AND exam_year = '2023' AND exam_name ='I-PREPARATORY EXAMINATION' GROUP BY class,stream";
+//     $pdo_statement = $con->prepare($query);
+//     $pdo_statement->execute();
+//     return $pdo_statement->fetch();
+// }
+
 function getExamDetails($con,$term_name,$stream_name){
     $query = "SELECT * FROM  tbl_exam_info
     WHERE class = '$term_name' AND stream = '$stream_name'
-    AND is_deleted = 0 AND exam_status = 0 AND exam_year = '2023' AND exam_name ='I-PREPARATORY EXAMINATION' GROUP BY class,stream";
+    AND is_deleted = 0 AND exam_status = 0 AND exam_year = '2023' AND exam_name ='II-PREPARATORY EXAMINATION' GROUP BY class,stream";
     $pdo_statement = $con->prepare($query);
     $pdo_statement->execute();
     return $pdo_statement->fetch();
 }
-
 function getSubjectCodes($stream_name){
     //science
     $PCMB = array("33", "34", "35", '36');
