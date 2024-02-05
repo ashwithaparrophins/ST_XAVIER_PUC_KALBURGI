@@ -308,7 +308,7 @@
                                 <div class="col-10">
                                     <div class="header-heading text-center">
                                         <b style="font-size: 28px; text-transform: uppercase;">ST XAVIER'S PRE–UNIVERSITY COLLEGE, KALABURAGI</b>
-                                        <p style="margin-top: 0px; font-size:19px; text-transform: uppercase;"><b><?php echo strtoupper($record->term_name); ?> II - PREPARATORY EXAMINATION JANUARY - 2024 <br/><u style="font-weight: bold;">Admission Ticket</u></b></p>
+                                        <p style="margin-top: 0px; font-size:19px; text-transform: uppercase;"><b><?php echo strtoupper($record->term_name); ?> ANNUAL EXAMINATION - FEBRUARY 2024 <br/><u style="font-weight: bold;">Admission Ticket</u></b></p>
                                     </div>
                                 </div>
                             </div>
@@ -348,8 +348,9 @@
                                             <!-- <thead> -->
                                                 <tr>
                                                     <th class="text-center">DATE</th>
+                                                    <!-- <th class="text-center">MORNING SESSION <br>SUBJETS</th> -->
                                                     <th class="text-center"><!-- MORNING SESSION <br> -->TIME : 10.15 AM TO 01.30 PM</th>
-                                                    <!-- <th class="text-center">AFTER NOON SESSION <br>TIME : 2.00PM TO 5.15PM</th> -->
+                                                    <!-- <th class="text-center">TIME</th> -->
                                                     <th class="text-center">INVIGILATOR'S SIGNATURE</th>
                                                 </tr>
                                                 
@@ -357,7 +358,7 @@
                                             <tbody> -->
                                                  <!-- foreach($subjects_code as $sub){  -->
                                                     <?php 
-                                                    $exam_name = 'II-PREPARATORY EXAMINATION';
+                                                    $exam_name = 'ANNUAL EXAMINATION - FEBRUARY 2024';
                                                     $examInfo = $examData->getExamInfo($record->term_name,$record->stream_name,$subjects_code,$exam_name);
                                                     // log_message('debug','fffff'.print_r($examInfo,true));
                                                     foreach($examInfo as $exam){  
@@ -365,7 +366,7 @@
                                                         <tr>
                                                             <td class="text-center"><?php echo date('d-m-Y',strtotime($exam->exam_date))?></td>
                                                             <td class="text-center" style="text-transform: uppercase;"><?php echo $exam->name; ?></td>
-                                                            <!-- <td class="text-center">--</td> -->
+                                                            <!-- <td class="text-center"><?php echo $exam->time; ?></td> -->
                                                             <td class="text-center"></td>
                                                         </tr>
                                                         <?php } /*else{*/ ?>
