@@ -604,7 +604,7 @@ class Student_model extends CI_Model
         $this->db->from('tbl_admission_students_status_temp as std');
         $this->db->where('std.is_deleted', 0);
         // $this->db->where('std.application_fee_status', 1);
-        $this->db->where('std.adm_year', '2023');
+        $this->db->where('std.adm_year', '2024');
         $this->db->order_by('std.row_id', 'DESC');
         $this->db->limit(1);
         $query = $this->db->get();

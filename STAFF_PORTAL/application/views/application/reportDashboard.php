@@ -136,7 +136,7 @@ $this->load->helper('form');
                             </div>
                         </a>
                     </div> -->
-                    <div class="col-lg-3 col-6 mb-2 ">
+                    <!-- <div class="col-lg-3 col-6 mb-2 ">
                         <a data-toggle="modal" data-target="#applicationFeePaidReport" class="more-info text-white" href="#">
                             <div class="card card-small dash-card admission_card">
                                 <div class="card-body pt-2 pb-2">
@@ -149,7 +149,7 @@ $this->load->helper('form');
                                 </div>
                             </div>
                         </a>
-                    </div>
+                    </div> -->
             </div>
         </div>
     </div>
@@ -208,6 +208,7 @@ $this->load->helper('form');
                         <div class="col-lg-12">
                             <label>By Year</label>
                             <select class="form-control input-md required" id="" name="by_year">
+                                <option value="2024">2024</option>
                                
                                 <option value="2023">2023</option>
                                 <!-- <option value="2022">2022</option>
@@ -416,7 +417,7 @@ $this->load->helper('form');
                         <div class="col-lg-12">
                             <label>By Year</label>
                             <select class="form-control input-md required" id="" name="by_year">
-                               
+                                <option value="2024">2024</option>
                                 <option value="2023">2023</option>
                                 <!-- <option value="2022">2022</option>
                                 <option value="2021">2021</option> -->
@@ -545,6 +546,7 @@ $this->load->helper('form');
                         <div class="col-lg-12">
                             <label>By Year</label>
                             <select class="form-control input-md required" id="" name="by_year">
+                                <option value="2024">2024</option>
                                
                                 <option value="2023">2023</option>
                                 <!-- <option value="2022">2022</option>
@@ -748,7 +750,10 @@ $this->load->helper('form');
                         <div class="col-lg-12">
                             <label>Year</label>
                             <select class="form-control input-md required" id="" name="year">
+                             <option value="2024">2024</option>
+
                                 <option value="2023">2023</option>
+                                
                                 <!-- <option value="2022">2022</option>
                                 <option value="2021">2021</option> -->
                             </select>

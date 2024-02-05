@@ -37,7 +37,7 @@ class Registration_model extends CI_Model
         $this->db->from("tbl_admission_registered_student_temp");
         $this->db->where("email", $email);    
         $this->db->or_where("mobile", $mobile);
-        $this->db->where("reg_year", 2023);  
+        $this->db->where("reg_year", 2024);  
         $this->db->where("is_deleted", 0);
         $query = $this->db->get();
         return $query->row();
@@ -54,7 +54,7 @@ class Registration_model extends CI_Model
     //     $this->db->select("mobile");
     //     $this->db->from("tbl_admission_registered_student_temp");
     //     $this->db->where("mobile", $mobile);  
-    //     $this->db->where("reg_year", 2023);
+    //     $this->db->where("reg_year", 2024);
     //     $this->db->where("is_deleted", 0);
     //     $query = $this->db->get();
     //     return $query->result();
@@ -65,7 +65,7 @@ class Registration_model extends CI_Model
         $this->db->select("registration_number");
         $this->db->from("tbl_admission_registered_student_temp");
         $this->db->where("registration_number", $registration_number);
-        $this->db->where("reg_year", 2023);   
+        $this->db->where("reg_year", 2024);   
         $this->db->where("is_deleted", 0);
         $query = $this->db->get();
         return $query->row();
@@ -77,7 +77,7 @@ class Registration_model extends CI_Model
         $this->db->from("tbl_admission_registered_student_temp");
         $this->db->where("mobile", $mobile);   
         $this->db->where("is_deleted", 0);
-        $this->db->where("reg_year", 2023);
+        $this->db->where("reg_year", 2024);
         $query = $this->db->get();
         return $query->row();
     }

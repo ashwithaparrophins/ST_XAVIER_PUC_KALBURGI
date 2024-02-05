@@ -147,7 +147,7 @@ $set_html=<<<EOD
                 <td style="font-size: 13px">sirnur farhatabad road</td>
             </tr>
             <tr>
-                <td style="font-size:18px;font-weight: bold;">Admission Form for I PUC 2023-24</td>
+                <td style="font-size:18px;font-weight: bold;">Admission Form for I PUC 2024-25</td>
             </tr>
         </td>
         <td style="border-right: 1px solid black;border-top: 1px solid black;border-bottom: 1px solid black;" width="100">

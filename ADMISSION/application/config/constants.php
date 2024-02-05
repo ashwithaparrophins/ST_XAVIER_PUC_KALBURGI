@@ -96,7 +96,7 @@ define('SEGMENT',								2);
 define('TITLE','ST. XAVIER\'S PRE–UNIVERSITY COLLEGE, KALABURAGI');
 define('SUB_TITLE','SXPUC');
 define('INSTITUTION_LOGO','assets/dist/img/logo_stxpuc.jpg');
-define('ADMISSION_YEAR', '2023');
+define('ADMISSION_YEAR', '2024');
 define('CARD_TITLE','Admission Registration - '.ADMISSION_YEAR);
 define('TAB_TITLE','Schoolphins-SXPUC');
 define('LOADER_IMG','assets/dist/img/load.gif');

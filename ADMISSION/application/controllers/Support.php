@@ -40,7 +40,7 @@ class Support extends BaseController
                     'registered_row_id' => $this->student_row_id,
                     'subject' => $subject,
                     'message' => $message,
-                    'year'    => '2023',
+                    'year'    => '2024',
                     'created_by' => $this->student_row_id,
                     'created_date_time' => date('Y-m-d H:i:s'));
                 $retun_id = $this->support_model->addStudentContactInfo($messageInfo);

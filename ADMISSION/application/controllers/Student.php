@@ -111,10 +111,10 @@ class Student extends BaseController
         $student = $this->student_model->getStudentApplicationInfo($this->student_row_id);
         $data['studentSchoolInfo'] = $this->student_model->getStudentSchoolInfo($this->student_row_id);
         $data['studentMarkInfo'] = $this->student_model->getStudentMarkInfoforDisplay($this->student_row_id);
-        log_message('debug','jhgfdsgfd'.print_r($data['studentMarkInfo'],true));
+       // log_message('debug','jhgfdsgfd'.print_r($data['studentMarkInfo'],true));
         $data['marksDetail'] = $this->student_model->getMarksDetailforDisplay($this->student_row_id);
         $data['boardInfo'] = $this->student_model->getBoardNameById($sslc_id); //$this->sslc_board_name_id
-        log_message('debug','kdkfd'.print_r($data['boardInfo'],true));
+       log_message('debug','kdkfd'.print_r($data['boardInfo'],true));
         $data['allBoardsInfo'] = $this->registration_model->getBoardName();
         $data['documentInfo'] = $this->student_model->getDocumnetDetails($this->student_row_id);
         $data['studentApplicationInfo'] = $student;
@@ -561,7 +561,7 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
             'residential_address_district'=> $residence_address_district, 
             'residential_address_state'=> $residence_address_state, 
             'residential_address_pincode'=> $residence_address_pincode, 
-            'admission_year'=> date('Y'),
+            'admission_year'=> ADMISSION_YEAR,
             'physically_challenged'=> $physically_challenged,
             'dyslexia_challenged'=> $dyslexia_challenged, 
             'created_by'=> $this->student_row_id,
@@ -1103,9 +1103,9 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
                             $appNo = substr($isExistsApplicationNumber->application_number,2);
 
                              $appliNo = $appNo + 1;
-                            $applicationNumber = '23'.sprintf('%04d', $appliNo);
+                            $applicationNumber = '24'.sprintf('%04d', $appliNo);
                         }else {
-                               $applicationNumber = '23'.sprintf('%04d', 1);
+                               $applicationNumber = '24'.sprintf('%04d', 1);
 
                                }
                             }else{
@@ -1118,7 +1118,7 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
 
                
                 $applicationStatus = array(
-                    'adm_year' => 2023,
+                    'adm_year' => 2024,
                     'application_number'=> $applicationNumber,
                     'registered_row_id' => $this->student_row_id,
                     'sslc_percentage' => $total_percentage,
@@ -1132,7 +1132,7 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
                 }else{
 
                     $applicationStatus = array(
-                        'adm_year' => 2023,
+                        'adm_year' => 2024,
                         'registered_row_id' => $this->student_row_id,
                         'application_number'=> $applicationNumber,
                         'sslc_percentage' => $total_percentage,
@@ -1357,9 +1357,9 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
                             $appNo = substr($isExistsApplicationNumber->application_number,2);
 
                              $appliNo = $appNo + 1;
-                            $applicationNumber = '23'.sprintf('%04d', $appliNo);
+                            $applicationNumber = '24'.sprintf('%04d', $appliNo);
                         }else {
-                               $applicationNumber = '23'.sprintf('%04d', 1);
+                               $applicationNumber = '24'.sprintf('%04d', 1);
 
                                }
                             }else{
@@ -1372,7 +1372,7 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
 
                
                 $applicationStatus = array(
-                    'adm_year' => 2023,
+                    'adm_year' => 2024,
                     'application_number'=> $applicationNumber,
                     'registered_row_id' => $this->student_row_id,
                     'sslc_percentage' => $total_percentage,
@@ -1386,7 +1386,7 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
                 }else{
 
                     $applicationStatus = array(
-                        'adm_year' => 2023,
+                        'adm_year' => 2024,
                         'registered_row_id' => $this->student_row_id,
                         'application_number'=> $applicationNumber,
                         'sslc_percentage' => $total_percentage,
@@ -1606,9 +1606,9 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
                             $appNo = substr($isExistsApplicationNumber->application_number,2);
 
                              $appliNo = $appNo + 1;
-                            $applicationNumber = '23'.sprintf('%04d', $appliNo);
+                            $applicationNumber = '24'.sprintf('%04d', $appliNo);
                         }else {
-                               $applicationNumber = '23'.sprintf('%04d', 1);
+                               $applicationNumber = '24'.sprintf('%04d', 1);
 
                                }
                             }else{
@@ -1621,7 +1621,7 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
 
                
                 $applicationStatus = array(
-                    'adm_year' => 2023,
+                    'adm_year' => 2024,
                     'application_number'=> $applicationNumber,
                     'registered_row_id' => $this->student_row_id,
                     'sslc_percentage' => $total_percentage,
@@ -1635,7 +1635,7 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
                 }else{
 
                     $applicationStatus = array(
-                        'adm_year' => 2023,
+                        'adm_year' => 2024,
                         'registered_row_id' => $this->student_row_id,
                         'application_number'=> $applicationNumber,
                         'sslc_percentage' => $total_percentage,

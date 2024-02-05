@@ -124,7 +124,7 @@ class Registration extends BaseController
                         'sslc_board_name_id' => $boardName, 
                         'other_board_name' => $other_board_name,
                         'mobile' => $mobile,
-                        'reg_year' => 2023,
+                        'reg_year' => 2024,
                         'dob' => $date_of_birth, 
                         'created_by' => $registration_number,
                         'created_date'=>date('Y-m-d H:i:s'));

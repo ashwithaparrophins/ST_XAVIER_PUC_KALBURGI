@@ -39,7 +39,7 @@ class Login_model extends CI_Model
         $this->db->select('std.row_id, std.password, std.name, std.email, std.mobile, std.dob, std.registration_number');
         $this->db->from('tbl_admission_registered_student_temp as std');
             $this->db->where('std.mobile', $username);
-            $this->db->where('std.reg_year', 2023);
+            $this->db->where('std.reg_year', 2024);
         $query = $this->db->get();
         $student = $query->row();
         return $student;

@@ -128,7 +128,7 @@ class Login extends CI_Controller
                 }else{
                     $studentInfo = array(
                         'mobile' => $username, 
-                        'reg_year'=>'2023', 
+                        'reg_year'=>'2024', 
                         'created_date'=>date('Y-m-d H:i:s'));
                     
                     $results = $this->registration_model->studentRegistrationToDB($studentInfo);

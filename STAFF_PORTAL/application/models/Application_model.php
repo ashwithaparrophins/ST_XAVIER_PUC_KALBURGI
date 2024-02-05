@@ -160,7 +160,7 @@ class Application_model extends CI_Model {
         $this->db->where('approved.application_number !=', '');
         $this->db->where('personal.is_deleted', 0);
         $this->db->where('approved.admission_status', 0);
-        $this->db->where('approved.application_fee_status', 1);
+        // $this->db->where('approved.application_fee_status', 1);
         //$this->db->where('approved.shortlisted_status', 0);
         $this->db->where('personal.is_deleted', 0);
         $this->db->where('approved.is_deleted', 0);
@@ -231,7 +231,7 @@ class Application_model extends CI_Model {
         $this->db->where('approved.application_number !=', '');
         $this->db->where('personal.is_deleted', 0);
         $this->db->where('approved.admission_status', 0);
-        $this->db->where('approved.application_fee_status', 1);
+        // $this->db->where('approved.application_fee_status', 1);
         //$this->db->where('approved.shortlisted_status', 0);
         $this->db->where('personal.is_deleted', 0);
         $this->db->where('approved.is_deleted', 0);
@@ -1068,7 +1068,7 @@ class Application_model extends CI_Model {
         // $this->db->where('personal.admission_year', 2021);
         $this->db->where('approved.is_deleted', 0);
         $this->db->where('approved.shortlisted_status', 0);
-        $this->db->where('approved.application_fee_status', 1);
+      //  $this->db->where('approved.application_fee_status', 1);
         $this->db->where('approved.submitted_doc_status', 1);
         $query = $this->db->get();
         return $query->num_rows();
@@ -1170,7 +1170,7 @@ class Application_model extends CI_Model {
         // $this->db->where('personal.admission_year', 2021);
         $this->db->where('approved.is_deleted', 0);
         $this->db->where('approved.shortlisted_status', 0);
-        $this->db->where('approved.application_fee_status', 1);
+      //  $this->db->where('approved.application_fee_status', 1);
         $this->db->where('approved.submitted_doc_status', 1);
         $this->db->order_by('approved.sslc_percentage', 'DESC');
         $this->db->limit($filter['page'], $filter['segment']);
@@ -2068,7 +2068,7 @@ public function getAllAdmittedListInfo()
             }else if($filter['report_type'] == 'APPLICATION_STACK'){
                 $this->db->where('std.admission_status', 0);
                 // $this->db->where('std.shortlisted_status', 0);
-                $this->db->where('std.application_fee_status',1); 
+               // $this->db->where('std.application_fee_status',1); 
             }else if($filter['report_type'] == 'APPLICATION_FEE_PENDING'){
                 $this->db->where('std.admission_status', 0);
                 $this->db->where('std.application_fee_status', 0);

@@ -90,7 +90,7 @@ class Application extends BaseController {
 
 
             if($admission_year == '') {
-                $filter['admission_year'] = 2023;
+                $filter['admission_year'] = 2024;
 
             }else {
                 $filter['admission_year']  = $admission_year;
@@ -171,7 +171,7 @@ class Application extends BaseController {
 
 
             if($admission_year == '') {
-                $filter['admission_year'] = 2023;
+                $filter['admission_year'] = 2024;
 
             }else {
                 $filter['admission_year']  = $admission_year;
@@ -293,7 +293,7 @@ class Application extends BaseController {
 
 
             if($admission_year == '') {
-                $filter['admission_year'] = 2023;
+                $filter['admission_year'] = 2024;
 
             }else {
                 $filter['admission_year']  = $admission_year;
@@ -360,7 +360,7 @@ class Application extends BaseController {
 
 
             if($admission_year == '') {
-                $filter['admission_year'] = 2023;
+                $filter['admission_year'] = 2024;
 
             }else {
                 $filter['admission_year']  = $admission_year;
@@ -432,7 +432,7 @@ class Application extends BaseController {
 
 
             if($admission_year == '') {
-                $filter['admission_year'] = 2023;
+                $filter['admission_year'] = 2024;
 
             }else {
                 $filter['admission_year']  = $admission_year;
@@ -749,7 +749,7 @@ class Application extends BaseController {
                              'is_active' => 1,
                              'is_admitted' => 1,
                              'admission_status'=>1,
-                             'intake_year' => '2023-2024',
+                             'intake_year' => '2024-2025',
                              'native_place'=>$studentApplicationInfo->native_place,
                              'last_percentage'=>$studentApplicationInfo->sslc_percentage,
                              'mother_name' =>$studentApplicationInfo->mother_name,
@@ -1626,7 +1626,7 @@ class Application extends BaseController {
 
 
             if($admission_year == '') {
-                $admission_year_filter = 2023;
+                $admission_year_filter = 2024;
 
             }else {
                 $admission_year_filter  = $admission_year;
@@ -1778,7 +1778,7 @@ class Application extends BaseController {
                      'is_active' => 1,
                      'is_admitted' => 1,
                      'admission_status'=>1,
-                     'intake_year' => '2023-2024',
+                     'intake_year' => '2024-2025',
                      'native_place'=>$studentApplicationInfo->native_place,
                      'last_percentage'=>$studentApplicationInfo->sslc_percentage,
                      'mother_name' =>$studentApplicationInfo->mother_name,
@@ -2007,7 +2007,7 @@ class Application extends BaseController {
         $data['admission_year'] = $admission_year;
 
         if($admission_year == '') {
-            $filter['admission_year'] = 2023;
+            $filter['admission_year'] = 2024;
         }else {
             $filter['admission_year']  = $admission_year;
         }
@@ -2113,11 +2113,11 @@ class Application extends BaseController {
     $mobile = $this->security->xss_clean($this->input->post('mobile'));
     $date = $this->security->xss_clean($this->input->post('date'));
     $by_name = $this->security->xss_clean($this->input->post('by_name'));
-    log_message('debug','dataa'.$by_name);
+    // log_message('debug','dataa'.$by_name);
     $data['admission_year'] = $admission_year;
 
     if($admission_year == '') {
-        $filter['admission_year'] = 2023;
+        $filter['admission_year'] = 2024;
     }else {
         $filter['admission_year']  = $admission_year;
     }
@@ -2262,8 +2262,9 @@ public function grievanceSolved(){
                 $this->excel->getActiveSheet()->getStyle('A1:M3')->applyFromArray($styleBorderArray);
                 $sl = 1;
                 $excel_row = 4;
-    
+    log_message('debug','filter'.print_r($filter,true));
                 $studentInfo = $this->application->getApplicationInfoForReport($filter);
+    log_message('debug','filter'.print_r($studentInfo,true));
                
                     foreach($studentInfo as $std){
                         $this->excel->setActiveSheetIndex($sheet)->setCellValue('A'.$excel_row, $sl++);

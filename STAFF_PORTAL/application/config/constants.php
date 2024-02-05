@@ -214,7 +214,7 @@ define('CL',                            'CASUAL LEAVE');
 
 define('CURRENT_YEAR',                            '2023');
 
-
+define('ADMISSION_YEAR',                            '2024');
 
 define('SEGMENT',								2);
 

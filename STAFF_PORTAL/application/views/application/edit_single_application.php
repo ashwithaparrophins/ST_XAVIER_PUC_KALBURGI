@@ -646,7 +646,7 @@ $certificate_uploaded_name = array();
                                                                     <input name="caste_no" id="caste_no"
                                                                         value="<?php echo $studentInfo->caste_no; ?>"
                                                                         class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" placeholder="Caste Certificate No."
-                                                                        autocomplete="off" required>
+                                                                        autocomplete="off" >
                                                                     <span class="mdc-floating-label" id="my-label-id">Caste Certificate No.</span>
                                                                     <span class="mdc-line-ripple"></span>
                                                                 </label>
@@ -659,7 +659,7 @@ $certificate_uploaded_name = array();
                                                                     <input name="income_no" id="income_no"
                                                                         value="<?php echo $studentInfo->income_no; ?>"
                                                                         class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" placeholder="Income Certificate No."
-                                                                        autocomplete="off" required>
+                                                                        autocomplete="off" >
                                                                     <span class="mdc-floating-label" id="my-label-id">Income Certificate No.</span>
                                                                     <span class="mdc-line-ripple"></span>
                                                                 </label>

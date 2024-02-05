@@ -29,7 +29,7 @@
           <div class="card-header pb-0 pt-2 card_background">
             <div class="col-xs-12">
               
-              <h5 class="mb-2 font_color text-center"><b class="title_blue">Admission 2023 - 2024 Sign In</b></h5>
+              <h5 class="mb-2 font_color text-center"><b class="title_blue">Admission 2024 - 2025 Sign In</b></h5>
             </div>
           </div>
           <div class="card-body">

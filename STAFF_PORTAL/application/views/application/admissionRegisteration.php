@@ -114,7 +114,9 @@ if ($error) {
                                             <?php if(!empty($admission_year)){ ?>
                                                 <option value="<?php echo $admission_year; ?>" selected><b>Selected: <?php echo $admission_year; ?></b></option>
                                             <?php } ?>
-                                            <option value="<?php echo CURRENT_YEAR?>"><?php echo CURRENT_YEAR?></option>
+                                            <option value="<?php echo ADMISSION_YEAR?>"><?php echo ADMISSION_YEAR?></option>
+                                            <option value="<?php echo 2023?>"><?php echo 2023?></option>
+
                                             <!-- <option value="2021">2021</option> -->
                                             
                                         </select>

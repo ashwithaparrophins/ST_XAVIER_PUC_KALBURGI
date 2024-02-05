@@ -448,12 +448,12 @@
                                 <span> Registered</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                                 <a class="nav-link " href="<?php echo base_url(); ?>viewApplicationFeePending">
                                     <i class="material-icons">description</i>
                                     <span>App Fee Pending</span>
                                 </a>
-                            </li>
+                            </li> -->
 
                         <li class="nav-item">
                             <a class="nav-link " href="<?php echo base_url(); ?>getAllApplicationInfo">
