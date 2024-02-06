@@ -125,7 +125,9 @@ foreach($studentMarkInfo as $mark){
         }
     }
     $total_percentage = round($totalPercentage,2);
-
+    if(is_nan($total_percentage)){
+        $total_percentage = 0;
+    }
 
 $set_html=<<<EOD
 <tr nobr="true">
