@@ -117,10 +117,10 @@
                           <th width="200">Name<span class="float-right">:</span></th>
                           <td><?php echo $studentInfo->name; ?></td>
                         </tr>      
-                        <tr>
+                        <!-- <tr>
                           <th>10th Register/Hall Ticket/ Unique No.<span class="float-right">:</span> </th>
                           <td><?php echo $studentInfo->registration_number; ?></td>
-                        </tr>  
+                        </tr>   -->
                         <tr>
                           <th>Mobile No.<span class="float-right">:</span></th>
                           <td><?php echo $studentInfo->mobile; ?></td>

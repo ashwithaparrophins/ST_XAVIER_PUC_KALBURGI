@@ -48,6 +48,8 @@
                                                 <?php if(!empty($admission_year)){ ?>
                                                     <option value="<?php echo $admission_year; ?>" selected><b>Selected: <?php echo $admission_year; ?></b></option>
                                                 <?php } ?>
+                                                <option value="<?php echo ADMISSION_YEAR?>"><?php echo ADMISSION_YEAR?></option>
+
                                                 <option value="2023">2023</option>
                                                 <!-- <option value="2022">2022</option>
                                                 <option value="2021">2021</option> -->
