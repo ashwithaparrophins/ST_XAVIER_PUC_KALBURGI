@@ -1077,12 +1077,21 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
                             }
                             $total_mark += $mark->obtnd_mark;
                             // $total_ninth_mark += $mark->mark_obt_9_std;
-                            $total_max_mark += $max_mark;  
-                            $totalPercentage = ($total_mark / $total_max_mark) * 100;
+                            $total_max_mark += $max_mark; 
+                            if($max_mark == 0){
+                                $totalPercentage = 0;
+                            } else{
+                                $totalPercentage = ($total_mark / $total_max_mark) * 100;
+
+                            }
                             // $totalNinthPercentage = ($total_ninth_mark / $total_max_mark) * 100;
                         }
                     }
                     $total_percentage = round($totalPercentage,2);
+
+                    if(is_nan($total_percentage)){
+                        $total_percentage = 0;
+                    }
                     // $total_ninth_percentage = round($totalNinthPercentage,2);
                     // $isApplied = $this->student_model->getStudentApplication_2021($this->student_row_id);
                     // if(empty($isApplied)){
