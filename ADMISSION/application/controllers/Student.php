@@ -917,11 +917,69 @@ log_message('debug','csdfsdr'.$sslc_board_name_id);
                     //    }
                     }
                 }
+
+                //start
+                $total_max_mark = 0;
+                $total_ninth_mark = 0;
+                $total_mark = 0;
+                $totalPercentage = 0; 
+                $isExists = $this->student_model->checkStudentAdmissionStatus($this->student_row_id);
+                if(!empty($isExists)){
+                    $studentMarkInfo = $this->student_model->getStudentMarkInfo($this->student_row_id);
+
+                    if($boardInfo->board_name == "CBSE"){
+                        foreach($studentMarkInfo as $mark){
+                            $total_max_mark += $mark->max_mark;  
+                            $total_mark += $mark->obtnd_mark;
+                            // $total_ninth_mark += $mark->mark_obt_9_std;
+                            $totalPercentage = ($total_mark / $total_max_mark) * 100;
+                            // $totalNinthPercentage = ($total_ninth_mark / $total_max_mark) * 100;
+                        }
+                    } else if($boardInfo->board_name == "ICSE"){
+                        $markInfo = array_slice($studentMarkInfo, 0, 5, true);
+                        foreach($markInfo as $mark){
+                            $total_max_mark += $mark->max_mark;  
+                            $total_mark += $mark->obtnd_mark;
+                            // $total_ninth_mark += $mark->mark_obt_9_std;
+                            $totalPercentage = ($total_mark / $total_max_mark) * 100;
+                            // $totalNinthPercentage = ($total_ninth_mark / $total_max_mark) * 100;
+                        }
+                    } else {
+                        foreach($studentMarkInfo as $mark){
+                            if($mark->subject_name == 'EXEMPTED'){
+                                $max_mark = 0;  
+                            }else{
+                                $max_mark = $mark->max_mark;  
+                            }
+                            $total_mark += $mark->obtnd_mark;
+                            // $total_ninth_mark += $mark->mark_obt_9_std;
+                            $total_max_mark += $max_mark; 
+                            if($max_mark == 0){
+                                $totalPercentage = 0;
+                            } else{
+                                $totalPercentage = ($total_mark / $total_max_mark) * 100;
+
+                            }
+                            // $totalNinthPercentage = ($total_ninth_mark / $total_max_mark) * 100;
+                        }
+                    }
+                    $total_percentage = round($totalPercentage,2);
+
+                    if(is_nan($total_percentage)){
+                        $total_percentage = 0;
+                    }
+                    //end
+                    $applicationStatus = array(
+                        'sslc_percentage' => $total_percentage,
+                        'updated_by' => $this->student_row_id,
+                        'updated_date_time' => date('Y-m-d H:i:s'));
+    
+                        $retun = $this->student_model->updateStudentApplicationStatus($this->student_row_id,$applicationStatus);
+                }
             }
             if($retun_id > 0) {
                 $this->session->set_flashdata('success', 'School Details Added Successfully<br> Please Fill the Combination Details');
-                redirect('viewCombinationDetail');
-                
+                redirect('viewCombinationDetail');    
             } else {
                 $this->session->set_flashdata('error', 'Failed to Add Academic Details');
             }

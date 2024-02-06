@@ -785,7 +785,7 @@ class Application extends BaseController {
                            'present_address'=>$studentApplicationInfo->residential_address_line_1.' '.$studentApplicationInfo->residential_address_line_2.' '.$studentApplicationInfo->residential_address_district.' '.$studentApplicationInfo->residential_address_state.' '.$studentApplicationInfo->residential_address_pincode,
                             'residential_address'=>$studentApplicationInfo->permanent_address_line_1.' '.$studentApplicationInfo->permanent_address_line_2.' '.$studentApplicationInfo->permanent_address_district.' '.$studentApplicationInfo->permanent_address_state.' '.$studentApplicationInfo->permanent_address_pincode,
                             'is_dyslexic'=>$studentApplicationInfo->dyslexia_challenged,
-                          
+                            'primary_mobile'=>$studentApplicationInfo->father_mobile,
                              'created_by' => $this->staff_id,
                              'created_date_time' => date('Y-m-d H:i:s'),
                              'updated_by' => $this->staff_id);
