@@ -398,7 +398,7 @@ if(!empty($documentInfo)){
                                              <div class="mdc-select mdc-select-gender mdc-select--required">
                                                  <div class="mdc-select__anchor demo-width-class">
                                                      <span class="mdc-select__ripple"></span>
-                                                     <input type="text" class="mdc-select__selected-text" name="gender"
+                                                     <input type="text" onkeydown="return false;" onfocus="this.blur();" class="mdc-select__selected-text" name="gender"
                                                          id="gender" value="" required>
                                                      <i class="mdc-select__dropdown-icon"></i>
                                                      <span class="mdc-floating-label">Select Gender</span>
@@ -543,7 +543,7 @@ if(!empty($documentInfo)){
                                          <div class="mdc-select__anchor" aria-required="true">
                                              <span class="mdc-select__ripple"></span>
                                              <input type="text" class="mdc-select__selected-text" name="nationality"
-                                                 id="nationality" value="" required>
+                                                 id="nationality" value="" onkeydown="return false;" onfocus="this.blur();" required>
                                              <i class="mdc-select__dropdown-icon"></i>
                                              <span class="mdc-floating-label">Select Nationality</span>
                                              <span class="mdc-line-ripple"></span>
@@ -1767,6 +1767,12 @@ if(!empty($documentInfo)){
 
 
  <script type="text/javascript">
+    document.getElementById('gender').addEventListener('input', function () {
+        this.value = ''; // Clear any input
+    });
+    document.getElementById('nationality').addEventListener('input', function () {
+        this.value = ''; // Clear any input
+    });
 const dyslexia = mdc.select.MDCSelect.attachTo(document.querySelector('.mdc-select-dyslexia'));
 const physically = mdc.select.MDCSelect.attachTo(document.querySelector('.mdc-select-physically'));
 mdc.select.MDCSelect.attachTo(document.querySelector('.mdc-select-hostel'));

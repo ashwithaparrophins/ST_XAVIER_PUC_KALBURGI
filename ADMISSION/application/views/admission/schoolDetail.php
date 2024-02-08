@@ -132,7 +132,7 @@ $this->load->helper('form');
                                     <div class="mdc-select mdc-select-medium mdc-select--required">
                                         <div class="mdc-select__anchor demo-width-class" aria-required="true">
                                             <span class="mdc-select__ripple"></span>
-                                            <input type="text" class="mdc-select__selected-text" name="medium" value="" data-live-search="true" id="medium" required>
+                                            <input type="text" class="mdc-select__selected-text" name="medium" value="" onkeydown="return false;" onfocus="this.blur();" data-live-search="true" id="medium" required>
                                             <i class="mdc-select__dropdown-icon"></i>
                                             <span class="mdc-floating-label">Medium of Instruction</span>
                                             <span class="mdc-line-ripple"></span>
@@ -287,7 +287,7 @@ $this->load->helper('form');
                                 <div class="mdc-select mdc-select-board mdc-select--required">
                                     <div class="mdc-select__anchor demo-width-class" aria-required="true">
                                         <span class="mdc-select__ripple"></span>
-                                        <input type="text" class="mdc-select__selected-text" name="sslc_board_name" id="sslc_board_name" value="" required>
+                                        <input type="text" class="mdc-select__selected-text" name="sslc_board_name" id="sslc_board_name"  onkeydown="return false;" onfocus="this.blur();" value="" required>
                                         <i class="mdc-select__dropdown-icon"></i>
                                         <span class="mdc-floating-label">10th Board Name</span>
                                         <span class="mdc-line-ripple"></span>
@@ -700,6 +700,14 @@ $this->load->helper('form');
 
 
 <script type="text/javascript">
+
+    document.getElementById('medium').addEventListener('input', function () {
+        this.value = ''; // Clear any input
+    });
+    document.getElementById('sslc_board_name').addEventListener('input', function () {
+        this.value = ''; // Clear any input
+    });
+
     mdc.textField.MDCTextField.attachTo(document.querySelector('.name_of_the_school'));
     mdc.textField.MDCTextField.attachTo(document.querySelector('.other_medium_instruction'));
     mdc.textField.MDCTextField.attachTo(document.querySelector('.register_number'));

@@ -106,7 +106,7 @@ if(!empty($documentInfo)){
                                     <div class="mdc-select mdc-select-program_name mdc-select--required">
                                         <div class="mdc-select__anchor demo-width-class">
                                             <span class="mdc-select__ripple"></span>
-                                            <input type="text" class="mdc-select__selected-text" name="program_name" value="" id="program_name" required>
+                                            <input type="text" class="mdc-select__selected-text" name="program_name" value="" id="program_name"  onkeydown="return false;" onfocus="this.blur();" required>
                                             <i class="mdc-select__dropdown-icon"></i>
                                             <span class="mdc-floating-label">Select Course for First Preference</span>
                                             <span class="mdc-line-ripple"></span>
@@ -144,7 +144,7 @@ if(!empty($documentInfo)){
                                     <div class="mdc-select mdc-select-stream_name mdc-select--required">
                                         <div class="mdc-select__anchor" aria-required="true">
                                             <span class="mdc-select__ripple"></span>
-                                            <input type="text" class="mdc-select__selected-text" name="stream_name" id="stream_name" value="" required>
+                                            <input type="text" class="mdc-select__selected-text" name="stream_name" id="stream_name" value="" onkeydown="return false;" onfocus="this.blur();" required>
                                             <i class="mdc-select__dropdown-icon"></i>
                                             <span class="mdc-floating-label">Select Stream for First Preference</span>
                                             <span class="mdc-line-ripple"></span>
@@ -167,7 +167,7 @@ if(!empty($documentInfo)){
                                     <div class="mdc-select mdc-select-language_second mdc-select--required">
                                         <div class="mdc-select__anchor demo-width-class" aria-required="true">
                                             <span class="mdc-select__ripple"></span>
-                                            <input type="text" class="mdc-select__selected-text" name="language_second" value="" data-live-search="true" id="language_second" required>
+                                            <input type="text" class="mdc-select__selected-text" name="language_second" value="" onkeydown="return false;" onfocus="this.blur();" data-live-search="true" id="language_second" required>
                                             <i class="mdc-select__dropdown-icon"></i>
                                             <span class="mdc-floating-label">Language II</span>
                                             <span class="mdc-line-ripple"></span>
@@ -419,6 +419,15 @@ if(!empty($documentInfo)){
                              
             
 <script type="text/javascript">
+     document.getElementById('program_name').addEventListener('input', function () {
+        this.value = ''; // Clear any input
+    });
+    document.getElementById('stream_name').addEventListener('input', function () {
+        this.value = ''; // Clear any input
+    });
+    document.getElementById('language_second').addEventListener('input', function () {
+        this.value = ''; // Clear any input
+    });
     mdc.textField.MDCTextField.attachTo(document.querySelector('.language_first'));
     const stream_name_selected = mdc.select.MDCSelect.attachTo(document.querySelector('.mdc-select-stream_name'));
     const second_stream_name_selected = mdc.select.MDCSelect.attachTo(document.querySelector('.mdc-select-second_stream_name'));

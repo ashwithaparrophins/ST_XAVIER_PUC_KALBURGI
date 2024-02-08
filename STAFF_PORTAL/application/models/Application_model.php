@@ -82,7 +82,7 @@ class Application_model extends CI_Model {
         $this->db->select('
         personal.resgisted_tbl_row_id,
         approved.application_number, 
-        personal.sslc_percentage, 
+        approved.sslc_percentage, 
         approved.ninth_percentage, 
         personal.name,
         personal.father_name,
@@ -143,7 +143,7 @@ class Application_model extends CI_Model {
         }
     
         if(!empty($filter['sslc_pecentage'])){
-            $likeCriteria = "(personal.sslc_percentage  LIKE '%".$filter['sslc_pecentage']."%')";
+            $likeCriteria = "(approved.sslc_percentage  LIKE '%".$filter['sslc_pecentage']."%')";
             $this->db->where($likeCriteria);
         }
         if(!empty($filter['ninth_pecentage'])){
@@ -164,7 +164,7 @@ class Application_model extends CI_Model {
         //$this->db->where('approved.shortlisted_status', 0);
         $this->db->where('personal.is_deleted', 0);
         $this->db->where('approved.is_deleted', 0);
-        $this->db->order_by('personal.sslc_percentage', 'DESC');
+        $this->db->order_by('approved.sslc_percentage', 'DESC');
         $this->db->limit($filter['page'], $filter['segment']);
         $query = $this->db->get();
         $result = $query->result();
@@ -214,7 +214,7 @@ class Application_model extends CI_Model {
     
     
         if(!empty($filter['sslc_pecentage'])){
-            $likeCriteria = "(personal.sslc_percentage  LIKE '%".$filter['sslc_pecentage']."%')";
+            $likeCriteria = "(approved.sslc_percentage  LIKE '%".$filter['sslc_pecentage']."%')";
             $this->db->where($likeCriteria);
         }
         if(!empty($filter['ninth_pecentage'])){
@@ -236,7 +236,7 @@ class Application_model extends CI_Model {
         $this->db->where('personal.is_deleted', 0);
         $this->db->where('approved.is_deleted', 0);
       
-        $this->db->order_by('personal.sslc_percentage', 'DESC');
+        $this->db->order_by('approved.sslc_percentage', 'DESC');
         
         $query = $this->db->get();
         return $query->num_rows();
@@ -248,7 +248,7 @@ class Application_model extends CI_Model {
         $this->db->select('
         personal.resgisted_tbl_row_id,
         approved.application_number, 
-        personal.sslc_percentage, 
+        approved.sslc_percentage, 
         personal.name,
         personal.father_name,
         personal.father_mobile,
@@ -308,7 +308,7 @@ class Application_model extends CI_Model {
         }
 
         if(!empty($filter['sslc_percentage'])){
-            $likeCriteria = "(personal.sslc_percentage  LIKE '%".$filter['sslc_percentage']."%')";
+            $likeCriteria = "(approved.sslc_percentage  LIKE '%".$filter['sslc_percentage']."%')";
             $this->db->where($likeCriteria);
         }
 
@@ -320,7 +320,7 @@ class Application_model extends CI_Model {
         $this->db->where('approved.application_number !=', '');
         $this->db->where('personal.is_deleted', 0);
         $this->db->where('approved.admission_status', 2);
-        $this->db->order_by('personal.sslc_percentage', 'DESC');
+        $this->db->order_by('approved.sslc_percentage', 'DESC');
         $this->db->limit($page, $segment);
         $query = $this->db->get();
         $result = $query->result();
@@ -369,7 +369,7 @@ class Application_model extends CI_Model {
         }
 
         if(!empty($filter['sslc_percentage'])){
-            $likeCriteria = "(personal.sslc_percentage  LIKE '%".$filter['sslc_percentage']."%')";
+            $likeCriteria = "(approved.sslc_percentage  LIKE '%".$filter['sslc_percentage']."%')";
             $this->db->where($likeCriteria);
         }
         if(!empty($filter['admission_year'])){
