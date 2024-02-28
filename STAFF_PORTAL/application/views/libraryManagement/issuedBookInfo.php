@@ -316,7 +316,7 @@ if ($success) {
             e.preventDefault();
             var link = jQuery(this).get(0).href;
             var value = link.substring(link.lastIndexOf('/') + 1);
-            jQuery("#byFilterMethod").attr("action", baseURL + "libraryManagementSystem/" + value);
+            jQuery("#byFilterMethod").attr("action", baseURL + "viewIssuedBooks/" + value);
             jQuery("#byFilterMethod").submit();
         });
 

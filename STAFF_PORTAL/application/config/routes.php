@@ -1014,6 +1014,7 @@ $route['addLibraryIssueInfo'] = "libraryManagement/addLibraryIssueInfo";
 
 //Issued Books
 $route['viewIssuedBooks'] = "libraryManagement/viewIssuedBooks";
+$route['viewIssuedBooks/(:any)'] = "libraryManagement/viewIssuedBooks/$1";
 $route['editIssuedInfo/(:any)'] = "libraryManagement/editIssuedInfo/$1";
 $route['updateIssuedInfo'] = "libraryManagement/updateIssuedInfo";
 
