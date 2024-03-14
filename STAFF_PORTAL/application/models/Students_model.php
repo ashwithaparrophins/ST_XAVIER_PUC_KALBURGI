@@ -1836,4 +1836,16 @@ class students_model extends CI_Model
    
     }
 
+    public function getAllStudentInfo_For_FeeDuereport($term_name,$preference,$year){
+        $this->db->from('tbl_students_info as student'); 
+        $this->db->where('student.term_name', $term_name);
+        $this->db->where('student.stream_name', $preference);
+        $this->db->where('student.is_deleted', 0);
+        $this->db->where('student.is_active', 1);
+        $this->db->where('student.intake_year_id',$year);
+        $this->db->order_by('student.stream_name', 'ASC');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     }

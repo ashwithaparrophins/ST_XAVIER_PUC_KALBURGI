@@ -1019,6 +1019,127 @@ class Transport_model extends CI_Model
         $query = $this->db->get();
         return $query->num_rows();
     }
+
+    public function getFeeConcessionCount($filter='') {
+        $this->db->select('fee.row_id,fee.fee_amt,fee.approved_status,fee.date,fee.description,fee.student_id,
+        fee.payment_status,std.student_name,std.sat_number');
+        $this->db->from('tbl_student_bus_fee_concession as fee');
+        $this->db->join('tbl_students_info as std','std.row_id = fee.student_id','left');
+        // $this->db->join('tbl_student_academic_info as academic', 'academic.rel_student_row_id = std.row_id','left');
+         if(!empty($filter['by_id'])) {
+            $likeCriteria = "(fee.student_id LIKE '%".$filter['by_id']."%')";
+            $this->db->where($likeCriteria);
+        } 
+         if(!empty($filter['admission_no'])) {
+            $likeCriteria = "(std.student_id LIKE '%".$filter['admission_no']."%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['by_name'])) {
+            $likeCriteria = "(std.student_name LIKE '%".$filter['by_name']."%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['amount'])){
+            $this->db->where('fee.fee_amt', $filter['amount']);
+        } 
+        if(!empty($filter['by_date'])){
+            $likeCriteria = "(fee.date LIKE '%".$filter['by_date']."%')";
+            $this->db->where($likeCriteria);
+        } 
+        if(!empty($filter['year'])){
+            $this->db->where('fee.con_year',$filter['year']);
+        } 
+        // if(!empty($filter['concession_to'])){
+        //     $likeCriteria = "(fee.concession_to LIKE '%".$filter['concession_to']."%')";
+        //     $this->db->where($likeCriteria);
+        // } 
+        // if(!empty($filter['concession_from'])){
+        //     $likeCriteria = "(fee.concession_from LIKE '%".$filter['concession_from']."%')";
+        //     $this->db->where($likeCriteria);
+        // } 
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('std.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function getFeeConcessionInfoList($filter='') {
+        $this->db->select('fee.row_id,fee.fee_amt,fee.approved_status,fee.date,fee.description,std.student_id,fee.concession_to,fee.concession_from,
+        fee.payment_status,std.student_name,std.sat_number,fee.con_year');
+        $this->db->from('tbl_student_bus_fee_concession as fee');
+        $this->db->join('tbl_students_info as std','std.row_id = fee.student_id','left');
+        // $this->db->join('tbl_student_academic_info as academic', 'academic.rel_student_row_id = std.row_id','left'); 
+        if(!empty($filter['by_name'])) {
+            $likeCriteria = "(std.student_name LIKE '%".$filter['by_name']."%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['by_id'])) {
+            $likeCriteria = "(fee.student_id LIKE '%".$filter['by_id']."%')";
+            $this->db->where($likeCriteria);
+        }
+         if(!empty($filter['admission_no'])) {
+            $likeCriteria = "(std.student_id LIKE '%".$filter['admission_no']."%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['amount'])){
+            $this->db->where('fee.fee_amt', $filter['amount']);
+        } 
+        // if(!empty($filter['concession_to'])){
+        //     $likeCriteria = "(fee.concession_to LIKE '%".$filter['concession_to']."%')";
+        //     $this->db->where($likeCriteria);
+        // } 
+        // if(!empty($filter['concession_from'])){
+        //     $likeCriteria = "(fee.concession_from LIKE '%".$filter['concession_from']."%')";
+        //     $this->db->where($likeCriteria);
+        // } 
+        if(!empty($filter['year'])){
+            $this->db->where('fee.con_year',$filter['year']);
+        }
+        // else{
+        //     $this->db->where('fee.con_year',CURRENT_YEAR);
+        // } 
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('std.is_deleted', 0);
+        $this->db->order_by('fee.row_id','DESC');
+        $this->db->limit($filter['page'], $filter['segment']);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function addConcession($feeInfo) {
+        $this->db->trans_start();
+        $this->db->insert('tbl_student_bus_fee_concession', $feeInfo);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+
+    public function getFeeConcessionById($row_id) {
+        $this->db->select('fee.row_id,fee.fee_amt,fee.approved_status,fee.date,fee.description,fee.student_id,
+        fee.payment_status,fee.con_year,std.student_name,std.admission_no,std.term_name,std.stream_name');
+        $this->db->from('tbl_student_bus_fee_concession as fee');
+        $this->db->join('tbl_students_info as std','std.row_id = fee.student_id','left');
+        // $this->db->join('tbl_student_academic_info as academic', 'academic.rel_student_row_id = std.row_id','left'); 
+        $this->db->where('fee.row_id', $row_id);
+        $this->db->where('fee.is_deleted', 0); 
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function updateConcession($feeInfo, $row_id) {
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_student_bus_fee_concession', $feeInfo);
+        return TRUE;
+    }
     
+    public function getFeeConcessionInfo($student_row_id,$year){
+        $this->db->select('SUM(fee.fee_amt) as fee_amt');
+        $this->db->from('tbl_student_bus_fee_concession as fee');
+        $this->db->where('fee.student_id', $student_row_id);
+        $this->db->where('fee.con_year', $year);
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('fee.approved_status', 1);
+        $query = $this->db->get();
+        return $query->row();
+    }
 }
 ?>

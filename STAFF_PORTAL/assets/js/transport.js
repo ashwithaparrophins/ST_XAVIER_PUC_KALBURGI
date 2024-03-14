@@ -239,6 +239,80 @@ jQuery(document).on("click", ".deleteTransportName", function(){
     }
 });
 
+	// delete Fee Installment
+	jQuery(document).on("click", ".deleteBusConcession", function(){
+		var row_id = $(this).data("row_id"),
+			hitURL = baseURL + "deleteBusConcession",
+			currentRow = $(this);
+		
+		var confirmation = confirm("Are you sure to delete this Concession Info?");
+		
+		if(confirmation)
+		{
+			jQuery.ajax({
+			type : "POST",
+			dataType : "json",
+			url : hitURL,
+			data : { row_id : row_id } 
+			}).done(function(data){
+					
+				currentRow.parents('tr').remove();
+				if(data.status = true) { alert("Concession successfully deleted"); }
+				else if(data.status = false) { alert("Concession deletion failed"); }
+				else { alert("Access denied..!"); }
+			});
+		}
+	});
+
+		// concession
+		jQuery(document).on("click", ".approveBusConcession", function(){
+			var row_id = $(this).data("row_id"),
+				hitURL = baseURL + "approveBusConcession",
+				currentRow = $(this);
+			
+			var confirmation = confirm("Are you sure to Approve this request?");
+			
+			if(confirmation)
+			{
+				jQuery.ajax({
+				type : "POST",
+				dataType : "json",
+				url : hitURL,
+				data : { row_id : row_id } 
+				}).done(function(data){
+					
+					if(data.status = true) { alert("Request successfully Approved");
+					window.location.reload() }
+					else if(data.status = false) { alert("Failed to approve request"); }
+					else { alert("Access denied..!"); }
+				});
+			}
+		});
+		
+		
+		jQuery(document).on("click", ".rejectBusConcession", function(){
+			var row_id = $(this).data("row_id"),
+				hitURL = baseURL + "rejectBusConcession",
+				currentRow = $(this);
+			
+			var confirmation = confirm("Are you sure to Reject this request?");
+			
+			if(confirmation)
+			{
+				jQuery.ajax({
+				type : "POST",
+				dataType : "json",
+				url : hitURL,
+				data : { row_id : row_id } 
+				}).done(function(data){
+	
+					if(data.status = true) { alert("Request successfully Rejected"); 
+					window.location.reload()}
+					else if(data.status = false) { alert("Failed to reject request"); }
+					else { alert("Access denied..!"); }
+				});
+			}
+		});
 
 
 });

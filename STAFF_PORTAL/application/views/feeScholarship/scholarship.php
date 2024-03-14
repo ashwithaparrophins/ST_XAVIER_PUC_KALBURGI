@@ -67,7 +67,7 @@
                         <div class="row c-m-b">
                             <div class="col-lg-5 col-6 col-md-4 col-sm-4 box-tools">
                                 <span class="page-title">
-                                    <i class="fas fa-rupee-sign"></i> Concession
+                                    <i class="fas fa-rupee-sign"></i> Scholarship
                                 </span>
                             </div>
                             <div class="col-lg-3 col-6 col-md-4 col-sm-4">
@@ -97,7 +97,7 @@
                 <div class="card card-small mb-4">
                     <div class="card-body p-1 pb-2 table-responsive">
                         <table class="display table table-bordered table-striped table-hover w-100">
-                            <form action="<?php echo base_url(); ?>viewFeeConcession" method="POST" id="byFilterMethod">
+                            <form action="<?php echo base_url(); ?>viewScholarship" method="POST" id="byFilterMethod">
                                 <tr class="filter_row" class="text-center">
                                     <td>
                                         <div class="form-group mb-0">
@@ -146,7 +146,7 @@
                                     foreach($concessionInfo as $fee){ ?>
                                 <tr>
                                     <th class="text-center" width="180"><?php echo $fee->student_id; ?></th>
-                                    <th width="330"><?php echo strtoupper($fee->student_name); ?></th>
+                                    <th width="330"><?php echo $fee->student_name; ?></th>
                                     <th class="text-center" width="150"><?php echo $fee->fee_amt; ?></th>
                                     <th class="text-center" width="150"><?php echo date('d-m-Y',strtotime($fee->date)); ?></th>
                                     <th><?php echo $fee->description; ?></th>
@@ -157,14 +157,14 @@
                                         if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR){ 
                                                 if($fee->payment_status == 0){  ?>
                                         <a class="btn btn-xs btn-info"
-                                            href="<?php echo base_url(); ?>editConcession/<?php echo $fee->row_id; ?>"
+                                            href="<?php echo base_url(); ?>editScholarship/<?php echo $fee->row_id; ?>"
                                             title="Edit Student"><i class="fas fa-pencil-alt"></i></a>
                                         <?php if($fee->approved_status == 1){ ?>
-                                        <a class="btn btn-xs btn-danger rejectConcession p-2" href="#"
+                                        <a class="btn btn-xs btn-danger rejectScholarship p-2" href="#"
                                             data-row_id="<?php echo $fee->row_id; ?>"> Reject</a>
                                         <?php } } ?>
                                         <?php if($fee->approved_status != 1){  ?>
-                                        <a class="btn btn-xs btn-success approveConcession p-2" href="#"
+                                        <a class="btn btn-xs btn-success approveScholarship p-2" href="#"
                                             data-row_id="<?php echo $fee->row_id; ?>"> Approve</a>
                                         <?php } } 
                                             }else{
@@ -175,7 +175,7 @@
                                 </tr>
                                 <?php } }else{  ?>
                                 <tr>
-                                    <th colspan="8" class="text-center">Concession Record Not Found</th>
+                                    <th colspan="8" class="text-center">Scholarship Record Not Found</th>
                                 </tr>
                                 <?php } ?>
                             </tbody>
@@ -193,13 +193,13 @@
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header bg-primary" style="padding: 7px 15px;">
-                    <h4 class="modal-title">Add New Concession</h4>
+                    <h4 class="modal-title">Add New Scholarship</h4>
                     <button type="button" class="close float-right" data-dismiss="modal">&times;</button>
                 </div>
                 <!-- Modal body -->
                 <div class="modal-body p-2">
                     <?php $this->load->helper("form"); ?>
-                    <form role="form" id="addConcessionInfo" action="<?php echo base_url() ?>addConcession"
+                    <form role="form" id="addConcessionInfo" action="<?php echo base_url() ?>addScholarship"
                         method="post" role="form">
                         <div class="row form-contents">
                             <div class="col-lg-12">
@@ -218,9 +218,9 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label>Enter Concession Amount <span class="text-danger">*</span></label>
+                                    <label>Enter Scholarship Amount <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control " id="fee_amount" name="fee_amount"
-                                        placeholder="Enter Concession Amount" onkeypress="return isNumberKey(event)"
+                                        placeholder="Enter Scholarship Amount" onkeypress="return isNumberKey(event)"
                                         required autocomplete="off">
                                 </div>
                                
@@ -266,7 +266,7 @@ jQuery(document).ready(function() {
         e.preventDefault();
         var link = jQuery(this).get(0).href;
         var value = link.substring(link.lastIndexOf('/') + 1);
-        jQuery("#byFilterMethod").attr("action", baseURL + "viewFeeConcession/" + value);
+        jQuery("#byFilterMethod").attr("action", baseURL + "viewScholarship/" + value);
         jQuery("#byFilterMethod").submit();
     });
 

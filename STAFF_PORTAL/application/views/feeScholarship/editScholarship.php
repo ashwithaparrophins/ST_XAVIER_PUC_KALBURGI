@@ -43,7 +43,7 @@ if ($error) {
                         <div class="row c-m-b">
                             <div class="col-lg-7 col-6 col-md-7 box-tools">
                                 <span class="page-title">
-                                    <i class="fas fa-rupee-sign"></i> Edit Concession
+                                    <i class="fas fa-rupee-sign"></i> Edit Scholarship
                                 </span>
                             </div>
                             <div class="col-lg-5 col-md-5 col-6">
@@ -60,7 +60,7 @@ if ($error) {
                 <div class="card card-small c-border mb-4 p-2">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item p-2">
-                            <form role="form" action="<?php echo base_url() ?>updateConcession" method="post"
+                            <form role="form" action="<?php echo base_url() ?>updateScholarship" method="post"
                                 role="form">
                                 <input type="hidden" name="row_id" id="row_id" value="<?php echo $feeInfo->row_id; ?>" />
                                 <div class="row p-0 column_padding_card">

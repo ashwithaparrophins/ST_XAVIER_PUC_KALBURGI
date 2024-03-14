@@ -256,7 +256,15 @@ if ($error) {
                                                             </th>
                                                         </tr>
                                                         <?php } ?>
-                                                        
+                                                        <?php 
+                                                        if(!empty($feeConcession->fee_amt)){ ?>
+                                                        <tr class="bg-warning text-white" >
+                                                            <th class="text-left" scope="col">Concession</th>
+                                                            <th class="text-left" scope="col">
+                                                                <?php echo number_format($feeConcession->fee_amt,2); ?>
+                                                            </th>
+                                                        </tr>
+                                                        <?php } ?>
                                                         <?php //if(!empty($fee_amount)){ ?>
                                                         <tr class="bg-danger text-white">
                                                             <th class="text-left" scope="col">Pending Balance</th>
@@ -399,7 +407,8 @@ if ($error) {
                                                         <th class="text-center"><?php echo $fee->ref_receipt_no; ?></th>
                                                         <!-- <th class="text-center"><?php echo $fee->order_id; ?></th> -->
                                                         <th class="text-center"><?php echo $fee->bus_fees; ?></th>
-                                                        <?php if($year == CURRENT_YEAR){?>
+                                                        <?php if($year == CURRENT_YEAR){
+                                                            log_message('debug','from_date'.date('M',strtotime($fee->from_date)));?>
                                                         <th class="text-center"><?php echo date('M-Y',strtotime($fee->from_date)); ?></th>
                                                         <th class="text-center"><?php echo date('M-Y',strtotime($fee->to_date)); ?></th>
                                                         <?php } ?>

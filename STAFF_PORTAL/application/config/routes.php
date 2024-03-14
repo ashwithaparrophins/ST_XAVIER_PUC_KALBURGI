@@ -432,6 +432,15 @@ $route['updateConcession'] = "fee/updateConcession";
 $route['approveConcession'] = "fee/approveConcession";
 $route['rejectConcession'] = "fee/rejectConcession";
 
+// fee scholarship
+$route['viewScholarship'] = "fee/viewScholarship";
+$route['viewScholarship/(:any)'] = "fee/viewScholarship/$1";
+$route['addScholarship'] = "fee/addScholarship";
+$route['editScholarship/(:any)'] = "fee/editScholarship/$1";
+$route['updateScholarship'] = "fee/updateScholarship";
+$route['approveScholarship'] = "fee/approveScholarship";
+$route['rejectScholarship'] = "fee/rejectScholarship";
+
 //fee Installment Info
 $route['feeInstallmentListing'] = "fee/feeInstallmentListing";
 $route['feeInstallmentListing/(:any)'] = "fee/feeInstallmentListing/$1";
@@ -501,11 +510,20 @@ $route['getReceipt'] = "transport/getReceipt";
 $route['viewStudentTransportListing'] = "transport/viewStudentTransportListing";
 $route['viewStudentTransportListing/(:any)'] = "transport/viewStudentTransportListing/$1";
 
+//Bus fee concession
+$route['viewBusFeeConcession'] = "transport/viewBusFeeConcession";
+$route['viewBusFeeConcession/(:any)'] = "transport/viewBusFeeConcession/$1";
+$route['addBusConcession'] = "transport/addBusConcession";
+$route['editBusConcession/(:any)'] = "transport/editBusConcession/$1";
+$route['updateBusConcession'] = "transport/updateBusConcession";
+$route['approveBusConcession'] = "transport/approveBusConcession";
+$route['rejectBusConcession'] = "transport/rejectBusConcession";
+$route['deleteBusConcession'] = "transport/deleteBusConcession";
 //transport report 
 $route['downloadTransportFeeInfoReport'] = "reports/downloadTransportFeeInfoReport";
 $route['downloadArrearTransportFeeInfoReport'] = "reports/downloadArrearTransportFeeInfoReport";
 $route['downloadTransportDueInfoReport'] = "reports/downloadTransportDueInfoReport";
-
+$route['downloadTransportOnlyDueInfoReport'] = "reports/downloadTransportOnlyDueInfoReport";
 //
 $route['downloadBulkFeeReport'] = "reports/downloadBulkFeeReport";
 $route['downloadArrearFeeInfoReport'] = "reports/downloadArrearFeeInfoReport";
@@ -554,6 +572,7 @@ $route['downloadAdmittedStudentInfo'] = "reports/downloadAdmittedStudentInfo";
 
 $route['downloadDayWiseFeeReport'] = "reports/downloadDayWiseFeeReport";
 $route['downloadFeeDueReport'] = "reports/downloadFeeDueReport";
+$route['downloadFeePaidReport'] = "reports/downloadFeePaidReport";
 $route['downloadRejectedAppFeeReport'] = "reports/downloadRejectedAppFeeReport";
 
 

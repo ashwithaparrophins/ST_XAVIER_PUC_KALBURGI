@@ -1249,7 +1249,11 @@ class Transport extends BaseController
                 if(!empty($feePaidInfo->paid_amount)){
                     $total_fee_amount -= $feePaidInfo->paid_amount;
                 }
-
+                $feeConcession = $this->transport->getFeeConcessionInfo($student_row_id,$year); 
+                if(!empty($feeConcession)){
+                    $total_fee_amount -= $feeConcession->fee_amt;
+                    $data['feeConcession'] = $feeConcession;
+                }
                 $data['stdFeePaymentInfo'] = $this->transport->getStudentOverallTransFeePaymentInfo($student_row_id,$year);
                 $data['feePaidInfo'] = $feePaidInfo;
                 $data['studentData'] = $studentData;
@@ -1304,6 +1308,7 @@ class Transport extends BaseController
 
             $payment_date = $this->security->xss_clean($this->input->post('payment_date'));
             $from_date = $this->security->xss_clean($this->input->post('month_from'));
+   
             $to_date = $this->security->xss_clean($this->input->post('month_to'));
             $month = $this->security->xss_clean($this->input->post('month_diff'));
             $ref_receipt_no = $this->security->xss_clean($this->input->post('receipt_no'));
@@ -1541,7 +1546,7 @@ class Transport extends BaseController
                         $data['end_date'] = '';
                     }
 
-                log_message('debug','row'.$row_id);
+                // log_message('debug','row'.$row_id);
                 $busInfo = array(
                     'cancel_bus_status' => 1,
                     'bus_joined_date' => date('Y-m-d',strtotime($join_date)),
@@ -1580,5 +1585,192 @@ class Transport extends BaseController
                 echo (json_encode(array('status' => false)));
             }
         }
+    }
+
+    public function viewBusFeeConcession(){
+        if ($this->isAdmin() == true ) {
+            $this->loadThis();
+        } else {  
+            $filter = array();
+            $by_id = $this->security->xss_clean($this->input->post('by_id'));
+            $admission_no = $this->security->xss_clean($this->input->post('admission_no'));
+            $by_name = $this->security->xss_clean($this->input->post('by_name'));
+            $amount = $this->security->xss_clean($this->input->post('amount'));
+            $concession_from = $this->security->xss_clean($this->input->post('concession_from'));
+            $concession_to = $this->security->xss_clean($this->input->post('concession_to'));
+            $year = $this->security->xss_clean($this->input->post('year'));
+            
+            $data['by_id'] = $by_id;
+            $data['admission_no'] = $admission_no;
+            $data['by_name'] = $by_name;
+            $data['amount'] = $amount;
+            $data['year'] = $year;
+
+            $filter['by_id'] = $by_id;
+            $filter['admission_no'] = $admission_no;
+            $filter['by_name'] = $by_name;
+            $filter['amount'] = $amount;
+            $filter['year'] = $year;
+
+            // if(!empty($concession_from)){
+            //     $filter['concession_from'] = date('Y-m-d',strtotime($concession_from));
+            //     $data['concession_from'] = date('d-m-Y',strtotime($concession_from));
+            // }else{
+            //     $data['concession_from'] = '';
+            // }
+            // if(!empty($concession_to)){
+            //     $filter['concession_to'] = date('Y-m-d',strtotime($concession_to));
+            //     $data['concession_to'] = date('d-m-Y',strtotime($concession_to));
+            // }else{
+            //     $data['concession_to'] = '';
+            // }
+            $this->load->library('pagination');
+            $count = $this->transport->getFeeConcessionCount($filter);
+            $returns = $this->paginationCompress("viewBusFeeConcession/", $count, 100);
+            $data['totalCount'] = $count;
+            $filter['page'] = $returns["page"];
+            $filter['segment'] = $returns["segment"];
+            $data['concessionInfo'] = $this->transport->getFeeConcessionInfoList($filter);
+            $data['studentInfo'] = $this->student->getCurrentStudentInfoForTrans($filter);
+            // $data['studentInfo22'] = $this->student->getStudentPreviousPendingAmt();
+            $this->global['pageTitle'] = ''.TAB_TITLE.' : Fee Concession';
+            $this->loadViews("transport/busconcession", $this->global, $data, null);
+        }
+    }
+    public function addBusConcession() {
+        if($this->isAdmin() == TRUE) {
+            $this->loadThis();
+        }  else {
+            $this->load->library('form_validation');
+            $this->form_validation->set_rules('student_id','Student ID','trim|required');
+            $this->form_validation->set_rules('fee_amount','Amount','trim|required|numeric');
+            $this->form_validation->set_rules('description','Remarks','trim|required');
+
+            if($this->form_validation->run() == FALSE) {
+                $this->viewBusFeeConcession();
+            } else {
+                $student_id = $this->security->xss_clean($this->input->post('student_id'));
+                $fee_amount = $this->security->xss_clean($this->input->post('fee_amount'));
+                $description = $this->security->xss_clean($this->input->post('description'));
+                $year = $this->security->xss_clean($this->input->post('con_year'));
+                $concession_from = $this->security->xss_clean($this->input->post('concession_from'));
+                $concession_to = $this->security->xss_clean($this->input->post('concession_to'));
+                // $isExist = $this->transport->checkStudentIdExists($student_id);
+                // if(!empty($isExist)){
+                //     $this->session->set_flashdata('warning', 'Student Already Exists');
+                //     redirect('viewBusFeeConcession');
+                // }else{ 
+                    $feeInfo = array(
+                        'student_id'=>$student_id,
+                        'fee_amt'=>$fee_amount,
+                        'description'=>$description,
+                        'con_year' => $year,
+                        'concession_from'=>date('Y-m-d',strtotime($concession_from)),
+                        'concession_to'=>date('Y-m-d',strtotime($concession_to)),
+                        'date'=>date('Y-m-d H:i:s'),
+                        'approved_status'=>0,
+                        'created_by'=>$this->staff_id,
+                        'created_date_time'=>date('Y-m-d H:i:s'));
+                    $result = $this->transport->addConcession($feeInfo);
+                    if($result > 0){
+                        $this->session->set_flashdata('success', 'Scholarship Added successfully');
+                    } else{
+                        $this->session->set_flashdata('error', 'Failed to Add Scholarship');
+                    }
+                // }
+                redirect('viewBusFeeConcession');
+                
+            }
+        }
+    }
+    
+    public function editBusConcession($row_id = null){
+        if ($this->isAdmin() == true ) {
+            $this->loadThis();
+        } else {
+            if ($row_id == NULL) {
+                redirect('viewFeeStructure');
+            }
+            $data['feeInfo'] = $this->transport->getFeeConcessionById($row_id);
+            $data['studentInfo'] = $this->student->getstudentInfo();
+            $this->global['pageTitle'] = ''.TAB_TITLE.' : Update Concession';
+            $this->loadViews("transport/editbusConcession", $this->global, $data, null);
+        }
+    }
+
+    public function updateBusConcession() {
+        if($this->isAdmin() == TRUE) {
+            $this->loadThis();
+        }  else {
+            $row_id = $this->input->post('row_id');
+            $this->load->library('form_validation');
+            $this->form_validation->set_rules('student_id','Student ID','trim|required');
+            $this->form_validation->set_rules('fee_amount','Amount','trim|required|numeric');
+            $this->form_validation->set_rules('description','Remarks','trim|required');
+            if($this->form_validation->run() == FALSE) {
+                redirect('editbusConcession/'.$row_id);
+            } else {
+                $student_id = $this->security->xss_clean($this->input->post('student_id'));
+                $fee_amount = $this->security->xss_clean($this->input->post('fee_amount'));
+                $description = $this->security->xss_clean($this->input->post('description'));
+                $year = $this->security->xss_clean($this->input->post('year'));
+
+                    $feeInfo = array(
+                        'student_id'=>$student_id,
+                        'fee_amt'=>$fee_amount,
+                        'description'=>$description,
+                        'con_year' => $year,
+                        'updated_by'=>$this->staff_id,
+                        'updated_date_time'=>date('Y-m-d H:i:s'));
+                    $result = $this->transport->updateConcession($feeInfo,$row_id);
+                    if($result > 0){
+                        $this->session->set_flashdata('success', 'Scholarship Updated successfully');
+                    } else{
+                        $this->session->set_flashdata('error', 'Failed to Update Scholarship');
+                    }
+                redirect('editBusConcession/'.$row_id);
+            }
+        }
+    }
+
+    
+    public function deleteBusConcession(){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {   
+            $row_id = $this->input->post('row_id');
+            $feeInfo = array('is_deleted' => 1,
+            'updated_date_time' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->staff_id);
+            $result = $this->transport->updateConcession($feeInfo,$row_id);
+            if ($result == true) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
+        } 
+    }
+
+    
+    public function approveBusConcession(){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {   
+            $row_id = $this->input->post('row_id');
+            $feeInfo = array('approved_status' => 1,
+            'updated_date_time' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->staff_id);
+            $result = $this->transport->updateConcession($feeInfo,$row_id);
+            if ($result == true) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
+        } 
+    }
+    
+    public function rejectBusConcession(){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {   
+            $row_id = $this->input->post('row_id');
+            $feeInfo = array('approved_status' => 2,
+            'updated_date_time' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->staff_id);
+            $result = $this->transport->updateConcession($feeInfo,$row_id);
+            if ($result == true) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
+        } 
     }
 }

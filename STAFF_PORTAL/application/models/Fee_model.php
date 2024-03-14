@@ -175,6 +175,14 @@ class Fee_model extends CI_Model
         return $query->row();
     }
 
+    public function getFeeInfoByReceiptNumBulk($receipt_number){
+        $this->db->from('tbl_students_overall_fee_payment_info_i_puc_2021 as fee');
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('fee.application_no', $receipt_number);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
     public function updateReceiptNumber($feePayment,$row_id) {
         $this->db->where_in('row_id', $row_id);
         $this->db->update('tbl_students_overall_fee_payment_info_i_puc_2021', $feePayment);
@@ -1202,7 +1210,7 @@ class Fee_model extends CI_Model
                 $this->db->where('fee.payment_date>=', $filter['date_from']);
                 $this->db->where('fee.payment_date<=', $filter['date_to']);
                }
-               if(!empty($filter['preference'])){
+               if(($filter['preference']!= 'ALL')){
                 $this->db->where('student.stream_name', $filter['preference']);
                }
                if(!empty($filter['term_name'])){
@@ -1269,7 +1277,7 @@ class Fee_model extends CI_Model
                 $this->db->where('fee.payment_date>=', $filter['date_from']);
                 $this->db->where('fee.payment_date<=', $filter['date_to']);
                }
-               if(!empty($filter['preference'])){
+               if(($filter['preference']!= 'ALL')){
                 $this->db->where('student.stream_name', $filter['preference']);
                }
                if(!empty($filter['term_name'])){
@@ -1725,6 +1733,140 @@ class Fee_model extends CI_Model
         return $query->row();
     }
 
+    public function getFeeScholarshipCount($filter='') {
+        $this->db->select('std.student_id,fee.row_id,fee.fee_amt,fee.approved_status,fee.date,
+        fee.description,fee.application_no,fee.payment_status,std.student_name');
+        $this->db->from('tbl_student_fee_scholarship as fee');
+        $this->db->join('tbl_students_info as std','std.row_id = fee.application_no'); 
+       
+        
+        if(!empty($filter['by_name'])) {
+            $likeCriteria = "(std.student_name LIKE '%".$filter['by_name']."%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['amount'])){
+            $this->db->where('fee.fee_amt', $filter['amount']);
+        } 
+         if(!empty($filter['student_id'])){
+            $this->db->where('std.student_id', $filter['student_id']);
+        } 
+        if(!empty($filter['by_date'])){
+            $likeCriteria = "(fee.date LIKE '%".$filter['by_date']."%')";
+            $this->db->where($likeCriteria);
+        } 
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('std.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
     
+    public function getFeeScholarshipInfo($filter='') {
+        $this->db->select('std.student_id,fee.row_id,fee.fee_amt,fee.approved_status,fee.date,fee.description,fee.application_no,
+        fee.payment_status,std.student_name');
+        $this->db->from('tbl_student_fee_scholarship as fee');
+        $this->db->join('tbl_students_info as std','std.row_id = fee.application_no'); 
+       
+        
+        if(!empty($filter['by_name'])) {
+            $likeCriteria = "(std.student_name LIKE '%".$filter['by_name']."%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['amount'])){
+            $this->db->where('fee.fee_amt', $filter['amount']);
+        } 
+        if(!empty($filter['student_id'])){
+            $this->db->where('std.student_id', $filter['student_id']);
+        } 
+        if(!empty($filter['by_date'])){
+            $likeCriteria = "(fee.date LIKE '%".$filter['by_date']."%')";
+            $this->db->where($likeCriteria);
+        } 
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('std.is_deleted', 0);
+        $this->db->order_by('fee.row_id','DESC');
+        $this->db->limit($filter['page'], $filter['segment']);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function addScholarship($feeInfo) {
+        $this->db->trans_start();
+        $this->db->insert('tbl_student_fee_scholarship', $feeInfo);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+
+    public function updateScholarship($feeInfo, $row_id) {
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_student_fee_scholarship', $feeInfo);
+        return TRUE;
+    }
+
+    public function getFeeScholarshipById($row_id) {
+        $this->db->select('fee.row_id,fee.fee_amt,fee.approved_status,fee.date,fee.description,fee.application_no,
+        fee.payment_status,std.student_name');
+        $this->db->from('tbl_student_fee_scholarship as fee');
+        $this->db->join('tbl_students_info as std','std.row_id = fee.application_no'); 
+        $this->db->where('fee.row_id', $row_id);
+        $this->db->where('fee.is_deleted', 0); 
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function getStudentFeeScholarship($application_no){
+        $this->db->from('tbl_student_fee_scholarship as fee');
+        $this->db->where('fee.application_no', $application_no);
+        $this->db->where('fee.payment_status', 0);
+        $this->db->where('fee.approved_status', 1);
+        $this->db->where('fee.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function getSumOfFeesPaidForReceipt($rel_stud_row_id,$year,$date){
+        $this->db->select('SUM(paid_amount) as paid_amount');
+        $this->db->from('tbl_students_overall_fee_payment_info_i_puc_2021 as fee');
+        $this->db->where('fee.application_no', $rel_stud_row_id);
+        $this->db->where('fee.payment_year', $year);
+        $this->db->where('fee.created_date_time<=', $date);
+        $this->db->where('fee.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function getSumFeeConcessionInfoForReport($student_id,$year,$date){ 
+        // $this->db->select('SUM(fee.fee_amt) as fee_amt');
+        $this->db->from('tbl_student_fee_concession as fee');
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('fee.application_no', $student_id);
+        $this->db->where('fee.date <=', $date);
+        $this->db->where('fee.year', $year);
+        $this->db->where('fee.approved_status', 1);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function getSumFeeScholarshipInfoForReport($student_id,$year,$date){ 
+        // $this->db->select('SUM(fee.fee_amt) as fee_amt');
+        $this->db->from('tbl_student_fee_scholarship as fee');
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('fee.application_no', $student_id);
+        $this->db->where('fee.date <=', $date);
+        $this->db->where('fee.year', $year);
+        $this->db->where('fee.approved_status', 1);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function getTotalFeePaidReportInfo($application_no,$payment_year){
+        $this->db->select('SUM(paid_amount) as paid_amount');
+        $this->db->from('tbl_students_overall_fee_payment_info_i_puc_2021 as fee'); 
+        $this->db->where('fee.application_no', $application_no);
+        $this->db->where('fee.payment_year',$payment_year);
+        $this->db->where('fee.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
 }
 ?>

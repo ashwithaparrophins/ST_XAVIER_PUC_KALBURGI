@@ -73,6 +73,22 @@
             </a>
         </div>
         <div class="col-lg-3 col-6 mb-2 column_padding_card">
+            <a data-toggle="modal" data-target="#downloadFeePaidReport" class="more-info text-white dashboard_link" href="#">
+                <div class="card card-small dash-card" style="background: #3e50b3;">
+                    <div class="card-body pt-1 pb-1">
+                        <h6 class="stats-small__value text-uppercase text-white">Fee Paid Report</h6>
+                        <div class="icon pull-right mt-4">
+                            <i class="fas fa-file dash-icons"></i></i>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center dash-footer p-1">
+                        <div class="more-info text-white"></div>
+                        <span class="text-center">Download</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-6 mb-2 column_padding_card">
             <a data-toggle="modal" data-target="#downloadFeeDueReport" class="more-info text-white dashboard_link" href="#">
                 <div class="card card-small dash-card" style="background: #3e50b3;">
                     <div class="card-body pt-1 pb-1">
@@ -175,6 +191,23 @@
         </div>
         <div class="col-lg-3 col-6 mb-2 column_padding_card">
             <a data-toggle="modal" data-target="#transportFeeDueReport" class="more-info text-white dashboard_link" href="#">
+                <div class="card card-small dash-card" style="background: #3e50b3;">
+                    <div class="card-body pt-1 pb-1">
+                        <h6 class="stats-small__value text-uppercase text-white">Overall Transport Fee Due Report</h6>
+                        <div class="icon pull-right mt-4">
+                            <i class="fas fa-file dash-icons"></i></i>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center dash-footer p-1">
+                        <div class="more-info text-white"></div>
+                        <span class="text-center">Download</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-6 mb-2 column_padding_card">
+            <a data-toggle="modal" data-target="#transportOnlyFeeDue" class="more-info text-white dashboard_link" href="#">
                 <div class="card card-small dash-card" style="background: #3e50b3;">
                     <div class="card-body pt-1 pb-1">
                         <h6 class="stats-small__value text-uppercase text-white">Transport Fee Due Report</h6>
@@ -698,6 +731,7 @@
                             <select class="form-control input-md required" id="" name="preference">
                                 
                                 <option value="">Select One Preference</option>
+                                <option value="ALL">ALL</option> 
                                 <option value="PCMB">PCMB</option>
                                 <option value="PCMC">PCMC</option>
                                 <!-- <option value="PCME">PCME</option>
@@ -840,6 +874,7 @@
                             <select class="form-control input-md required" id="" name="preference">
                               
                                 <option value="">Select One Preference</option>
+                                <!-- <option value="ALL">ALL</option>  -->
                                 <option value="PCMB">PCMB</option>
                                 <option value="PCMC">PCMC</option>
                                 <!-- <option value="PCME">PCME</option>
@@ -873,6 +908,71 @@
     </div>
 </div>
 
+<div class="modal" id="downloadFeePaidReport">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header p-2">
+                <h6 class="modal-title">Download Fee Paid Report</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body p-2">
+                <form id="downloadFeeDueReport" method="POST" action="<?php echo base_url().'downloadFeePaidReport'?>">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Select Term</label>
+                                <select class="form-control" name="term_name_select"  required>
+                                    <option value="I PUC">I PUC</option>
+                                    <option value="II PUC">II PUC</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+               
+                        <div class="row">
+                        <div class="col-lg-12">
+                            <label>By Stream</label>
+                            <select class="form-control input-md required" id="" name="preference">
+                              
+                                <option value="">Select One Preference</option>
+                                <option value="ALL">ALL</option> 
+                                <option value="PCMB">PCMB</option>
+                                <option value="PCMC">PCMC</option>
+                                <!-- <option value="PCME">PCME</option>
+                                <option value="PCMS" >PCMS</option> -->
+                                <option value="EBAC">EBAC</option>
+                                <option value="HEPE">HEPE</option>
+                                <option value="HEPS">HEPS</option>
+                                <!-- <option value="CSBA">CSBA</option>
+                                <option value="MEBA">MEBA</option>
+                                <option value="MSBA">MSBA</option>
+                                <option value="PEBA">PEBA</option>
+                                <option value="SEBA">SEBA</option>
+                                <option value="HEPS">HEPS</option> -->
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer" style="padding:5px;">
+                        <div class="row">
+                            <div class="col-lg-12 col-12">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success"><i class="fa fa-download"
+                                        aria-hidden="true"></i> Download</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- transport fee paid report -->
 <div class="modal" id="transportFeePaidReport">
     <div class="modal-dialog">
@@ -1213,6 +1313,62 @@
             <div class="modal-body" style="padding: 10px;">
                 <form method="POST" data-download_form="true"
                     action="<?php echo base_url(); ?>downloadTransportDueInfoReport">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="inputEmail4">Term</label>
+                            <select class="form-control input-md required" name="term_name_select" required>
+                                <option value="">Select Term</option>
+                                <option value="I PUC">I PUC</option>
+                                <option value="II PUC">II PUC</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-12">
+                            <label for="inputEmail4">Bus No.</label>
+                            <select class="form-control text-dark"  name="bus_no" >
+                                <option value="">Select Bus No.</option>
+                                <?php if (!empty($busNoInfo)) {
+                                    foreach ($busNoInfo as $busno) { ?>
+                                        <option value="<?php echo $busno->bus_no; ?>"><?php echo $busno->bus_no ?></option>
+                                <?php }
+                                } ?>
+                            </select>
+                            
+                        </div>
+
+                       
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer" style="padding:5px;">
+                        <div class="row">
+                            <div class="col-lg-12 col-12">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                <button type="submit" id="applicationRejectedReport"
+                                    class="btn btn-success">Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="transportOnlyFeeDue">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header" style="padding: 10px;">
+                <h6 class="modal-title">Transport Fee Due Report</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="padding: 10px;">
+                <form method="POST" data-download_form="true"
+                    action="<?php echo base_url(); ?>downloadTransportOnlyDueInfoReport">
 
                     <div class="row">
                         <div class="col-lg-12">

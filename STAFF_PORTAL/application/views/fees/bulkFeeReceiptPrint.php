@@ -64,7 +64,11 @@ table{
         $filter['term_name'] = $studentInfo->term_name;
        
         $feeStructureInfo = $feeModel->getFeeStructureInfo($filter);
-       
+        $concession = $feeModel->getSumFeeConcessionInfoForReport($feeInfo->application_no,$feeInfo->payment_year,$feeInfo->created_date_time);
+        $concessionFee = $concession->fee_amt;
+        $scholarship = $feeModel->getSumFeeScholarshipInfoForReport($feeInfo->application_no,$feeInfo->payment_year,$feeInfo->created_date_time);
+        $scholarshipFee = $scholarship->fee_amt;
+        $paidFeeSum = $feeModel->getSumOfFeesPaidForReceipt($feeInfo->application_no,$feeInfo->payment_year,$feeInfo->created_date_time);
 
         $copy_name = ['STUDENT COPY','OFFICE COPY'] ?>
         <?php //for($r=0;$r<2;$r++){ ?>
@@ -138,7 +142,17 @@ table{
                 <?php $i++; }else{
                     $dept_fee = $fee->fee_amount_state_board;
                 } } } ?>  
-
+                <?php  foreach($feeStructureInfo as $fee){ 
+                        if($fee->fees_type != 'College Dept Fee' && $fee->fees_type != 'Eligibility Fee'){
+                        $total_fee +=  $fee->fee_amount_state_board; ?>
+                <?php $i++; }}
+                if($feeInfo->attempt == "1") {
+                    $total_fee_amt = $total_fee_amt - 2000;
+                    } else {
+                    $total_fee_amt = $feeInfo->total_amount;
+                }
+                
+               ?>
                 <tr>
                     <th style="text-align: left;" colspan="1">Total Fee</th>
                     <th class="border_right_none" style="text-align: right;"><?php if($feeInfo->attempt == "1"){ echo number_format($total_fee_amt - 2000,2);} else {
@@ -155,10 +169,17 @@ table{
                     <th style="text-align: left;" colspan="1">Amount Paid</th>
                     <th class="border_right_none" style="text-align: right;"><?php if($feeInfo->payment_count == 1){ $paidAmt = $studentInfo->paid_amount; }else{ $paidAmt =$studentInfo->paid_amount; } echo number_format($paidAmt,2); ?></th>
                 </tr>
-                <tr>
-                    <th style="text-align: left;" colspan="1">Amount Pending</th>
-                    <th class="border_right_none" style="text-align: right;"><?php echo number_format($studentInfo->pending_balance,2); ?></th>
-                </tr>
+                <?php if($feeInfo->attempt == "1") {?>
+                    <tr>
+                        <th style="text-align: left;" colspan="1">Amount Pending</th>
+                        <th class="border_right_none" style="text-align: right;"><?php echo number_format($total_fee_amt - $paidFeeSum->paid_amount - $concessionFee - $scholarshipFee,2); ?></th>
+                    </tr>
+                <?php }else{ ?>
+                    <tr>
+                        <th style="text-align: left;" colspan="1">Amount Pending</th>
+                        <th class="border_right_none" style="text-align: right;"><?php echo number_format($total_fee - $paidFeeSum->paid_amount - $concessionFee - $scholarshipFee,2); ?></th>
+                    </tr>
+                <?php } ?>
                 <tr>
                     <td colspan="2"><b>Paid total amount in word: <span style="text-transform: capitalize;"><?php echo $paid_amount_words.' ONLY'; ?></span></b></td>
                 </tr>   

@@ -925,10 +925,17 @@
                             </a>
                         </li>
                         <?php if($role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ADMIN  ){ ?>
+                              
+                                <li class="nav-item">
+                                    <a class="nav-link " href="<?php echo base_url(); ?>viewScholarship">
+                                        <i class="fas fa-rupee-sign"></i>
+                                        <span>Scholarship</span>
+                                    </a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link " href="<?php echo base_url(); ?>viewFeeConcession">
                                         <i class="fas fa-rupee-sign"></i>
-                                        <span>Scholarship</span>
+                                        <span>Concession</span>
                                     </a>
                                 </li>
                                 <?php } ?>
@@ -968,6 +975,12 @@
                             <a class="nav-link" href="<?php echo base_url(); ?>viewStudentTransportListing">
                                 <i class="material-icons">description</i>
                                 <span>Transport Fee Paid</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="<?php echo base_url(); ?>viewBusFeeConcession">
+                                <i class="fas fa-rupee-sign header_icons"></i>
+                                    <span>Transport Concession</span>
                             </a>
                         </li>
                         <li class="nav-item">

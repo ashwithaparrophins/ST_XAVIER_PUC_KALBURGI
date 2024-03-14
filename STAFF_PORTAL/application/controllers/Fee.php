@@ -87,9 +87,9 @@ class Fee extends BaseController
                         'created_date_time'=>date('Y-m-d H:i:s'));
                     $result = $this->fee->addConcession($feeInfo);
                     if($result > 0){
-                        $this->session->set_flashdata('success', 'Scholarship Added successfully');
+                        $this->session->set_flashdata('success', 'Concession Added successfully');
                     } else{
-                        $this->session->set_flashdata('error', 'Failed to Add Scholarship');
+                        $this->session->set_flashdata('error', 'Failed to Add Concession');
                     }
                 redirect('viewFeeConcession');
             }
@@ -134,9 +134,9 @@ class Fee extends BaseController
                         'updated_date_time'=>date('Y-m-d H:i:s'));
                     $result = $this->fee->updateConcession($feeInfo,$row_id);
                     if($result > 0){
-                        $this->session->set_flashdata('success', 'Scholarship Updated successfully');
+                        $this->session->set_flashdata('success', 'Concession Updated successfully');
                     } else{
-                        $this->session->set_flashdata('error', 'Failed to Update Scholarship');
+                        $this->session->set_flashdata('error', 'Failed to Update Concession');
                     }
                 redirect('editConcession/'.$row_id);
             }
@@ -185,7 +185,156 @@ class Fee extends BaseController
     }
 
 
-   
+    public function viewScholarship(){
+        if ($this->isAdmin() == true ) {
+            $this->loadThis();
+        } else {  
+            $filter = array();
+            $by_name = $this->security->xss_clean($this->input->post('by_name'));
+            $amount = $this->security->xss_clean($this->input->post('amount'));
+            $by_date = $this->security->xss_clean($this->input->post('by_date'));
+            $student_id = $this->security->xss_clean($this->input->post('student_id'));
+
+            $data['by_name'] = $by_name;
+            $data['amount'] = $amount;
+            $data['student_id'] = $student_id;
+
+            $filter['student_id'] = $student_id;
+            $filter['by_name'] = $by_name;
+            $filter['amount'] = $amount;
+
+            if(!empty($by_date)){
+                $filter['by_date'] = date('Y-m-d',strtotime($by_date));
+                $data['by_date'] = date('d-m-Y',strtotime($by_date));
+            }else{
+                $data['by_date'] = '';
+            }
+            
+            $this->load->library('pagination');
+            $count = $this->fee->getFeeScholarshipCount($filter);
+            $returns = $this->paginationCompress("viewScholarship/", $count, 100);
+            $data['totalCount'] = $count;
+            $filter['page'] = $returns["page"];
+            $filter['segment'] = $returns["segment"];
+            $data['concessionInfo'] = $this->fee->getFeeScholarshipInfo($filter);
+            $data['studentInfo'] = $this->student->getStudentInfoForConcession();
+            $this->global['pageTitle'] = ''.TAB_TITLE.' : Fee Scholarship';
+            $this->loadViews("feeScholarship/scholarship.php", $this->global, $data, null);
+        }
+    }
+  
+    public function addScholarship() {
+        if($this->isAdmin() == TRUE) {
+            $this->loadThis();
+        }  else {
+            $this->load->library('form_validation');
+            $this->form_validation->set_rules('application_no','Student ID','trim|required');
+            $this->form_validation->set_rules('fee_amount','Amount','trim|required|numeric');
+
+            $data['studentInfo'] = $this->student->getStudentInfoForConcession();
+
+            if($this->form_validation->run() == FALSE) {
+                $this->viewScholarship();
+            } else {
+                $application_no = $this->security->xss_clean($this->input->post('application_no'));
+                $fee_amount = $this->security->xss_clean($this->input->post('fee_amount'));
+                $description = $this->security->xss_clean($this->input->post('description'));
+                $year = $this->security->xss_clean($this->input->post('year'));
+                    $feeInfo = array(
+                        'application_no'=>$application_no,
+                        'fee_amt'=>$fee_amount,
+                        'description'=>$description,
+                        'year'=>$year,
+                        'date'=>date('Y-m-d H:i:s'),
+                        'approved_status'=>1,
+                        'created_by'=>$this->staff_id,
+                        'created_date_time'=>date('Y-m-d H:i:s'));
+                    $result = $this->fee->addScholarship($feeInfo);
+                    if($result > 0){
+                        $this->session->set_flashdata('success', 'Scholarship Added successfully');
+                    } else{
+                        $this->session->set_flashdata('error', 'Failed to Add Scholarship');
+                    }
+                redirect('viewScholarship');
+            }
+        }
+    } 
+    
+    public function editScholarship($row_id = null){
+        if ($this->isAdmin() == true ) {
+            $this->loadThis();
+        } else {
+            if ($row_id == NULL) {
+                redirect('viewScholarship');
+            }
+            $data['feeInfo'] = $this->fee->getFeeScholarshipById($row_id);
+            $data['studentInfo'] = $this->student->getStudentInfoForConcession();
+            $this->global['pageTitle'] = ''.TAB_TITLE.' : Update Scholarship';
+            $this->loadViews("feeScholarship/editScholarship", $this->global, $data, null);
+        }
+    }
+
+    public function updateScholarship() {
+        if($this->isAdmin() == TRUE) {
+            $this->loadThis();
+        }  else {
+            $row_id = $this->input->post('row_id');
+            $this->load->library('form_validation');
+            $this->form_validation->set_rules('application_no','Student ID','trim|required');
+            $this->form_validation->set_rules('fee_amount','Amount','trim|required|numeric');
+
+            if($this->form_validation->run() == FALSE) {
+                redirect('editScholarship/'.$row_id);
+            } else {
+                $application_no = $this->security->xss_clean($this->input->post('application_no'));
+                $fee_amount = $this->security->xss_clean($this->input->post('fee_amount'));
+                $description = $this->security->xss_clean($this->input->post('description'));
+
+                    $feeInfo = array(
+                        'application_no'=>$application_no,
+                        'fee_amt'=>$fee_amount,
+                        'description'=>$description,
+                        'updated_by'=>$this->staff_id,
+                        'updated_date_time'=>date('Y-m-d H:i:s'));
+                    $result = $this->fee->updateScholarship($feeInfo,$row_id);
+                    if($result > 0){
+                        $this->session->set_flashdata('success', 'Scholarship Updated successfully');
+                    } else{
+                        $this->session->set_flashdata('error', 'Failed to Update Scholarship');
+                    }
+                redirect('editScholarship/'.$row_id);
+            }
+        }
+    }
+
+    
+  
+
+    public function approveScholarship(){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {   
+            $row_id = $this->input->post('row_id');
+            $feeInfo = array('approved_status' => 1,
+            'updated_date_time' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->staff_id);
+            $result = $this->fee->updateScholarship($feeInfo,$row_id);
+            if ($result == true) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
+        } 
+    }
+    
+    public function rejectScholarship(){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {   
+            $row_id = $this->input->post('row_id');
+            $feeInfo = array('approved_status' => 2,
+            'updated_date_time' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->staff_id);
+            $result = $this->fee->fee->updateScholarship($feeInfo,$row_id);
+            if ($result == true) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
+        } 
+    }
 
     //fee payment proceed in portal
     public function newAdmissionFeePayNow(){
@@ -1065,8 +1214,11 @@ class Fee extends BaseController
         //log_message('debug','feeStruct='.print_r($data['feeStructureInfo'],true));
         // $concession = $this->fee->getStudentFeeConcessionInfo($data['feeInfo']->rel_stud_row_id);
         // $data['paidFeeSum'] = $this->fee->getSumOfFeesPaid($data['feeInfo']->application_no,$data['feeInfo']->payment_year);
-        $data['paidFeeSum'] = $this->fee->getTotalFeePaidInfo($data['feeInfo']->application_no,$filter['fee_year']);
-        
+        $data['paidFeeSum'] = $this->fee->getSumOfFeesPaidForReceipt($data['feeInfo']->application_no,$data['feeInfo']->payment_year,$data['feeInfo']->created_date_time);
+        $concession = $this->fee->getSumFeeConcessionInfoForReport($data['feeInfo']->application_no,$data['feeInfo']->payment_year,$data['feeInfo']->created_date_time);
+        $data['concession'] = $concession->fee_amt;
+        $scholarship = $this->fee->getSumFeeScholarshipInfoForReport($data['feeInfo']->application_no,$data['feeInfo']->payment_year,$data['feeInfo']->created_date_time);
+        $data['scholarship'] = $scholarship->fee_amt;
         // $data['fee_concession'] = $concession->fee_amt;
         $data['studentInfo'] = $studentInfo;
         
@@ -2400,6 +2552,13 @@ public function processTheFeePayment(){
                         $concession_amt = $feeConcession->fee_amt;
                         $total_fee_amount -= $concession_amt;
                     }
+
+                    $scholarship_amt = 0;
+                    $feeScholarship = $this->fee->getStudentFeeScholarship($application_no);
+                    if(!empty($feeScholarship)){
+                        $scholarship_amt = $feeScholarship->fee_amt;
+                        $total_fee_amount -= $scholarship_amt;
+                    }
                     
                         $total_fee_amount -= $paidFee;
                         if($paid->attempt == '1'){
@@ -2411,6 +2570,7 @@ public function processTheFeePayment(){
                     $data['previousBal'] = $data['first_puc_pending_amount'] = $data['pending_amount'] = $total_fee_amount;
                     $data['I_balance'] = $total_fee_amount;
                     $data['concession'] = $concession_amt;
+                    $data['scholarship'] = $scholarship_amt;
                     $data['balance'] = 0;
                     }else{
                     //$prev_year = trim($studentInfo->intake_year_id)-1;
@@ -2508,12 +2668,20 @@ public function processTheFeePayment(){
                     if(!empty($feeConcession)){
                         $concession_amt = $feeConcession->fee_amt;
                     }
-                    $data['second_puc_pending_amount'] = $data['pending_amount'] = $total_fee_amount-$concession_amt;
+
+                    $scholarship_amt = 0;
+                    $feeScholarship = $this->fee->getStudentFeeScholarship($application_no);
+                    if(!empty($feeScholarship)){
+                        $scholarship_amt = $feeScholarship->fee_amt;
+                    }
+                    $data['second_puc_pending_amount'] = $data['pending_amount'] = $total_fee_amount-$concession_amt-$scholarship_amt;
                     $data['paid_amount'] = $paidFee;
                   
                     //get list of payment in II PUC
                     $data['balance'] = $total_fee_amount;
                     $data['concession'] = $concession_amt;
+                    $data['scholarship'] = $scholarship_amt;
+
                 }
                 // $data['balance'] = $total_fee_to_pay;
                 
@@ -2639,6 +2807,12 @@ public function processTheFeePayment(){
                     $concession_amt = $feeConcession->fee_amt;
                     $total_fee_to_pay -= $concession_amt;
                 }
+                $scholarship_amt = 0;
+                $feeScholarship = $this->fee->getStudentFeeScholarship($application_no);
+                if(!empty($feeScholarship)){
+                    $scholarship_amt = $feeScholarship->fee_amt;
+                    $total_fee_to_pay -= $scholarship_amt;
+                }
                 $data['feePaidInfo'] = $this->fee->getFeePaidInfo($application_no,$filter['fee_year']);
                 if(!empty($data['feePaidInfo'])){
                     foreach($data['feePaidInfo'] as $fee){
@@ -2682,6 +2856,7 @@ public function processTheFeePayment(){
                     'paid_amount' => $paid_fee_amount,
                     'excess_amount' => $fee_excess_amount,
                     'fee_concession' => $concession_amt,
+                    'fee_scholarship' => $scholarship_amt,
                     'pending_balance' => abs($pending_fee_balance),
                     'fee_pending_status' => $fee_pending_status,
                     'payment_count' => $paid_count,
