@@ -1120,3 +1120,7 @@ $route['downloadClassCompletedReportNew'] = "studentAttendance/downloadClassComp
 $route['getFormInformation3'] = "timetable/getFormInformation3";
 
 $route['redirectStudentView'] = "students/redirectStudentView";
+
+$route['addAnnualMark'] = "exam/addAnnualMark";
+$route['getStudentForAnnualMark'] = "exam/getStudentForAnnualMark";
+$route['addStudentAnnualMarkByStaff'] = "exam/addStudentAnnualMarkByStaff";

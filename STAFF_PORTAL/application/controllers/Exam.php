@@ -37,6 +37,29 @@ class Exam extends BaseController {
         }
     }
 
+
+    public function addAnnualMark() {
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        } else {        
+            $filter = array();
+            if($this->role == ROLE_TEACHING_STAFF){
+                $filter['staff_id'] = $this->staff_id;
+                $data['staff_id'] = $this->staff_id;
+            }else{
+                $data['staff_id'] = '';
+            }
+            $data['staffSubjectInfo'] = $this->staff->getAllSubjectInfo($filter);
+            $data['streamInfo'] = $this->student->getAllStreamName(); 
+            $data['exam_type'] = '';
+            $this->global['pageTitle'] = ''.TAB_TITLE.' : Add Internal Marks';
+            $this->loadViews("exam/annualExamMarksEntry", $this->global, $data , NULL);
+        }
+    }
+
+
+
     // get stream and section by term
     public function getStreamSectionByTerm(){
         if($this->isAdmin() == TRUE){
@@ -111,6 +134,178 @@ class Exam extends BaseController {
         
         }  
     }
+
+           // get student details annual
+           public function getStudentForAnnualMark(){ 
+            if($this->isAdmin() == TRUE) {
+                $this->loadThis();
+            } else {
+                $this->load->library('form_validation');
+                $this->form_validation->set_rules('term_name','Term','trim|required');
+                $this->form_validation->set_rules('section_row_id','Stream','trim|required');
+                $this->form_validation->set_rules('staff_subject_row_id','Subject','trim|required');
+                if($this->form_validation->run() == FALSE) {
+                    $this->addAnnualMark();
+                }else{
+                    $filter= array();
+                    if($this->role == ROLE_TEACHING_STAFF){
+                        $filter['staff_id'] = $this->staff_id;
+                    }
+                    $data['is_verified'] = false;
+                    $data['staff_id'] = $this->staff_id;
+                    $term_name = $this->input->post("term_name");
+                    $section_row_id = $this->input->post("section_row_id");
+                    $staff_subject_row_id = $this->input->post("staff_subject_row_id");
+                    $exam_type = $this->input->post("exam_type");
+                    $filter['section_row_id'] = $section_row_id;
+                    $filter['staff_subject_row_id'] = $staff_subject_row_id;
+                    $sectionInfo = $this->attendance->getSectionInfoByRowId($filter);
+                    $subjectInfo = $this->attendance->getSubjectByRowId($filter);
+                    $data['term_name'] = $term_name;
+                    $data['stream_name'] = $sectionInfo->stream_name;
+                    $data['sub_name'] = $subjectInfo->sub_name;
+                    $data['subject_row_id'] = $subjectInfo->row_id;
+                    $data['subject_code'] = $subjectInfo->subject_code;
+                    $data['staff_name'] = $subjectInfo->staff_name; 
+                    $data['exam_type'] = $exam_type;
+                    $data['section_name'] = $sectionInfo->section_name; 
+                    $data['section_row_id'] = $section_row_id;
+                    $data['staff_subject_row_id'] = $staff_subject_row_id;
+                    $data['subject'] = $subjectInfo; 
+    
+                    $sectionName = $sectionInfo->section_name;
+                    if($sectionName == "ALL"){
+                        $filter['section_name'] = '';
+                    }else{
+                        $filter['section_name'] = $sectionName;
+                    }
+                    $filter['stream_name'] = $sectionInfo->stream_name;
+                    $filter['term_name'] = $term_name;
+                    $filter['subject_name'] = $subjectInfo->sub_name;
+                    $filter['supplementary_status'] = 1;
+                    $data['streamInfo'] = $this->student->getAllStreamName(); 
+                    $data['studentsInfo'] = $this->student->getStudentInfoForInternal($filter);
+                    $data['staffSubjectInfo'] = $this->staff->getAllSubjectInfo($filter);
+                    $this->global['pageTitle'] = ''.TAB_TITLE.' : Add Annual Exam Marks';
+                    $this->loadViews("exam/annualExamMarksEntry", $this->global, $data , NULL);
+                }
+            
+            }  
+        }
+
+
+
+        public function addStudentAnnualMarkByStaff(){
+            if($this->isAdmin() == TRUE) {
+                $this->loadThis();
+            } else {
+                $this->load->library('form_validation');
+                $this->form_validation->set_rules('term_name','Term','trim|required');
+                $this->form_validation->set_rules('subject_id','Subject Name','trim|required');
+               // $this->form_validation->set_rules('subject_id','Subject Name','trim|required');
+                if($this->form_validation->run() == FALSE) {
+                    $this->addAnnualMark();
+                }else{
+                    $term_name = $this->input->post("term_name");
+                    $section_row_id = $this->input->post("section_row_id");
+                    $stream_name = $this->input->post("stream_name");
+                    $subject_id = $this->input->post("subject_id");
+                    $section_name = $this->input->post("section_name");
+                    $exam_type = $this->input->post("exam_type");
+                    $staff_updated_status = $this->input->post("staff_updated_status");
+                    $data['is_verified'] = false;
+                    $data['staff_id'] = $this->staff_id;
+    
+                    $subject = $this->subjects->getAllSubjectByID($subject_id);
+                    $exam_year ='2023-24';
+                    $filter= array();
+                    if($this->role == ROLE_TEACHING_STAFF){
+                        $filter['staff_id'] = $this->staff_id;
+                    }
+                   
+                    $staff_subject_row_id = $this->input->post("staff_subject_row_id");
+                    $filter['staff_subject_row_id'] = $staff_subject_row_id;
+                    $data['staff_subject_row_id'] = $staff_subject_row_id;
+                    $subjectInfo = $this->attendance->getSubjectByRowId($filter);
+                    $data['term_name'] = $term_name;
+                    $data['stream_name'] = $stream_name;
+                    $data['sub_name'] = $subjectInfo->sub_name;
+                    $data['subject_row_id'] = $subjectInfo->row_id;
+                    $data['subject_code'] = $subjectInfo->subject_code;
+                    $data['staff_name'] = $subjectInfo->staff_name; 
+                    $data['section_row_id'] = $section_row_id; 
+                    $data['exam_type'] = $exam_type;
+                    $data['section_name'] = $section_name; 
+                    $data['subject'] = $subjectInfo; 
+    
+                    $filter['stream_name'] = $stream_name;
+                    $filter['term_name'] = $term_name;
+                    $filter['subject_name'] = $subjectInfo->sub_name;
+                    $sectionName = $section_name;
+                    if($sectionName == "ALL"){
+                        $filter['section_name'] = '';
+                    }else{
+                        $filter['section_name'] = $sectionName;
+                    }
+                    $filter['supplementary_status'] = 1;
+                    $data['studentsInfo'] = $this->student->getStudentInfoForInternal($filter);
+                   
+                    $return_id = 0;
+                    foreach($data['studentsInfo'] as $student){
+                        $student_id = trim($student->student_id);
+                        $theory_mark = $this->input->post("obt_theory_mark_".$student_id);
+                        $lab_mark = $this->input->post("lab_obt_mark_".$student_id);
+                       // $this->form_validation->set_rules("obt_theory_mark_".$student_id,'STUDENT Theory Mark','trim|required');
+                        // if($this->form_validation->run() == FALSE) {
+                        //     redirect('addAnnualMark');
+                        // }
+                        $markInfo = array(
+                            'student_id' => $student_id,
+                            'staff_id' => $this->staff_id,
+                            'subject_code' => $subject_id,
+                            'obt_theory_mark' => $theory_mark,
+                            'obt_lab_mark' => $lab_mark,
+                            'exam_year' => $exam_year,
+                            'exam_type' => $exam_type,
+                            'staff_updated_status' => $staff_updated_status,
+                            'office_validation_status' => 0,
+                            'created_by' => $this->staff_id, 
+                            'created_date_time' => date('Y-m-d H:i:s'));
+                        $markInfoUpdate = array(
+                            'subject_code' => $subject_id,
+                            'staff_id' => $this->staff_id,
+                            'student_id' => $student_id,
+                            'obt_theory_mark' => $theory_mark,
+                            'staff_updated_status' => $staff_updated_status,
+                            'obt_lab_mark' => $lab_mark,
+                            'updated_by' => $this->staff_id,
+                            'updated_date_time' => date('Y-m-d H:i:s'));
+                        if($theory_mark!=""){
+                            $isExist = $this->exams->getInternalExamSubjectMarkByID($subject_id,$student_id,$exam_type,$exam_year);
+                            if(empty($isExist)){
+                                $return_id += $this->exams->addStudentInternalMark($markInfo);
+                                $this->session->set_flashdata('success', 'Subject mark added Successfully');
+                            }else{
+                                //$return_id = 0;
+                                $return_id += $this->exams->updateStudentInternalMark($subject_id,$student_id,$exam_type,$markInfoUpdate,$exam_year);
+                                $this->session->set_flashdata('success', 'Subject Mark Updated');
+                            }
+                        }
+                    }
+                    if($return_id == 0){
+                        $this->session->set_flashdata('error', 'Subject mark add Failed'); 
+                    }
+                    
+                    $data['streamInfo'] = $this->student->getAllStreamName(); 
+                    $data['staffSubjectInfo'] = $this->staff->getAllSubjectInfo($filter);
+                    $this->global['pageTitle'] = ''.TAB_TITLE.' : Add Annual Exam Marks';
+                    $this->loadViews("exam/annualExamMarksEntry", $this->global, $data , NULL);
+                }
+            }
+        } 
+
+
+
 
     //exam listing for hall ticket
     public function examListing(){
