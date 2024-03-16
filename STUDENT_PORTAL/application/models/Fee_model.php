@@ -81,6 +81,16 @@ class Fee_model extends CI_Model
         return $query->row();
     }
 
+    public function getStudentFeeScholarship($application_no){
+        $this->db->from('tbl_student_fee_scholarship as fee');
+        $this->db->where('fee.application_no', $application_no);
+        $this->db->where('fee.payment_status', 0);
+        $this->db->where('fee.approved_status', 1);
+        $this->db->where('fee.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
 
 
 

@@ -922,6 +922,17 @@ public function updateCoursePaymentLogByRowId($paymentInfo,$order_id) {
         return $query->row();
     }
 
+    public function getFeeConcessionInfo($student_row_id,$year){
+        $this->db->select('SUM(fee.fee_amt) as fee_amt');
+        $this->db->from('tbl_student_bus_fee_concession as fee');
+        $this->db->where('fee.student_id', $student_row_id);
+        $this->db->where('fee.con_year', $year);
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('fee.approved_status', 1);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
 
  
 }

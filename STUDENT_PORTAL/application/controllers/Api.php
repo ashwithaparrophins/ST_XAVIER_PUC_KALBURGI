@@ -1594,6 +1594,15 @@ public function collegeNotificationsApi(){
                 $concession_amt = $feeConcession->fee_amt;
                 $total_fee_amount -= $concession_amt;
             }
+
+            $scholarship_amt = 0;
+            $feeScholarship = $this->fee->getStudentFeeScholarship($application_no);
+            if(!empty($feeScholarship)){
+                $scholarship_amt = $feeScholarship->fee_amt;
+                $total_fee_amount -= $scholarship_amt;
+            }
+
+
             
             $total_fee_amount -= $paidFee;
             $data->previousBal = $data->first_puc_pending_amount = $data->pending_amount = $total_fee_amount;
@@ -1667,6 +1676,11 @@ public function collegeNotificationsApi(){
             if(!empty($feeConcession)){
                 $concession_amt = $feeConcession->fee_amt;
             }
+            $scholarship_amt = 0;
+            $feeScholarship = $this->fee->getStudentFeeScholarship($application_no);
+            if(!empty($feeScholarship)){
+                $scholarship_amt = $feeScholarship->fee_amt;
+            }
             $data->second_puc_pending_amount = $data->pending_amount = $total_fee_amount-$concession_amt;
             $data->paid_amount = number_format($paidFee,2);
           
@@ -1712,6 +1726,12 @@ public function collegeNotificationsApi(){
         $feePaidInfo = $this->student_model->getTransportTotalPaidAmount($studentRowId,$year);
         if(!empty($feePaidInfo->paid_amount)){
             $total_fee_amount -= $feePaidInfo->paid_amount;
+        }
+
+        $feeConcession = $this->student_model->getFeeConcessionInfo($studentRowId,$year); 
+        if(!empty($feeConcession)){
+            $total_fee_amount -= $feeConcession->fee_amt;
+            $data['feeConcession'] = $feeConcession;
         }
 
        
