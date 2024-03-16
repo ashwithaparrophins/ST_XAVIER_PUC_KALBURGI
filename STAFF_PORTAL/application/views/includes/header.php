@@ -1072,6 +1072,12 @@
                                 <span>Add Internal Mark</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo base_url(); ?>addAnnualMark">
+                                <i class="material-icons">edit</i>
+                                <span>Add Annual Mark</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <?php } ?>
