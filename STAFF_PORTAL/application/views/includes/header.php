@@ -918,12 +918,12 @@
                                 <span>Fee Paid Info</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link " href="<?php echo base_url(); ?>feeInstallmentListing">
                                 <i class="fas fa-rupee-sign header_icons"></i>
                                 <span>Instalment</span>
                             </a>
-                        </li>
+                        </li> -->
                         <?php if($role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ADMIN  ){ ?>
                               
                                 <li class="nav-item">
