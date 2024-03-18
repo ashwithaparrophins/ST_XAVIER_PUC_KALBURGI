@@ -1547,8 +1547,6 @@ public function collegeNotificationsApi(){
 	    $responseParamList = array();
         
         $studentInfo = $this->student_model->getStudentInfoByRowId($application_no);
-       // log_message('debug','hh'.print_r($studentInfo ,true));
-
         $dt = array();
         $data = (object)$dt;
         $term_name = $studentInfo->term_name;
@@ -1597,6 +1595,7 @@ public function collegeNotificationsApi(){
 
             $scholarship_amt = 0;
             $feeScholarship = $this->fee->getStudentFeeScholarship($application_no);
+
             if(!empty($feeScholarship)){
                 $scholarship_amt = $feeScholarship->fee_amt;
                 $total_fee_amount -= $scholarship_amt;
@@ -1731,7 +1730,6 @@ public function collegeNotificationsApi(){
         $feeConcession = $this->student_model->getFeeConcessionInfo($studentRowId,$year); 
         if(!empty($feeConcession)){
             $total_fee_amount -= $feeConcession->fee_amt;
-            $data['feeConcession'] = $feeConcession;
         }
 
        
