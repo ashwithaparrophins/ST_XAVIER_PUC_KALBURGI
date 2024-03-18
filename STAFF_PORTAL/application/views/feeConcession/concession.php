@@ -230,7 +230,7 @@
                             <label>Year <span class="text-danger">*</span></label>
                                     <select class="form-control selectpicker" data-live-search="true" name="year" >
                                             <option value="2023">2023</option>
-                                            <option value="2024">2024</option>
+                                            <!-- <option value="2024">2024</option> -->
                                     </select>
                                 </div>
                             </div>

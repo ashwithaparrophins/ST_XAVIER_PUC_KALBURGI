@@ -365,11 +365,11 @@
 
                                               
 
-                                                <a class="btn btn-xs btn-danger deleteBusConcession" href="#"
+                                                <!-- <a class="btn btn-xs btn-danger deleteBusConcession" href="#"
 
                                                     data-row_id="<?php echo $fee->row_id; ?>" title="Delete"><i
 
-                                                        class="fa fa-trash"></i></a>
+                                                        class="fa fa-trash"></i></a> -->
 
                                               <?php } ?>           
 

@@ -536,6 +536,9 @@ class Reports extends BaseController
             // $spreadsheet->getActiveSheet()->setCellValue('I3', 'French Fee');
             $spreadsheet->getActiveSheet()->setCellValue('F3', 'Total Fee Paid');
             $spreadsheet->getActiveSheet()->setCellValue('G3', 'Pending');
+            $spreadsheet->getActiveSheet()->setCellValue('H3', 'Concession');
+            $spreadsheet->getActiveSheet()->setCellValue('I3', 'Scholarship');
+
             $spreadsheet->getActiveSheet()->getStyle("A3:K3")->applyFromArray($font_style_total);
             $spreadsheet->getActiveSheet()->getStyle('C3')->getAlignment()->setWrapText(true);
             $spreadsheet->getActiveSheet()->getStyle('D3')->getAlignment()->setWrapText(true);
@@ -572,6 +575,8 @@ class Reports extends BaseController
             $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(20);
             $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(20);
             $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+            $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+            $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(20);
            
            
             // foreach($feeTypeInfo as $type){
@@ -585,14 +590,35 @@ class Reports extends BaseController
                     $filter['stream_name'] = $std->stream_name;
                    
                     $total_fee = $this->fee->getTotalFeeAmount($filter);
-                    $total_fee_amount = $total_fee->total_fee;
+                    $total_fee_amount = $total_fees = $total_fee->total_fee;
                     $total_paid_amount = $this->fee->getTotalFeePaidReportInfo($std->row_id,$year);
+                    $paidInfo = $this->fee->getFeePaidInfoAttempt($std->row_id,$year);
+
                     if($total_paid_amount->paid_amount == ''){
                         $paid_amt = 0;
                     }else{
                         $paid_amt = $total_paid_amount->paid_amount;
                     }
-                    if($total_fee_amount - $total_paid_amount->paid_amount > 0){
+                    if($paidInfo->attempt == '1'){
+                        $total_fee_amount = $total_fee_amount -2000;
+                    }else{
+                        $total_fee_amount =$total_fee_amount;
+                    }
+                    $feeConcession = $this->fee->getStudentFeeConcession($std->row_id);
+                
+                    if(!empty($feeConcession)){
+                        $concession_amt = $feeConcession->fee_amt;
+                    }else{
+                        $concession_amt = 0;
+                    }
+                    $feeScholarship = $this->fee->getStudentFeeScholarship($std->row_id);
+                
+                    if(!empty($feeScholarship)){
+                        $scholarship_amt = $feeScholarship->fee_amt;
+                    }else{
+                        $scholarship_amt = 0;
+                    }
+                    if($total_fee_amount - $total_paid_amount->paid_amount - $concession_amt - $scholarship_amt> 0){
                         $spreadsheet->getActiveSheet()->getStyle("A" . $excel_row)->getFont()->setSize(14);
                         $spreadsheet->getActiveSheet()->setCellValue('A' . $excel_row,  $sl_number);
                         $spreadsheet->getActiveSheet()->setCellValue('B' . $excel_row,  $std->student_id);
@@ -600,10 +626,13 @@ class Reports extends BaseController
                         $spreadsheet->getActiveSheet()->setCellValue('C' . $excel_row,  $std->student_name);
                         $spreadsheet->getActiveSheet()->setCellValue('D' . $excel_row,  $std->stream_name);
                     
-                        $spreadsheet->getActiveSheet()->setCellValue('E' . $excel_row,  $total_fee_amount);
+                        $spreadsheet->getActiveSheet()->setCellValue('E' . $excel_row,  $total_fees);
                     
                         $spreadsheet->getActiveSheet()->setCellValue('F' . $excel_row,  $paid_amt);
-                        $spreadsheet->getActiveSheet()->setCellValue('G' . $excel_row,  $total_fee_amount - $total_paid_amount->paid_amount);
+                        $spreadsheet->getActiveSheet()->setCellValue('G' . $excel_row,  $total_fee_amount - $total_paid_amount->paid_amount - $concession_amt - $scholarship_amt);
+                        $spreadsheet->getActiveSheet()->setCellValue('H'.$excel_row, $concession_amt);
+                        $spreadsheet->getActiveSheet()->setCellValue('I'.$excel_row, $scholarship_amt);
+
                         $spreadsheet->getActiveSheet()->getStyle('A' . $excel_row)->getAlignment()->setWrapText(true);
                     
                         $sl_number++;
@@ -630,7 +659,7 @@ class Reports extends BaseController
                     // $filter['category'] = strtoupper($std->category);
 
                     $total_fee = $this->fee->getTotalFeeAmount($filter);
-                    $total_fee_amount = $total_fee->total_fee;
+                    $total_fee_amount = $total_fees =$total_fee->total_fee;
                     if($year== CURRENT_YEAR){
                        
                         $total_paid_amount = $this->fee->getTotalFeePaidReportInfo($std->row_id,$year);
@@ -643,7 +672,26 @@ class Reports extends BaseController
                     }else{
                         $paid_amt = $total_paid_amount->paid_amount;
                     }
-                    if($total_fee_amount - $total_paid_amount->paid_amount > 0){
+                    if($paidInfo->attempt == '1'){
+                        $total_fee_amount = $total_fee_amount -2000;
+                    }else{
+                        $total_fee_amount =$total_fee_amount;
+                    }
+                    $feeConcession = $this->fee->getStudentFeeConcession($std->row_id);
+                
+                    if(!empty($feeConcession)){
+                        $concession_amt = $feeConcession->fee_amt;
+                    }else{
+                        $concession_amt = 0;
+                    }
+                    $feeScholarship = $this->fee->getStudentFeeScholarship($std->row_id);
+                
+                    if(!empty($feeScholarship)){
+                        $scholarship_amt = $feeScholarship->fee_amt;
+                    }else{
+                        $scholarship_amt = 0;
+                    }
+                    if($total_fee_amount - $total_paid_amount->paid_amount - $concession_amt - $scholarship_amt> 0){
 
                         $spreadsheet->getActiveSheet()->getStyle("A" . $excel_row)->getFont()->setSize(14);
                         $spreadsheet->getActiveSheet()->setCellValue('A' . $excel_row,  $sl_number);
@@ -653,10 +701,12 @@ class Reports extends BaseController
                         $spreadsheet->getActiveSheet()->setCellValue('D' . $excel_row,  $std->stream_name);
                         
                     
-                        $spreadsheet->getActiveSheet()->setCellValue('E' . $excel_row,  $total_fee_amount);
+                        $spreadsheet->getActiveSheet()->setCellValue('E' . $excel_row,  $total_fees);
                     
                         $spreadsheet->getActiveSheet()->setCellValue('F' . $excel_row,  $paid_amt);
-                        $spreadsheet->getActiveSheet()->setCellValue('G' . $excel_row,  $total_fee_amount - $total_paid_amount->paid_amount);
+                        $spreadsheet->getActiveSheet()->setCellValue('G' . $excel_row,  $total_fee_amount - $total_paid_amount->paid_amount - $concession_amt - $scholarship_amt);
+                        $spreadsheet->getActiveSheet()->setCellValue('H'.$excel_row, $concession_amt);
+                        $spreadsheet->getActiveSheet()->setCellValue('I'.$excel_row, $scholarship_amt);
                     }
                     $spreadsheet->getActiveSheet()->getStyle('A' . $excel_row)->getAlignment()->setWrapText(true);
                     $this->excel->getActiveSheet()->getStyle('A'.$excel_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -5189,7 +5239,7 @@ public function downloadTransportDueInfoReport()
         $spreadsheet->getActiveSheet()->getStyle("A1:A1")->applyFromArray($headerFontSize);
 
         $spreadsheet->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " TRANSPORT FEE DUE REPORT -" . date('Y'));
+        $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " TRANSPORT FEE DUE REPORT - 2023");
         $spreadsheet->getActiveSheet()->mergeCells("A2:J2");
         $spreadsheet->getActiveSheet()->getStyle("A2:A2")->applyFromArray($headerFontSize);
         $spreadsheet->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -5200,8 +5250,9 @@ public function downloadTransportDueInfoReport()
         $spreadsheet->getActiveSheet()->setCellValue('E3', 'Total Amt.');
         $spreadsheet->getActiveSheet()->setCellValue('F3', 'Paid Amt.');
         $spreadsheet->getActiveSheet()->setCellValue('G3', 'Pending Amt.');
-        $spreadsheet->getActiveSheet()->setCellValue('H3', 'Route');
-        $spreadsheet->getActiveSheet()->setCellValue('I3', 'Bus No.');
+        $spreadsheet->getActiveSheet()->setCellValue('H3', 'Concession');
+        $spreadsheet->getActiveSheet()->setCellValue('I3', 'Route');
+        $spreadsheet->getActiveSheet()->setCellValue('J3', 'Bus No.');
         
             
         $spreadsheet->getActiveSheet()->getStyle("A3:J3")->applyFromArray($font_style_total);
@@ -5241,9 +5292,10 @@ public function downloadTransportDueInfoReport()
         $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(18);
         $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(18);
         $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-        $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(25);
-        $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(25);
         $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+     
        
         $filter = array();
         $filter['term_name'] = $term_name;
@@ -5267,10 +5319,14 @@ public function downloadTransportDueInfoReport()
                   
 
                     $pending_bal = $total_fee - $paid_amt;
+                   
                     $BusfeeConcession = $this->transport->getFeeConcessionInfo($std->row_id,$year); 
-                    if(!empty($BusfeeConcession)){
-                        $pending_bal -= $BusfeeConcession->fee_amt;
+                    if(!empty($BusfeeConcession->fee_amt)){
+                        $concession_amt = $BusfeeConcession->fee_amt;
+                    }else{
+                        $concession_amt = 0;
                     }
+                    $pending_bal -= $BusfeeConcession->fee_amt;
                    // if($paid_amt == 0) {
                     $spreadsheet->getActiveSheet()->getStyle("A" . $excel_row)->getFont()->setSize(14);
                     $spreadsheet->getActiveSheet()->setCellValue('A' . $excel_row,  $sl_number);
@@ -5280,8 +5336,9 @@ public function downloadTransportDueInfoReport()
                     $spreadsheet->getActiveSheet()->setCellValue('E' . $excel_row,  $total_fee);
                     $spreadsheet->getActiveSheet()->setCellValue('F' . $excel_row,  $paid_amt);
                     $spreadsheet->getActiveSheet()->setCellValue('G' . $excel_row,  $pending_bal);
-                    $spreadsheet->getActiveSheet()->setCellValue('H' . $excel_row,  $routeInfo->name);
-                    $spreadsheet->getActiveSheet()->setCellValue('I' . $excel_row,  $routeInfo->bus_no);
+                    $spreadsheet->getActiveSheet()->setCellValue('H' . $excel_row,  $concession_amt);
+                    $spreadsheet->getActiveSheet()->setCellValue('I' . $excel_row,  $routeInfo->name);
+                    $spreadsheet->getActiveSheet()->setCellValue('J' . $excel_row,  $routeInfo->bus_no);
                     $spreadsheet->getActiveSheet()->getStyle('A' . $excel_row)->getAlignment()->setWrapText(true);
 
                     $sl_number++;
@@ -5349,7 +5406,7 @@ public function downloadTransportOnlyDueInfoReport()
         $spreadsheet->getActiveSheet()->getStyle("A1:A1")->applyFromArray($headerFontSize);
 
         $spreadsheet->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " TRANSPORT FEE DUE REPORT -" . date('Y'));
+        $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " TRANSPORT FEE DUE REPORT - 2023");
         $spreadsheet->getActiveSheet()->mergeCells("A2:J2");
         $spreadsheet->getActiveSheet()->getStyle("A2:A2")->applyFromArray($headerFontSize);
         $spreadsheet->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -5360,8 +5417,9 @@ public function downloadTransportOnlyDueInfoReport()
         $spreadsheet->getActiveSheet()->setCellValue('E3', 'Total Amt.');
         $spreadsheet->getActiveSheet()->setCellValue('F3', 'Paid Amt.');
         $spreadsheet->getActiveSheet()->setCellValue('G3', 'Pending Amt.');
-        $spreadsheet->getActiveSheet()->setCellValue('H3', 'Route');
-        $spreadsheet->getActiveSheet()->setCellValue('I3', 'Bus No.');
+        $spreadsheet->getActiveSheet()->setCellValue('H3', 'Concession');
+        $spreadsheet->getActiveSheet()->setCellValue('I3', 'Route');
+        $spreadsheet->getActiveSheet()->setCellValue('J3', 'Bus No.');
         
             
         $spreadsheet->getActiveSheet()->getStyle("A3:J3")->applyFromArray($font_style_total);
@@ -5401,9 +5459,10 @@ public function downloadTransportOnlyDueInfoReport()
         $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(18);
         $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(18);
         $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-        $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(25);
-        $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(25);
         $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+        $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(15);
        
         $filter = array();
         $filter['term_name'] = $term_name;
@@ -5428,9 +5487,13 @@ public function downloadTransportOnlyDueInfoReport()
 
                     $pending_bal = $total_fee - $paid_amt;
                     $BusfeeConcession = $this->transport->getFeeConcessionInfo($std->row_id,$year); 
-                    if(!empty($BusfeeConcession)){
-                        $pending_bal -= $BusfeeConcession->fee_amt;
+                    if(!empty($BusfeeConcession->fee_amt)){
+                        $concession_amt = $BusfeeConcession->fee_amt;
+                    }else{
+                        $concession_amt = 0;
                     }
+                    $pending_bal -= $BusfeeConcession->fee_amt;
+
                    // if($paid_amt == 0) {
                     if($pending_bal > 0){
                     $spreadsheet->getActiveSheet()->getStyle("A" . $excel_row)->getFont()->setSize(14);
@@ -5441,8 +5504,9 @@ public function downloadTransportOnlyDueInfoReport()
                     $spreadsheet->getActiveSheet()->setCellValue('E' . $excel_row,  $total_fee);
                     $spreadsheet->getActiveSheet()->setCellValue('F' . $excel_row,  $paid_amt);
                     $spreadsheet->getActiveSheet()->setCellValue('G' . $excel_row,  $pending_bal);
-                    $spreadsheet->getActiveSheet()->setCellValue('H' . $excel_row,  $routeInfo->name);
-                    $spreadsheet->getActiveSheet()->setCellValue('I' . $excel_row,  $routeInfo->bus_no);
+                    $spreadsheet->getActiveSheet()->setCellValue('H' . $excel_row,  $concession_amt);
+                    $spreadsheet->getActiveSheet()->setCellValue('I' . $excel_row,  $routeInfo->name);
+                    $spreadsheet->getActiveSheet()->setCellValue('J' . $excel_row,  $routeInfo->bus_no);
                     $spreadsheet->getActiveSheet()->getStyle('A' . $excel_row)->getAlignment()->setWrapText(true);
 
                     $sl_number++;

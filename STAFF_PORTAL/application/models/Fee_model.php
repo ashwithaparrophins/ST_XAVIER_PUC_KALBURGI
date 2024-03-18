@@ -1286,6 +1286,8 @@ class Fee_model extends CI_Model
            
 
             $this->db->where('fee.is_deleted', 0);
+            $this->db->where('student.std_status', 0);
+
             $this->db->order_by('student.student_id ASC, fee.payment_date ASC,fee.receipt_number ASC');
 
             

@@ -155,9 +155,7 @@ table{
                ?>
                 <tr>
                     <th style="text-align: left;" colspan="1">Total Fee</th>
-                    <th class="border_right_none" style="text-align: right;"><?php if($feeInfo->attempt == "1"){ echo number_format($total_fee_amt - 2000,2);} else {
-                    echo number_format($studentInfo->total_amount,2);
-                    }; ?></th>
+                    <th class="border_right_none" style="text-align: right;"><?php echo number_format($total_fee_amt,2); ?></th>
                 </tr>
                 <?php if($fee_concession != 0){ ?>
                 <tr>

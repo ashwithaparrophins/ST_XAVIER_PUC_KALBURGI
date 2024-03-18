@@ -874,7 +874,7 @@
                             <select class="form-control input-md required" id="" name="preference">
                               
                                 <option value="">Select One Preference</option>
-                                <!-- <option value="ALL">ALL</option>  -->
+                                <option value="ALL">ALL</option> 
                                 <option value="PCMB">PCMB</option>
                                 <option value="PCMC">PCMC</option>
                                 <!-- <option value="PCME">PCME</option>
