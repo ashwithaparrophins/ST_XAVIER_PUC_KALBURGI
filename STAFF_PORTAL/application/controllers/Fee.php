@@ -1200,6 +1200,14 @@ class Fee extends BaseController
         $data['feeInfo'] = $this->fee->getFeeInfoByReceiptNum($row_id);
 
         $studentInfo =  $this->student->getStudentInfoByRowId($data['feeInfo']->application_no);
+        $lastRow = $this->fee->getLastOverallFeeRow($data['feeInfo']->application_no);
+        if($lastRow->row_id == $row_id){
+            $concession = $this->fee->getSumFeeConcessionInfoForReport($data['feeInfo']->application_no,$data['feeInfo']->payment_year,$data['feeInfo']->created_date_time);
+            $data['concession'] = $concession->fee_amt;
+           
+        }
+        $scholarship = $this->fee->getSumFeeScholarshipInfoForReport($data['feeInfo']->application_no,$data['feeInfo']->payment_year,$data['feeInfo']->created_date_time);
+        $data['scholarship'] = $scholarship->fee_amt;
         // $filter['fee_year'] = ($studentInfo->intake_year_id)+1;
         // if($studentInfo->term_name == 'I PUC'){
         //     $studentInfo = $this->application->getApprovedStudentInfoByApplicationNo($data['feeInfo']->application_no);
@@ -1215,10 +1223,7 @@ class Fee extends BaseController
         // $concession = $this->fee->getStudentFeeConcessionInfo($data['feeInfo']->rel_stud_row_id);
         // $data['paidFeeSum'] = $this->fee->getSumOfFeesPaid($data['feeInfo']->application_no,$data['feeInfo']->payment_year);
         $data['paidFeeSum'] = $this->fee->getSumOfFeesPaidForReceipt($data['feeInfo']->application_no,$data['feeInfo']->payment_year,$data['feeInfo']->created_date_time);
-        $concession = $this->fee->getSumFeeConcessionInfoForReport($data['feeInfo']->application_no,$data['feeInfo']->payment_year,$data['feeInfo']->created_date_time);
-        $data['concession'] = $concession->fee_amt;
-        $scholarship = $this->fee->getSumFeeScholarshipInfoForReport($data['feeInfo']->application_no,$data['feeInfo']->payment_year,$data['feeInfo']->created_date_time);
-        $data['scholarship'] = $scholarship->fee_amt;
+       
         // $data['fee_concession'] = $concession->fee_amt;
         $data['studentInfo'] = $studentInfo;
         
@@ -2548,6 +2553,7 @@ public function processTheFeePayment(){
                     $data['paid_amount'] = $paidFee;
                     $concession_amt = 0;
                     $feeConcession = $this->fee->getStudentFeeConcession($application_no);
+                    // log_message('debug','concession'.print_r($application_no,true));
                     if(!empty($feeConcession)){
                         $concession_amt = $feeConcession->fee_amt;
                         $total_fee_amount -= $concession_amt;

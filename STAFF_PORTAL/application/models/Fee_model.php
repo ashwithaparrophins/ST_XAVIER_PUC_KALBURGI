@@ -1842,7 +1842,6 @@ class Fee_model extends CI_Model
         $this->db->from('tbl_student_fee_concession as fee');
         $this->db->where('fee.is_deleted', 0);
         $this->db->where('fee.application_no', $student_id);
-        $this->db->where('fee.date <=', $date);
         $this->db->where('fee.year', $year);
         $this->db->where('fee.approved_status', 1);
         $query = $this->db->get();
@@ -1854,7 +1853,6 @@ class Fee_model extends CI_Model
         $this->db->from('tbl_student_fee_scholarship as fee');
         $this->db->where('fee.is_deleted', 0);
         $this->db->where('fee.application_no', $student_id);
-        $this->db->where('fee.date <=', $date);
         $this->db->where('fee.year', $year);
         $this->db->where('fee.approved_status', 1);
         $query = $this->db->get();
@@ -1867,6 +1865,15 @@ class Fee_model extends CI_Model
         $this->db->where('fee.application_no', $application_no);
         $this->db->where('fee.payment_year',$payment_year);
         $this->db->where('fee.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function getLastOverallFeeRow($row_id){
+        $this->db->from('tbl_students_overall_fee_payment_info_i_puc_2021 as fee'); 
+        $this->db->where('fee.application_no', $row_id);
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->order_by('fee.row_id','DESC');
         $query = $this->db->get();
         return $query->row();
     }
