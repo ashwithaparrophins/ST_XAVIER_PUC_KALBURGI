@@ -218,7 +218,7 @@ class Reports extends BaseController
             $spreadsheet->getActiveSheet()->getStyle("A1:A1")->applyFromArray($headerFontSize);
 
             $spreadsheet->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
-            $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " FEES PAID FOR THE YEAR -" . date('Y'));
+            $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " FEES PAID FOR THE YEAR - 2023");
             $spreadsheet->getActiveSheet()->mergeCells("A2:J2");
             $spreadsheet->getActiveSheet()->getStyle("A2:A2")->applyFromArray($headerFontSize);
             $spreadsheet->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -790,7 +790,7 @@ class Reports extends BaseController
             $spreadsheet->getActiveSheet()->getStyle("A1:A1")->applyFromArray($headerFontSize);
 
             $spreadsheet->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
-            $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " FEES PAID FOR THE YEAR -" . date('Y'));
+            $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " FEES PAID FOR THE YEAR - 2023");
             $spreadsheet->getActiveSheet()->mergeCells("A2:I2");
             $spreadsheet->getActiveSheet()->getStyle("A2:A2")->applyFromArray($headerFontSize);
             $spreadsheet->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -5082,9 +5082,8 @@ public function downloadBulkFeeReport(){
             if (!empty($paidInfo)) {
                 
                 foreach ($paidInfo as $studentInfo) {
-                    $feeInfo = $this->fee->getFeeInfoByReceiptNumBulk($studentInfo->row_id);
+                    $feeInfo = $this->fee->getFeeInfoByReceiptNumBulk($studentInfo->fee_row_id);
                     $data['feeInfo'] = $feeInfo;
-    
 
                     $data['studentInfo'] = $studentInfo; 
                     $data['paid_amount'] = $studentInfo->paid_amount;

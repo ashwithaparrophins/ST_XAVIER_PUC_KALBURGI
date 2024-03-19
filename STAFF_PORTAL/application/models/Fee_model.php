@@ -178,7 +178,7 @@ class Fee_model extends CI_Model
     public function getFeeInfoByReceiptNumBulk($receipt_number){
         $this->db->from('tbl_students_overall_fee_payment_info_i_puc_2021 as fee');
         $this->db->where('fee.is_deleted', 0);
-        $this->db->where('fee.application_no', $receipt_number);
+        $this->db->where('fee.row_id', $receipt_number);
         $query = $this->db->get();
         return $query->row();
     }
