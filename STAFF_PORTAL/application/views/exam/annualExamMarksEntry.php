@@ -1255,7 +1255,54 @@ function actionTaken(student_id) {
     // }else{
     //     checkMark = 24;
     // }
-    if (value != "") {
+    if(lab_status == "true"){
+        if (value != "") {
+        if(value=='MP-LAB' || value=='MP-THEORY'){
+            if(value == 'MP-THEORY'){
+              $("#result_" + student_id).html("<b style='color:red'> FAIL </b>");
+              $("#get_total_mark_" + student_id).html("<b style='color:red'> FAIL </b>");
+            }else if(value == 'MP-LAB'){
+                // if(theory_mark < 35){
+                  $("#result_" + student_id).html("<b style='color:red'> FAIL </b>");
+                  $("#get_total_mark_" + student_id).html("<b style='color:red'> FAIL </b>");
+                // }
+            }
+        }else{
+            if(value=='AB-THEORY' || value=='MP-THEORY' || value=='SAT-THEORY' || value=='AB-LAB' || value=='SAT-LAB'){
+              $("#result_" + student_id).html("<b style='color:red'>" + value.slice(0,2) + "</b>"); 
+              $("#get_total_mark_" + student_id).html("<b style='color:red'>" + value.slice(0,2) + "</b>"); 
+            }else if(value=='AB-LAB' || value=='MP-LAB' || value=='SAT-LAB'){
+             if(theory_mark < 35){
+               $("#result_" + student_id).html("<b style='color:red'> FAIL </b>"); 
+               $("#get_total_mark_" + student_id).html("<b style='color:red'> FAIL </b>"); 
+              }else if(theory_mark!="AB" && theory_mark!="MP" && theory_mark!="SAT") {
+                $("#result_" + student_id).html("<b style='color:green'> PASS </b>"); 
+                $("#get_total_mark_" + student_id).html("<b style='color:red'> " + value.slice(0,2) + " </b>"); 
+              }
+            }
+        }
+        if(value=='AB-THEORY' || value=='MP-THEORY' || value=='SAT-THEORY'){
+            $("#obt_theory_mark_" + student_id).val(value.slice(0,2));
+            $("#obt_theory_mark_" + student_id).prop('readonly', false);
+        }
+        if(value=='AB-LAB' || value=='MP-LAB' || value=='SAT-LAB'){
+           $("#lab_obt_mark_" + student_id).val(value.slice(0,2));
+           $("#lab_obt_mark_" + student_id).prop('readonly', false);
+        }
+ 
+    } else {
+        $("#result_" + student_id).html("<b style='color:red'>Pending</b>");
+        $("#get_total_mark_" + student_id).html("<b style='color:red'>Pending</b>");
+        $("#obt_theory_mark_" + student_id).val("");
+        $("#obt_theory_mark_" + student_id).prop('readonly', false);
+        $("#lab_obt_mark_" + student_id).val("");
+        $("#lab_obt_mark_" + student_id).prop('readonly', false);
+    }
+
+ }else{
+
+
+  if (value != "") {
         if(value=='MP-LAB' || value=='MP-THEORY'){
             if(value == 'MP-THEORY'){
               $("#result_" + student_id).html("<b style='color:red'> FAIL </b>");
@@ -1297,6 +1344,10 @@ function actionTaken(student_id) {
         $("#lab_obt_mark_" + student_id).val("");
         $("#lab_obt_mark_" + student_id).prop('readonly', false);
     }
+
+
+ }
+    
 }
 
 function getTotalMarks(student_id) { term_name
@@ -1359,7 +1410,7 @@ function getTotalMarks(student_id) { term_name
                 fail_flag = 0;
             }
         } else {
-            if (theory_mark < 21 || labCheck == "MP" || labCheck == "SAT" || lab_mark < 10.5) {
+            if (theory_mark < 21 || labCheck == "MP" || labCheck == "SAT" || labCheck == "AB" || lab_mark < 10.5) {
                 fail_flag = 1;
             } else if (total_mark < 35) {
                 fail_flag = 1;
