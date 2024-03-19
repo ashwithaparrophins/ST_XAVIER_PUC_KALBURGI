@@ -633,7 +633,7 @@ input[type=number]::-webkit-outer-spin-button {
                                             echo "<b style='color:orange'>Pending</b>"; 
                                         }   
                                     }else if($labStatus == 'true'){
-                                        if($total_mark >= 35 && $mark_obt_theory >= 21 && $lab_mark_obt != 'MP'){
+                                        if($total_mark >= 35 && $mark_obt_theory >= 21 && $lab_mark_obt != 'MP' && $lab_mark_obt >= 10.5){
                                             $pass_count++;
                                            echo "<b style='color:green'>PASS</b>";
                                             if($total_mark >= $dest_min_mark){
@@ -665,7 +665,7 @@ input[type=number]::-webkit-outer-spin-button {
 
                                     }else{
 
-                                        if($total_mark >= 35 && $mark_obt_theory >= 24 && $lab_mark_obt != 'MP'){
+                                        if($total_mark >= 35 && $mark_obt_theory >= 28 && $lab_mark_obt != 'MP'){
                                             $pass_count++;
                                           echo "<b style='color:green'>PASS</b>";
                                             if($total_mark >= $dest_min_mark){
@@ -1300,6 +1300,125 @@ function actionTaken(student_id) {
 }
 
 function getTotalMarks(student_id) { term_name
+    var fail_flag = 0;
+    var exam_type = $('#exam_type').val();
+    var lab_status = $('#lab_status').val();
+    var term_name = $('#term_name').val(); 
+    var max_theory_mark = $('#max_theory_mark').val();
+    var min_mark_pass = $('#min_mark_pass').val();
+    var max_lab_mark = $('#max_lab_mark').val();
+    var theory_mark = $("#obt_theory_mark_" + student_id).val();
+    var lab_mark = $("#lab_obt_mark_" + student_id).val();
+    var labCheck = lab_mark;
+    // alert(max_lab_mark);
+    lab_mark = Number(lab_mark);
+    theory_mark = Number(theory_mark);
+    var total_mark = 0;
+    if(exam_type == 'I_UNIT_TEST' || exam_type == 'II_UNIT_TEST' ){
+        var min_mark_pass = min_mark_pass;
+        var total_pass_mark = max_theory_mark;
+    }else{
+        var min_mark_pass = min_mark_pass;
+        var total_pass_mark = max_theory_mark;
+    }
+    if (isNaN(theory_mark) && isNaN(lab_mark)) {
+        total_mark = 0;
+    } else if (isNaN(theory_mark)) {
+        total_mark = lab_mark;
+    } else if (isNaN(lab_mark)) {
+        total_mark = theory_mark;
+    } else {
+        total_mark = theory_mark + lab_mark;
+    }
+    if(theory_mark > total_pass_mark){
+        alert("Please enter valid Theory mark");
+        $("#obt_theory_mark_" + student_id).val("");
+        exit;
+    }
+    if(lab_status == 'true'){
+        if(lab_mark > max_lab_mark){
+        alert("Please enter valid Lab mark");
+        $("#lab_obt_mark_" + student_id).val("");
+        exit;
+    }
+    }else{
+        if(lab_mark > max_lab_mark){
+        alert("Please enter valid Lab mark");
+        $("#lab_obt_mark_" + student_id).val("");
+        exit;
+    }  
+    }
+    if(lab_status == 'true'){
+        if(exam_type == 'ANNUAL_EXAMINATION'){
+          if (Number(max_theory_mark) == 80 && Number(max_lab_mark) == 20) {
+            if (theory_mark < 24 || labCheck == "MP") {
+                fail_flag = 1;
+            } else if (total_mark < 35) {
+                fail_flag = 1;
+            } else {
+                fail_flag = 0;
+            }
+        } else {
+            if (theory_mark < 21 || labCheck == "MP" || labCheck == "SAT" || lab_mark < 10.5) {
+                fail_flag = 1;
+            } else if (total_mark < 35) {
+                fail_flag = 1;
+            } else {
+                fail_flag = 0;
+
+            }
+        }
+    }else{
+           if (total_mark < min_mark_pass) {
+            fail_flag = 1;
+            } else {
+            fail_flag = 0;
+            } 
+    }
+    }else{
+
+    if(exam_type == 'ANNUAL_EXAMINATION'){
+          if (Number(max_theory_mark) == 80 && Number(max_lab_mark) == 20) {
+            if (theory_mark < 28 || labCheck == "MP") {
+                fail_flag = 1;
+            } else if (total_mark < 35) {
+                fail_flag = 1;
+            } else {
+                fail_flag = 0;
+            }
+        } else {
+            if (theory_mark < 21 || labCheck == "MP" || labCheck == "SAT") {
+                fail_flag = 1;
+            } else if (total_mark < 35) {
+                fail_flag = 1;
+            } else {
+                fail_flag = 0;
+
+            }
+        }
+    }else{
+           if (total_mark < min_mark_pass) {
+            fail_flag = 1;
+            } else {
+            fail_flag = 0;
+            } 
+    }
+}
+
+
+    if (fail_flag == 1) {
+        $("#get_total_mark_" + student_id).html("<b style='color:red'>" + total_mark + "</b>");
+        $("#result_" + student_id).html("<b style='color:red'>FAIL</b>");
+    } else {
+        $("#get_total_mark_" + student_id).html("<b style='color:green'>" + total_mark + "</b>");
+        $("#result_" + student_id).html("<b style='color:green'>PASS</b>");
+    }
+}
+
+
+
+function getTotalMarksLab(student_id) {
+     term_name
     var fail_flag = 0;
     var exam_type = $('#exam_type').val();
     var lab_status = $('#lab_status').val();
