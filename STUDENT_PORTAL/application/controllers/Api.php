@@ -1629,7 +1629,7 @@ public function collegeNotificationsApi(){
                 $total_fee_obj = $this->fee->getTotalFeeAmount($filter);
 
                 $data->first_puc_total_fee = $first_puc_total_bal = $total_fee_obj->total_fee;
-            
+               
                 $paidFee = $this->fee->getTotalFeePaidInfo($application_no,$filter['fee_year']);
                 $data->feePaidInfo = $this->fee->getFeePaidInfo($application_no,$filter['fee_year']);
                 $data->fee_installment = $this->fee->checkInstalmentExists($application_no);
@@ -1672,14 +1672,18 @@ public function collegeNotificationsApi(){
             //$data->total_fee_amount =  $total_fee_amount;
             $concession_amt = 0;
             $feeConcession = $this->fee->getStudentFeeConcession($application_no);
+
             if(!empty($feeConcession)){
                 $concession_amt = $feeConcession->fee_amt;
+                $total_fee_amount -= $concession_amt;
             }
             $scholarship_amt = 0;
             $feeScholarship = $this->fee->getStudentFeeScholarship($application_no);
             if(!empty($feeScholarship)){
                 $scholarship_amt = $feeScholarship->fee_amt;
+                $total_fee_amount -= $scholarship_amt;
             }
+
             $data->second_puc_pending_amount = $data->pending_amount = $total_fee_amount-$concession_amt;
             $data->paid_amount = number_format($paidFee,2);
           
