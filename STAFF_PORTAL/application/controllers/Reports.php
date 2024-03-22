@@ -218,7 +218,7 @@ class Reports extends BaseController
             $spreadsheet->getActiveSheet()->getStyle("A1:A1")->applyFromArray($headerFontSize);
 
             $spreadsheet->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
-            $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " FEES PAID FOR THE YEAR - 2023");
+            $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " FEES PAID FOR THE YEAR - 2024");
             $spreadsheet->getActiveSheet()->mergeCells("A2:J2");
             $spreadsheet->getActiveSheet()->getStyle("A2:A2")->applyFromArray($headerFontSize);
             $spreadsheet->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -481,7 +481,7 @@ class Reports extends BaseController
             $filter = array();
             $term_name = $this->security->xss_clean($this->input->post('term_name_select'));
             $preference = $this->security->xss_clean($this->input->post('preference'));
-            $year = CURRENT_YEAR;
+            $year = $this->security->xss_clean($this->input->post('year'));
             // log_message('debug','term_name'.$term_name);
             // $year = $this->security->xss_clean($this->input->post('year'));
             // log_message('debug','year'.$year);
@@ -753,6 +753,7 @@ class Reports extends BaseController
             $filter = array();
             $term_name = $this->security->xss_clean($this->input->post('term_name_select'));
             $preference = $this->security->xss_clean($this->input->post('preference'));
+            $year = $this->security->xss_clean($this->input->post('year'));
           
             
             $spreadsheet = new Spreadsheet();
@@ -790,7 +791,7 @@ class Reports extends BaseController
             $spreadsheet->getActiveSheet()->getStyle("A1:A1")->applyFromArray($headerFontSize);
 
             $spreadsheet->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
-            $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " FEES PAID FOR THE YEAR - 2023");
+            $spreadsheet->getActiveSheet()->setCellValue('A2', $term_name . " FEES PAID FOR THE YEAR - ".$year);
             $spreadsheet->getActiveSheet()->mergeCells("A2:I2");
             $spreadsheet->getActiveSheet()->getStyle("A2:A2")->applyFromArray($headerFontSize);
             $spreadsheet->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -848,15 +849,17 @@ class Reports extends BaseController
          
             $filter['preference'] = $preference;
             $filter['term_name'] = $term_name;
+            $filter['year'] = $year;
+
             // foreach($feeTypeInfo as $type){
           
                 $studentInfo = $this->fee->getAllFeePaymentInfoForDueReport($filter);
                 
                 if (!empty($studentInfo)) {
                     foreach ($studentInfo as $std) {
-                        $feeInfo = $this->fee->getTotalFeeAmountForReport($term_name,$preference,CURRENT_YEAR);
+                        $feeInfo = $this->fee->getTotalFeeAmountForReport($term_name,$preference,$year);
                         $total_fee = $feeInfo->total_fee;
-                        $feePaidInfo = $this->fee->getFeePaidInfoForReport($std->row_id,CURRENT_YEAR);
+                        $feePaidInfo = $this->fee->getFeePaidInfoForReport($std->row_id,$year);
                        
                         if(!empty($feePaidInfo->paid_amount)){
                             $paid_amt = $feePaidInfo->paid_amount;
@@ -3527,7 +3530,132 @@ class Reports extends BaseController
         }
     }
 
-
+    public function getCancelReceiptReport(){
+        if ($this->isAdmin() == true ) {
+            setcookie('isDownLoaded',1);  
+            $this->loadThis();
+        } else {
+            $filter = array();
+           
+            $year = $this->security->xss_clean($this->input->post('year'));
+            $stream_name = $this->security->xss_clean($this->input->post('stream_name'));
+            $type = $this->security->xss_clean($this->input->post('type'));
+            // if($type == 'Fee Refund'){ 
+                $cellNameByStudentReport = array('G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+                // $filter['bank_settlement'] = $bank_settlement;
+                $sheet = 0;
+                    $this->excel->setActiveSheetIndex($sheet);
+                    //name the worksheet
+                    $this->excel->getActiveSheet()->setTitle("CANCEL RECEIPT REPORT");
+                    $this->excel->getActiveSheet()->getPageSetup()->setPrintArea('A1:Q500');
+                    //set Title content with some text
+                    $this->excel->getActiveSheet()->setCellValue('A1', EXCEL_TITLE);
+                    $this->excel->getActiveSheet()->setCellValue('A2', "Cancel Receipt Report");
+                    $this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(18);
+                    $this->excel->getActiveSheet()->getStyle('A2')->getFont()->setSize(14);
+                    $this->excel->getActiveSheet()->mergeCells('A1:H1');
+                    $this->excel->getActiveSheet()->mergeCells('A2:H2');
+                    $this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
+                    $this->excel->getActiveSheet()->getStyle('A2:H2')->getFont()->setBold(true);
+                    $this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $this->excel->getActiveSheet()->getStyle('A1:H2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    
+                    $excel_row = 3;
+                    $this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(8);
+                    $this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(14);
+                    $this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(28);
+                    $this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+                    $this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(13);
+                    $this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(13);
+                    $this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+                    $this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+                    
+                    $this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+                    $this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+                    $this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+                    $this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+                    $this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(15);
+                    $this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(15);
+                    $this->excel->getActiveSheet()->getColumnDimension('O')->setWidth(25);
+                    $this->excel->getActiveSheet()->getColumnDimension('P')->setWidth(15);
+                    $this->excel->getActiveSheet()->getColumnDimension('Q')->setWidth(18);
+                    $this->excel->getActiveSheet()->getColumnDimension('R')->setWidth(18);
+                    $this->excel->getActiveSheet()->getStyle('A3:H3')->getFont()->setBold(true);
+                    $this->excel->getActiveSheet()->getStyle('A3:H3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $this->excel->setActiveSheetIndex($sheet)->setCellValue('A'.$excel_row, 'SL No.');
+                    // $this->excel->setActiveSheetIndex($sheet)->setCellValue('B'.$excel_row, 'Date');
+                    $this->excel->setActiveSheetIndex($sheet)->setCellValue('B'.$excel_row, 'Application No.');
+                    $this->excel->setActiveSheetIndex($sheet)->setCellValue('C'.$excel_row, 'Name');
+                    // $this->excel->setActiveSheetIndex($sheet)->setCellValue('E'.$excel_row, 'Gender');
+                    $this->excel->setActiveSheetIndex($sheet)->setCellValue('D'.$excel_row, 'Class');
+                    $this->excel->setActiveSheetIndex($sheet)->setCellValue('E'.$excel_row, 'Stream');
+                    $this->excel->setActiveSheetIndex($sheet)->setCellValue('F'.$excel_row, 'Receipt No.');
+                    $this->excel->setActiveSheetIndex($sheet)->setCellValue('G'.$excel_row, 'Amount');
+                    $this->excel->setActiveSheetIndex($sheet)->setCellValue('H'.$excel_row, 'Remarks');
+                    // $this->excel->setActiveSheetIndex($sheet)->setCellValue('K'.$excel_row, 'Father Name');
+                    // $this->excel->setActiveSheetIndex($sheet)->setCellValue('L'.$excel_row, 'Mother Name');
+                    // $this->excel->setActiveSheetIndex($sheet)->setCellValue('M'.$excel_row, 'Father Mobile');
+                    // $this->excel->setActiveSheetIndex($sheet)->setCellValue('N'.$excel_row, 'Mother Mobile');
+                    $this->excel->getActiveSheet()->getStyle('A3:H3')->getFont()->setBold(true); 
+                    $this->excel->getActiveSheet()->getStyle('A3:H3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            
+                    $styleBorderArray = array('borders' => array('allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN)));
+                    $this->excel->getActiveSheet()->getStyle('A1:H500')->applyFromArray($styleBorderArray);
+            
+                   
+                    $filter['year']= $year;
+                    $data['year'] = $year;
+    
+                    $sl = 1;
+                    $excel_row = 4;
+    
+                    // log_message('debug','refund'.print_r($filter,true));
+                    $studentInfo = $this->fee->getCancelReceiptInfoForReport($filter);
+                //    log_message('debug','std'.print_r($studentInfo,true));
+    
+                        foreach($studentInfo as $std){
+                          
+                           // if($std->refund_amt >0){
+                                $this->excel->setActiveSheetIndex($sheet)->setCellValue('A'.$excel_row, $sl++);
+                                // $this->excel->setActiveSheetIndex($sheet)->setCellValue('B'.$excel_row, date('d-m-Y',strtotime($std->refund_date)));
+                                $this->excel->setActiveSheetIndex($sheet)->setCellValue('B'.$excel_row, $std->application_no);
+                                $this->excel->setActiveSheetIndex($sheet)->setCellValue('C'.$excel_row, $std->student_name);
+                                // $this->excel->setActiveSheetIndex($sheet)->setCellValue('E'.$excel_row, $std->gender);
+                                $this->excel->setActiveSheetIndex($sheet)->setCellValue('D'.$excel_row, $std->term_name);
+                                $this->excel->setActiveSheetIndex($sheet)->setCellValue('E'.$excel_row, $std->stream_name);
+                                $this->excel->setActiveSheetIndex($sheet)->setCellValue('F'.$excel_row, $std->receipt_number);
+                                $this->excel->setActiveSheetIndex($sheet)->setCellValue('G'.$excel_row, $std->paid_amount);
+                                $this->excel->setActiveSheetIndex($sheet)->setCellValue('H'.$excel_row, $std->remarks);
+                                // $this->excel->setActiveSheetIndex($sheet)->setCellValue('K'.$excel_row, $std->father_name);
+                                // $this->excel->setActiveSheetIndex($sheet)->setCellValue('L'.$excel_row, $std->mother_name);
+                                // $this->excel->setActiveSheetIndex($sheet)->setCellValue('M'.$excel_row, $std->father_mobile);
+                                // $this->excel->setActiveSheetIndex($sheet)->setCellValue('N'.$excel_row, $std->mother_mobile);
+    
+                                $this->excel->getActiveSheet()->getStyle('A'.$excel_row.':B'.$excel_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $this->excel->getActiveSheet()->getStyle('D'.$excel_row.':I'.$excel_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $this->excel->getActiveSheet()->getStyle('J'.$excel_row.':N'.$excel_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $this->excel->getActiveSheet()->getStyle('O'.$excel_row.':R'.$excel_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                $excel_row++;
+                            //}
+                        }
+                        $this->excel->createSheet(); 
+                    
+                
+                    $filename =  $report_type.'_Cancel_Receipt_Report_-'.date('d-m-Y').'.xls'; //save our workbook as this file name
+                    header('Content-Type: application/vnd.ms-excel'); //mime type
+                    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+                    header('Cache-Control: max-age=0'); //no cache
+                                
+                    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+                    //if you want to save it as .XLSX Excel 2007 format
+                    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
+                    ob_start();
+                    setcookie('isDownLoaded',1);  
+                    $objWriter->save("php://output");
+              
+    
+            }
+        }
     // DOWNLOAD mun internal report
     public function downloadMunInternalReport()
     {

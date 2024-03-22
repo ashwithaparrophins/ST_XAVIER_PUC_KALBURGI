@@ -329,7 +329,7 @@ if ($error) {
                                                             name="paid_amount" placeholder="Paid Amount"
                                                             onkeypress="return isNumberKey(event)" required
                                                             autocomplete="off">
-                                                            <input type="hidden" value="<?php echo $total_fee_amount - 2000; ?>" id="ii_paid_amt">
+                                                            <input type="hidden" value="<?php echo $total_fee_amount - $scholarship - $concession - 2000; ?>" id="ii_paid_amt">
 
                                                     </div>
                                                 </div>
@@ -386,7 +386,7 @@ if ($error) {
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                                <?php if (!empty($II_feePaidInfo)) {
+                                                <?php $j = 1;   $length = count($II_feePaidInfo); if (!empty($II_feePaidInfo)) {
                                                             foreach ($II_feePaidInfo as $fee) { 
                                                                 if(!empty($fee->ref_receipt_no)){
                                                                     $fees_receipt_no = $fee->ref_receipt_no;
@@ -410,10 +410,14 @@ if ($error) {
                                                             <a href="<?php echo base_url(); ?>feePaymentReceiptPrint/<?php echo $fee->row_id; ?>"
                                                                 target="_blank">Receipt</a>
                                                         <?php } ?>   
-                                                        <a class="btn btn-xs btn-secondary" onclick="openModel(<?php echo $fee->row_id; ?>,/<?php echo $fees_receipt_no; ?>/)" title="Edit" href='#'><i class="fas fa-edit"></i></a>    
+                                                        <a class="btn btn-xs btn-secondary" onclick="openModel(<?php echo $fee->row_id; ?>,/<?php echo $fees_receipt_no; ?>/)" title="Edit" href='#'><i class="fas fa-edit"></i></a>  
+                                                        <?php if($length == $j && $fee->payment_type != 'ONLINE'){ ?>                                                                                
+
+                                                            <a class="btn btn-xs btn-danger deleteFeesReceipt" href="#" data-row_id="<?php echo $fee->row_id; ?>" title="Cancel Receipt"><i class="fas fa-trash"></i></a>
+                                                        <?php  } ?>  
                                                     </td>
                                                 </tr>
-                                                <?php }
+                                                <?php  $j++;}
                                                         } else { ?>
                                                 <tr class="text-dark">
                                                     <td colspan="6">Fee info not found</td>
@@ -518,7 +522,7 @@ if ($error) {
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                                <?php if (!empty($feePaidInfo)) {   
+                                                <?php $i = 1;   $length = count($feePaidInfo);if (!empty($feePaidInfo)) {   
                                                             foreach ($feePaidInfo as $fee) {
                                                                 if(!empty($fee->ref_receipt_no)){
                                                                     $fee_receipt_no = $fee->ref_receipt_no;
@@ -537,9 +541,12 @@ if ($error) {
                                                             <a href="<?php echo base_url(); ?>feePaymentReceiptPrint/<?php echo $fee->row_id; ?>"
                                                             target="_blank">Receipt</a> 
                                                             <a class="btn btn-xs btn-secondary" onclick="openModel(<?php echo $fee->row_id; ?>,/<?php echo $fee_receipt_no; ?>/)" title="Edit" href='#'><i class="fas fa-edit"></i></a>
+                                                            <?php if($length == $i && $fee->payment_type != 'ONLINE'){ ?>                                                                                
+                                                                <a class="btn btn-xs btn-danger deleteFeesReceipt"  href="#" data-row_id="<?php echo $fee->row_id; ?>" title="Cancel Receipt"><i class="fas fa-trash"></i></a>
+                                                            <?php  } ?> 
                                                     </td>
                                                 </tr>
-                                                <?php }
+                                                <?php $i++;}
                                                         } else { ?>
                                                 <tr class="text-dark">
                                                     <td colspan="6">Fee info not found</td>
@@ -777,6 +784,54 @@ if ($error) {
     }
 
 jQuery(document).ready(function() {
+
+    jQuery(document).on("click", ".deleteFeesReceipt", function(){
+    var row_id = $(this).data("row_id"),
+        hitURL = baseURL + "deleteFeesReceipt",
+        currentRow = $(this);
+
+    var confirmation = confirm("Are you sure you want to delete this Receipt?");
+
+    if (confirmation) {
+        var remark;
+
+        do {
+            // Prompt the user to enter a remark
+            remark = prompt("Enter remark:");
+
+            // Check if the user clicked "Cancel"
+            if (remark === null) {
+                // Exit the function if the user cancels
+                return;
+            }
+
+            // Check if the user entered a remark
+            if (remark.trim() === "") {
+                alert("Remark is mandatory. Please enter a remark.");
+            }
+        } while (remark.trim() === "");
+
+        // Continue with the deletion process
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: hitURL,
+            data: {
+                row_id: row_id,
+                remark: remark  // Include the remark in the data sent to the server
+            }
+        }).done(function(data) {
+            currentRow.parents('tr').remove();
+            if (data.status === true) {
+                alert("Fee Receipt successfully Deleted");
+            } else if (data.status === false) {
+                alert("Failed to delete Receipt");
+            } else {
+                alert("Access denied..!");
+            }
+        });
+    }
+});
 
         const II_feeTypeSelect = $("#ii_fee_type_select");
         const II_paidAmountInput = $("#II_PUC_paid_amount");

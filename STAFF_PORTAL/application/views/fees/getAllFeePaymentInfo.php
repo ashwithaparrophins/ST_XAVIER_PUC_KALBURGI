@@ -69,22 +69,47 @@ if ($error) {
                     <div class="card-body p-2">
                         <form action="<?php echo base_url(); ?>getAllFeePaymentInfo" method="POST" id="byFilterMethod">
                             <div class="row c-m-b">
-                                <div class="col-lg-3 col-12 col-md-5 box-tools">
+                                <div class="col-lg-2 col-12 col-md-5 box-tools">
                                     <span class="page-title">
                                         <i class="material-icons">book</i> Fee Paid Info
                                     </span>
                                 </div>
-                                <div class="col-lg-3 col-12 col-md-3 box-tools ">
+                                <div class="col-lg-2 col-12 col-md-3 box-tools ">
                                     <span class="page-title float-right">
                                         Total Receipt: <b><?php echo $online_pay_count; ?></b>
                                     </span>
                                 </div>
+                                <div class="col-lg-3 col-md-5 col-12">
+                               
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            </div>
+                                        <input type="text" value="<?php echo date('d-m-Y',strtotime($date_from_filter)); ?>"
+                                            class="form-control rounded datepicker" id="" name="date_from_filter"
+                                            placeholder="Date From" style="font-weight:500;color:black;" aria-label="Search"
+                                            aria-describedby="search-addon" autocomplete="off" />
+                                        
+                                    <div class="input-group-prepend">
+                                        <!-- <span class="input-group-text" id="basic-addon1"><b>To Date</b></span> -->
+                                        </div>
+                                    <input type="text" value="<?php echo date('d-m-Y',strtotime($date_to_filter)); ?>"
+                                        class="form-control rounded datepicker" id="" name="date_to_filter"
+                                        placeholder="Date To" style="font-weight:500;color:black;" aria-label="Search"
+                                        aria-describedby="search-addon" autocomplete="off" />
+                                    
+                                    <div class="input-group-prepend">
+                                        <button type="submit" class="btn btn-success border_radius_none py-0">
+                                            <i class="fa fa-search"></i>
+                                    </div>
+                                </div>
+                            </div>
                                 <div class="col-lg-2 input-group float-right">
                                     <select class="form-control" name="year" id="year">
                                         <?php if(!empty($year)){ ?>
                                         <option value="<?php echo $year; ?>" selected><b><?php echo $year; ?></b>
                                         </option>
                                         <?php } ?>
+                                        <option value="2024">2024</option>
                                         <option value="2023">2023</option>
                                         <option value="2022">2022</option>
                               
@@ -93,7 +118,7 @@ if ($error) {
                                         <button class="btn btn-success" type="submit">Search</button>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-5 col-12">
+                                <div class="col-lg-3 col-md-5 col-12">
 
 
 
@@ -106,7 +131,7 @@ if ($error) {
                                             class="fas fa-university"></i>
                                         New-Adm Order ID Process</a> -->
 
-                                    <a class="btn btn-success mobile-btn float-right border_right_radius" href="#"
+                                    <a class="btn btn-success mobile-btn float-right" href="#"
                                         id="addBankSettlement"><i class="fa fa-university"></i>
                                         Bank Settlement</a>
                                     <!-- <div class="dropdown mobile-btn float-right">
@@ -813,6 +838,12 @@ jQuery(document).ready(function() {
 
 
     jQuery('#date_select, .dateSearch, #date_from, #date_to, #settle_date_bank, .bank_date_search').datepicker({
+        autoclose: true,
+        orientation: "bottom",
+        format: "dd-mm-yyyy"
+
+    });
+    jQuery('.datepicker, .dateSearch').datepicker({
         autoclose: true,
         orientation: "bottom",
         format: "dd-mm-yyyy"

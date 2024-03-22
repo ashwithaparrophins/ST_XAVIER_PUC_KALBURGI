@@ -323,7 +323,55 @@ if ($warning) {
                 </div>
             </div>
         </div>
-        
+        <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR) { ?>
+
+            <div class="col-md-6 col-12 mb-2">
+                <div class="card">
+                    <div class="card-body p-1">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0">
+                                <tr class="table-primary">
+                                    <th colspan="4" class="text-center"  style="background-color:#e3cfff">TOTAL COLLECTION
+                                    <form role="form" action="<?php echo base_url() ?>facultyDashboard" method="post" role="form" class="form-inline">
+
+                                    <div class="form-group">
+                                        <label for="usr">From:</label>
+                                        <input type="text" name="from_date" value="<?php echo date('d-m-Y',strtotime($from_date)); ?>" class="datepicker form-control"
+                                            Placeholder="From Date" autocomplete="off" required>
+                                    </div>
+                                    <div class="form-group ml-2">
+                                            <label for="usr">To:</label><input type="text" name="to_date" value="<?php echo date('d-m-Y',strtotime($to_date)); ?>" class="datepicker form-control"
+                                            Placeholder="To Date" autocomplete="off" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-dark btn-sm"><i class="fa fa-search"></i></button>
+                                    </div>
+                                    </form>
+                                    </th>
+                                </tr>
+                                <tr  style="background-color:#e3cfff">
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                </tr>          
+                                <tr>
+                                    <th class="text-bold">School Fee</th>
+                                    <td class="text-bold"><?php echo number_format($fees_paid,2); ?></td>
+                                </tr>
+                                <tr>
+                                    <th class="text-bold">Misc Fee</th>
+                                    <td class="text-bold"><?php echo number_format($mis_paid,2); ?></td>
+                                </tr>
+                                <tr style="background-color:#e3cfff">
+                                    <th class="text-bold">TOTAL FEE</th>
+                                    <td class="text-bold"><?=number_format($fees_paid + $mis_paid,2) ?></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <?php } ?>
         <div class="col-lg-6 col-md-6 col-12 mb-2 padding_left_right_null">
             <div class="card card-small">
                 <div class="card-header border-bottom card_head_dashboard">

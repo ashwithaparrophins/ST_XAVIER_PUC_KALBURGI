@@ -65,12 +65,35 @@
                 <div class="card card-small card_heading_title p-0 m-b-1">
                     <div class="card-body p-2">
                         <div class="row c-m-b">
-                            <div class="col-lg-6 col-sm-5 col-12">
+                            <div class="col-lg-4 col-sm-5 col-12">
                                 <span class="page-title">
                                     <i class="material-icons">description</i> Miscellaneous Fee
                                 </span>
                             </div>
-                            <div class="col-lg-6 col-sm-7 col-12 box-tools">
+                            <div class="col-lg-4 col-6 col-md-6 col-sm-6">
+                                <form action="<?php echo base_url(); ?>miscellaneousFeeListing" method="POST"
+                                    id="byFilterMethod"  enctype="multipart/form-data">
+                                    <div class="input-group input-groups mobile-btn float-left student_search">
+                                        <select class="form-control-sm p-1 search_select" name="intake_year" id="intake_year">
+                                            <?php if(!empty($intake_year)){ ?>
+                                            <option value="<?php echo $intake_year; ?>" selected><b>
+                                                    <?php echo $intake_year; ?></b></option>
+                                            <?php } ?>
+                                            <option value="">By Year</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2023">2023</option>
+                                          
+                                        </select>
+                                   
+                                        <div class="input-group-append float-left">
+                                            <button type="submit" class="btn btn-success border_radius_none py-0">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form> 
+                            </div>
+                            <div class="col-lg-4 col-sm-7 col-12 box-tools">
                                 <a onclick="showLoader();window.history.back();" class="btn primary_color mobile-btn float-right text-white border_left_radius btn-backtrack"
                                     value="Back"><i class="fa fa-arrow-circle-left"></i> Back </a>
 
@@ -496,7 +519,9 @@ jQuery(document).ready(function() {
         "ajax": {
             url: '<?php echo base_url(); ?>/getMiscellaneousFeeInfo',
             type: 'POST',
-
+            data: function (d) {
+                d.intake_year = $('#intake_year').val(); 
+            },
             // dataType: 'json',
         },
 

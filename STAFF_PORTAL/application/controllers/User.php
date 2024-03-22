@@ -20,6 +20,7 @@ class User extends BaseController
         $this->load->model('subjects_model','subject');
         $this->load->model('studentAttendance_model','attendance');
         $this->load->model('push_notification_model');  
+        $this->load->model('fee_model','fee');
         $this->isLoggedIn();
     }
 
@@ -144,8 +145,8 @@ class User extends BaseController
                 }
                 array_push($subjects_code, '02');
                 $subjects = $this->getSubjectCodes($studentRecord->stream_name);
-                log_message('debug','subjectsss'.print_r($subjects,true));
-                log_message('debug','subjectssscodeee'.print_r($subjects_code,true));
+               // log_message('debug','subjectsss'.print_r($subjects,true));
+               // log_message('debug','subjectssscodeee'.print_r($subjects_code,true));
 
                 $subjects_code = array_merge($subjects_code,$subjects);
                 $data['subject_code'] = $subjects_code;
@@ -374,9 +375,24 @@ class User extends BaseController
         $this->load->library('pagination');
         $newsCount = $this->staff->getNewsFeedCount($filter);
         $returns = $this->paginationCompress("facultyDashboard/", $newsCount, 4);
+       // log_message('debug','count'.print_r($returns,true));
         $filter['page'] = $returns["page"];
         $filter['segment'] = $returns["segment"];
         $data['newsInfo'] = $this->staff->getNewsFeed($filter);
+        $data['from_date'] = $from_date = $this->security->xss_clean($this->input->post('from_date'));
+     $data['to_date'] = $to_date = $this->security->xss_clean($this->input->post('to_date'));
+     if(empty($from_date)){
+         $from_date = date('Y-m-d');
+         $to_date = date('Y-m-d');
+        
+     }
+     
+     $data['from_date'] = $from_date;
+     $data['to_date'] = $to_date;
+ 
+     $data['fees_paid'] = $this->fee->getTotalPaidAmountByDate($from_date,$to_date);
+     $data['mis_paid'] = $this->fee->getTotalMisAmountByDate($from_date,$to_date);
+  
        // $newsCount = $this->staff->getNewsFeedCount($filter);
         $returns = $this->paginationCompress("facultyDashboard/", $newsCount, 4);
         $filter['page'] = $returns["page"];

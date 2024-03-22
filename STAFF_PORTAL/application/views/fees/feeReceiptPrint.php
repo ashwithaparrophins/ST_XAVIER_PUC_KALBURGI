@@ -173,17 +173,17 @@ table{
                     <th style="text-align: left;" colspan="1">Amount Paid</th>
                     <th class="border_right_none" style="text-align: right;"><?php if($feeInfo->payment_count == 1){ $paidAmt = $feeInfo->paid_amount; }else{ $paidAmt =$feeInfo->paid_amount; } echo number_format($paidAmt,2); ?></th>
                 </tr>
-                <?php if($feeInfo->attempt == "1") {?>
+                <?php //if($feeInfo->attempt == "1") {?>
                     <tr>
                         <th style="text-align: left;" colspan="1">Amount Pending</th>
-                        <th class="border_right_none" style="text-align: right;"><?php echo number_format($total_fee_amt - $paidFeeSum->paid_amount - $concession - $scholarship,2); ?></th>
+                        <th class="border_right_none" style="text-align: right;"><?php echo number_format($pending_bal,2); ?></th>
                     </tr>
-                <?php }else{ ?>
-                    <tr>
+                <?php //}else{ ?>
+                    <!-- <tr>
                         <th style="text-align: left;" colspan="1">Amount Pending</th>
                         <th class="border_right_none" style="text-align: right;"><?php echo number_format($total_fee - $paidFeeSum->paid_amount - $concession - $scholarship,2); ?></th>
-                    </tr>
-                <?php } ?>
+                    </tr> -->
+                <?php //} ?>
                 <tr>
                     <td colspan="2"><b>Paid total amount in word: <span style="text-transform: capitalize;"><?php echo $paid_amount_words.' ONLY'; ?></span></b></td>
                 </tr>   

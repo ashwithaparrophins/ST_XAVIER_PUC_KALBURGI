@@ -67,11 +67,13 @@
                                                 role="tab" aria-controls="second_unit_test" aria-selected="true">II Unit Test
                                             </a>
                                         </li>
+                                    <?php if ($role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ACCOUNTS || $role == ROLE_PRINCIPAL ) { ?>
+
                                         <li class="nav-item">
                                             <a class="nav-link" id="paidInfo-tab" data-toggle="tab" href="#paidInfo"
                                                 role="tab" aria-controls="paidInfo" aria-selected="true">Fee Paid Info</a>
                                         </li>
-                                        
+                                    <?php } ?>
                                         <!-- <li class="nav-item">
                                             <a class="nav-link" id="first_term-tab" data-toggle="tab" href="#first_term"
                                                 role="tab" aria-controls="first_term" aria-selected="true">I Term
@@ -416,7 +418,7 @@
                                                                 <!-- <th class="text-center"><?php if($fee->pending_balance == 0){ ?>
                                                                     <b style="color:green"><?php echo $fee->pending_balance; ?></b>
                                                                     <?php }else{
-                                                                        $feeConcession = $bill_model->getStudentFeeConcessionForview($studentInfo->row_id,'2023');
+                                                                        $feeConcession = $bill_model->getStudentFeeConcessionForview($studentInfo->row_id,'2024');
                                                                         ?>
                                                                     <b style="color:red"><?php echo $fee->pending_balance-$feeConcession->fee_amt; ?></b>
                                                                     <?php
@@ -456,7 +458,9 @@
                                                                     $paid_amt += $fee->paid_amount;
                                                                 } ?>
                                                                 <?php  
-                                                                $feeConcession = $bill_model->getStudentFeeConcessionForview($studentInfo->row_id,'2023');
+                                                                $feeConcession = $bill_model->getStudentFeeConcessionForview($studentInfo->row_id,'2024');
+                                                                $feeScholarship = $bill_model->getStudentFeeScholarshipForview($studentInfo->row_id,'2024');
+
                                                                 ?>
                                                                 <div style="font-size: 18px;" class="col-12 col-lg-3">
                                                                     <b>Concession: Rs. <?php $concession += $feeConcession->fee_amt; if($concession>0){ echo $concession; } else { echo 0; } ?></b>

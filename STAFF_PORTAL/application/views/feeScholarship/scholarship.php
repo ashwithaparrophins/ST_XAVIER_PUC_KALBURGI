@@ -99,6 +99,21 @@
                         <table class="display table table-bordered table-striped table-hover w-100">
                             <form action="<?php echo base_url(); ?>viewScholarship" method="POST" id="byFilterMethod">
                                 <tr class="filter_row" class="text-center">
+                                <td>
+                                    <div class="form-group mb-0">
+                                        <select class="form-control text-dark" id="year"
+                                                name="year" value="<?php echo $year;  ?>">
+                                                <?php if(!empty($year)){ ?>
+                                                <option value="<?php echo $year; ?>" selected><b>Selected: <?php echo $year; ?></b></option>
+                                            <?php } ?>
+                                            <option value="2024">2024</option>
+                                            <option value="2023">2023</option>
+                                            
+                                        </select>
+
+                                    </div>
+
+                                    </td>
                                     <td>
                                         <div class="form-group mb-0">
                                             <input type="text" value="<?php echo $student_id; ?>" name="student_id" id="by_name"
@@ -133,6 +148,7 @@
                             </form>
                             <thead>
                                 <tr class="text-center table_row_background">
+                                    <th>Year</th>
                                     <th>Student ID</th>
                                     <th>Name</th>
                                     <th>Amount</th>
@@ -145,6 +161,7 @@
                                 <?php if(!empty($concessionInfo)){
                                     foreach($concessionInfo as $fee){ ?>
                                 <tr>
+                                    <th class="text-center"><?php echo $fee->year; ?></th>
                                     <th class="text-center" width="180"><?php echo $fee->student_id; ?></th>
                                     <th width="330"><?php echo $fee->student_name; ?></th>
                                     <th class="text-center" width="150"><?php echo $fee->fee_amt; ?></th>
@@ -229,8 +246,8 @@
                             <div class="form-group mb-2">
                             <label>Year <span class="text-danger">*</span></label>
                                     <select class="form-control selectpicker" data-live-search="true" name="year" >
+                                            <option value="2024">2024</option>
                                             <option value="2023">2023</option>
-                                            <!-- <option value="2024">2024</option> -->
                                     </select>
                                 </div>
                             </div>

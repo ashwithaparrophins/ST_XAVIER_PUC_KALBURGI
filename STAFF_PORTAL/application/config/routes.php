@@ -1125,3 +1125,6 @@ $route['redirectStudentView'] = "students/redirectStudentView";
 $route['addAnnualMark'] = "exam/addAnnualMark";
 $route['getStudentForAnnualMark'] = "exam/getStudentForAnnualMark";
 $route['addStudentAnnualMarkByStaff'] = "exam/addStudentAnnualMarkByStaff";
+$route['deleteFeesReceipt'] = "fee/deleteFeesReceipt";
+
+$route['getCancelReceiptReport'] = "reports/getCancelReceiptReport";

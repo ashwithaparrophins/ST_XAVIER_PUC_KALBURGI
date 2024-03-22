@@ -212,7 +212,7 @@ define('ROLE_SECURITY',                         '16');
 
 define('CL',                            'CASUAL LEAVE');
 
-define('CURRENT_YEAR',                            '2023');
+define('CURRENT_YEAR',                            '2024');
 
 define('ADMISSION_YEAR',                            '2024');
 

@@ -5,7 +5,7 @@ class Fee_model extends CI_Model
     
     public function getFeeConcessionInfo($filter='') {
         $this->db->select('std.student_id,fee.row_id,fee.fee_amt,fee.approved_status,fee.date,fee.description,fee.application_no,
-        fee.payment_status,std.student_name');
+        fee.payment_status,std.student_name,fee.year');
         $this->db->from('tbl_student_fee_concession as fee');
         $this->db->join('tbl_students_info as std','std.row_id = fee.application_no'); 
        
@@ -23,6 +23,12 @@ class Fee_model extends CI_Model
         if(!empty($filter['by_date'])){
             $likeCriteria = "(fee.date LIKE '%".$filter['by_date']."%')";
             $this->db->where($likeCriteria);
+        } 
+        if(!empty($filter['year'])){
+            $this->db->where('fee.year',$filter['year']);
+        }
+        else{
+            $this->db->where('fee.year',CURRENT_YEAR);
         } 
         $this->db->where('fee.is_deleted', 0);
         $this->db->where('std.is_deleted', 0);
@@ -51,6 +57,12 @@ class Fee_model extends CI_Model
         if(!empty($filter['by_date'])){
             $likeCriteria = "(fee.date LIKE '%".$filter['by_date']."%')";
             $this->db->where($likeCriteria);
+        } 
+        if(!empty($filter['year'])){
+            $this->db->where('fee.year',$filter['year']);
+        }
+        else{
+            $this->db->where('fee.year',CURRENT_YEAR);
         } 
         $this->db->where('fee.is_deleted', 0);
         $this->db->where('std.is_deleted', 0);
@@ -117,7 +129,7 @@ class Fee_model extends CI_Model
     
     public function getFeeConcessionById($row_id) {
         $this->db->select('fee.row_id,fee.fee_amt,fee.approved_status,fee.date,fee.description,fee.application_no,
-        fee.payment_status,std.student_name');
+        fee.payment_status,std.student_name,fee.year');
         $this->db->from('tbl_student_fee_concession as fee');
         $this->db->join('tbl_students_info as std','std.row_id = fee.application_no'); 
         $this->db->where('fee.row_id', $row_id);
@@ -154,7 +166,18 @@ class Fee_model extends CI_Model
         $this->db->from('tbl_student_fee_concession as fee');
         $this->db->where('fee.application_no', $application_no);
         $this->db->where('fee.year', $year);
-        $this->db->where('fee.payment_status', 0);
+        // $this->db->where('fee.payment_status', 0);
+        $this->db->where('fee.approved_status', 1);
+        $this->db->where('fee.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function getStudentFeeScholarshipForview($application_no,$year){
+        $this->db->from('tbl_student_fee_scholarship as fee');
+        $this->db->where('fee.application_no', $application_no);
+        $this->db->where('fee.year', $year);
+        // $this->db->where('fee.payment_status', 0);
         $this->db->where('fee.approved_status', 1);
         $this->db->where('fee.is_deleted', 0);
         $query = $this->db->get();
@@ -806,7 +829,14 @@ class Fee_model extends CI_Model
         if(!empty($filter['payment_type'])){
          $this->db->where('fee.payment_type', $filter['payment_type']);
         }
- 
+        if(!empty($filter['date_from_filter'])){
+            $this->db->where('fee.payment_date>=', $filter['date_from_filter']);
+        }
+
+        
+        if(!empty($filter['date_to_filter'])){
+            $this->db->where('fee.payment_date<=', $filter['date_to_filter']);
+        }
         if($filter['bank_settlement'] == 'Settled'){
          $this->db->where('fee.bank_settlement_status', 1);
         }else if($filter['bank_settlement'] == 'Pending'){
@@ -885,6 +915,14 @@ class Fee_model extends CI_Model
                 $this->db->where('fee.payment_year', CURRENT_YEAR);
              //   $this->db->where('bank.fee_year', CURRENT_YEAR);
              }
+             if(!empty($filter['date_from_filter'])){
+                $this->db->where('fee.payment_date>=', $filter['date_from_filter']);
+            }
+    
+            
+            if(!empty($filter['date_to_filter'])){
+                $this->db->where('fee.payment_date<=', $filter['date_to_filter']);
+            }
             $this->db->where('fee.is_deleted', 0);
            $this->db->order_by('fee.row_id', 'ASC');
            $this->db->limit($page, $segment);
@@ -1626,7 +1664,7 @@ class Fee_model extends CI_Model
     }
 
 
-    public function getMiscellaneousFeesInfo()
+    public function getMiscellaneousFeesInfo($filter = array())
     {
         $this->db->select('fee.row_id,fee.qnty,std.student_id,fee.student_name,fee.term,fee.amount,fee.ref_receipt_no,
          fee.created_by,fee.date, type.miscellaneous_type,fee.miscellaneous_type as miscellaneous,fee.payment_type');
@@ -1634,6 +1672,9 @@ class Fee_model extends CI_Model
         $this->db->join('tbl_miscellaneous_type as type', 'type.row_id = fee.miscellaneous_type','left');
        // $this->db->join('tbl_student_academic_info as acd', 'acd.student_id = fee.student_id','left');
         $this->db->join('tbl_students_info as std', 'std.row_id = fee.student_row_id','left');
+        if(!empty($filter['intake_year'])){
+            $this->db->where('fee.year', $filter['intake_year']);
+        }
         $this->db->where('fee.is_deleted', 0);
         $this->db->order_by('fee.row_id', 'DESC');
         $query = $this->db->get();
@@ -1756,6 +1797,12 @@ class Fee_model extends CI_Model
             $likeCriteria = "(fee.date LIKE '%".$filter['by_date']."%')";
             $this->db->where($likeCriteria);
         } 
+        if(!empty($filter['year'])){
+            $this->db->where('fee.year',$filter['year']);
+        }
+        else{
+            $this->db->where('fee.year',CURRENT_YEAR);
+        } 
         $this->db->where('fee.is_deleted', 0);
         $this->db->where('std.is_deleted', 0);
         $query = $this->db->get();
@@ -1764,7 +1811,7 @@ class Fee_model extends CI_Model
     
     public function getFeeScholarshipInfo($filter='') {
         $this->db->select('std.student_id,fee.row_id,fee.fee_amt,fee.approved_status,fee.date,fee.description,fee.application_no,
-        fee.payment_status,std.student_name');
+        fee.payment_status,std.student_name,fee.year');
         $this->db->from('tbl_student_fee_scholarship as fee');
         $this->db->join('tbl_students_info as std','std.row_id = fee.application_no'); 
        
@@ -1782,6 +1829,12 @@ class Fee_model extends CI_Model
         if(!empty($filter['by_date'])){
             $likeCriteria = "(fee.date LIKE '%".$filter['by_date']."%')";
             $this->db->where($likeCriteria);
+        } 
+        if(!empty($filter['year'])){
+            $this->db->where('fee.year',$filter['year']);
+        }
+        else{
+            $this->db->where('fee.year',CURRENT_YEAR);
         } 
         $this->db->where('fee.is_deleted', 0);
         $this->db->where('std.is_deleted', 0);
@@ -1807,7 +1860,7 @@ class Fee_model extends CI_Model
 
     public function getFeeScholarshipById($row_id) {
         $this->db->select('fee.row_id,fee.fee_amt,fee.approved_status,fee.date,fee.description,fee.application_no,
-        fee.payment_status,std.student_name');
+        fee.payment_status,std.student_name,fee.year');
         $this->db->from('tbl_student_fee_scholarship as fee');
         $this->db->join('tbl_students_info as std','std.row_id = fee.application_no'); 
         $this->db->where('fee.row_id', $row_id);
@@ -1837,7 +1890,7 @@ class Fee_model extends CI_Model
         return $query->row();
     }
 
-    public function getSumFeeConcessionInfoForReport($student_id,$year,$date){ 
+    public function getSumFeeConcessionInfoForReport($student_id,$year){ 
         // $this->db->select('SUM(fee.fee_amt) as fee_amt');
         $this->db->from('tbl_student_fee_concession as fee');
         $this->db->where('fee.is_deleted', 0);
@@ -1876,6 +1929,58 @@ class Fee_model extends CI_Model
         $this->db->order_by('fee.row_id','DESC');
         $query = $this->db->get();
         return $query->row();
+    }
+
+    public function getTotalPaidAmountByDate($date_from,$date_to){
+        $this->db->select('SUM(fee.paid_amount) as paid_amount');
+        $this->db->from('tbl_students_overall_fee_payment_info_i_puc_2021 as fee');
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('fee.payment_date >=', date('Y-m-d',strtotime($date_from)));
+        $this->db->where('fee.payment_date <=', date('Y-m-d',strtotime($date_to)));
+        $query = $this->db->get();
+        return $query->row()->paid_amount;
+    }
+    public function getTotalMisAmountByDate($date_from,$date_to){
+        $this->db->select('SUM(fee.amount) as amt'); 
+        $this->db->from('tbl_miscellaneous_fee as fee'); 
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('fee.date >=', date('Y-m-d',strtotime($date_from)));
+        $this->db->where('fee.date <=', date('Y-m-d',strtotime($date_to)));
+        $query = $this->db->get();
+        return $query->row()->amt;
+    }
+    function checkStudentIdExists($student_id,$year){
+        $this->db->from('tbl_student_fee_concession as fee');
+        $this->db->where('fee.application_no', $student_id);
+        $this->db->where('fee.year', $year);
+        $this->db->where('fee.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function updateReceiptNo($row_id,$feePayment) {
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_students_overall_fee_payment_info_i_puc_2021', $feePayment);
+        return TRUE;
+    }
+
+    public function getCancelReceiptInfoForReport($filter){
+        $this->db->select('fee.payment_date, fee.payment_type,fee.paid_amount,fee.pending_balance, fee.total_amount,
+        fee.row_id,fee.receipt_number,fee.application_no,student.student_name,student.term_name,student.stream_name,
+        fee.payment_year,fee.remarks');
+        $this->db->from('tbl_students_overall_fee_payment_info_i_puc_2021 as fee');
+        $this->db->join('tbl_students_info as student', 'student.row_id = fee.application_no','left');
+
+        
+         if(!empty($filter['year'])){
+            $this->db->where('fee.payment_year', $filter['year']);
+        }
+          
+        $this->db->order_by('fee.row_id','ASC');
+        $this->db->where('fee.is_deleted', 1);
+        $this->db->where('student.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
     }
 }
 ?>

@@ -86,7 +86,19 @@ if ($error) {
                                                     id="fee_amount" name="fee_amount" placeholder="Enter Amount" autocomplete="off">
                                                 </div>
                                             </div>
-
+                                            <div class="form-group col-lg-6">
+                                                <label for="exampleInputEmail1">Year<span class="text-danger required_star">*</span></label>
+                                                <div class="form-group mb-2">  
+                                                    <select class="form-control selectpicker" data-live-search="true" name="year" id="year" required autocomplete="off">
+                                                        <?php if(!empty($feeInfo->year)){ ?>
+                                                            <option value="<?php echo $feeInfo->year; ?>">SELECTED:<?php echo $feeInfo->year; ?></option>
+                                                        <?php } ?>
+                                                        <option value="2024">2024</option>
+                                                        <option value="2023">2023</option>
+                                                       
+                                                    </select>
+                                                </div>
+                                            </div> 
                                             <div class="form-group col-12">
                                                 <label>Description <span class="text-danger">*</span></label>
                                                 <div class="form-group mb-0">

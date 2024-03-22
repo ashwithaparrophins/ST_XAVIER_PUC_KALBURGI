@@ -30,14 +30,18 @@ class Fee extends BaseController
             $amount = $this->security->xss_clean($this->input->post('amount'));
             $by_date = $this->security->xss_clean($this->input->post('by_date'));
             $student_id = $this->security->xss_clean($this->input->post('student_id'));
+            $year = $this->security->xss_clean($this->input->post('year'));
 
             $data['by_name'] = $by_name;
             $data['amount'] = $amount;
             $data['student_id'] = $student_id;
+            $data['year'] = $year;
+
 
             $filter['student_id'] = $student_id;
             $filter['by_name'] = $by_name;
             $filter['amount'] = $amount;
+            $filter['year'] = $year;
 
             if(!empty($by_date)){
                 $filter['by_date'] = date('Y-m-d',strtotime($by_date));
@@ -76,6 +80,11 @@ class Fee extends BaseController
                 $fee_amount = $this->security->xss_clean($this->input->post('fee_amount'));
                 $description = $this->security->xss_clean($this->input->post('description'));
                 $year = $this->security->xss_clean($this->input->post('year'));
+                $isExist = $this->fee->checkStudentIdExists($application_no,$year);
+                if(!empty($isExist)){
+                    $this->session->set_flashdata('warning', 'Student ID Already Exists');
+                    redirect('viewFeeConcession');
+                }else{ 
                     $feeInfo = array(
                         'application_no'=>$application_no,
                         'fee_amt'=>$fee_amount,
@@ -91,6 +100,7 @@ class Fee extends BaseController
                     } else{
                         $this->session->set_flashdata('error', 'Failed to Add Concession');
                     }
+                }
                 redirect('viewFeeConcession');
             }
         }
@@ -125,11 +135,13 @@ class Fee extends BaseController
                 $application_no = $this->security->xss_clean($this->input->post('application_no'));
                 $fee_amount = $this->security->xss_clean($this->input->post('fee_amount'));
                 $description = $this->security->xss_clean($this->input->post('description'));
+                $year = $this->security->xss_clean($this->input->post('year'));
 
                     $feeInfo = array(
                         'application_no'=>$application_no,
                         'fee_amt'=>$fee_amount,
                         'description'=>$description,
+                        'year'=> $year,
                         'updated_by'=>$this->staff_id,
                         'updated_date_time'=>date('Y-m-d H:i:s'));
                     $result = $this->fee->updateConcession($feeInfo,$row_id);
@@ -194,14 +206,17 @@ class Fee extends BaseController
             $amount = $this->security->xss_clean($this->input->post('amount'));
             $by_date = $this->security->xss_clean($this->input->post('by_date'));
             $student_id = $this->security->xss_clean($this->input->post('student_id'));
+            $year = $this->security->xss_clean($this->input->post('year'));
 
             $data['by_name'] = $by_name;
             $data['amount'] = $amount;
             $data['student_id'] = $student_id;
+            $data['year'] = $year;
 
             $filter['student_id'] = $student_id;
             $filter['by_name'] = $by_name;
             $filter['amount'] = $amount;
+            $filter['year'] = $year;
 
             if(!empty($by_date)){
                 $filter['by_date'] = date('Y-m-d',strtotime($by_date));
@@ -289,11 +304,13 @@ class Fee extends BaseController
                 $application_no = $this->security->xss_clean($this->input->post('application_no'));
                 $fee_amount = $this->security->xss_clean($this->input->post('fee_amount'));
                 $description = $this->security->xss_clean($this->input->post('description'));
+                $year = $this->security->xss_clean($this->input->post('year'));
 
                     $feeInfo = array(
                         'application_no'=>$application_no,
                         'fee_amt'=>$fee_amount,
                         'description'=>$description,
+                        'year'=> $year,
                         'updated_by'=>$this->staff_id,
                         'updated_date_time'=>date('Y-m-d H:i:s'));
                     $result = $this->fee->updateScholarship($feeInfo,$row_id);
@@ -998,6 +1015,8 @@ class Fee extends BaseController
             $bank_settlement = $this->security->xss_clean($this->input->post('bank_settlement'));
             $by_bank_date = $this->security->xss_clean($this->input->post('by_bank_date'));
             $year = $this->security->xss_clean($this->input->post('year'));
+            $date_from_filter = $this->security->xss_clean($this->input->post('date_from_filter'));
+            $date_to_filter = $this->security->xss_clean($this->input->post('date_to_filter'));
             
             $searchText = "";
             $data['year'] = $filter['by_year'] = $year;
@@ -1068,7 +1087,21 @@ class Fee extends BaseController
                 $data['by_bank_date'] = '';
             }
 
-            
+            if(!empty($date_from_filter)){
+	            $filter['date_from_filter'] = date('Y-m-d',strtotime($date_from_filter));
+	            $data['date_from_filter'] = $date_from_filter;
+	        }else{
+	            $data['date_from_filter'] = date('Y-m-01');
+                $filter['date_from_filter'] = date('Y-m-01');
+	        }
+
+            if(!empty($date_to_filter)){
+	            $filter['date_to_filter'] = date('Y-m-d',strtotime($date_to_filter));
+	            $data['date_to_filter'] = $date_to_filter;
+	        }else{
+	            $data['date_to_filter'] = date('Y-m-t');
+                $filter['date_to_filter'] = date('Y-m-t');
+            }
             $this->load->library('pagination');
             $count = $this->fee->getAllFeePaymentInfoCount($filter);
             $returns = $this->paginationCompress("onlinePaymentInfo/", $count, 100 );
@@ -1197,17 +1230,38 @@ class Fee extends BaseController
     
     public function feePaymentReceiptPrint($row_id){
         $filter = array();
-        $data['feeInfo'] = $this->fee->getFeeInfoByReceiptNum($row_id);
+        $feeInfo = $data['feeInfo'] = $this->fee->getFeeInfoByReceiptNum($row_id);
 
         $studentInfo =  $this->student->getStudentInfoByRowId($data['feeInfo']->application_no);
         $lastRow = $this->fee->getLastOverallFeeRow($data['feeInfo']->application_no);
-        if($lastRow->row_id == $row_id){
-            $concession = $this->fee->getSumFeeConcessionInfoForReport($data['feeInfo']->application_no,$data['feeInfo']->payment_year,$data['feeInfo']->created_date_time);
-            $data['concession'] = $concession->fee_amt;
-           
-        }
+        $concession = $this->fee->getSumFeeConcessionInfoForReport($data['feeInfo']->application_no,$data['feeInfo']->payment_year);
         $scholarship = $this->fee->getSumFeeScholarshipInfoForReport($data['feeInfo']->application_no,$data['feeInfo']->payment_year,$data['feeInfo']->created_date_time);
-        $data['scholarship'] = $scholarship->fee_amt;
+
+        // if($lastRow->row_id == $row_id && (($feeInfo->pending_balance == $concession->fee_amt) || ($feeInfo->pending_balance == $scholarship->fee_amt) || ($feeInfo->pending_balance == $scholarship->fee_amt + $concession->fee_amt))){
+        //     $data['concession'] = $concession->fee_amt;
+        //     $data['scholarship'] = $scholarship->fee_amt;
+        //     $data['pending_bal'] = $data['feeInfo']->pending_balance - $data['concession'] - $data['scholarship'];   
+           
+        // }else{
+        //     $data['pending_bal'] = $data['feeInfo']->pending_balance;
+        // }
+        if($lastRow->row_id == $row_id){
+            if($feeInfo->pending_balance == $concession->fee_amt){
+                $data['concession'] = $concession->fee_amt;
+                $data['pending_bal'] = $data['feeInfo']->pending_balance - $data['concession'];
+            }else if($feeInfo->pending_balance == $scholarship->fee_amt){
+                $data['scholarship'] = $scholarship->fee_amt;
+                $data['pending_bal'] = $data['feeInfo']->pending_balance - $data['scholarship'];
+            }else if($feeInfo->pending_balance == $scholarship->fee_amt + $concession->fee_amt){
+                $data['concession'] = $concession->fee_amt;
+                $data['scholarship'] = $scholarship->fee_amt;
+                $data['pending_bal'] = $data['feeInfo']->pending_balance - $data['concession'] - $data['scholarship'];   
+
+            }
+
+        }else{
+                $data['pending_bal'] = $data['feeInfo']->pending_balance;
+        }
         // $filter['fee_year'] = ($studentInfo->intake_year_id)+1;
         // if($studentInfo->term_name == 'I PUC'){
         //     $studentInfo = $this->application->getApprovedStudentInfoByApplicationNo($data['feeInfo']->application_no);
@@ -3060,7 +3114,13 @@ public function processTheFeePayment(){
             $this->loadThis();
         } else {
             $data['studentInfo'] = $this->student->getstudentInfo();
-          
+            $intake_year = $this->security->xss_clean($this->input->post('intake_year'));
+            if(empty($intake_year)){
+                $data['intake_year'] = CURRENT_YEAR;
+            }else{
+                $data['intake_year'] = $intake_year;
+            }
+            $miscellaneousFeeInfo = $this->fee->getMiscellaneousFeesInfo($filter);
 
             $data['miscellaneousTypeInfo'] = $this->settings->getAllMiscellaneousTypeInfo();
             // $data['streamInfo'] = $this->application->getStreamNames();
@@ -3078,7 +3138,8 @@ public function processTheFeePayment(){
         $start = intval($this->input->post("start"));
         $length = intval($this->input->post("length"));
         $data_array_new = [];
-        $miscellaneousFeeInfo = $this->fee->getMiscellaneousFeesInfo();
+        $filter['intake_year'] = $this->security->xss_clean($this->input->post('intake_year'));
+        $miscellaneousFeeInfo = $this->fee->getMiscellaneousFeesInfo($filter);
        // log_message('debug','mis'.print_r($miscellaneousFeeInfo,true));
         foreach($miscellaneousFeeInfo as $fee) {
             $checkbox="";
@@ -3305,6 +3366,21 @@ public function processTheFeePayment(){
         }
     }
 
-
+    public function deleteFeesReceipt(){
+        if ($this->isAdmin() == true) {
+            echo (json_encode(array('status' => 'access')));
+        } else {
+            $row_id = $this->input->post('row_id');
+            $remark = $this->input->post('remark');
+      
+            $receiptInfo = array('is_deleted' => 1,
+            'remarks' => $remark,
+            'updated_by' => $this->staff_id,
+            'updated_date_time' => date('Y-m-d h:i:s'));
+        
+            $result = $this->fee->updateReceiptNo($row_id, $receiptInfo);
+            if ($result > 0) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
+        }
+    }
 }
 ?>

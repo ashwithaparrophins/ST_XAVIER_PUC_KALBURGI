@@ -168,6 +168,22 @@
                 </div>
             </a>
         </div>
+        <div class="col-lg-3 col-6 mb-2 column_padding_card">
+            <a data-toggle="modal" data-target="#cancelReceiptReport" class="more-info text-white dashboard_link" href="#">
+                <div class="card card-small dash-card" style="background: #3e50b3;">
+                    <div class="card-body pt-1 pb-1">
+                        <h6 class="stats-small__value text-uppercase text-white">Cancel Receipt Report</h6>
+                        <div class="icon pull-right mt-4">
+                            <i class="fas fa-file dash-icons"></i></i>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center dash-footer p-1">
+                        <div class="more-info text-white"></div>
+                        <span class="text-center">Download</span>
+                    </div>
+                </div>
+            </a>
+        </div>
         <div class="col-12 mb-1">
                 <div class="card p-2 main_card">
                     <h6 class="font-weight-bold mb-2">Transport Fee Report</h6>
@@ -891,6 +907,15 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Year</label>
+                            <select class="form-control input-md required" name="year">
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+                    </div>
                     <!-- Modal footer -->
                     <div class="modal-footer" style="padding:5px;">
                         <div class="row">
@@ -957,6 +982,15 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Year</label>
+                            <select class="form-control input-md required" name="year">
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+                    </div>
                     <!-- Modal footer -->
                     <div class="modal-footer" style="padding:5px;">
                         <div class="row">
@@ -970,6 +1004,48 @@
 
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="cancelReceiptReport">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Cancel Receipt Report</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body p-2">
+
+                <!-- <form role="form" id="getCancelReceipt" action="<?php echo base_url() ?>getCancelReceiptReport"
+                    method="post" role="form"> -->
+                    <form action="<?php echo base_url() ?>getCancelReceiptReport" method="POST" data-download_form="true">
+
+                   
+                    <div class="row">
+                        <div class="col-6">
+                                <label>Payment Year</label>
+                                <select class="form-control input-md"  name="year" >
+                                    <!-- <option value="">ALL</option> -->
+                                    <option value="2024"><?php echo 2024; ?></option>
+                                   
+                            </select>
+                        </div>
+                    </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button id="downloadReportCancelReceiptExcel" type="submit" class="btn btn-md btn-primary float-right"><i
+                        class="fa fa-download"></i> Download</button>
+                <!-- <input type="submit" form="getCancelReceipt" class="btn btn-success float-right" value="Download" /> -->
+            </div>
+            </form>
         </div>
     </div>
 </div>
