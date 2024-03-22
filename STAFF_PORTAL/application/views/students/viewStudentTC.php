@@ -370,7 +370,8 @@ h4{
                                         </tr>
                                         <tr>
                                             <th>09. <span class="spacing_left">Class in which the student was studying at the &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time of leaving</span></th>
-                                            <th><?php echo $record->term_name; ?></th>
+                                            <th><?php echo $record->term_name; $record->program_name; ?>
+                                            <?php echo $record->program_name; ?></th>
                                         </tr>
                                         <tr>
                                             <th>10. <span class="spacing_left">Subjects studied at the time of leaving</span><span style="margin-left: 6px;"><br/><span style="margin-left: 50px;">a) Languages</span>
@@ -383,8 +384,16 @@ h4{
                                             </th>
                                         </tr>
                                         <tr>
-                                            <th>11. <span class="spacing_left">Medium</span></th>
-                                            <th>ENGLISH</th>
+                                        <th>11. <span class="spacing_left">Medium</span></th>
+                                        <?php if ($record->program_name == 'COMMERCE' || $record->program_name == 'SCIENCE') { ?>
+                                            <th>ENGLISH</th>    
+                                        <?php } else { ?>
+                                            <th>KANNADA</th>
+                                        <?php } ?>
+
+
+
+                                
                                         </tr>
                                     
                                         <tr>
@@ -407,18 +416,29 @@ h4{
                                             <th><?php echo $record->character_conduct; ?></th>
                                         </tr>
 
+
+
+
                                         <tr>
-                                                <th colspan='2' rowspan='5'><br/>College DISE Code : &nbsp; &nbsp; &nbsp;29040512405
+                                                <th colspan='2' rowspan='5'><br/>College DISE Code :&nbsp;&nbsp;&nbsp;29040512405
                                                 <!-- <th><?php echo date('d/m/Y',strtotime($record->dob)); ?></th> -->
                                             
-                                              <br/>  Student No. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; &nbsp;  <?php echo $record->student_id; ?> 
-                                               <!-- <br/>   Admission No.  &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; &nbsp; <?php echo $record->admission_no; ?>
-                                               <br/> Class Reg No. &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; &nbsp; &nbsp; <?php echo $record->register_no; ?> -->
-                                               <div class="col-12">
-                                                <h6 class="place_date" style="font-size: 16px;"> <span class="footer_sign"><br/><br/><br/><br/><br/><br/>PRINCIPAL/VICE PRINCIPAL</span></h6>
+                                              <br/>SATS No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<?php echo $record->sat_number; ?> 
+                                              <br/>Student No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<?php echo $record->student_no; ?> 
+                                              <br/>Admission No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<?php echo $record->admission_number; ?> 
+                                               <!-- <//?php log_message('debug','number'.$record->admission_number); ?>  -->
+                                              <br/>Class Reg No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<?php echo $record->register_no; ?> 
+                                             <div class="col-12">
+                                                <h6 class="place_date" style="font-size: 16px;"> <span class="footer_sign"><br/><br/><br/><br/><br/><br/>PRINCIPAL</span></h6>
                                             </div>
                                             </th>
                                             </tr>
+
+
+
+
+
+
                                         <!-- <tr>
                                             <th colspan="2">
                                                 <span style="font-size: 17px;">Certified that the student was not debarred, rusticated or otherwise disqualified from continuing his studies by the 

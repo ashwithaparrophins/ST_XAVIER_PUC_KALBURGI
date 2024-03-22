@@ -205,12 +205,23 @@ class students_model extends CI_Model
         return $query->row();
     }
 
+    // function getStudentTcInfoById($student_id) {
+    //     $this->db->from('tbl_applied_students_tc_info as std');
+    //     $this->db->where('std.student_id', $student_id);
+    //     $query = $this->db->get();
+    //     return $query->row();
+    // }
     function getStudentTcInfoById($student_id) {
-        $this->db->from('tbl_applied_students_tc_info as std');
-        $this->db->where('std.student_id', $student_id);
+        
+        $this->db->from('tbl_applied_students_tc_info as tc');
+        $this->db->join('tbl_students_info as student', 'student.student_id = tc.student_id','left');
+
+        $this->db->where('tc.student_id', $student_id);
         $query = $this->db->get();
         return $query->row();
-    }
+        }
+
+
     // add tc info
     function addStudentTcInfo($tcInfo){
         $this->db->trans_start();
@@ -869,6 +880,7 @@ class students_model extends CI_Model
         std.student_name,
         std.section_name,
         std.stream_name,
+       
         std.program_name,
         std.mobile,
         std.term_name,
@@ -884,8 +896,10 @@ class students_model extends CI_Model
         std.student_id,
         std.register_no,
         std.application_no,
-        std.admission_no
-       ');
+        std.admission_no,
+        std.student_no,
+        std.sat_number,
+       std.admission_number');
         $this->db->from('tbl_students_info as std');
         $this->db->join('tbl_applied_students_tc_info as tc','tc.student_id = std.student_id','left');
         $this->db->where_in('tc.student_id', $student_id);

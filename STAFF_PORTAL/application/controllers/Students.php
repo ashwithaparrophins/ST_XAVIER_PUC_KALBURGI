@@ -705,8 +705,12 @@ class Students extends BaseController
             $reason_unqualified = $this->security->xss_clean($this->input->post('reason_unqualified'));
             $belong_sc_st = $this->security->xss_clean($this->input->post('belong_sc_st'));
             $admission_date = $this->security->xss_clean($this->input->post('admission_date'));
+            $admission_number = $this->security->xss_clean($this->input->post('admission_number'));
+            $last_class = $this->security->xss_clean($this->input->post('last_class'));
+            $fee_due = $this->security->xss_clean($this->input->post('fee_due'));
+
             $caste = $this->security->xss_clean($this->input->post('caste'));
-            $college_due_status = "YES";
+             $college_due_status = "YES";
             $character = $this->security->xss_clean($this->input->post('character'));
             $leaving_date = date("Y-m-d", strtotime($leaving_date));
             // $appliedYear =  date('Y');
@@ -731,9 +735,15 @@ class Students extends BaseController
             $status = $this->student->checkStudentTCAppliedStatus($student_id);
             $tcInfo = array('student_id'=> $student_id,
                 'leaving_date'=>$leaving_date,
+                'last_class'=>$last_class,
+
+                'date_of_admission'=>$admissionDate,
+              
                 'is_promoted'=>$qualified_status,
                 'is_belongs_sc_st'=>$belong_sc_st,
                 'is_cleared_college_due'=>$college_due_status,
+                'fee_due'=>$fee_due,
+                
                 'character_conduct'=>$character,
                 'tc_number'=>$tc_number,
                 'applied_year'=>$appliedYear,
@@ -742,16 +752,18 @@ class Students extends BaseController
                 'reason_unqualified'=>$reason_unqualified,
                 'updated_date_time'=>date('Y-m-d H:i:s'),
                 'created_date_time'=>date('Y-m-d H:i:s'));
-
+//log_message('debug','admissin'.print_r($tcInfo,true));
         
             $studentInfo = array('student_id'=> $student_id,
                 'date_of_admission'=>$admissionDate,
+                 'admission_number'=>$admission_number,
+               
                 'caste'=>$caste,
                 'tc_taken_status'=> 1,
                 'is_active'=> 0,
                 'updated_date_time'=>date('Y-m-d H:i:s'),
                 'created_date_time'=>date('Y-m-d H:i:s'));
-
+log_message('debug','admissin_student'.print_r($tcInfo,true));
             if($status == 1){
                 $result = $this->student->updateTcInfo($tcInfo, $student_id);
                 $result_one = $this->student->updateStudentTcStatusInfo($studentInfo, $student_id);

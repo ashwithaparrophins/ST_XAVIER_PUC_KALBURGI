@@ -229,6 +229,7 @@ $route['promoteStudent'] = "students/promoteStudent";
 //alumin student
 $route['studentAlumniInfo'] = "students/studentAlumniInfo";
 $route['studentAlumniInfo/(:any)'] = "students/studentAlumniInfo/$1";
+$route['getStudentTcInfo'] = "students/getStudentTcInfo";
 
 // student Tc
 $route['getStudentById'] = 'students/getStudentById';

@@ -294,43 +294,58 @@ if ($error) {
             <form  id="addTcList">
                 <input type="hidden" id="student_id" name="student_id"  />
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-xs-12">
-                        <div class="form-group">
-                            <label for="date_of_admission" class="col-form-label">Date of Admission:</label>
-                            <input type="text" placeholder="Enter Admission Date" class="form-control datepicker" name="date_of_admission" id="date_of_admission">
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="col-lg-6 col-md-4 col-xs-6">
                         <div class="form-group">
                             <label for="leaving_date" class="col-form-label">Date of Leaving:</label>
                             <input type="text" placeholder="Select Student Leaving Date" class="form-control datepicker" name="leaving_date" id="leaving_date">
                         </div>
                     </div>
+                    <div class="col-lg-6 col-md-4 col-xs-6">
+                        <div class="form-group">
+                            <label for="date_of_admission" class="col-form-label">Date of Admission:</label>
+                            <input type="text" placeholder="Select Student admission Date" class="form-control datepicker" name="date_of_admission" id="date_of_admission">
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="role">Whether the student is qualified for Promotion?</label>
-                    <select class="form-control required" id="qualified_status" name="qualified_status">
+                <div class="row">
+                <div class="col-lg-6 col-md-4 col-xs-6">
+                    <div class="form-group">
+                        <label for="admission_number" class="col-form-label">Admission Number:</label>
+                        <input type="text" placeholder="Select Student admission number" class="form-control" name="admission_number" id="admission_number"></div>
+                    </div>
+                    <div class="col-lg-6 col-md-4 col-xs-6">
+                    <div class="form-group">
+                        <label for="qualified_status" class="col-form-label">Whether Qualified for promotion to a higher class?</label>
+                        <select class="form-control required" id="qualified_status" name="qualified_status">
                         <option value="YES" >YES</option>
                         <option value="NO">NO </option>
-                    </select>
-                </div>
-                <div class="form-group reason_unqualified">
-                    <label for="role">Give reason for Unqualified Promotion?</label>
-                    <select class="form-control required" id="reason_unqualified_val" name="reason_unqualified">
-                        <option value="" >Select One Resaon</option>
-                        <option value="DISCONTINUED" >Discontinued</option>
-                        <option value="ATTENDAANCE SHORTAGE">Attendance Shortage </option>
-                    </select>
+                    </select></div>
+                    </div>
+
+
+                    
                 </div>
                 <div class="form-group">
-                    <label for="role">Whether the student is belongs to SC/ST?</label>
+                    <label for="role">Whether the candidate belongs to Scheduled Caste or Tribe?</label>
                     <select class="form-control required" id="belong_sc_st" name="belong_sc_st">
                         <option value="NO">NO </option>
                         <option value="YES" >YES</option>
                         
                     </select>
                 </div>
-                
+                <div class="form-group">
+                    <label for="last_class">Class in which the student was studying at the time of leaving?</label>
+                    <input type="text" placeholder="Select Class" class="form-control" name="last_class" id="last_class">
+                </div>
+                            <div class="form-group">
+                                <label for="fee_due" class="col-form-label pb-0">Fee Due<span>*</span></label>
+                                <select class="form-control required pendingFee" id="fee_due" name="fee_due" required>
+                                    <option value="" disabled>Select Fee Due</option>
+                                    <option  value="YES">YES</option>
+                                    <option value="NO">NO </option>
+                                </select>
+                            </div>
+                        
                 <div class="form-group">
                     <label for="role">Character and Conduct?</label>
                     <select class="form-control required" id="character" name="character">
@@ -522,12 +537,16 @@ jQuery(document).ready(function() {
         var qualified_status = $('#qualified_status :selected').val();
         var reason_unqualified = $('#reason_unqualified_val :selected').val();
         var belong_sc_st = $('#belong_sc_st :selected').val();
+        var fee_due = $('#fee_due :selected').val();
         /// var college_due_status = $('#college_due_status :selected').val();
         var character = $('#character :selected').val();
         var leaving_date = $('#leaving_date').val();
         var admission_date = $('#date_of_admission').val();
+        var admission_number=$('#admission_number').val();
         var student_id = $('#student_id').val();
         var caste = $('#caste').val();
+        var last_class = $('#last_class').val();
+        
         if(leaving_date == ""){ 
             $(".alertMessage").html('<div class="alert alert-warning alert-dismissable">Sorry! Leaving date Empty!</div>');
             $(".alertMessage").show();
@@ -543,7 +562,10 @@ jQuery(document).ready(function() {
                     leaving_date: leaving_date,
                     student_id : student_id,
                     admission_date : admission_date,
+                    admission_number : admission_number,
                     caste : caste,
+                    last_class:last_class,
+                    fee_due:fee_due,
                 },
 
                 success: function(data) {
@@ -571,6 +593,7 @@ jQuery(document).ready(function() {
 function openModel(student_id){
     $(".alertMessage").hide();
     $('.modal-title').html('Transfer Certificate <span style="float:right;">Student ID: '+ student_id + '</span>');
+   // alert(student_id);
     $.ajax({
         url: '<?php echo base_url(); ?>/getStudentTcInfo',
         type: 'POST',
@@ -580,9 +603,11 @@ function openModel(student_id){
 
         success: function(data) {
             var studentTcInfo = JSON.parse(data);
-            
             if(studentTcInfo != null){
-            var leavingDate = studentTcInfo.leaving_date
+        
+
+            // var leavingDate = studentTcInfo.leaving_date
+            var leavingDate = "03-31-2024";
             $('#leaving_date').val(appendLeadingZeroes(new Date(leavingDate).getDate()) 
             + "-" + appendLeadingZeroes(new Date(leavingDate).getMonth() + 1) 
             + "-" + appendLeadingZeroes(new Date(leavingDate).getFullYear()));
@@ -590,6 +615,12 @@ function openModel(student_id){
             $('#qualified_status').val(studentTcInfo.is_promoted);
             $('#belong_sc_st').val(studentTcInfo.is_belongs_sc_st);
             $('#character').val(studentTcInfo.character_conduct);
+            $('#admission_number').val(studentTcInfo.admission_number);
+            $('#last_class').val(studentInfo.term_name + ' ' + studentInfo.program_name);
+
+            $('#fee_due').val(studentTcInfo.fee_due);
+            // alert(studentInfo.fee_due);
+
             if(studentTcInfo.reason_unqualified != ""){
                 $('#reason_unqualified_val').val(studentTcInfo.reason_unqualified);
                 $(".reason_unqualified").show();
@@ -625,18 +656,30 @@ function openModel(student_id){
 
         success: function(data) {
             var studentInfo = JSON.parse(data);
+            var leavingDate = "03-31-2024";
+            $('#leaving_date').val(appendLeadingZeroes(new Date(leavingDate).getDate()) 
+            + "-" + appendLeadingZeroes(new Date(leavingDate).getMonth() + 1) 
+            + "-" + appendLeadingZeroes(new Date(leavingDate).getFullYear()));
             var admissionDate = studentInfo.date_of_admission;
             $('#student_id').val(student_id);
             $('#stdName').html(studentInfo.student_name);
+           // alert(studentInfo.student_name);
             $('#studentName').html(studentInfo.student_name);
             $('#dob').html(studentInfo.dob);
             $('#section').html(studentInfo.section_name);
             $('#nationality').html(studentInfo.nationality);
             $('#father_name').html(studentInfo.father_name);
             $('#mother_name').html(studentInfo.mother_name);
+        
 
             $('#religion').html(studentInfo.religion);
             $('#caste').val(studentInfo.caste);
+              $('#admission_number').val(studentInfo.admission_number);
+              $('#last_class').val(studentInfo.term_name + ' ' + studentInfo.program_name);
+
+           
+            // $('#fee_due').val(studentInfo.is_cleared_college_due);
+
             $('#languages').html(studentInfo.elective_sub);
 
             if(admissionDate != ' ' && admissionDate != '1970-01-01' && admissionDate != '0000-00-00'){
