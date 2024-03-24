@@ -1319,7 +1319,10 @@ class Fee_model extends CI_Model
                 $this->db->where('student.stream_name', $filter['preference']);
                }
                if(!empty($filter['term_name'])){
-                $this->db->where('student.term_name', $filter['term_name']);
+                $this->db->where('fee.term_name', $filter['term_name']);
+               }
+               if(!empty($filter['year'])){
+                $this->db->where('fee.payment_year', $filter['year']);
                }
            
 

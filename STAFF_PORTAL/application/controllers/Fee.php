@@ -1257,6 +1257,8 @@ class Fee extends BaseController
                 $data['scholarship'] = $scholarship->fee_amt;
                 $data['pending_bal'] = $data['feeInfo']->pending_balance - $data['concession'] - $data['scholarship'];   
 
+            }else{
+                $data['pending_bal'] = $data['feeInfo']->pending_balance;
             }
 
         }else{
@@ -2554,15 +2556,7 @@ public function processTheFeePayment(){
             //     $studentInfo = $this->admission->getStudentStudentInfo($application_no);
             // }
             $filter = array(); 
-            //FOR BOARD
-            // $studentInfo2 = $this->admission->getStudentStudentInfo($application_no);
-            // $boardInfo = $this->admission->getStudentRegisteredInfo($studentInfo2->registered_row_id);
-            //     $data['board_id'] = $boardInfo->sslc_board_name_id;
-            //         if($boardInfo->sslc_board_name_id == 1){
-            //             $filter['board_name'] = "SSLC";
-            //         }else{
-            //             $filter['board_name'] = "OTHER";
-            // }
+          
 
             if(!empty($studentInfo)){
                 $term_name = $studentInfo->term_name;
@@ -2640,10 +2634,13 @@ public function processTheFeePayment(){
                     
                         $filter['term_name'] = 'I PUC';
                         $data['year']=$filter['fee_year'] = trim($studentInfo->intake_year_id);
-                    
-                        $total_fee_obj = $this->fee->getfirstpucbal($application_no);
-                        $data['first_puc_total_fee'] = $first_puc_total_bal = $total_fee_obj->amount;
-
+                        if($studentInfo->intake_year_id == 2023){
+                            $total_fee_obj = $this->fee->getTotalFeeAmount($filter);
+                            $data['first_puc_total_fee'] = $first_puc_total_bal = $total_fee_obj->total_fee;
+                        }else{
+                            $total_fee_obj = $this->fee->getfirstpucbal($application_no);
+                            $data['first_puc_total_fee'] = $first_puc_total_bal = $total_fee_obj->amount;
+                        }
                         // $total_fee_obj = $this->fee->getTotalFeeAmount($filter);
 
                         // $data['first_puc_total_fee'] = $first_puc_total_bal = $total_fee_obj->total_fee;
@@ -2784,7 +2781,14 @@ public function processTheFeePayment(){
             $excess_amount = $this->security->xss_clean($this->input->post('excess_amount'));
             $ref_receipt_no = $this->security->xss_clean($this->input->post('ref_receipt_no'));
             $payment_year = $this->security->xss_clean($this->input->post('payment_year')); 
-            $isExist = $this->fee->checkReceiptNoExists($ref_receipt_no,$payment_year);
+            $studentInfo =  $this->student->getStudentInfoByRowId($application_no);
+            
+            $fee_year = $studentInfo->intake_year_id;
+            if($term_name == 'II PUC'){
+                $fee_year = ($studentInfo->intake_year_id)+1;
+               
+            }
+            $isExist = $this->fee->checkReceiptNoExists($ref_receipt_no,$fee_year);
             if(!empty($isExist)){
                 $this->session->set_flashdata('error', 'Receipt No. Already Exists');
                 

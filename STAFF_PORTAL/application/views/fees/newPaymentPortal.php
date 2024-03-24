@@ -378,7 +378,7 @@ if ($error) {
                                                         <th>Date</th>
                                                         <th>Receipt No.</th>
                                                         <th>Amt.</th>
-                                                        <?php if($fee_year_II == '2023' && $std_status == 0){
+                                                        <?php if($fee_year_II == '2024' && $std_status == 0){
                                                            ?>
                                                         <th>Fee Type</th>
                                                         <?php } ?>
@@ -397,7 +397,7 @@ if ($error) {
                                                     <td><?php echo date('d-m-Y', strtotime($fee->payment_date)); ?></td>
                                                     <td class="text-center"><?php echo $fee->ref_receipt_no; ?></td>
                                                     <td><?php echo number_format($fee->paid_amount,2); ?></td>
-                                                    <?php if($fee_year_II == '2023' && $std_status == 0){
+                                                    <?php if($fee_year_II == '2024' && $std_status == 0){
                                                            ?>
                                                     <td><?php if($fee->attempt == "1"){echo "First Attempt";}else{echo "Second Attempt";}; ?></td>
                                                     <?php } ?>
@@ -445,7 +445,7 @@ if ($error) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php if(empty($first_puc_total_fee)){ ?>
+                                            <?php if($studentInfo->intake_year_id == 2023){ ?>
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
@@ -489,7 +489,7 @@ if ($error) {
                                             <div class="row">
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <input type="hidden" value="<?php echo $year; ?>" id="II_PUC_year">
+                                                        <input type="hidden" value="<?php echo $year; ?>" id="I_PUC_year">
                                                         <input type="text" class="form-control reference_receipt_no" id="ref_receipt_number1"
                                                             name="ref_receipt_number" placeholder="Reference Receipt No."
                                                             onkeypress="return isNumberKey(event)" required
@@ -875,6 +875,37 @@ jQuery(document).ready(function() {
             let reference_receipt_no = $(this).val();
            
             let year = $('#II_PUC_year').val();
+          
+            $('.receiptHide').hide();
+            $.ajax({
+                url: '<?php echo base_url(); ?>/getReceiptNumber',
+                type: 'POST',
+                dataType: "json",
+                data: { 
+                    reference_receipt_no : reference_receipt_no,
+                    year: year
+                   
+                },
+                success: function(data) {
+                    //var examObject = JSON.parse(data);
+                    var examObject = JSON.stringify(data)
+                    var count = data.result.length;
+                    if(count != 0){
+                        if(data.result.ref_receipt_no == reference_receipt_no){
+                            $('.receiptHide').show();
+                        }else{
+                            $('.receiptHide').hide();
+                        }
+                    }else{
+                        $('.receiptHide').hide();
+                    }
+                }
+            });
+        });
+        $('.reference_receipt_no').on('keyup', function(evt){
+            let reference_receipt_no = $(this).val();
+           
+            let year = $('#I_PUC_year').val();
           
             $('.receiptHide').hide();
             $.ajax({
