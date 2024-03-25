@@ -1267,11 +1267,11 @@ class Fee extends BaseController
         // $filter['fee_year'] = ($studentInfo->intake_year_id)+1;
         // if($studentInfo->term_name == 'I PUC'){
         //     $studentInfo = $this->application->getApprovedStudentInfoByApplicationNo($data['feeInfo']->application_no);
-            $filter['fee_year'] = CURRENT_YEAR;
+            $filter['fee_year'] = $data['feeInfo']->payment_year;
         // }
 
         $filter['stream_name'] = $studentInfo->stream_name;
-        $filter['term_name'] = $studentInfo->term_name;
+        $filter['term_name'] = $data['feeInfo']->term_name;
     
         $data['feeStructureInfo'] = $this->fee->getFeeStructureInfo($filter);
         // $data['concession_amount'] = $this->fee->getFeeConcessionByAppNo($data['feeInfo']->application_no,$filter['fee_year']);
@@ -3049,7 +3049,6 @@ public function processTheFeePayment(){
             $ref_receipt_no = $this->input->post("reference_receipt_no");
             $year = $this->input->post("year");
             $data['result'] = $this->fee->getCheckReceiptNo($ref_receipt_no,$year);
-            //log_message('debug','result'.print_r($data['result'],true));
             header('Content-type: text/plain'); 
             header('Content-type: application/json'); 
             echo json_encode($data);

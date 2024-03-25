@@ -351,11 +351,11 @@ if ($error) {
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                     <input type="hidden" value="<?php echo $fee_year_II; ?>" id="II_PUC_year">
-                                                        <input type="text" class="form-control reference_receipt_no" id="ref_receipt_number"
+                                                        <input type="text" class="form-control reference_receipt_noII" id="ref_receipt_number"
                                                             name="ref_receipt_number" placeholder="Reference Receipt No."
                                                             onkeypress="return isNumberKey(event)" required
                                                             autocomplete="off" >
-                                                            <h6 class="error-hint display-none receiptHide" style="color: red;">Receipt Number Already exists</h6>
+                                                            <h6 class="error-hint display-none receiptHideII" style="color: red;">Receipt Number Already exists</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -445,7 +445,7 @@ if ($error) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php if($studentInfo->intake_year_id == 2023){ ?>
+                                            <?php if($studentInfo->intake_year_id == 2023 || $studentInfo->intake_year_id == 2024){ ?>
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
@@ -468,7 +468,7 @@ if ($error) {
                                                             onkeypress="return isNumberKey(event)" required
                                                             autocomplete="off">
 
-                                                            <input type="hidden" value="<?php echo $total_fee_amount - 2000; ?>" id="i_paid_amt">
+                                                            <input type="hidden" value="<?php echo $I_balance - 2000; ?>" id="i_paid_amt">
 
                                                     </div>
                                                 </div>
@@ -515,7 +515,7 @@ if ($error) {
                                                         <th>Date</th>
                                                         <th>Receipt No.</th>
                                                         <th>Amt.</th>
-                                                        <?php if($year == '2023' && $std_status == 0){?>
+                                                        <?php if(($year == '2023' || $year == '2024') && $std_status == 0){?>
                                                         <th>Fee Type</th>
                                                         <?php }?>
                                                         <th>Type</th>
@@ -533,7 +533,7 @@ if ($error) {
                                                     <td><?php echo date('d-m-Y', strtotime($fee->payment_date)); ?></td>
                                                     <td class="text-center"><?php echo $fee->ref_receipt_no; ?></td>
                                                     <td><?php echo number_format($fee->paid_amount,2); ?></td>
-                                                    <?php if($year == '2023' && $std_status == 0){?>
+                                                    <?php if(($year == '2023'|| $year == '2024') && $std_status == 0){?>
                                                     <td><?php if($fee->attempt == "1"){echo "First Attempt";}else{echo "Second Attempt";}; ?></td>
                                                     <?php } ?>
                                                     <td><?php echo $fee->payment_type; ?></td>
@@ -856,7 +856,7 @@ jQuery(document).ready(function() {
         I_feeTypeSelect.on("change", function () {
           
             if (I_feeTypeSelect.val() == "1") {  
-                //alert(I_paidAmtHidden.val());
+                alert(I_paidAmtHidden.val());
                 I_paidAmountInput.val(I_paidAmtHidden.val());
                 I_paidAmountInput.prop("readonly", true);
             } else {
@@ -871,12 +871,14 @@ jQuery(document).ready(function() {
     
 
     $('.receiptHide').hide();
-    $('.reference_receipt_no').on('keyup', function(evt){
+    $('.receiptHideII').hide();
+
+    $('.reference_receipt_noII').on('keyup', function(evt){
             let reference_receipt_no = $(this).val();
            
             let year = $('#II_PUC_year').val();
-          
-            $('.receiptHide').hide();
+       
+            $('.receiptHideII').hide();
             $.ajax({
                 url: '<?php echo base_url(); ?>/getReceiptNumber',
                 type: 'POST',
@@ -892,12 +894,12 @@ jQuery(document).ready(function() {
                     var count = data.result.length;
                     if(count != 0){
                         if(data.result.ref_receipt_no == reference_receipt_no){
-                            $('.receiptHide').show();
+                            $('.receiptHideII').show();
                         }else{
-                            $('.receiptHide').hide();
+                            $('.receiptHideII').hide();
                         }
                     }else{
-                        $('.receiptHide').hide();
+                        $('.receiptHideII').hide();
                     }
                 }
             });
