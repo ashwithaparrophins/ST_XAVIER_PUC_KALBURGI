@@ -2644,6 +2644,7 @@ public function processTheFeePayment(){
                         // $total_fee_obj = $this->fee->getTotalFeeAmount($filter);
 
                         // $data['first_puc_total_fee'] = $first_puc_total_bal = $total_fee_obj->total_fee;
+                        $paid = $this->fee->getFeePaidInfoAttempt($application_no,$filter['fee_year']);
                     
                         $paidFee = $this->fee->getTotalFeePaidInfo($application_no,$filter['fee_year']);
                         $data['feePaidInfo'] = $this->fee->getFeePaidInfo($application_no,$filter['fee_year']);
@@ -2651,7 +2652,11 @@ public function processTheFeePayment(){
 
                         $data['fee_installment'] = $this->fee->checkInstalmentExists($application_no);
                         $first_puc_total_bal -= $paidFee;
-                     
+                        if($paid->attempt == '1'){
+                            $first_puc_total_bal = $total_fee_amount -2000;    
+                        }else{
+                            $first_puc_total_bal =$total_fee_amount;
+                        }
                         //if alumni first_puc_total_bal =0
                         if($studentInfo->is_active == 0 && trim($studentInfo->intake_year_id) == '2021'){
                             $first_puc_total_bal = 0;
