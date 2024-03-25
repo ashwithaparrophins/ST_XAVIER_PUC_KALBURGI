@@ -650,12 +650,12 @@ if ($error) {
 
 
                 <div class="row">
-                <div class="col-lg-6 col-md-4 col-xs-6">
+                <!-- <div class="col-lg-6 col-md-4 col-xs-6">
                     <div class="form-group">
                         <label for="admission_number" class="col-form-label">Admission Number:</label>
                         <input type="text" placeholder="Select Student admission number" class="form-control" name="admission_number" id="admission_number"></div>
-                    </div>
-                    <div class="col-lg-6 col-md-4 col-xs-6">
+                    </div> -->
+                    <div class="col-lg-12 col-md-4 col-xs-6">
                     <div class="form-group">
                         <label for="qualified_status" class="col-form-label">Whether Qualified for promotion to a higher class?</label>
                         <select class="form-control required" id="qualified_status" name="qualified_status">
@@ -1475,7 +1475,7 @@ jQuery(document).ready(function() {
         /// var college_due_status = $('#college_due_status :selected').val();
         var character = $('#character :selected').val();
         var leaving_date = $('#leaving_date').val();
-        var admission_number = $('#admission_number').val();
+        // var admission_number = $('#admission_number').val();
         var fee_due = $('#fee_due').val();
         var last_class = $('#last_class').val();
         var admission_date = $('#date_of_admission').val();
@@ -1493,9 +1493,6 @@ jQuery(document).ready(function() {
         }else if(last_class==""){
             $(".alertMessage").html('<div class="alert alert-danger alert-dismissable">Sorry! Class is Empty!×</button></div>');
             $(".alertMessage").show();
-        }else if(admission_number==""){
-            $(".alertMessage").html('<div class="alert alert-danger alert-dismissable">Sorry! Admission Number is Empty!×</button></div>');
-            $(".alertMessage").show();
         }
         else{
             $.ajax({
@@ -1507,7 +1504,7 @@ jQuery(document).ready(function() {
                     belong_sc_st: belong_sc_st,
                     character: character,
                     leaving_date: leaving_date,
-                    admission_number: admission_number,
+                    // admission_number: admission_number,
                     student_id : student_id,
                     admission_date : admission_date,
                     caste : caste,
@@ -1562,7 +1559,7 @@ function openModel(student_id){
            
             var leavingDate = "03-31-2024";
             var admissionDate = studentTcInfo.date_of_admission;
-            // var admission_number = studentTcInfo.admission_number;
+            
             $('#leaving_date').val(appendLeadingZeroes(new Date(leavingDate).getDate()) 
             + "-" + appendLeadingZeroes(new Date(leavingDate).getMonth() + 1) 
             + "-" + appendLeadingZeroes(new Date(leavingDate).getFullYear()));
@@ -1572,7 +1569,7 @@ function openModel(student_id){
             
             $('#last_class').val(studentInfo.term_name + ' ' + studentInfo.program_name);
 
-            $('#admission_number').val(studentInfo.admission_no);
+            // $('#admission_number').val(studentInfo.admission_no);
 
             var admission = appendLeadingZeroes(new Date(admissionDate).getDate()) 
                     + "-" + appendLeadingZeroes(new Date(admissionDate).getMonth() + 1) 
@@ -1629,7 +1626,7 @@ function openModel(student_id){
             $('#nationality').html(studentInfo.nationality);
             $('#father_name').html(studentInfo.father_name);
             $('#mother_name').html(studentInfo.mother_name);
-            $('#admission_number').val(studentInfo.admission_no);
+            // $('#admission_number').val(studentInfo.admission_no);
             // $('#last_class').val(studentInfo.last_class);
             $('#last_class').val(studentInfo.term_name + ' ' + studentInfo.program_name);
 

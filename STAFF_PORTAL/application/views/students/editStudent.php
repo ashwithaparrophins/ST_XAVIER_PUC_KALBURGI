@@ -537,9 +537,13 @@ if ($error) {
                                                             </div>
                                                         </div>
                                                         </th>
-                                                        <th class="tbl-head"></th>
+                                                        <th class="tbl-head"> Admission Number</th>
+                                                        <th width="140"><input value="<?php echo $studentInfo->admission_number; ?>" type="text" 
+                                                                    class="form-control required text-uppercase" placeholder="Admission Number" 
+                                                                    id="admission_number" name="admission_number" autocomplete="off"/></th>
 
-                                                            <th></th>
+
+                                                            <!-- <th></th> -->
                                                         </tr>
                                                     </table>
                                                 </div>

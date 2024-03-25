@@ -542,6 +542,7 @@ class Students extends BaseController
                 $date_of_admission = $this->security->xss_clean($this->input->post('date_of_admission'));
                 $doj = $this->security->xss_clean($this->input->post('doj'));
                 $sat_number = $this->security->xss_clean($this->input->post('sat_number'));
+                $admission_number = $this->security->xss_clean($this->input->post('admission_number'));
                 
                 if(!empty($date_of_admission)) {
                     $date_of_admission = date('Y-m-d',strtotime($date_of_admission));
@@ -566,6 +567,7 @@ class Students extends BaseController
                     'date_of_admission' => $date_of_admission,
                     'doj' => $doj,
                     'sat_number' => $sat_number,
+                    'admission_number' => $admission_number,
                     'updated_by'=>$this->staff_id, 
                     'updated_date_time'=>date('Y-m-d H:i:s'));
                     $result = $this->student->updateStudentInfo($studentAcademicInfo,$row_id);
@@ -705,7 +707,7 @@ class Students extends BaseController
             $reason_unqualified = $this->security->xss_clean($this->input->post('reason_unqualified'));
             $belong_sc_st = $this->security->xss_clean($this->input->post('belong_sc_st'));
             $admission_date = $this->security->xss_clean($this->input->post('admission_date'));
-            $admission_number = $this->security->xss_clean($this->input->post('admission_number'));
+            // $admission_number = $this->security->xss_clean($this->input->post('admission_number'));
             $last_class = $this->security->xss_clean($this->input->post('last_class'));
             $fee_due = $this->security->xss_clean($this->input->post('fee_due'));
 
@@ -756,7 +758,7 @@ class Students extends BaseController
         
             $studentInfo = array('student_id'=> $student_id,
                 'date_of_admission'=>$admissionDate,
-                 'admission_number'=>$admission_number,
+                //  'admission_number'=>$admission_number,
                
                 'caste'=>$caste,
                 'tc_taken_status'=> 1,

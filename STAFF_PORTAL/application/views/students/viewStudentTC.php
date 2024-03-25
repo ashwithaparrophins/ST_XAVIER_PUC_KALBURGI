@@ -331,10 +331,12 @@ h4{
                                                     <li> In words</li>
                                                 </ul> -->
                                             </th>
-                                            <th><?php echo date('d/m/Y',strtotime($record->dob)); ?>
+                                            <!-- <th><//?php echo date('d/m/Y',strtotime($record->dob)); ?> -->
+                                            <th><?php echo date('d F Y', strtotime($record->dob)); ?></th>
+
                                                 <!-- <br><ul class="content_list" style="list-style-type: none;">
-                                                    <li style="margin-left: -40px;"><?php echo date('d/m/Y',strtotime($record->dob)); ?></li>
-                                                    <!-- <li style="margin-left: -40px;"><?php echo strtoupper($date.' '.date('F',strtotime($record->dob)).' '.$year); ?></li> -->
+                                                    <li style="margin-left: -40px;"><//?php echo date('d/m/Y',strtotime($record->dob)); ?></li>
+                                                    <!-- <li style="margin-left: -40px;"><//?php echo strtoupper($date.' '.date('F',strtotime($record->dob)).' '.$year); ?></li> -->
                                                 <!-- </ul> -->
                                             </th>
                                         </tr>
@@ -424,10 +426,10 @@ h4{
                                                 <!-- <th><?php echo date('d/m/Y',strtotime($record->dob)); ?></th> -->
                                             
                                               <br/>SATS No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<?php echo $record->sat_number; ?> 
-                                              <br/>Student No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<?php echo $record->student_no; ?> 
+                                              <br/>Student No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<?php echo $record->pu_board_number; ?> 
                                               <br/>Admission No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<?php echo $record->admission_number; ?> 
                                                <!-- <//?php log_message('debug','number'.$record->admission_number); ?>  -->
-                                              <br/>Class Reg No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<?php echo $record->register_no; ?> 
+                                              <br/>Class Reg No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<?php echo $record->student_id; ?> 
                                              <div class="col-12">
                                                 <h6 class="place_date" style="font-size: 16px;"> <span class="footer_sign"><br/><br/><br/><br/><br/><br/>PRINCIPAL</span></h6>
                                             </div>

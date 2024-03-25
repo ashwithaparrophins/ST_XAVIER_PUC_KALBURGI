@@ -308,12 +308,12 @@ if ($error) {
                     </div>
                 </div>
                 <div class="row">
-                <div class="col-lg-6 col-md-4 col-xs-6">
+                <!-- <div class="col-lg-6 col-md-4 col-xs-6">
                     <div class="form-group">
                         <label for="admission_number" class="col-form-label">Admission Number:</label>
                         <input type="text" placeholder="Select Student admission number" class="form-control" name="admission_number" id="admission_number"></div>
-                    </div>
-                    <div class="col-lg-6 col-md-4 col-xs-6">
+                    </div> -->
+                    <div class="col-lg-12 col-md-4 col-xs-6">
                     <div class="form-group">
                         <label for="qualified_status" class="col-form-label">Whether Qualified for promotion to a higher class?</label>
                         <select class="form-control required" id="qualified_status" name="qualified_status">
@@ -542,7 +542,7 @@ jQuery(document).ready(function() {
         var character = $('#character :selected').val();
         var leaving_date = $('#leaving_date').val();
         var admission_date = $('#date_of_admission').val();
-        var admission_number=$('#admission_number').val();
+        // var admission_number=$('#admission_number').val();
         var student_id = $('#student_id').val();
         var caste = $('#caste').val();
         var last_class = $('#last_class').val();
@@ -562,7 +562,7 @@ jQuery(document).ready(function() {
                     leaving_date: leaving_date,
                     student_id : student_id,
                     admission_date : admission_date,
-                    admission_number : admission_number,
+                    // admission_number : admission_number,
                     caste : caste,
                     last_class:last_class,
                     fee_due:fee_due,
@@ -615,7 +615,7 @@ function openModel(student_id){
             $('#qualified_status').val(studentTcInfo.is_promoted);
             $('#belong_sc_st').val(studentTcInfo.is_belongs_sc_st);
             $('#character').val(studentTcInfo.character_conduct);
-            $('#admission_number').val(studentTcInfo.admission_number);
+            // $('#admission_number').val(studentTcInfo.admission_number);
             $('#last_class').val(studentInfo.term_name + ' ' + studentInfo.program_name);
 
             $('#fee_due').val(studentTcInfo.fee_due);
@@ -674,7 +674,7 @@ function openModel(student_id){
 
             $('#religion').html(studentInfo.religion);
             $('#caste').val(studentInfo.caste);
-              $('#admission_number').val(studentInfo.admission_number);
+            //   $('#admission_number').val(studentInfo.admission_number);
               $('#last_class').val(studentInfo.term_name + ' ' + studentInfo.program_name);
 
            
