@@ -2653,9 +2653,9 @@ public function processTheFeePayment(){
                         $data['fee_installment'] = $this->fee->checkInstalmentExists($application_no);
                         $first_puc_total_bal -= $paidFee;
                         if($paid->attempt == '1'){
-                            $first_puc_total_bal = $total_fee_amount -2000;    
+                            $first_puc_total_bal = $first_puc_total_bal -2000;    
                         }else{
-                            $first_puc_total_bal =$total_fee_amount;
+                            $first_puc_total_bal =$first_puc_total_bal;
                         }
                         //if alumni first_puc_total_bal =0
                         if($studentInfo->is_active == 0 && trim($studentInfo->intake_year_id) == '2021'){
