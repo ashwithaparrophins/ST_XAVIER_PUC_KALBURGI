@@ -140,5 +140,20 @@ class Performance_model extends CI_Model
         $query = $this->db->get();
         return $query->row();
     }
+
+
+    public function getAnnualExamMark($student_id,$subjects_code,$exam_year){
+        $this->db->select('exam.student_id,exam.subject_code,exam.obt_theory_mark,exam.obt_lab_mark,exam.exam_type,sub.name,sub.sub_type,sub.lab_status	');
+        $this->db->join('tbl_subjects as sub','sub.subject_code = exam.subject_code');
+        $this->db->from('tbl_college_internal_exam_marks as exam');
+        $this->db->where('exam.student_id', $student_id);
+        $this->db->where('exam.subject_code', $subjects_code);
+        $this->db->where('exam.exam_type', 'ANNUAL_EXAMINATION');
+        $this->db->where('exam.exam_year', '2023-24');
+        // $this->db->where('exam.office_validation_status', 1);
+        $this->db->where('exam.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
 }
 ?>

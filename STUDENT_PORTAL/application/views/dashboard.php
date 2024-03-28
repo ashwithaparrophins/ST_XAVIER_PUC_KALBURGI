@@ -127,6 +127,24 @@ if ($noMatch) {
         </div>
       </div>
     </div>
+    <?php if($term_name == 'I PUC'){  ?>
+    <div class="col-lg-3 col-6 mb-4 column_padding_card">
+      <div class="card card-small dash-card" style="background: #1e90ff;">
+        <div class="card-body pt-1 pb-1">
+          <span class="stats-small__label text-uppercase text-white text-center">Annual Exam</span>
+          <h6 class="stats-small__value count text-white">
+            </h6>
+          <div class="icon pull-right">
+            <i class="fa fa-book  dash-icons"></i>
+          </div>
+        </div>
+        <div class="card-footer text-center dash-footer p-0">
+          <a class="more-info text-white" href="<?php echo base_url(); ?>examAnnualPerformance"><i class="fa fa-arrow-circle-right"></i></a><br>
+          <span class="text-center">Result</span>
+        </div>
+      </div>
+    </div>
+    <?php } ?>
     <?php if ($studentInfo->program_name == 'COMMERCE') { ?>
       <!-- <div class="col-lg-6 col-md-6 col-12 mb-4 padding_left_right_null">
         <!-- Quick Post 
@@ -402,6 +420,23 @@ if ($noMatch) {
         </div>
       </a>
     </div>
+    <?php if($term_name == 'I PUC'){  ?>
+    <div class="col-lg-3 col-6 mb-2 column_padding_card">
+      <a href="<?php echo base_url(); ?>examAnnualPerformance">
+        <div class="card card-small dash-card mobile_dashCards">
+          <div class="card-body pt-1 pb-1">
+            <div class="icon text-center text-white">
+              <i class="material-icons card_dash_mobileIcons">assignment_turned_in</i>
+            </div>
+            <h6 class="mobile_dash_title text-uppercase text-white text-center mb-0">Annual Exam</h6>
+          </div>
+          <div class="card-footer text-center dash-footer p-1">
+            <span class="more-info text-white text-center font-weight-bold">View <i class="material-icons">visibility</i></span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <?php } ?>
 
     <?php if ($studentInfo->program_name == 'COMMERCE') { ?>
       <div class="col-lg-6 col-md-6 col-12 mb-4 padding_left_right_null">

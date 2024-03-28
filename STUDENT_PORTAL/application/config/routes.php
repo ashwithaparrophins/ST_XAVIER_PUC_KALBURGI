@@ -239,3 +239,5 @@ $route['apicheckpassword'] = "api/checkpassword";
 $route['apigetSubjectNames'] = "api/getSubjectNames";
 
 $route['apiviewNotificationFeed'] = "api/viewNotificationFeed";
+
+$route['examAnnualPerformance'] = "performance/examAnnualPerformance";

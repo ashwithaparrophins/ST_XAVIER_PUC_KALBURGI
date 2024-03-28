@@ -243,6 +243,22 @@
 
                                 </li>
 
+                                <?php if($term_name == 'I PUC'){  ?>
+
+                                <li class="nav-item">
+
+                                <a class="nav-link " href="<?php echo base_url(); ?>examAnnualPerformance">
+
+                                    <i class="material-icons">&#xE6E1;</i>
+
+                                    <span>Annual Exam</span>
+
+                                </a>
+
+                                </li>
+
+                                <?php } ?>
+
                                 <?php if($term_name == 'II PUC'){  ?>
 
 

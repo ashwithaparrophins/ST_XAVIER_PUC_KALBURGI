@@ -244,6 +244,65 @@ class Performance extends BaseController
 
 
 
+
+        public function examAnnualPerformance(){
+
+                $subjects_code = array();
+
+                $assignment_exam_marks = array();
+
+                $data['studentInfo'] = $this->student_model->getStudentInfoById($this->student_id,$this->term_name);
+
+                $exam_year = '2023-24';         
+
+                $elective_sub = strtoupper( $data['studentInfo']->elective_sub);
+
+                if($elective_sub == "KANNADA"){
+
+                array_push($subjects_code, '01');
+
+                }else if($elective_sub == 'HINDI'){
+
+                array_push($subjects_code, '03');
+
+                } else if($elective_sub == 'FRENCH'){
+
+                array_push($subjects_code, '12');
+
+                }
+
+                array_push($subjects_code, '02');
+
+                $exam_mark_first_test = array();
+
+                $subjects = $this->getSubjectCodes($data['studentInfo']->stream_name);
+
+                $subjects_code = array_merge($subjects_code,$subjects);
+
+                
+                for($i=0;$i < count($subjects_code);$i++){
+
+                        $getMarkOfFirstUnitTest = $this->performance_model->getAnnualExamMark($this->student_id,$subjects_code[$i],$exam_year);
+
+                        $exam_mark_first_test[$i] = $getMarkOfFirstUnitTest;
+
+                        $getSubjectName[$i] = $this->performance_model->getAllSubjectInfo($subjects_code[$i]);                               
+                }
+         
+                $data['subjects_code'] = $subjects_code;
+               
+                $data['getSubjectName'] = $getSubjectName;
+            
+                $data['firstUnitTestMarkInfo'] = $exam_mark_first_test;
+               
+                $this->global['pageTitle'] = ''.TAB_TITLE.' : Annual Performance' ;
+
+                $this->loadViews("student/annualPerformance", $this->global, $data, NULL);
+
+        }
+
+
+
         public function viewAnnualExam(){
 
                 $data['studentMarkInfo'] = $this->performance_model->getStudentFinalExamMarkInfo($this->student_id);
