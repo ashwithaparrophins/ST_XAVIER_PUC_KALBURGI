@@ -2134,6 +2134,67 @@ public function checkpassword(){
 }
 
 
+public function examAnnualPerformance(){
+
+    $student_id =$_GET['id'];
+
+    $subjects_code = array();
+
+    $assignment_exam_marks = array();
+
+    $studentInfo = $this->student_model->getStudentInfoBystudId($student_id);
+
+    $data['studentInfo'] = $this->student_model->getStudentInfoById($studentInfo->student_id,$studentInfo->term_name);
+
+    $exam_year = '2023-24';         
+
+    $elective_sub = strtoupper( $data['studentInfo']->elective_sub);
+
+    if($elective_sub == "KANNADA"){
+
+    array_push($subjects_code, '01');
+
+    }else if($elective_sub == 'HINDI'){
+
+    array_push($subjects_code, '03');
+
+    } else if($elective_sub == 'FRENCH'){
+
+    array_push($subjects_code, '12');
+
+    }
+
+    array_push($subjects_code, '02');
+
+    $exam_mark_first_test = array();
+
+    $subjects = $this->getSubjectCodes($data['studentInfo']->stream_name);
+
+    $subjects_code = array_merge($subjects_code,$subjects);
+
+    
+    for($i=0;$i < count($subjects_code);$i++){
+
+            $getMarkOfFirstUnitTest = $this->performance_model->getAnnualExamMark($studentInfo->student_id,$subjects_code[$i],$exam_year);
+
+            $exam_mark_first_test[$i] = $getMarkOfFirstUnitTest;
+
+            $getSubjectName[$i] = $this->performance_model->getAllSubjectInfo($subjects_code[$i]);                               
+    }
+
+    $data['subjects_code'] = $subjects_code;
+   
+    $data['getSubjectName'] = $getSubjectName;
+
+    $data['firstUnitTestMarkInfo'] = $exam_mark_first_test;
+   
+    $this->global['pageTitle'] = ''.TAB_TITLE.' : Annual Performance' ;
+
+    $this->load->view("student/annualPerformanceApp",$data);
+
+}
+
+
 
 }
  

@@ -241,3 +241,5 @@ $route['apigetSubjectNames'] = "api/getSubjectNames";
 $route['apiviewNotificationFeed'] = "api/viewNotificationFeed";
 
 $route['examAnnualPerformance'] = "performance/examAnnualPerformance";
+
+$route['apiexamAnnualPerformance'] = "api/examAnnualPerformance";
