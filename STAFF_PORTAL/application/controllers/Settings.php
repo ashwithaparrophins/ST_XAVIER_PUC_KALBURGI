@@ -1303,7 +1303,7 @@ $count++;
                         if(!empty($isExistsStudent)){
                             if(empty($isExists)){
                                 // Check if both obt_theory_mark and obt_lab_mark are not empty
-                                if (!empty($obt_theory_mark) && !empty($obt_lab_mark)) {
+                                if (!empty($obt_theory_mark) || !empty($obt_lab_mark)) {
                                 $info = array(
                                     'student_id' => trim($student_id),
                                     'subject_code' => trim($temp_sub_code),
