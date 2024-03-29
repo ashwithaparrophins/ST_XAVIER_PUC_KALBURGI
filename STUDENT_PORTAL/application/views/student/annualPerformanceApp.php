@@ -583,7 +583,7 @@ $base_url = 'https://sjpuc.schoolphins.com/student/'; ?>
 
                                         <th colspan="2">Result:
 
-                                            <?php if($result_fail_status == true){ ?>
+                                        <?php if(strtoupper($studentInfo->pass_status) == 'FAIL'){ ?>
 
                                             <span class="text_fail"><?php echo 'FAIL'; ?></span>
 

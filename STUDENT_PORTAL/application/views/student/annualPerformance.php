@@ -403,7 +403,7 @@
 
                                                 <?php  }
 
-                                                       if($total_mark_obtained != 0){
+                                                      if($total_mark_obtained != 0){
 
                                                         $total_percentage = ($total_mark_obtained/$total_max_mark)*100; ?>
 
@@ -429,7 +429,7 @@
 
                                                     <th colspan="2">Result:
 
-                                                        <?php if($result_fail_status == true){ ?>
+                                                        <?php if(strtoupper($studentInfo->pass_status) == 'FAIL'){ ?>
 
                                                         <span class="text_fail"><?php echo 'FAIL'; ?></span>
 

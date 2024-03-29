@@ -148,7 +148,7 @@ class Performance_model extends CI_Model
         $this->db->from('tbl_college_internal_exam_marks as exam');
         $this->db->where('exam.student_id', $student_id);
         $this->db->where('exam.subject_code', $subjects_code);
-        $this->db->where('exam.exam_type', 'ANNUAL_EXAMINATION');
+        $this->db->where('exam.exam_type', 'ANNUAL_IMPORT');
         $this->db->where('exam.exam_year', '2023-24');
         // $this->db->where('exam.office_validation_status', 1);
         $this->db->where('exam.is_deleted', 0);
