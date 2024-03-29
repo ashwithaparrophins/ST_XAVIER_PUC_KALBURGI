@@ -2052,6 +2052,41 @@ log_message('debug','admissin_student'.print_r($tcInfo,true));
         redirect('viewStudentInfoById/'.$std_row_id);
     }
 
+
+
+    public function getAnnualMarkCardToPrint2024($student_id = null){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        }else{
+            if($student_id == null){
+            $student_id = $this->security->xss_clean($this->input->get('student_id'));
+            $student_id = base64_decode(urldecode($student_id));
+            $student_id = json_decode(stripslashes($student_id));
+            $exam_year = $this->input->get("exam_year");
+            $data['exam_year'] = $exam_year;
+            //log_message('debug', 'sql query fail in... to student id'.$student_id);
+            }
+            $this->global['pageTitle'] = ''.TAB_TITLE.' : Students Detained Marks Card To Print';
+            $data['studentsRecords'] = $this->student->getStudentMarksSheetByStudentId($student_id);
+
+            // $this->loadViews("students/generateMarkCard", $this->global, $data, null);
+            
+            $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir().DIRECTORY_SEPARATOR.'mpdf','default_font' => 'serif']);         
+            $mpdf->curlAllowUnsafeSslRequests = true;
+            $mpdf->autoScriptToLang = true;
+            $mpdf->autoLangToFont = true;
+            $mpdf->AddPage('P','','','','',6,6,6,8,15,15);
+            $mpdf->SetTitle('ANNUAL MARKS CARD');
+            // $html = $this->load->view('exam_report/generateAnnualMarkCard',$data,true);
+            $html = $this->load->view('examReport22/generateAnnualMarkCardNew',$data,true);
+            $stylesheet = file_get_contents('assets/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css');
+            $mpdf->WriteHTML($stylesheet, 1); // CSS Script goes here.
+            // $mpdf->SetAutoFont('kozgopromedium', '', 11, true);
+            $mpdf->WriteHTML($html);
+            $mpdf->Output('ANNUAL_MARKS_CARD.pdf', 'I');
+        }
+    }
+
     
 }
 

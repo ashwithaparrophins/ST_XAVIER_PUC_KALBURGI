@@ -103,6 +103,8 @@ if ($error) {
                                         <a class="dropdown-item" href="#" id="conduct_certificate"><i class="fa fa-file"></i> Conduct Certificate</a>
                                         <div class="dropdown-divider m-0"></div>
                                         <a class="dropdown-item" href="#" id="first_year_hall_ticket"><i class="fa fa-file"></i> Hall ticket</a>
+                                        <div class="dropdown-divider m-0"></div>
+                                        <a class="dropdown-item" href="#" id="annual_mark_card"><i class="fa fa-file"></i> Annual Mark Card</a>
                                         <!-- <div class="dropdown-divider m-0"></div>
                                         <a class="dropdown-item" href="#" id="mark_card_print"><i class="fa fa-file"></i> Mark Card</a> -->
                                         <!-- <a class="dropdown-item" href="#" id="first_year_hall_ticket"><i class="fa fa-file"></i> Hall ticket</a> -->
@@ -1246,6 +1248,22 @@ jQuery(document).ready(function() {
         var students = JSON.stringify(students);
         window.open('<?php echo base_url(); ?>getFirstYearStudentHallTicket?student_id=' + btoa(students));
     });
+
+
+    $('#annual_mark_card').click(function() {
+        var students = [];
+        if ($('.singleSelect:checkbox:checked').length == 0) {
+            alert("Select atleast one Student for Annual Mark Card!");
+            return;
+        }
+        $('.singleSelect:checked').each(function(i) {
+            students.push($(this).val());
+        });
+        var students = JSON.stringify(students);
+        window.open('<?php echo base_url(); ?>getAnnualMarkCardToPrint2024?student_id=' + btoa(students));
+    });
+
+
 
     $('#second_year_hall_ticket').click(function() {
         var students = [];
