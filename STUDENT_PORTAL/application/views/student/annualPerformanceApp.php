@@ -397,13 +397,13 @@ $base_url = 'https://sjpuc.schoolphins.com/student/'; ?>
 
                                             <th rowspan="2">Subjects</th>
 
-                                            <th style="width:250px" rowspan="2">Max. Marks</th>
+                                            <!-- <th style="width:250px" rowspan="2">Max. Marks</th> -->
 
                                             <th style="width:120px">TH</th>
 
                                             <th style="width:120px">PR/IA</th>
 
-                                            <th style="width:250px" rowspan="2">Marks Scored</th>
+                                            <th style="width:250px" rowspan="2">Total Marks</th>
 
                                         </tr>
 
@@ -509,9 +509,9 @@ $base_url = 'https://sjpuc.schoolphins.com/student/'; ?>
                                             <?php echo strtoupper($getSubjectName[$i]->name); ?></th>
 
 
-                                        <th class="text-center table_marks_data"><?php echo $max_mark; ?>
+                                        <!-- <th class="text-center table_marks_data"><?php echo $max_mark; ?>
 
-                                        </th>
+                                        </th> -->
 
                                         <?php if($result_subject_fail_status == true){ ?>
 
@@ -565,7 +565,7 @@ $base_url = 'https://sjpuc.schoolphins.com/student/'; ?>
 
                                         <th class="total_row">Grand Total</th>
 
-                                        <th><?php echo $total_max_mark; ?></th>
+                                        <!-- <th><?php echo $total_max_mark; ?></th> -->
 
                                         <th colspan="2"></th>
 
