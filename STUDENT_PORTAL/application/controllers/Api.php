@@ -170,6 +170,10 @@ class Api extends CI_Controller
                 if($studentInfo->route_id!='0'){
                     $db_data[] = $info;
                 }
+            }elseif($info->title=='ANNUAL RESULT'){
+                if($studentInfo->term_name =='I PUC'){
+                    $db_data[] = $info;
+                }
             }else{
                 $db_data[] = $info;
             }
