@@ -507,6 +507,7 @@ $route['deleteTransportName'] = "transport/deleteTransportName";
 $route['printStudentTransportBill/(:any)'] = "transport/printStudentTransportBill/$1";
 $route['getReceipt'] = "transport/getReceipt";
 
+
 // routes for Transport Management- Student Bus
 $route['viewStudentTransportListing'] = "transport/viewStudentTransportListing";
 $route['viewStudentTransportListing/(:any)'] = "transport/viewStudentTransportListing/$1";
@@ -1127,4 +1128,7 @@ $route['getStudentForAnnualMark'] = "exam/getStudentForAnnualMark";
 $route['addStudentAnnualMarkByStaff'] = "exam/addStudentAnnualMarkByStaff";
 $route['deleteFeesReceipt'] = "fee/deleteFeesReceipt";
 
-$route['getCancelReceiptReport'] = "reports/getCancelReceiptReport";
+
+
+ //annual marks import
+ $route['importExamInfo'] = "settings/importExamInfo";

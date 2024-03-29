@@ -1208,6 +1208,136 @@ $count++;
             if ($result == true) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
         } 
     }
+ // Exam marks import
+ public function importExamInfo(){
+    $config=['upload_path' => './upload/',
+    'allowed_types' => 'xlsx|csv|xls','max_size' => '102400','overwrite' => TRUE,
+    ];
+    $this->load->library('upload', $config);
+    if (!$this->upload->do_upload('excelFile')) {
+        $error = array('error' => $this->upload->display_errors());
+    } else { 
+        $data = array('upload_data' => $this->upload->data());
+    }
+   if (!empty($data['upload_data']['file_name'])) {
+        $import_xls_file = $data['upload_data']['file_name'];
+    } else {
+        $import_xls_file = 0;
+    }
+    $inputFileName = 'upload/'. $import_xls_file;
+   
+    try {
+        $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+        $objPHPExcel = $objReader->load($inputFileName);
+    } catch (Exception $e) {
+        die('Error loading file "' . pathinfo($inputFileName, PATHINFO_BASENAME)
+                . '": ' . $e->getMessage());
+    }
+   
+    $excelValues = array();
+    $excelValues2 = array();
+    $sheetCount = $objPHPExcel->getSheetCount();
+    $sheetNames = $objPHPExcel->getSheet();
+    //sheet index
+    $objWorksheet = $objPHPExcel->setActiveSheetIndex(0);
+    $row_index = $objWorksheet->getHighestRow(); 
+    $col_name = $objWorksheet->getHighestColumn();
+    $headings = array();
+    $cell_config = array(); 
+    $row_count = 1;
+    $highestRow = $objWorksheet->getHighestDataRow(); 
+    $highestColumn = $objWorksheet->getHighestDataColumn();
+    $total_fields = 2;
+    $count = 0;
+    $sub_name = array();
+    $startingColumn = 'C'; // The column to start from
+    $endingColumn = 'P';   // The column to end at
+
+    $sub_name = array();
+
+    for ($j = $startingColumn; $j <= $endingColumn; $j = chr(ord($j) + 2)) {
+        $sub_column = $objWorksheet->getCellByColumnAndRow(ord($j) - ord('C') + 2, 1)->getFormattedValue();
+        array_push($sub_name, $sub_column);
+    }
+
+            for ($i = 2; $i <= $highestRow; $i++) {
+                $student_id = $objWorksheet->getCellByColumnAndRow(1, $i)->getFormattedValue();
+                $pass_status = $objWorksheet->getCellByColumnAndRow(16, $i)->getFormattedValue();
+                // $sat_number = $objWorksheet->getCellByColumnAndRow(15, $i)->getFormattedValue();
+                // $enrollment_no = $objWorksheet->getCellByColumnAndRow(16, $i)->getFormattedValue();
+                    $studentInfo = $this->settings->getStudentByStudentId($student_id);
+                    
+
+                    $startColumnIndex = 2;
+                    for ($j = 0; $j < count($sub_name); $j++) {
+
+                        $temp_sub_code = $sub_name[$j]; // Create a temporary variable to hold the modified subject code
+
+                        if ($sub_name[$j] == 'Language') {
+                            if ($studentInfo->elective_sub == 'KANNADA') {
+                                $temp_sub_code = '01';
+                            } else if ($studentInfo->elective_sub == 'HINDI') {
+                                $temp_sub_code = '03';
+                            } else if ($studentInfo->elective_sub == 'FRENCH') {
+                                $temp_sub_code = '12';
+                            }else if ($studentInfo->elective_sub == 'URDU') {
+                                $temp_sub_code = '08';
+                            }
+                        }
+
+                        // if($pass_status == 'PASS'){
+                        //     $pass = 'PASS';
+                        // }else{
+                        //     $pass = 'FAIL';
+                        // }
+
+                        $obt_theory_mark = $objWorksheet->getCellByColumnAndRow($startColumnIndex, $i)->getFormattedValue();
+                        $obt_lab_mark = $objWorksheet->getCellByColumnAndRow($startColumnIndex + 1, $i)->getFormattedValue();
+                      
+
+                        $isExists = $this->settings->checkmarkExists($student_id, $temp_sub_code,'ANNUAL_IMPORT','2023-24');
+
+                        $isExistsStudent = $this->settings->getStudentByStudentId($student_id);
+                        
+                        if(!empty($isExistsStudent)){
+                            if(empty($isExists)){
+                                // Check if both obt_theory_mark and obt_lab_mark are not empty
+                                if (!empty($obt_theory_mark) && !empty($obt_lab_mark)) {
+                                $info = array(
+                                    'student_id' => trim($student_id),
+                                    'subject_code' => trim($temp_sub_code),
+                                    'obt_theory_mark' => trim($obt_theory_mark),
+                                    'obt_lab_mark' => trim($obt_lab_mark),
+                                    'exam_year' => '2023-24',
+                                    'exam_type' => 'ANNUAL_IMPORT',
+                                    'is_deleted' => '0',
+                                    'staff_updated_status' =>'1',
+                                    'created_by' => $this->staff_id,
+                                    'created_date_time' => date('Y-m-d H:i:s')
+                                );
+                                $result = $this->settings->addMarkInfo($info);
+                            }
+                        }
+                        }else{
+                            log_message('debug','student'.$student_id);
+                        }
+                       
+                            $startColumnIndex += 2;
+                    }
+
+                    if(!empty($isExistsStudent)){
+                        $studentInfo = array(
+                            'pass_status' => trim($pass_status),
+                            'updated_by'=> $this->staff_id, 
+                            'updated_date_time'=>date('Y-m-d H:i:s')
+                        );
+
+                        $result2 = $this->settings->updateStudentInfo($studentInfo,$student_id);
+                    }
+            }
+                redirect('viewSettings');
+        }
 
 
 }

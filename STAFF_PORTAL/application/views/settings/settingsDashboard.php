@@ -882,6 +882,29 @@ if ($error) {
                 </div>
             </div>
         </div> 
+
+        <div class="col-lg-6 col-md-6 col-12 mb-2">
+            <div class="card card-small">
+                <div class="card-header border-bottom card_head_dashboard">
+                    <h6 class="m-0 text-dark">Exam Marks Import</h6>
+                </div>
+                <div class="card-body d-flex flex-column p-1">
+                    <?php $this->load->helper("form"); ?>
+                        <form role="form" action="<?php echo base_url() ?>importExamInfo" method="POST" role="form" enctype="multipart/form-data" >
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="file" class="form-control" id="excelFile" name="excelFile" >
+                                <label for="fname">Select a Excel File</label>
+                                <img src="<?php echo base_url(); ?>assets/dist/img/excel.png"  class="avatar  img-thumbnail" width="50"  height="10" src="#" id="uploadedImage" name="userfile" width="130" height="130" alt="avatar" >     
+                            </div>
+                            <div class="col-6">
+                                <input  type="submit" class="btn btn-success btn-block" value="Submit" />
+                            </div>
+                        </div>
+                        </form>
+                </div>
+            </div>
+        </div>
       <?php } ?>
           
     </div>

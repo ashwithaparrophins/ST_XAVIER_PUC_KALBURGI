@@ -439,4 +439,44 @@ class Settings_model extends CI_Model{
 
     }
 
+    public function getStudentByStudentId($student_id){
+        $this->db->select('student.row_id,student.blood_group,student.student_no,student.application_no,student.register_no, 
+        student.student_id,student.hall_ticket_no,student.student_name,student.elective_sub,student.dob,student.mobile,student.email,
+        student.date_of_admission,student.roll_number,student.gender,student.student_status,student.residential_address,
+        student.pu_board_number,student.category,student.last_board_name,student.present_address,student.permanent_address,
+        student.father_name,student.father_mobile,student.mother_name,student.mother_mobile,student.program_name,student.stream_name,
+        student.intake_year,student.term_name,student.section_name,student.elective_sub');
+        $this->db->from('tbl_students_info as student');
+        $this->db->where('student.student_id', $student_id);
+        $this->db->where('student.is_active', 1);
+        $this->db->where('student.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function checkmarkExists($student_id, $subject_code,$exam_type,$year) {
+        $this->db->from('tbl_college_internal_exam_marks as exam');
+        $this->db->where('exam.student_id',$student_id);
+        $this->db->where('exam.subject_code',$subject_code);
+        $this->db->where('exam.exam_type','ANNUAL_IMPORT');
+        $this->db->where('exam.exam_year','2023-24');
+        $this->db->where('exam.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function addMarkInfo($info) {
+        $this->db->trans_start();
+        $this->db->insert('tbl_college_internal_exam_marks', $info);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+
+    public function updateStudentInfo($acInfo, $register_no){
+        $this->db->where('student_id', $register_no);
+        $this->db->update('tbl_students_info', $acInfo);
+        return TRUE;
+    }
+
 }
