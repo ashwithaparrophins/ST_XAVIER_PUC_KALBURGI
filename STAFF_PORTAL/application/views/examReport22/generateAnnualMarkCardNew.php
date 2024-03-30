@@ -504,11 +504,10 @@ foreach ($studentsRecords as $record) {
                         // 
                     } else {
                          $final_result = 'PROMOTED';
-                        // $final_result =  calculateResult($overall_total, $max_mark);
                     }
 
                     if(strtoupper($record->pass_status) == "PASS"){
-                        $final_result = 'PROMOTED';
+                        $final_result =  calculateResult($overall_total, $max_mark);
                     }else{
                         $final_result = 'DETAINED';
                     }
@@ -773,15 +772,15 @@ function calculateResult($total_marks, $max_mak)
 {
     $percentage = floor(($total_marks / $max_mak) * 100);
     if ($percentage >= 85) {
-        return "Promoted";
+        return "Distinction";
     } else if ($percentage >= 60 && $percentage <= 84) {
-        return "Promoted";
+        return "I Class";
     } else if ($percentage >= 50 && $percentage <= 59) {
-        return "Promoted";
+        return "II Class";
     } else if ($percentage >= 35 && $percentage <= 49) {
-        return "Promoted";
+        return "III Class";
     } else {
-        return "Promoted";
+        return "PASS";
     }
 }
 
