@@ -288,11 +288,11 @@ foreach ($studentsRecords as $record) {
                 if ($elective_sub == "KANNADA") {
                     array_push($subjects_code, '01','02');
                 } else if ($elective_sub == 'HINDI') {
-                    array_push($subjects_code, '02','03');
+                    array_push($subjects_code, '03','02');
                 } else if ($elective_sub == 'FRENCH') {
-                    array_push($subjects_code, '02','12');
+                    array_push($subjects_code, '12','02');
                 } else if ($elective_sub == 'EX') {
-                    array_push($subjects_code, '02','EX');
+                    array_push($subjects_code, 'EX','02');
                 }  else {
                     $exam_status = true;
                 }
