@@ -262,17 +262,17 @@ foreach ($studentsRecords as $record) {
                             <td><b>&nbsp;<?php echo strtoupper($record->mother_name); ?></b></td>
                            
                             <td width="180">
-                                <p> ಸ್ಯಾಟ್ಸ್ ಸಂಖ್ಯೆ </p>SATS No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo strtoupper($record->sat_number); ?></b>
+                                <p> ಪರೀಕ್ಷಾ ವರ್ಷ/ ತಿಂಗಳು </p>Exam Year /Month : &nbsp;&nbsp;<b>2024/ March</b>
                             </td>
                         </tr>
                         <tr>
-                            <td width="180">
+                            <td width="180" >
                                 <p> ತಂದೆಯ ಹೆಸರು </p>Father's Name
                             </td>
-                            <td><b>&nbsp;<?php echo strtoupper($record->father_name); ?></b></td>
-                            <td width="180">
-                                <p> ಪರೀಕ್ಷಾ ವರ್ಷ/ ತಿಂಗಳು </p>Exam Year /Month : &nbsp;&nbsp;<b>2024/ March</b>
-                            </td>
+                            <td colspan="2"><b>&nbsp;<?php echo strtoupper($record->father_name); ?></b></td>
+                            <!-- <td width="190"> -->
+                                <!-- <p> ಪರೀಕ್ಷಾ ವರ್ಷ/ ತಿಂಗಳು </p>Exam Year /Month : &nbsp;&nbsp;<b>2024/ March</b> -->
+                            <!-- </td> -->
                         </tr>
                     </table>
                 
