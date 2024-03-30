@@ -354,7 +354,7 @@ foreach ($studentsRecords as $record) {
                                 }
                     ?>
                                 <tr>
-                                    <td style="padding:7px;border-top:none;border-bottom:none;"> <?php echo $subjectInfo["sub_name"]; ?></td>
+                                    <td style="padding:7px;border-top:none;border-bottom:none;"> <?php echo $subjectInfo["name"]; ?></td>
                                     <td class="text-center" style="border-top:none;border-bottom:none;"><?php echo $subject ?></td>
                                     <td class="text-center" style="border-top:none;border-bottom:none;">100</td>
                                      <td class="text-center" style="border-top:none;border-bottom:none;"><?php 
@@ -396,7 +396,7 @@ foreach ($studentsRecords as $record) {
                             }
                             ?>
                             <tr>
-                                <td style="padding:7px;border-bottom:none;border-top:none;"><?php echo $subjectInfo["sub_name"]; ?></td>
+                                <td style="padding:7px;border-bottom:none;border-top:none;"><?php echo $subjectInfo["name"]; ?></td>
                                 <td class="text-center" style="border-bottom:none;border-top:none;"><?php echo $subject ?></td>
                                 <td class="text-center" style="border-bottom:none;border-top:none;">100</td>
                                 <td class="text-center" style="border-bottom:none;border-top:none;"><?php echo $mark_obt; ?></td>
@@ -468,7 +468,7 @@ foreach ($studentsRecords as $record) {
                         }
                     ?>
                         <tr>
-                            <td style="padding:7px;border-bottom:none;border-top:none;"><?php echo $subjectInfo["sub_name"]; ?></td>
+                            <td style="padding:7px;border-bottom:none;border-top:none;"><?php echo $subjectInfo["name"]; ?></td>
                             <td class="text-center" style="border-bottom:none;border-top:none;"><?php echo $sub_code ?></td>
                             <td class="text-center" style="border-bottom:none;border-top:none;">100</td>
  
@@ -584,8 +584,8 @@ foreach ($studentsRecords as $record) {
             <?php $issue_date = 'Date: ' . date("d/m/Y") . '';  ?>
 
         </div>
-        <br><br>
-        <table style="">
+        <br><br><br>
+        <table style="margin-top:10px">
             <tr class="m-0">
                 <td>
                     <div class="m-0">
