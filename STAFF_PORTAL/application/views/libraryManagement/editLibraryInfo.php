@@ -166,7 +166,7 @@ if ($warning) {
                                         <div class="col-md-4 col-12">
                                             <div class="form-group">
                                                 <label for="book_title">No. of copies</label>
-                                                <input type="text" class="form-control required" id="no_of_copies" name="no_of_copies" value="<?php echo $libraryInfo->no_of_copies; ?>" placeholder="Enter No. of copies" autocomplete="off"  />
+                                                <input type="text" class="form-control required" id="no_of_copies" name="no_of_copies" value="<?php echo $libraryInfo->no_of_copies; ?>" placeholder="Enter No. of copies" autocomplete="off"  readonly/>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-12">
@@ -263,7 +263,8 @@ if ($warning) {
         jQuery('.datepicker').datepicker({
             autoclose: true,
             orientation: "bottom",
-            format: "dd-mm-yyyy"
+            // format: "dd-mm-yyyy"
+            dateFormat: "dd-mm-yy" 
 
         });
 

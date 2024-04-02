@@ -155,11 +155,11 @@ if ($success) {
                                             <input type="text" value="<?php echo $fine; ?>" name="fine" id="fine" class="form-control input-sm" placeholder="By fine" autocomplete="off">
                                         </div>
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         <div class="form-group mb-0">
                                             <input type="text" value="<?php echo $remarks; ?>" name="remarks" id="remarks" class="form-control input-sm" placeholder="Remarks" autocomplete="off">
                                         </div>
-                                    </td>
+                                    </td> -->
                                     <td>
                                         <button type="submit" class="btn btn-success btn-block mobile-width"><i class="fa fa-filter"></i> Filter</button>
                                     </td>
@@ -177,7 +177,7 @@ if ($success) {
                                     <th>Returned Date</th>
                                     <!-- <th>Days Delayed</th> -->
                                     <th>Fine</th>
-                                    <th>Remarks</th>
+                                    <!-- <th>Remarks</th> -->
                                     <th width="130">Action</th>
                                 </tr>
                             </thead>
@@ -207,7 +207,7 @@ if ($success) {
                                             <th class="text-center"><?php echo $DD; ?></th>
                                             <!-- <th class="text-center"><?php echo $library->days_delayed; ?></th> -->
                                             <th class="text-center"><?php echo $library->fine; ?></th>
-                                            <th class="text-left"><?php echo $library->remarks; ?></th>
+                                            <!-- <th class="text-left"><?php echo $library->remarks; ?></th> -->
                                             <th class="text-left">
                                                 <!-- <span><a href="#" data-toggle="popover" data-content="Comment: <?php echo  $adm->comment; ?> <br/> "><span class="badge badge-primary"> <i class="fa fa-info-circle"></i></span></a></span> -->
                                                 <?php $status = $info->getAccessData($library->access_code);

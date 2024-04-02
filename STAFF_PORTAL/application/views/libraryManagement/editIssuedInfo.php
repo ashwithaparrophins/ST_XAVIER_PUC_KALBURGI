@@ -155,7 +155,8 @@ if ($warning) {
         jQuery('.datepicker').datepicker({
             autoclose: true,
             orientation: "bottom",
-            format: "dd-mm-yyyy"
+            // format: "dd-mm-yyyy"
+            dateFormat: "dd-mm-yy" 
 
         });
 
