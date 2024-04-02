@@ -1135,3 +1135,9 @@ $route['getCancelReceiptReport'] = "reports/getCancelReceiptReport";
 
  $route['getAnnualMarkCardToPrint2024/(:any)'] = "students/getAnnualMarkCardToPrint2024/$1";
 $route['getAnnualMarkCardToPrint2024'] = "students/getAnnualMarkCardToPrint2024";
+
+
+
+//staff app
+
+$route['checkIsExist'] = 'apistaff/checkIsExist';
