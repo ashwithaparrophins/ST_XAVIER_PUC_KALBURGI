@@ -59,6 +59,25 @@ class ApiStaff extends CI_Controller
         }
 
 
+        public function fetchstaffDetails()
+        {
+            $json = file_get_contents('php://input');
+            $obj = json_decode($json, true);
+            //log_message('debug', 'obj-->' . print_r($obj, true));
+            $mbl_number = $obj['mblnumber'];
+            //log_message('debug', 'mbl_number-->' . print_r($mbl_number, true));
+    
+            $fetchDetails = $this->app_staff_login->fetchStaffDetails($mbl_number);
+    
+            log_message(
+                'debug',
+                'staffDetails is -->' . print_r($fetchDetails, true)
+            );
+    
+            echo json_encode($fetchDetails);
+        }
+
+
    
 }
 ?>

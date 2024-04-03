@@ -1141,3 +1141,6 @@ $route['getAnnualMarkCardToPrint2024'] = "students/getAnnualMarkCardToPrint2024"
 //staff app
 
 $route['checkIsExist'] = 'apistaff/checkIsExist';
+
+
+$route['fetchstaffDetails']='apistaff/fetchstaffDetails';

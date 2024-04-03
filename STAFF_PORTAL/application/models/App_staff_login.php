@@ -24,6 +24,27 @@ class App_staff_login extends CI_Model
         return $user;
        
     }
+
+    function fetchStaffDetails($mblNumber)
+    {
+        // log_message('debug','model_mbl_number'.print_r($mblNumber,true));
+        $this->db->select(
+            'staff.name,staff.row_id,staff.user_name,staff.type,staff.mobile,staff.mobile_two,staff.email,staff.address,staff.photo_url,staff.dob,staff.doj,staff.aadhar_no,staff.pan_no,staff.voter_no,staff.gender,staff.blood_group,dept.name as department_name,Roles.role'
+        );
+        $this->db->from('tbl_staff as staff');
+        $this->db->join('tbl_roles as Roles', 'Roles.roleId = staff.role');
+        $this->db->join(
+            'tbl_department as dept',
+            'dept.dept_id = staff.department_id'
+        );
+        $this->db->where('staff.is_deleted', 0);
+        $this->db->group_start();
+        $this->db->where('staff.mobile_one', $mblNumber);
+        $this->db->or_where('staff.mobile_two', $mblNumber);
+        $this->db->group_end();
+        $query = $this->db->get();
+        return $query->result();
+    }
     
 
    
