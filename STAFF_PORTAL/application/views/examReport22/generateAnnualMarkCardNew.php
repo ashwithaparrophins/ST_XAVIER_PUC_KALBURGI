@@ -303,14 +303,17 @@ foreach ($studentsRecords as $record) {
                 <table class="table table_bordered" style="margin-top:20px">
                     <tr class="text-center">
                         <td width="180"  class="text-center">ವಿಷಯಗಳು &nbsp;Subjects</td>
-                        <td width="110" rowspan="2" class="text-center">ವಿಷಯದ ಸಂಕೇತ<br>Subject Code</td>
-                        <td width="100" rowspan="2" class="text-center">ಗರಿಷ್ಠಾಂಕ<br>Max. Marks</td>
-                        <td width="285" colspan="2" class="text-center">ಪಡೆದ ಅಂಕಗಳು<br>Marks Obtained</td>
+                        <td width="100" rowspan="2" class="text-center">ವಿಷಯದ ಸಂಕೇತ<br>Subject Code</td>
+                        <td width="50" rowspan="2" class="text-center">ಗರಿಷ್ಠಾಂಕ<br>Max. Marks</td>
+                        <td width="50" rowspan="2" class="text-center">ಕನಿಷ್ಠಾಂಕ<br>Min. Marks</td>
+                        <td width="285" colspan="4" class="text-center">ಪಡೆದ ಅಂಕಗಳು<br>Marks Obtained</td>
                     </tr>
                     <tr class="text-center">
                         <td class="text-center">ಭಾಗ 1 - ಭಾಷೆಗಳು<br>&nbsp;&nbsp;&nbsp;Part I - Languages</td>
-                        <td width="80" class="text-center">ಅಂಕಿಗಳಲ್ಲಿ<br>In Figures</td>
-                        <td width="260" class="text-center">ಅಕ್ಷರಗಳಲ್ಲಿ<br>In Words</td>
+                        <td width="50" class="text-center">ಸಿದ್ಧಾಂತ<br>Theory</td>
+                        <td width="50" class="text-center">ಪ್ರಾಯೋಗಿಕ<br>Practical</td>
+                        <td width="50" class="text-center">ಒಟ್ಟು<br>Total</td>
+                        <td width="200" class="text-center">ಅಕ್ಷರಗಳಲ್ಲಿ<br>In Words</td>
                     </tr>
                     <!-- <tr>
                         <td class="text-center" colspan="4">ಭಾಗ - 1 ಭಾಷೆಗಳು<br>PART-I Languages</td>
@@ -357,6 +360,9 @@ foreach ($studentsRecords as $record) {
                                     <td style="padding:7px;border-top:none;border-bottom:none;"> <?php echo $subjectInfo["name"]; ?></td>
                                     <td class="text-center" style="border-top:none;border-bottom:none;"><?php echo $subject ?></td>
                                     <td class="text-center" style="border-top:none;border-bottom:none;">100</td>
+                                    <td class="text-center" style="border-top:none;border-bottom:none;">35</td>
+                                    <td class="text-center" style="border-top:none;border-bottom:none;"><?php echo $stdMarkInfo['obt_theory_mark']; ?></td>
+                                    <td class="text-center" style="border-top:none;border-bottom:none;"><?php echo $stdMarkInfo['obt_lab_mark']; ?></td>
                                      <td class="text-center" style="border-top:none;border-bottom:none;"><?php 
                                      if($stdMarkInfo['obt_theory_mark'] == 'A'){
                                          echo 'A';
@@ -369,6 +375,8 @@ foreach ($studentsRecords as $record) {
                                 </tr>
                             <?php
                                 $overall_total += $mark_obt;
+                                $total_theory +=  $stdMarkInfo['obt_theory_mark'];
+                                $total_lab += $stdMarkInfo['obt_lab_mark'];
                             }
                         } else {
                             $max_mark = 500;
@@ -399,11 +407,16 @@ foreach ($studentsRecords as $record) {
                                 <td style="padding:7px;border-bottom:none;border-top:none;"><?php echo $subjectInfo["name"]; ?></td>
                                 <td class="text-center" style="border-bottom:none;border-top:none;"><?php echo $subject ?></td>
                                 <td class="text-center" style="border-bottom:none;border-top:none;">100</td>
+                                <td class="text-center" style="border-top:none;border-bottom:none;">35</td>
+                                <td class="text-center" style="border-top:none;border-bottom:none;"><?php echo $stdMarkInfo['obt_theory_mark']; ?></td>
+                                <td class="text-center" style="border-top:none;border-bottom:none;"><?php echo $stdMarkInfo['obt_lab_mark']; ?></td>
                                 <td class="text-center" style="border-bottom:none;border-top:none;"><?php echo $mark_obt; ?></td>
                                 <td style="border-bottom:none;border-top:none;"><?php  if($mark_obt == 'A'){echo "Absent";}else{echo convert_number($mark_obt) .' Only';} ?></td>
                             </tr>
                     <?php
                             $overall_total += $mark_obt;
+                            $total_theory += $stdMarkInfo['obt_theory_mark'];
+                            $total_lab += $stdMarkInfo['obt_lab_mark'];
                         }
                     } ?>
                     
@@ -415,6 +428,9 @@ foreach ($studentsRecords as $record) {
                             <td class="text-center" style="border-bottom:none;border-top:none;"><?php echo $sub_code ?></td>
                             <td class="text-center" style="border-bottom:none;border-top:none;">EX</td>
                             <td class="text-center" style="border-bottom:none;border-top:none;">EX</td>
+                            <td class="text-center" style="border-bottom:none;border-top:none;">EX</td>
+                            <td class="text-center" style="border-bottom:none;border-top:none;">EX</td>
+                            <td class="text-center" style="border-bottom:none;border-top:none;">EX</td>
 
 
                             <td style="border-bottom:none;border-top:none;">Exemption</td>
@@ -422,7 +438,7 @@ foreach ($studentsRecords as $record) {
                         <?php } ?>
                     <tr>
                         <td class="text-center">ಭಾಗ 2 - ಐಚ್ಛಿಕ ವಿಷಯಗಳು<br>Part II - Optionals</td>
-                        <td class="text-center" colspan="4"></td>
+                        <td class="text-center" colspan="7"></td>
                     </tr>
                     <?php
                     $subject_total = array();
@@ -463,6 +479,8 @@ foreach ($studentsRecords as $record) {
                                 $fail_flag = true;
                             }
                             $total_mark += $mark_obt_lab + $mark_obt;
+                            $total_theory += $mark_obt;
+                            $total_lab += $mark_obt_lab;
                             $subject_total[$i] = $total_mark_sub;
                             $i++;
                         }
@@ -471,6 +489,9 @@ foreach ($studentsRecords as $record) {
                             <td style="padding:7px;border-bottom:none;border-top:none;"><?php echo $subjectInfo["name"]; ?></td>
                             <td class="text-center" style="border-bottom:none;border-top:none;"><?php echo $sub_code ?></td>
                             <td class="text-center" style="border-bottom:none;border-top:none;">100</td>
+                            <td class="text-center" style="border-top:none;border-bottom:none;">35</td>
+                            <td class="text-center" style="border-top:none;border-bottom:none;"><?php echo $stdMarkInfo['obt_theory_mark']; ?></td>
+                            <td class="text-center" style="border-top:none;border-bottom:none;"><?php echo $stdMarkInfo['obt_lab_mark']; ?></td>
  
                         <td class="text-center" style="border-bottom:none;border-top:none;"><?php if($stdMarkInfo['obt_lab_mark'] == 'A' || $stdMarkInfo['obt_theory_mark'] == 'A'){echo 'A'; }else{ echo $total_mark_sub; } ?></td>
 
@@ -518,18 +539,21 @@ foreach ($studentsRecords as $record) {
                     <tr>
                         <td colspan="2" class="" style="text-align:right">ಒಟ್ಟು ಅಂಕಗಳು<br>Total Marks</td>
                         <th class="text-center"><?php echo $max_mark; ?></th>
+                        <th class="text-center">210</th>
+                        <th class="text-center"><?php echo $total_theory; ?></th>
+                        <th class="text-center"><?php echo $total_lab; ?></th>
                         <th class="text-center"><?php echo $overall_total; ?></th>
                         <td>ಪ್ರತಿಶತ<br>Percentage  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $percentage; ?></td>
                         <!-- <td><?php echo $total_marks_words . ' Only'; ?></td> -->
                     </tr>
                     <tr class="text-left" style="font-size: 16px;">
-                        <td colspan="4" style="padding:7px !important;text-align: left!important;" class="text-left">&nbsp;ಅಂಕಗಳು ಅಕ್ಷರಗಳಲ್ಲಿ<br>&nbsp;Marks in words<b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $total_marks_words . ' Only'; ?> </b></td>
+                        <td colspan="7" style="padding:7px !important;text-align: left!important;" class="text-left">&nbsp;ಅಂಕಗಳು ಅಕ್ಷರಗಳಲ್ಲಿ<br>&nbsp;Marks in words<b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $total_marks_words . ' Only'; ?> </b></td>
                         <td style="">ಪಡೆದ ದರ್ಜೆ<br>Class Obtained &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b class="text-center"><?php echo $final_result; ?></b></td>
                         <!-- <td></td> -->
                     </tr>
                     <tr class="text-left" style="font-size: 16px;">
                         <td  style="padding:7px !important;text-align: left!important;" class="text-left">&nbsp;ಕಾಲೇಜು ಸಂಕೇತ ಸಂಖ್ಯೆ<br>&nbsp;College Code No.<b>&nbsp;&nbsp;&nbsp;KK0267 </b></td>
-                        <td colspan="4" style=""> &nbsp;ಕಾಲೇಜು &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ST XAVIER'S PRE–UNIVERSITY COLLEGE</b><br>&nbsp;College &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:11px"><b>N.H 50, SIRNOOR KALABURAGI - 585308</b></span></td>
+                        <td colspan="7" style=""> &nbsp;ಕಾಲೇಜು &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ST XAVIER'S PRE–UNIVERSITY COLLEGE</b><br>&nbsp;College &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:11px"><b>N.H 50, SIRNOOR KALABURAGI - 585308</b></span></td>
                         <!-- <td></td> -->
                     </tr>
                 </table>
