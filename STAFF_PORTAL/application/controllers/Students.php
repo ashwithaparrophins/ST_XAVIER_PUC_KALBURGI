@@ -716,7 +716,7 @@ class Students extends BaseController
             $character = $this->security->xss_clean($this->input->post('character'));
             $leaving_date = date("Y-m-d", strtotime($leaving_date));
             // $appliedYear =  date('Y');
-            $appliedYear =  2023;
+            $appliedYear =  CURRENT_YEAR;
             $admissionDate = date("Y-m-d", strtotime($admission_date));
 
             $isExists = $this->student->checkTCNumberExists($student_id,$appliedYear);
