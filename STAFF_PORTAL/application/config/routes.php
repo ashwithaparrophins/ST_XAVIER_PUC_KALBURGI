@@ -1144,3 +1144,15 @@ $route['checkIsExist'] = 'apistaff/checkIsExist';
 
 
 $route['fetchstaffDetails']='apistaff/fetchstaffDetails';
+
+$route['leaveType'] = 'apistaff/leaveType';
+
+$route['listLeaveInfo'] = 'apistaff/listLeaveInfo';
+
+$route['applyLeaveWithoutDoc']='apistaff/applyLeaveWithoutDoc';
+
+$route['listLeaveHistory']='apistaff/listLeaveHistory';
+
+$route['cancellLeave']='apistaff/cancellLeave';
+
+$route['applyLeaveWithDoc']='apistaff/applyLeaveWithDoc';

@@ -29,7 +29,7 @@ class App_staff_login extends CI_Model
     {
         // log_message('debug','model_mbl_number'.print_r($mblNumber,true));
         $this->db->select(
-            'staff.name,staff.row_id,staff.user_name,staff.type,staff.mobile,staff.mobile_two,staff.email,staff.address,staff.photo_url,staff.dob,staff.doj,staff.aadhar_no,staff.pan_no,staff.voter_no,staff.gender,staff.blood_group,dept.name as department_name,Roles.role'
+            'staff.name,staff.row_id,staff.staff_id,staff.user_name,staff.type,staff.mobile,staff.mobile_two,staff.email,staff.address,staff.photo_url,staff.dob,staff.doj,staff.aadhar_no,staff.pan_no,staff.voter_no,staff.gender,staff.blood_group,dept.name as department_name,Roles.role'
         );
         $this->db->from('tbl_staff as staff');
         $this->db->join('tbl_roles as Roles', 'Roles.roleId = staff.role');
@@ -44,6 +44,40 @@ class App_staff_login extends CI_Model
         $this->db->group_end();
         $query = $this->db->get();
         return $query->result();
+    }
+
+    function fetchLeaveMangementInfo($staffID)
+    {  
+        $this->db->from('tbl_staff_leave_management');
+        $this->db->where('is_deleted', 0);
+        $this->db->where('staff_id', $staffID);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function applyLeaveInsert($info){
+        $this->db->trans_start();
+        $this->db->insert('tbl_staff_applied_leave', $info);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+
+    function getLeaveHistory($staff_id)
+    {
+        
+        $this->db->from('tbl_staff_applied_leave');
+        $this->db->where('staff_id', $staff_id);
+        $this->db->where('is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function cancellLeave($leaveRowId,$info)
+    {
+        $this->db->where("row_id", $leaveRowId); 
+        $this->db->update("tbl_staff_applied_leave", $info);
+        return 1;
     }
     
 
