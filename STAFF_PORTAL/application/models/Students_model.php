@@ -9,7 +9,7 @@ class students_model extends CI_Model
         $this->db->select('student.row_id,student.blood_group,student.student_no,student.application_no,student.register_no, 
         student.student_id,student.hall_ticket_no,student.student_name,student.elective_sub,student.dob,student.mobile,student.email,
         student.date_of_admission,student.roll_number,student.gender,student.student_status,student.residential_address,
-        student.pu_board_number,student.category,student.last_board_name,student.present_address,student.permanent_address,
+        student.pu_board_number,student.category,student.last_board_name,student.present_address,student.permanent_address,student.new_admitted,
         student.father_name,student.father_mobile,student.mother_name,student.mother_mobile,student.program_name,student.stream_name,
         student.intake_year,student.term_name,student.section_name,student.elective_sub');
         $this->db->from('tbl_students_info as student'); 
@@ -84,7 +84,44 @@ class students_model extends CI_Model
         $query = $this->db->get();
         return $query->num_rows();
     }
-
+    public function getAllstudentNewAdmiitedCount($filter,$student){
+        $this->db->from('tbl_students_info as student'); 
+        // $this->db->join('tbl_student_academic_info as academic', 'student.application_no = student.application_no');
+            
+        if(!empty($filter['student_id'])){
+            $likeCriteria = "(student.student_id  LIKE '%" . $filter['student_id'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['application_no'])){
+            $this->db->where('student.application_no', $filter['application_no']);
+        }
+        if(!empty($filter['by_name'])){
+            $likeCriteria = "(student.student_name  LIKE '%" . $filter['by_name'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['by_term'])){
+            $this->db->where('student.term_name', $filter['by_term']);
+        }
+        if(!empty($filter['by_stream'])){
+            $this->db->where('student.stream_name', $filter['by_stream']);
+        }
+        if(!empty($filter['by_Section'])){
+            $this->db->where('student.section_name', $filter['by_Section']);
+        }
+        if(!empty($filter['by_elective'])){
+            $this->db->where('student.elective_sub', $filter['by_elective']);
+        }
+        if(!empty($student)){
+            $this->db->where_in('student.row_id', $student);
+        }
+        $this->db->where('student.intake_year', '2024-2025');
+        $this->db->where('student.is_deleted', 0);
+        $this->db->where('student.is_active', 1);
+        $this->db->where('student.new_admitted', 0);
+        // $this->db->where('student.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
     
     public function getAlumniStudentInfo($filter){
         $this->db->select('student.row_id,student.blood_group,student.student_no,student.application_no,student.register_no, 

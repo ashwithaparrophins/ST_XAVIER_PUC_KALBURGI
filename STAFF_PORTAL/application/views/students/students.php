@@ -262,6 +262,9 @@ if ($error) {
                                                 $fee_status = '<span class="text-danger">'.$std_status['balance'].'</span>';
                                             }
                                         }
+                                        if ($std->intake_year == '2024-2025' && $std->new_admitted == 0) {                                         
+                                            continue; // Skip to the next iteration to avoid displaying this student in the main list
+                                        }
                                     ?>
                                     <tr>
                                         <th><input type="checkbox" class="singleSelect" value="<?php echo $std->student_id; ?>" /></th>

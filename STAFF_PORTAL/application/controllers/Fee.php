@@ -2586,7 +2586,6 @@ public function processTheFeePayment(){
 
                     $filter['term_name'] = $term_name;
                     $data['year'] = $filter['fee_year'] = CURRENT_YEAR;
-                 
                     $total_fee_obj = $this->fee->getTotalFeeAmount($filter);  
                     if($studentInfo->std_status  == 1){ //std_status = 1,then std is rejected
                         $paidFee = $this->fee->getTotalFeePaidInfo($application_no,CURRENT_YEAR);
@@ -3004,6 +3003,10 @@ public function processTheFeePayment(){
                     
                     // }
             
+                    $studentInfoStatus = array(
+                        'new_admitted' => 1,
+                        'updated_date_time' => date('Y-m-d H:i:s'));
+                    $this->student->updateStudentInfo($studentInfoStatus,$application_no);
     
         
             
