@@ -750,6 +750,7 @@ class Application extends BaseController {
                              'is_admitted' => 1,
                              'admission_status'=>1,
                              'intake_year' => '2024-2025',
+                             'intake_year_id' => '2024',
                              'native_place'=>$studentApplicationInfo->native_place,
                              'last_percentage'=>$studentApplicationStatus->sslc_percentage,
                              'mother_name' =>$studentApplicationInfo->mother_name,
