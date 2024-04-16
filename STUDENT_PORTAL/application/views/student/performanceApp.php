@@ -340,20 +340,20 @@ $base_url = 'https://sjpuc.schoolphins.com/student/'; ?>
                                     </li>
                                     
 
-                                    <!-- <li class="nav-item">
+                                    <li class="nav-item">
 
                                     <a class="nav-link" id="midTerm-tab" data-toggle="tab" href="#midTerm"
 
                                         role="tab" aria-controls="family" aria-selected="true">Mid Term Exam</a>
 
-                                </li> -->
+                                </li>
 
-                                <!-- <li class="nav-item">
+                                <li class="nav-item">
 
                                         <a class="nav-link" id="secondTest-tab" data-toggle="tab" href="#secondTest"
                                             role="tab" aria-controls="secondTest" aria-selected="false">II Unit Test</a>
 
-                                    </li> -->
+                                    </li>
 
                                     <?php //} ?>
 
