@@ -188,12 +188,13 @@ foreach ($studentsRecords as $record) {
         <div class="container">
             <div class="row ">
                 <div class="col-12">
-                    <div class="text-center "><img src="<?php echo base_url(); ?>assets/dist/img/gov_logo.png" height="65" alt=" Logo" class="sjpuc_logo" /></div>
+                    <div class="text-center "><img src="<?php echo base_url(); ?>assets/dist/img/logo_stxpuc.jpg" height="65" alt=" Logo" class="sjpuc_logo" /></div>
 
-                    <div class="text-center heading"><b>ಕರ್ನಾಟಕ ಸರ್ಕಾರ</b></div>
-                    <div class="text-center heading"><b>GOVERNMENT OF KARNATAKA</b></div>
-                    <div class="text-center heading"><b>ಶಾಲಾ ಶಿಕ್ಷಣ ಇಲಾಖೆ (ಪದವಿ ಪೂರ್ವ)</b></div>
-                    <div class="text-center heading"><b>DEPARTMENT OF SCHOOL EDUCATION (PRE-UNIVERSITY)</b></div>
+                    <!-- <div class="text-center heading"><b>ಕರ್ನಾಟಕ ಸರ್ಕಾರ</b></div> -->
+                    <div class="text-center heading" style="font-size:16px"><b>ST XAVIER'S PRE–UNIVERSITY COLLEGE, KALABURAGI</b></div>
+                    <!-- <div class="text-center heading"><b>ಶಾಲಾ ಶಿಕ್ಷಣ ಇಲಾಖೆ (ಪದವಿ ಪೂರ್ವ)</b></div> -->
+                    <div class="text-center heading" style="font-size:12px"><b>NH 218, SIRNOOR POST - 585 308 - GULBARGA DISTRICT</b></div>
+                    <div class="text-center heading" style="font-size:11px"><b>College Code: KK0267</b></div>
                 </div>
                 <?php
                 $profile_image_url = $record->photo_url;
@@ -304,8 +305,8 @@ foreach ($studentsRecords as $record) {
                     <tr class="text-center">
                         <td width="180"  class="text-center">ವಿಷಯಗಳು &nbsp;Subjects</td>
                         <td width="100" rowspan="2" class="text-center">ವಿಷಯದ ಸಂಕೇತ<br>Subject Code</td>
-                        <td width="50" rowspan="2" class="text-center">ಗರಿಷ್ಠಾಂಕ<br>Max. Marks</td>
-                        <td width="50" rowspan="2" class="text-center">ಕನಿಷ್ಠಾಂಕ<br>Min. Marks</td>
+                        <td width="50" rowspan="2" class="text-center">ಗರಿಷ್ಠ<br>Max. Marks</td>
+                        <td width="50" rowspan="2" class="text-center">ಕನಿಷ್ಠ<br>Min. Marks</td>
                         <td width="285" colspan="4" class="text-center">ಪಡೆದ ಅಂಕಗಳು<br>Marks Obtained</td>
                     </tr>
                     <tr class="text-center">
