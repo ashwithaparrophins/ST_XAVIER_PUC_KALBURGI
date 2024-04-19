@@ -552,11 +552,11 @@ foreach ($studentsRecords as $record) {
                         <td style="">ಪಡೆದ ದರ್ಜೆ<br>Class Obtained &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b class="text-center"><?php echo $final_result; ?></b></td>
                         <!-- <td></td> -->
                     </tr>
-                    <tr class="text-left" style="font-size: 16px;">
+                    <!-- <tr class="text-left" style="font-size: 16px;">
                         <td  style="padding:7px !important;text-align: left!important;" class="text-left">&nbsp;ಕಾಲೇಜು ಸಂಕೇತ ಸಂಖ್ಯೆ<br>&nbsp;College Code No.<b>&nbsp;&nbsp;&nbsp;KK0267 </b></td>
                         <td colspan="7" style=""> &nbsp;ಕಾಲೇಜು &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ST XAVIER'S PRE–UNIVERSITY COLLEGE</b><br>&nbsp;College &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:11px"><b>N.H 50, SIRNOOR KALABURAGI - 585308</b></span></td>
-                        <!-- <td></td> -->
-                    </tr>
+                        <!-- <td></td>
+                    </tr> -->
                 </table>
 
                 <table style="font-size: 12px; margin: 8px 20px 1px 20px;">
