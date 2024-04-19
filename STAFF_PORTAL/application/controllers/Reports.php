@@ -646,7 +646,6 @@ class Reports extends BaseController
                     $yr = $year-2;
                 }
                 $studentInfo = $this->student->getAllStudentInfo_For_FeeDuereport($term_name,$preference,$yr);
-
                 $total_state_fee_by_type = 0;
                 $total_cbse_fee_by_type = 0;
                 $total_nri_fee_by_type = 0;
@@ -672,6 +671,8 @@ class Reports extends BaseController
                     }else{
                         $paid_amt = $total_paid_amount->paid_amount;
                     }
+                    $paidInfo = $this->fee->getFeePaidInfoAttempt($std->row_id,$year);
+
                     if($paidInfo->attempt == '1'){
                         $total_fee_amount = $total_fee_amount -2000;
                     }else{
@@ -707,6 +708,9 @@ class Reports extends BaseController
                         $spreadsheet->getActiveSheet()->setCellValue('G' . $excel_row,  $total_fee_amount - $total_paid_amount->paid_amount - $concession_amt - $scholarship_amt);
                         $spreadsheet->getActiveSheet()->setCellValue('H'.$excel_row, $concession_amt);
                         $spreadsheet->getActiveSheet()->setCellValue('I'.$excel_row, $scholarship_amt);
+                    $excel_row++;
+                    $sl_number++;
+
                     }
                     $spreadsheet->getActiveSheet()->getStyle('A' . $excel_row)->getAlignment()->setWrapText(true);
                     $this->excel->getActiveSheet()->getStyle('A'.$excel_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -714,8 +718,6 @@ class Reports extends BaseController
 
                     $this->excel->getActiveSheet()->getStyle('D'.$excel_row.':G'.$excel_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-                    $sl_number++;
-                    $excel_row++;
                 }
             }
             // $excel_row++;
