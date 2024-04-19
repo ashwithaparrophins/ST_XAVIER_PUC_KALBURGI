@@ -193,7 +193,7 @@ foreach ($studentsRecords as $record) {
                     <!-- <div class="text-center heading"><b>ಕರ್ನಾಟಕ ಸರ್ಕಾರ</b></div> -->
                     <div class="text-center heading" style="font-size:16px"><b>ST XAVIER'S PRE–UNIVERSITY COLLEGE, KALABURAGI</b></div>
                     <!-- <div class="text-center heading"><b>ಶಾಲಾ ಶಿಕ್ಷಣ ಇಲಾಖೆ (ಪದವಿ ಪೂರ್ವ)</b></div> -->
-                    <div class="text-center heading" style="font-size:12px"><b>NH 218, SIRNOOR POST - 585 308 - GULBARGA DISTRICT</b></div>
+                    <div class="text-center heading" style="font-size:12px"><b>NH 50, SIRNOOR POST - 585 308 - GULBARGA DISTRICT</b></div>
                     <div class="text-center heading" style="font-size:11px"><b>College Code: KK0267</b></div>
                 </div>
                 <?php
