@@ -651,9 +651,6 @@ class ApiStaff extends CI_Controller
                     $role == ROLE_VICE_PRINCIPAL ||
                     $role == ROLE_PRIMARY_ADMINISTRATOR ||
                     $role == ROLE_OFFICE ||
-                    $role == ROLE_MANAGEMENT ||
-                    $role == ROLE_ACCOUNTS ||
-                    $role == ROLE_SUPER_ADMIN ||
                     $role == ROLE_TEACHING_STAFF
                 ) {
                     $db_data[] = $info;
@@ -661,7 +658,7 @@ class ApiStaff extends CI_Controller
                     continue;
                 }
             } elseif($info->title == 'STAFF INFO'){
-                if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_SUPER_ADMIN){
+                if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE){
                     $db_data[] = $info;
                 }else{
                     continue;
@@ -764,7 +761,7 @@ class ApiStaff extends CI_Controller
     {
         $staff_id = $_GET['staffId'];
         $this->webLogin($staff_id);
-        redirect('schoolStaffDetails');
+        redirect('staffDetails');
     }
 
     function staffAppTakeAttendance()
@@ -792,7 +789,7 @@ class ApiStaff extends CI_Controller
     {
         $staff_id = $_GET['staffId'];
         $this->webLogin($staff_id);
-        redirect('addUnitTestMark');
+        redirect('addInternalMark');
     }
 
     function staffAppStudyMaterial()
