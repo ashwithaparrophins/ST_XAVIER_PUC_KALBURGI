@@ -1138,21 +1138,57 @@ $route['getAnnualMarkCardToPrint2024'] = "students/getAnnualMarkCardToPrint2024"
 
 
 
-//staff app
+//app staff
 
 $route['checkIsExist'] = 'apistaff/checkIsExist';
 
-
-$route['fetchstaffDetails']='apistaff/fetchstaffDetails';
+$route['fetchstaffDetails'] = 'apistaff/fetchstaffDetails';
 
 $route['leaveType'] = 'apistaff/leaveType';
 
 $route['listLeaveInfo'] = 'apistaff/listLeaveInfo';
 
-$route['applyLeaveWithoutDoc']='apistaff/applyLeaveWithoutDoc';
+$route['applyLeaveWithoutDoc'] = 'apistaff/applyLeaveWithoutDoc';
 
-$route['listLeaveHistory']='apistaff/listLeaveHistory';
+$route['listLeaveHistory'] = 'apistaff/listLeaveHistory';
 
-$route['cancellLeave']='apistaff/cancellLeave';
+$route['cancellLeave'] = 'apistaff/cancellLeave';
 
-$route['applyLeaveWithDoc']='apistaff/applyLeaveWithDoc';
+$route['applyLeaveWithDoc'] = 'apistaff/applyLeaveWithDoc';
+
+$route['dashboardMenu'] = 'apistaff/dashboardMenu';
+
+$route['staffAppStudentDetails'] = 'apistaff/staffAppStudentDetails';
+
+$route['staffAppStaffDetails'] = 'apistaff/staffAppStaffDetails';
+
+$route['staffAppTakeAttendance'] = 'apistaff/staffAppTakeAttendance';
+
+$route['staffAppAbsentInfo'] = 'apistaff/staffAppAbsentInfo';
+
+$route['staffAppClassComplete'] = 'apistaff/staffAppClassComplete';
+
+$route['staffAppExamMark'] = 'apistaff/staffAppExamMark';
+
+$route['staffAppStudyMaterial'] = 'apistaff/staffAppStudyMaterial';
+
+$route['approveLeaveList']='apistaff/approveLeaveList';
+
+$route['approveLeave']='apistaff/approveLeave';
+
+$route['rejectLeave']='apistaff/rejectLeave';
+
+$route['tokenToDB']='apistaff/tokenToDB';
+
+$route['attendance']='apistaff/attendance';
+
+$route['attendanceList']='apistaff/attendanceList';
+
+// KJES ROUTES 
+$route['leaveType']='apistaff/leaveType';
+
+$route['subjectList']='apistaff/subjectList';
+
+$route['deleteToken']='apistaff/deleteToken';
+
+$route['checkStaffValid']='apistaff/checkStaffValid';

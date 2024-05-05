@@ -354,4 +354,12 @@ define('FCM_URL',                                      'https://fcm.googleapis.c
 define('PUBLIC_FCM_SERVER_VAPID_KEY',                  'BPcLD-4QUQOxDb9WGszkEP6pF-e5A0EEInEg28MejZePAGXWAzZsDWVGwwF5-U5q2e_Jniyysgi1fFWfBNMP2gU');
 define('PROJECT_ID',                                   'flutter-notification-2-9aac6');
 
+
+define('STAFF_FCM_SERVER_KEY',                               'AAAABm4avIA:APA91bEzyWQg9ukhCSNVEnKRvU7JcinSEc6eQcHXlsLqX82U_cVLFdW99f73dmRFRtEUwE-yLYsIZGdpMYDgZzEzLjtfrhEkLQUwcTdmio2Ih6icj8iKj_CXoYoz5tpkNgdAWJIBFDus');
+define('STAFF_NOTIFICATION_LOGO',                            '');
+define('STAFF_FCM_URL',                                      'https://fcm.googleapis.com/fcm/send');
+define('STAFF_PUBLIC_FCM_SERVER_VAPID_KEY',                  'BAuVZCqXmNYTPdCWlCeitLkpHOlaUOemXuXSvPMoxx5HFdKT44PzZ7VspFTvNiXcX5MbRzfdcSqfCu12wMOmJy0');
+
+
+
 define('PASSWORD','parro@123');

@@ -1,3 +1,4 @@
+<?php if($_SESSION['loggedIn_type']!='Mobile'){ ?>
 <footer id="footer" class="main-footer d-flex p-2 px-3 bg-white border-top ">
     <span class="copyright  my-auto mr-0">Copyright © <script>
         document.write(new Date().getFullYear())
@@ -6,7 +7,7 @@
                 class="title_blue ">Phins</span>.</a> All rights reserved
     </span>
 </footer>
-
+<?php }?>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
