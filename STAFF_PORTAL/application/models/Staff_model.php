@@ -21,6 +21,7 @@ class Staff_model extends CI_Model
         }
         
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('staff.resignation_status', 0);
         $this->db->where('staff.is_deleted', 0);
         $query = $this->db->get();
         return $query->num_rows();
@@ -116,6 +117,44 @@ class Staff_model extends CI_Model
         $this->db->where('row_id', $row_id);
         $this->db->update('tbl_staff', $staffInfo);
         return TRUE;
+    }
+    public function updateResignedDate(){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {   
+            $row_id = $this->input->post('staff_id');
+            $resigned_date = $this->input->post('resigned_date');
+            $staffInfo = array('resignation_date' => date('Y-m-d',strtotime($resigned_date)),'updated_by'=>$this->staff_id);
+            $result = $this->staff->updateStaff($staffInfo, $row_id);
+            if($result == true) {
+                $this->session->set_flashdata('success', 'Staff resignation info updated successfully');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to modify staff resignation info');
+            }
+            redirect('staffDetailsResigned');
+        } 
+    }
+    public function getResignedStaffInfo($filter='')
+    {
+
+        $this->db->select('staff.user_name, shift.name as shift_name, shift.shift_code, shift.start_time, shift.end_time, 
+        staff.type, staff.row_id, staff.staff_id, staff.email,staff.staff_type_id, staff.name,dept.name as department, 
+        staff.mobile_one, Role.role, staff.address,staff.dob,staff.resignation_date');
+        $this->db->from('tbl_staff as staff'); 
+        $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
+        $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
+        $this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
+    //    $this->db->join('tbl_institution_type_info as inst', 'staff.staff_type_id = inst.institutionId','left');
+       
+       if(!empty($filter['staff_id'])){
+            $this->db->where('staff.staff_id', $filter['staff_id']); 
+        }
+        $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('staff.is_deleted', 0);
+        $this->db->where('staff.resignation_status',1);
+        //  $this->db->where('staff.staff_type_id', 1);
+        $query = $this->db->get();
+        return $query->result();
     }
     function updateStaffSections($sectionInfo, $staff_id){
         $this->db->where('staff_id', $staff_id);
@@ -222,6 +261,7 @@ class Staff_model extends CI_Model
         $this->db->where('staff.staff_id !=', '123456');
         $this->db->where('dept.is_deleted', 0);
         $this->db->where('staff.is_deleted', 0);
+        $this->db->where('staff.resignation_status', 0);
         $query = $this->db->get();
         return $query->result();
     }
@@ -690,6 +730,8 @@ class Staff_model extends CI_Model
             $this->db->where('staff.department_id', $filter['staff_department']);
         }
         $this->db->where('staff.is_deleted', 0);
+        $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('staff.resignation_status', 0);
         //  $this->db->where('staff.staff_type_id', 1);
         $query = $this->db->get();
         $result = $query->result();

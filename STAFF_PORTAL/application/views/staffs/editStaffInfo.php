@@ -101,6 +101,16 @@ if ($error) {
                                                 aria-selected="false">Section</a>
                                         </li>
                                         <?php } ?>
+                                        <?php if($staffInfo->role != "Non-Teaching Staff") { ?>
+                                            <li class="nav-item">
+                                            <a class="nav-link" id="resign-tab" data-toggle="tab" href="#resign"
+                                               role="tab" aria-controls="resign"
+                                                aria-selected="true">Resignation Info</a>
+                                         </li>
+
+                                            <?php } ?>
+
+
                                         <li class="nav-item">
                                             <a class="nav-link" id="leaveIn-tab" data-toggle="tab" href="#leaveIn" role="tab" aria-controls="leaveIn" aria-selected="false">Leave Info</a>
                                         </li>
@@ -583,6 +593,102 @@ if ($error) {
 
                                             </div>
                                         </div>
+
+
+
+
+                                        <div class="tab-pane fade" id="resign" role="tabpanel" aria-labelledby="resign-tab">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 pr-0 ">
+                        <div class="card card-small c-border mb-4 p-1">
+                            <div class="card-header text-center profile-img">
+                                <?php if(!empty($profileImg)){ ?>
+                                    <img src="<?php echo $profileImg; ?>"
+                                        class="avatar rounded-circle img-thumbnail" width="120" height="130" alt="Profile Image">
+                                                <?php } else { ?>
+                                                    <img src="<?php echo base_url(); ?>assets/images/user.png"
+                                                                class="avatar rounded-circle img-thumbnail" width="130"
+                                                                height="100" src="#" id="uploadedImage" name="userfile"
+                                                                width="130" height="100" alt="Profile default">
+                                                <?php } ?>
+
+                            </div>
+                                                        <div
+                                                            class="card-body text-center profile_sidebar pt-0 pl-0 pr-0 mt-1">
+                                                            <div class="p-1">
+                                                                <i class="fa fa-id-card"></i>
+                                                                <span
+                                                                    style="color: #1e64b9;"><?php echo $staffInfo->staff_id; ?></span>
+                                                            </div>
+                                                            <hr class="mt-1 mb-1">
+                                                            <div class="p-1">
+                                                                <i class="far fa-calendar-alt"></i>
+                                                                <span> <?php  if(empty($staffInfo->dob) || $staffInfo->dob == '0000-00-00'){
+                                                                            echo "Not Updated";
+                                                                        } else{
+                                                                            echo date('d-m-Y',strtotime($staffInfo->dob));
+                                                                        } ?></span>
+                                                            </div>
+                                                            <hr class="mt-1 mb-1">
+                                                            <div class="p-1">
+                                                                <i class="fas fa-mobile-alt"></i>
+                                                                <?php if(empty($staffInfo->mobile)){ ?>
+                                                                <span class="text-danger">Not Updated</span>
+                                                                <?php } else { ?>
+                                                                <span> <?php echo $staffInfo->mobile?></span>
+                                                                <?php } ?>
+                                                            </div>
+                                                            <hr class="mt-1 mb-1">
+                                                            <div class="p-1">
+                                                                <i class="fas fa-envelope"></i>
+                                                                <span> <?php if(empty($staffInfo->email)){ ?>
+                                                                    <span class="text-danger">Not Updated</span>
+                                                                    <?php } else { ?>
+                                                                    <span> <?php echo $staffInfo->email?></span>
+                                                                    <?php } ?></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-8 col-md-8 col-12 pr-0 ">
+                                                <form role="form" action="<?php echo base_url() ?>updateResignationInfo"
+                                                        method="post">
+
+                                                        <input type="hidden"
+                                                                value="<?php echo $staffInfo->row_id; ?>" id="row_id"
+                                                                name="row_id"> 
+                                                        <input type="hidden"
+                                                            value="<?php echo $staffInfo->staff_id; ?>"
+                                                            name="staff_id" />
+                                                        <div class="row">
+                                                            <div class="col-12 col-lg-6 col-md-6">
+                                                                <label for="cl">Resignation Date</label>
+                                                                <input type="text" class="form-control required datepicker_resign"
+                                                                    id="resign_date"
+                                                                    value="<?php if($staffInfo->resignation_date == '' || $staffInfo->resignation_date == '0000-00-00' || $staffInfo->resignation_date == '1970-01-01'){ echo ''; } else{ echo date('d-m-Y',strtotime($staffInfo->resignation_date)); } ?>"
+                                                                    name="resign_date"
+                                                                    placeholder="Add Resignation Date"
+                                                                    onkeypress="return isNumberKey(event)" required
+                                                                    autocomplete="off">
+                                                            </div>
+                                                            
+                                                        </div>
+
+                                                        <!-- <hr class="mt-1 mb-1"> -->
+                                                        <div class="row mt-3 mr-3">
+                                                            <div class="col-12 col-lg-12 col-md-12">
+                                                                <button type="submit"
+                                                                    class="btn btn-success float-right">
+                                                                    Update </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
                                         <div class="tab-pane fade"
                                             id="changePassword" role="tabpanel" aria-labelledby="password-tab">
                                             <div class="row">
@@ -873,7 +979,12 @@ jQuery(document).ready(function() {
         format: "dd-mm-yyyy",
         endDate: "today"
     });
-
+    jQuery('.datepicker_resign').datepicker({
+        autoclose: true,
+        format: "dd-mm-yyyy",
+        // startDate : "01-01-2021",
+        // endDate: "today"
+    });
 
 });
 

@@ -84,6 +84,11 @@ $route['studentPerformance'] = "student/studentPerformance";
 $route['viewTimeTable'] = "timetable/viewTimeTable";
 $route['viewstudyMaterials'] = "studymaterial/viewstudyMaterials";
 $route['download/(:any)'] = "studymaterial/download/$1";
+$route['updateResignationInfo'] = "staffs/updateResignationInfo";
+$route['staffDetailsResigned'] = "staffs/staffDetailsResigned";
+$route['get_staffs_resigned'] = "staffs/get_staffs_resigned";
+$route['updateResignedDate'] = "staffs/updateResignedDate";
+
 
 
 //faculty routes

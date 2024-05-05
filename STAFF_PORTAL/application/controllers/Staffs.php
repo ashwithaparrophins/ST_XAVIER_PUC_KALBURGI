@@ -134,6 +134,61 @@ class Staffs extends BaseController
             $this->loadViews("staffs/addNewStaff", $this->global, $data, NULL);
         }
     }
+    public function updateResignedDate(){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {   
+            $row_id = $this->input->post('staff_id');
+            $resigned_date = $this->input->post('resigned_date');
+            $staffInfo = array('resignation_date' => date('Y-m-d',strtotime($resigned_date)),'updated_by'=>$this->staff_id);
+            $result = $this->staff->updateStaff($staffInfo, $row_id);
+            if($result == true) {
+                $this->session->set_flashdata('success', 'Staff resignation info updated successfully');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to modify staff resignation info');
+            }
+            redirect('staffDetailsResigned');
+        } 
+    }
+
+    public function updateResignationInfo(){
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        } else {
+            $row_id = $this->input->post('row_id');
+            $this->load->library('form_validation');
+            $this->form_validation->set_rules('resign_date','Resignation Date','trim|required');
+            
+            if($this->form_validation->run() == FALSE) {
+                redirect('editSchoolStaff/'.$row_id);  
+            } else {
+                
+                $resign_date = $this->input->post('resign_date');
+                
+                if(!empty($resign_date)) {
+                    $resign_date = date('Y-m-d',strtotime($resign_date));
+                } else {
+                    $resign_date = "";
+                }
+                
+                
+                $resignInfo = array(
+                    'resignation_date' => $resign_date, 
+                    'resignation_status' => 1, 
+                    'createdBy' => $this->staff_id, 
+                    'modified_date_time' => date('Y-m-d H:i:s'));
+                    
+                $result = $this->staff->updateStaff($resignInfo, $row_id);
+                if($result == true) {
+                    $this->session->set_flashdata('success', 'Staff resignation info updated successfully');
+                } else {
+                    $this->session->set_flashdata('error', 'Failed to modify staff resignation info');
+                }
+                redirect('editStaff/'.$row_id);  
+            }
+        }
+    }
 
     function addNewStaffToSjbhs() {
         if($this->isAdmin() == TRUE ){
@@ -243,7 +298,74 @@ class Staffs extends BaseController
             $this->loadViews("staffs/staffProfile", $this->global, $data, null);
         }
     }
-
+    public function get_staffs_resigned(){
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        } else {
+        $draw = intval($this->input->post("draw"));
+        $start = intval($this->input->post("start"));
+        $length = intval($this->input->post("length"));
+          $data_array_new = [];
+        //   $staffInfo_ = $this->staff->getAllStaffInfoForJob();
+        //   foreach($staffInfo_ as $record) {
+        //   $user_name = sprintf('SJBHS%03d', $record->staff_id);
+        //   $staffInfo = array(
+        //       'user_name' => $user_name
+        //   );
+        //   $this->staff->updateStaff($staffInfo, $record->row_id);
+        // }
+          $staffInfo = $this->staff->getResignedStaffInfo();
+          foreach($staffInfo as $staff) {
+              $editButton = "";
+              $deleteButton = "";
+              $staffViewMore = '<a class="btn btn-xs btn-primary"
+              href="'.base_url().'viewStaffInfoById/'.$staff->row_id.'"
+              title="View More"><i class="fa fa-eye"></i></a>';
+                $date = date('d-m-Y',strtotime($staff->resignation_date));
+            
+            // if($this->role == ROLE_ADMIN){
+            //     $deleteButton = '<a class="btn btn-xs btn-danger deleteStaff" href="#"
+            //     data-row_id="'.$staff->row_id.'" title="Delete Staff"><i
+            //         class="fa fa-trash"></i></a>';
+            $editButton = '<a class="btn btn-xs btn-info"
+            onclick="editResignDate(' . htmlspecialchars(json_encode($date), ENT_QUOTES, 'UTF-8') . ', ' .$staff->row_id . ','. htmlspecialchars(json_encode($staff->name), ENT_QUOTES, 'UTF-8') .')" title="Edit Date"><i
+            class="fa fa-pen"></i></a>';
+    
+            // }
+             
+            $data_array_new[] = array(
+                $staff->staff_id,
+                $staff->name,
+                $staff->department,
+                $staff->role,
+                $staff->mobile_one,
+                $date,
+                $staffViewMore.' '.$editButton.' '.$deleteButton
+                );
+            }
+         $count = count($staffInfo);
+          $result = array(
+               "draw" => $draw,
+                "recordsTotal" => $count,
+                "recordsFiltered" => $count,
+                "data" => $data_array_new
+           );
+      echo json_encode($result);
+      exit();
+      }
+    }
+    
+    function staffDetailsResigned()
+    {
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        } else {
+            $this->global['pageTitle'] = ''.TAB_TITLE.' : Staffs Details';
+            $this->loadViews("staffs/resignedStaff", $this->global, NULL , NULL);
+        }
+    }
     public function editStaff($staff_id = null)
     {
         if ($this->isAdmin() == true ) {

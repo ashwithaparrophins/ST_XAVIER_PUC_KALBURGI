@@ -284,7 +284,6 @@
             style="color:blue;font-weight:bold;margin-left: -100%;font-size: 17px;display:none;">Loading...</span></div>
 
     <!-- Main Sidebar -->
-    <?php if($_SESSION['loggedIn_type']!='Mobile'){ ?>
     <aside class="main-sidebar col-12 col-md-3 col-lg-2 px-0 noprint">
         <div class="main-navbar">
             <nav class="navbar align-items-stretch navbar-light bg-white flex-md-nowrap border-bottom p-0">
@@ -354,7 +353,12 @@
                         </li>
                         <?php } ?> -->
 
-
+                        <li class="nav-item">
+                <a class="nav-link " href="<?php echo base_url(); ?>staffDetailsResigned">
+                    <i class="fas fa-chalkboard-teacher header_icons"></i>
+                    <span>Resigned Staff</span>
+                </a>
+            </li>
                     </ul>
                 </li>
                 
@@ -1476,4 +1480,3 @@
         });
         </script>
         <!-- End of ChatBot -->
-        <?php } ?>  
