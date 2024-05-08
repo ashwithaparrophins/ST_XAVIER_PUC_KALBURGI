@@ -54,7 +54,7 @@ class Staffs extends BaseController
             //   href="'.base_url().'viewStaffInfoById/'.$staff->row_id.'"
             //   title="View More"><i class="fa fa-eye"></i></a>';
 
-            if($this->role == ROLE_ADMIN || $this->role == ROLE_PRIMARY_ADMINISTRATOR || $this->role == ROLE_PRINCIPAL || $this->role == ROLE_OFFICE || $this->role == ROLE_VICE_PRINCIPAL){
+            if($this->role == ROLE_ADMIN || $this->role == ROLE_SUPER_ADMIN || $this->role == ROLE_PRIMARY_ADMINISTRATOR || $this->role == ROLE_PRINCIPAL || $this->role == ROLE_OFFICE || $this->role == ROLE_VICE_PRINCIPAL){
                 $editButton = '<a class="btn btn-xs btn-primary"
                 href="'.base_url().'editStaff/'.$staff->row_id.'" title="Edit Staff"><i
                     class="fa fa-eye"></i></a>';
@@ -63,7 +63,7 @@ class Staffs extends BaseController
 
             
             
-            if($this->role == ROLE_ADMIN || $this->role == ROLE_PRIMARY_ADMINISTRATOR){
+            if($this->role == ROLE_ADMIN || $this->role == ROLE_SUPER_ADMIN || $this->role == ROLE_PRIMARY_ADMINISTRATOR){
                 $deleteButton = '<a class="btn btn-xs btn-danger deleteStaff" href="#"
                 data-row_id="'.$staff->row_id.'" title="Delete Staff"><i
                     class="fa fa-trash"></i></a>';
@@ -951,7 +951,7 @@ public function addNewStaffAttendance(){
           foreach($staffInfo as $staff) {
             $restoreButton = "";
             
-            if($this->role == ROLE_ADMIN || $this->role == ROLE_PRIMARY_ADMINISTRATOR){
+            if($this->role == ROLE_ADMIN || $this->role == ROLE_SUPER_ADMIN || $this->role == ROLE_PRIMARY_ADMINISTRATOR){
                  $restoreButton = '<a class="btn btn-xs btn-danger restoreStaff" href="#"
                  data-row_id="'.$staff->row_id.'" title="Restore Staff"><i class="fas fa-trash-restore"></i></a>';
             }

@@ -343,7 +343,7 @@
 
 
 
-                                                  if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_CORRESPONDENT){ 
+                                                  if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_CORRESPONDENT || $role == ROLE_SUPER_ADMIN){ 
 
                                                    if($fee->approved_status == 1){ ?>
 

@@ -223,9 +223,9 @@ if ($error) {
                                          <th width="150" class="text-center"><?php echo $bus->total_seat_capacity; ?></th>
                                         <th class="text-center">
                                            
-                                            <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE ){ ?>
+                                            <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE  || $role == ROLE_SUPER_ADMIN){ ?>
                                                     <a class="btn btn-xs btn-info" href="<?php echo base_url().'editBus/'.$bus->row_id; ?>" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                                                    <?php } if( $role == ROLE_ADMIN ||$role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE ){ ?>
+                                                    <?php } if( $role == ROLE_ADMIN ||$role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_SUPER_ADMIN){ ?>
                                                     <a class="btn btn-xs btn-danger deleteBus" href="#" data-row_id="<?php echo $bus->row_id; ?>" title="Delete Bus"><i class="fa fa-trash"></i></a>
                                             <?php } ?>
                                         </th>

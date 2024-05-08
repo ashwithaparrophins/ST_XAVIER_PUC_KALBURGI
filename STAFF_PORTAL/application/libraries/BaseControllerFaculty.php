@@ -64,7 +64,7 @@ class BaseController extends CI_Controller {
 		if ($this->role == ROLE_ADMIN || $this->role == ROLE_PRINCIPAL || $this->role == ROLE_TEACHING_STAFF || $this->role == EXAM_COMMITTEE || 
 		$this->role == ROLE_NON_TEACHING_STAFF || $this->role == ROLE_OFFICE ||  $this->role == ROLE_COUNSELOR || $this->role == ROLE_ERROR_COMMITTEE || 
 		$this->role == ROLE_APPROVE_COMMITTEE || $this->role == ROLE_RECTOR || $this->role == ROLE_ACCOUNT ||  $this->role == ROLE_LIBRARY ||  
-		$this->role == ROLE_VICE_PRINCIPAL || $this->role == ROLE_RECEPTION || $this->role == ROLE_PRIMARY_ADMINISTRATOR) {
+		$this->role == ROLE_VICE_PRINCIPAL || $this->role == ROLE_RECEPTION || $this->role == ROLE_PRIMARY_ADMINISTRATOR || $this->role == ROLE_SUPER_ADMIN) {
 			return false;
 		} else {
 			return true;
@@ -73,7 +73,7 @@ class BaseController extends CI_Controller {
 
 	function isSuperAdmin() {
 		if ($this->role == ROLE_PRIMARY_ADMINISTRATOR || $this->role == ROLE_ADMIN || $this->role == ROLE_PRINCIPAL || 
-		$this->role == ROLE_VICE_PRINCIPAL || $this->role == ROLE_OFFICE) {
+		$this->role == ROLE_VICE_PRINCIPAL || $this->role == ROLE_OFFICE || $this->role == ROLE_SUPER_ADMIN) {
 			return true;
 		} else {
 			return false;

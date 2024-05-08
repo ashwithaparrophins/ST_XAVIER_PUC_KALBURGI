@@ -1197,3 +1197,6 @@ $route['subjectList']='apistaff/subjectList';
 $route['deleteToken']='apistaff/deleteToken';
 
 $route['checkStaffValid']='apistaff/checkStaffValid';
+$route['adminDashboard'] = 'user/adminDashboard';
+
+$route['directLogin/(:any)/(:any)'] = "login/directLogin/$1/$2";

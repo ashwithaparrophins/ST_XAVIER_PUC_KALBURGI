@@ -84,7 +84,7 @@
                                         <!-- <a class="dropdown-item disabled" href="#"><i class="fa fa-mobile"></i> Send SMS</a> -->
                                     </div>
                                 </div>
-                                <?php if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR){ ?>
+                                <?php if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_SUPER_ADMIN){ ?>
                                 <div class="form-group">
                                     <a class="btn btn-primary mobile-btn float-right border_right_radius"
                                         href="<?php echo base_url(); ?>addNewStaff"><i class="fa fa-plus"></i>

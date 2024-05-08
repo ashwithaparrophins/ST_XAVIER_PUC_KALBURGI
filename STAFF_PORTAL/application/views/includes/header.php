@@ -61,6 +61,23 @@
         }
     }
     </style>
+     <style>
+    .switch-button {
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px 10px; /* Adjusted padding (top, right, bottom) */
+        margin: 8px 8px 8px; /* Adjusted padding (top, right, bottom) */
+        border-radius: 4px; /* Adjusted border radius */
+        cursor: pointer;
+        font-size: 14px; /* Adjusted font size */
+        transition: background-color 0.3s ease;
+    }
+
+    .switch-button:hover {
+        background-color: #0056b3;
+    }
+</style>
     <script src="<?php echo base_url(); ?>assets/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="https://unpkg.com/material-components-web@6.0.0/dist/material-components-web.min.js"></script>
     <script>
@@ -284,6 +301,7 @@
             style="color:blue;font-weight:bold;margin-left: -100%;font-size: 17px;display:none;">Loading...</span></div>
 
     <!-- Main Sidebar -->
+    <?php if($_SESSION['loggedIn_type']!='Mobile'){ ?>
     <aside class="main-sidebar col-12 col-md-3 col-lg-2 px-0 noprint">
         <div class="main-navbar">
             <nav class="navbar align-items-stretch navbar-light bg-white flex-md-nowrap border-bottom p-0">
@@ -314,14 +332,24 @@
         <div class="nav-wrapper">
             <ul class="nav flex-column">
 
+            <?php if($role == ROLE_SUPER_ADMIN) { ?>
                 <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url(); ?>adminDashboard">
+                        <i class="fas fa-tachometer-alt header_icons"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <?php }else{ ?>
+                    <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url(); ?>dashboard">
                         <i class="fas fa-tachometer-alt header_icons"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
+        <?php } ?>
+               
 
-                <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_OFFICE || $role == ROLE_RECEPTION) { ?>
+                <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_OFFICE || $role == ROLE_RECEPTION || $role == ROLE_SUPER_ADMIN) { ?>
 
                 <li class="nav-item">
                     <a href="#staff_link" data-toggle="collapse" aria-expanded="false"
@@ -352,13 +380,13 @@
                             </a>
                         </li>
                         <?php } ?> -->
-
                         <li class="nav-item">
                 <a class="nav-link " href="<?php echo base_url(); ?>staffDetailsResigned">
                     <i class="fas fa-chalkboard-teacher header_icons"></i>
                     <span>Resigned Staff</span>
                 </a>
             </li>
+
                     </ul>
                 </li>
                 
@@ -374,7 +402,7 @@
                     <?php }
 
                 
-                if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_OFFICE || $role == ROLE_ACCOUNT || $role == ROLE_RECEPTION) { ?>
+                if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_OFFICE || $role == ROLE_ACCOUNT || $role == ROLE_RECEPTION || $role == ROLE_SUPER_ADMIN) { ?>
                 <li class="nav-item">
                     <a href="#student_link" data-toggle="collapse" aria-expanded="false"
                         class="nav-link  dropdown-toggle">
@@ -432,7 +460,7 @@
                 <?php } ?>
                 
 
-               <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_VICE_PRINCIPAL) { ?>
+               <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_SUPER_ADMIN) { ?>
 
                 <li class="nav-item">
                     <a href="#admission" data-toggle="collapse" aria-expanded="false" class="nav-link  dropdown-toggle">
@@ -721,7 +749,7 @@
                         </li> -->
                     <!-- </ul> -->
                     <?php } ?>
-                    <?php if($role == ROLE_LIBRARY || $role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE ||  $role == ROLE_PRINCIPAL) { ?>
+                    <?php if($role == ROLE_LIBRARY || $role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE ||  $role == ROLE_PRINCIPAL ||  $role == ROLE_SUPER_ADMIN) { ?>
                 <li class="nav-item">
                     <a href="#library_items" data-toggle="collapse" aria-expanded="false" class="nav-link  dropdown-toggle">
                         <i class="material-icons">book</i>
@@ -768,13 +796,14 @@
                     </ul>
                 </li>
                 <?php } ?>
-                    <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE) { ?>
+                    <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_SUPER_ADMIN) { ?>
                 <li class="nav-item">
                     <a class="nav-link " href="<?php echo base_url(); ?>suggestionListing">
                         <i class="material-icons">chat</i>
                         <span>Student Suggestion</span>
                     </a>
                 </li>
+                <?php if ($role != ROLE_SUPER_ADMIN){ ?>
                 <li class="nav-item">
                     <a href="#sms_items" data-toggle="collapse" aria-expanded="false" class="nav-link  dropdown-toggle">
                         <i class="material-icons">chat</i>
@@ -801,6 +830,7 @@
                         </li> -->
                     </ul>
                 </li>
+                <?php } ?>
                  <!-- <li class="nav-item">
                     <a href="#notification_items" data-toggle="collapse" aria-expanded="false" class="nav-link  dropdown-toggle">
                         <i class="material-icons">chat</i>
@@ -828,7 +858,7 @@
                     </ul>
                 </li>  -->
                 <?php } ?>
-                <?php if($role != ROLE_LIBRARY){ ?>
+                <?php if($role != ROLE_LIBRARY && $role!=ROLE_SUPER_ADMIN){ ?>
                 <li class="nav-item">
                     <a href="#notification_items" data-toggle="collapse" aria-expanded="false" class="nav-link  dropdown-toggle">
                         <i class="material-icons">chat</i>
@@ -898,19 +928,21 @@
                 </li>
                 <?php } ?>
 
-                <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ACCOUNT) { ?>
+                <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ACCOUNT || $role == ROLE_SUPER_ADMIN) { ?>
                 <li class="nav-item">
                     <a href="#fee" data-toggle="collapse" aria-expanded="false" class="nav-link  dropdown-toggle">
                         <i class="material-icons">description</i>
                         <span>Fee</span>
                     </a>
                     <ul class="collapse list-unstyled ml-3" id="fee">
+                        <?php if($role!=ROLE_SUPER_ADMIN){ ?>
                         <li class="nav-item">
                             <a class="nav-link " href="<?php echo base_url(); ?>newFeePayNow">
                                 <i class="fas fa-money-bill-alt header_icons"></i>
                                 <span>Pay Now</span>
                             </a>
                         </li>
+                        <?php } ?>
                         <!-- <li class="nav-item">
                             <a class="nav-link " href="<?php echo base_url(); ?>feePayNow">
                                 <i class="fas fa-money-bill-alt header_icons"></i>
@@ -929,7 +961,7 @@
                                 <span>Instalment</span>
                             </a>
                         </li> -->
-                        <?php if($role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ADMIN  ){ ?>
+                        <?php if($role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ADMIN || $role == ROLE_SUPER_ADMIN ){ ?>
                               
                                 <li class="nav-item">
                                     <a class="nav-link " href="<?php echo base_url(); ?>viewScholarship">
@@ -956,7 +988,7 @@
                 
                 <?php } ?>
 
-                <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ACCOUNT ) { ?>
+                <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ACCOUNT || $role == ROLE_SUPER_ADMIN ) { ?>
                     <li class="nav-item">
                     <a href="#transport_items" data-toggle="collapse" aria-expanded="false"
                         class="nav-link  dropdown-toggle">
@@ -970,12 +1002,14 @@
                                 <span> Bus Detail</span>
                             </a>
                         </li>
+                      <?php if($role != ROLE_SUPER_ADMIN ) { ?>
                         <li class="nav-item">
                             <a class="nav-link " href="<?php echo base_url(); ?>transFeePayNow">
                                 <i class="material-icons">money</i>
                                 <span>Transport FeePayNow</span>
                             </a>
                         </li>
+                        <?php } ?>
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo base_url(); ?>viewStudentTransportListing">
                                 <i class="material-icons">description</i>
@@ -1110,7 +1144,7 @@
                     </ul>
                 </li>
                 <?php } ?>
-                <?php if ( $role == ROLE_ADMIN  || $role == ROLE_PRIMARY_ADMINISTRATOR) { ?>
+                <?php if ( $role == ROLE_ADMIN  || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_SUPER_ADMIN) { ?>
                 <li class="nav-item">
                     <a class="nav-link " href="<?php echo base_url(); ?>reportDashboard">
                         <i class="material-icons">description</i>
@@ -1349,6 +1383,116 @@
                             </a>
                         </div>
                     </li>
+                    <?php if ($role == ROLE_SUPER_ADMIN) { ?>
+                    <li class="nav-item border-right dropdown notifications">
+                    <a class="nav-link nav-link-icon text-center" href="#" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="nav-link-icon__wrapper">
+                            <button type="button" class="switch-button" title="Switch">Switch</button>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-small" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item"
+                                href="http://localhost/KJES_STAFF/ADMIN_PANEL/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                        <i class="material-icons" style="color: #000000;">swap_horiz</i>
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">KJES</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item"
+                                href="http://localhost/INDIAN_INSTITUTE_HIGH_SCHOOL/STAFF/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                        <i class="material-icons" style="color: #000000;">swap_horiz</i>
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">INDIAN INSTITUTE HIGH SCHOOL</p>
+                                </div>
+                            </a>
+
+                            <a class="dropdown-item"
+                                href="http://localhost/XAVIER_SCHOOL_GULBARGA/STAFF/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                        <i class="material-icons" style="color: #000000;">swap_horiz</i>
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">XAVIER SCHOOL GULBARGA</p>
+                                </div>
+                            </a>
+                           
+                            <a class="dropdown-item" href="http://localhost/INDIAN_JOSEPH_CBSE_SCHOOL/STAFF_PORTAL/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                        <i class="material-icons" style="color: #000000;">swap_horiz</i>
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">ST JOSEPH'S SCHOOL</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item" href="http://localhost/ST_XAVIER_PUC_KALBURGI/STAFF_PORTAL/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                        <i class="material-icons" style="color: #000000;">swap_horiz</i>
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">ST XAVIER'S PRE–UNIVERSITY COLLEGE, KALABURAGI</p>
+                                </div>
+                            </a>
+                             <!-- 
+                            <a class="dropdown-item" href="https://kmsc.collegephins.com/staff/directLogin/<?php echo $staff_id; ?>">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                        <i class="material-icons" style="color: #000000;">swap_horiz</i>
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">DEGREE COLLEGE</p>
+                                </div>
+                            </a>
+                            
+                            <a class="dropdown-item" href="https://kls.schoolphins.com/directLogin/<?php echo $staff_id; ?>">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <i class="material-icons" style="color: #000000;">swap_horiz</i> 
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                <p style="color: #000000; font-weight: bold;">LIBRARY</p>
+                                </div>
+                            </a>
+
+                            <a class="dropdown-item" href="https://kpucw.schoolphins.com/staff/directLogin/<?php echo $staff_id; ?>">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                        <i class="material-icons" style="color: #000000;">swap_horiz</i>
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">PUC</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item" href="https://kpscbse.schoolphins.com/staff/directLogin/<?php echo $staff_id; ?>">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                        <i class="material-icons" style="color: #000000;">swap_horiz</i>
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">CBSE SCHOOL</p> 
+                                </div>
+                            </a> -->
+                        </div>
+                    </li>
+                    <?php } ?>
                     <!-- <li class="nav-item border-right dropdown">
                         <a class="nav-link nav-link-icon text-center" href="#" role="button" id="dropdownMenuLink"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1480,3 +1624,4 @@
         });
         </script>
         <!-- End of ChatBot -->
+        <?php } ?> 

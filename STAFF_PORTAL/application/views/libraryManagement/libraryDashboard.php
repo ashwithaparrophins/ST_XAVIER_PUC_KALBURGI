@@ -17,7 +17,7 @@
     <!-- Small Stats Blocks -->
 
     <div class="row ">
-        <?php if ($role == ROLE_ADMIN ||$role == ROLE_LIBRARY || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_MANAGEMENT || $role == ROLE_ACCOUNT_MANAGER) { ?>
+        <?php if ($role == ROLE_ADMIN ||$role == ROLE_LIBRARY || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_MANAGEMENT || $role == ROLE_ACCOUNT_MANAGER || $role == ROLE_SUPER_ADMIN) { ?>
             <div class="col-lg-3 col-6 mb-1 column_padding_card">
                 <div class="card card-small dash-card" style="background: #6aacc5;">
                     <a onclick="showLoader();" href="<?php echo base_url(); ?>libraryManagementSystem">

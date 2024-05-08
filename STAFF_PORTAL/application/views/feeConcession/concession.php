@@ -182,7 +182,7 @@
 
                                         <?php 
                                         if($fee->payment_status == 0){
-                                        if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR){ 
+                                        if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_SUPER_ADMIN){ 
                                                 if($fee->payment_status == 0){  ?>
                                         <a class="btn btn-xs btn-info"
                                             href="<?php echo base_url(); ?>editConcession/<?php echo $fee->row_id; ?>"

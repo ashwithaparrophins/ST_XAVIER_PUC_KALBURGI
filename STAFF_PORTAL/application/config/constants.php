@@ -207,6 +207,7 @@ define('ROLE_RECEPTION',                        '14');
 define('ROLE_PRIMARY_ADMINISTRATOR',            '15');
 
 define('ROLE_SECURITY',                         '16');
+define('ROLE_SUPER_ADMIN',                      '50');
 
 // define('ROLE_MANAGER',                          '16');
 

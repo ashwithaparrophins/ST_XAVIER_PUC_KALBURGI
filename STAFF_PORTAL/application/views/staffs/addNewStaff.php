@@ -171,11 +171,11 @@ if ($error) {
                                                     <?php   if(!empty($designation))
                                                 {
                                                     foreach ($designation as $rl)
-                                                    {
-                                                        ?>
+                                                    { 
+                                                        if($rl->roleId!= 50){  ?>
                                                         <option value="<?php echo $rl->roleId ?>" <?php if($rl->roleId == set_value('role')) {echo "selected=selected";} ?>><?php echo $rl->role ?></option>
                                                         <?php
-                                                    }
+                                                    }}
                                                 } ?>
                                                 </select>
                                             </div>

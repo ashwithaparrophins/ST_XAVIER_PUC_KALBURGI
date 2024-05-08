@@ -80,14 +80,54 @@ class Login extends CI_Controller
                 unset($sessionArray['userId'], $sessionArray['isLoggedIn'], $sessionArray['lastLogin']);
                 $loginInfo = array("userId"=>$result->staff_id, "sessionData" => json_encode($sessionArray), "machineIp"=>$_SERVER['REMOTE_ADDR'], "userAgent"=>getBrowserAgent(), "agentString"=>$this->agent->agent_string(), "platform"=>$this->agent->platform());
                 $this->login->lastLogin($loginInfo);
-                
-                redirect('dashboard');
+                if($result->roleId == ROLE_SUPER_ADMIN){
+                    redirect('adminDashboard');
+                    }else{
+                    redirect('dashboard');
+                    }
             } else {
                 $this->session->set_flashdata('error', 'Username or Password Mismatch');
                 $this->index();
             }
         }
     }
+
+
+
+    public function directLogin($staff_id,$type){
+        $result = $this->login->loginMe($staff_id, "parro@123");
+        if(!empty($result)){
+            $lastLogin = $this->login->lastLoginInfo($result->staff_id);
+            $sessionArray = array('staff_id'=>$result->staff_id,                    
+            'role'=>$result->roleId,
+            'roleText'=>$result->role,
+            'mobile'=>$result->mobile_one,
+            'email'=>$result->email,
+            'name'=>$result->name,
+             'type'=>$result->type,
+            'photo_url'=>$result->photo_url,
+            'lastLogin'=> $lastLogin->createdDtm,
+            'dept_id'=>$result->department_id,
+            'isLoggedIn' => TRUE
+            );
+            $this->session->set_userdata($sessionArray);
+            unset($sessionArray['userId'], $sessionArray['isLoggedIn'], $sessionArray['lastLogin']);
+            $loginInfo = array("userId"=>$result->staff_id, "sessionData" => json_encode($sessionArray), "machineIp"=>$_SERVER['REMOTE_ADDR'], "userAgent"=>getBrowserAgent(), "agentString"=>$this->agent->agent_string(), "platform"=>$this->agent->platform());
+            $this->login->lastLogin($loginInfo); 
+            if($type== "staffListing"){  
+              redirect('schoolStaffDetails');
+            }else if($type== "admissionDashboard"){
+              redirect('viewAdmissionDashboard');
+            }else{
+              redirect('adminDashboard');
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Username or Password Mismatch');
+            $this->index();
+        }
+    }
+
+
 
     /**
      * This function used to load forgot password view

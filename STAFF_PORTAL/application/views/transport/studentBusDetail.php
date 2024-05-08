@@ -269,7 +269,7 @@ if ($error) {
                                        
                                         <th class="text-center">
                                            <!-- <a href="#" class="btn btn-xs btn-success" title="<b>Bus Fees :</b>" data-toggle="popover" data-placement="left"  data-trigger="focus" data-content="<b><?php echo $trans->rate; ?></b>"><i class="fa fa-info"></i></a> -->
-                                            <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE){ ?>
+                                            <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_SUPER_ADMIN){ ?>
                                                     <!-- <a class="btn btn-xs btn-info" href="<?php echo base_url().'editStudentTransport/'.$trans->row_id; ?>" title="Edit"><i class="fas fa-pencil-alt"></i></a> -->
                                                     <a class="btn btn-xs btn-primary" target="_blank" href="<?php echo base_url().'printStudentTransportBill/'.$trans->row_id; ?>" title="Print Receipt"><i class="fas fa-print"></i></a>
                                                     <?php } if($role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE){ ?>

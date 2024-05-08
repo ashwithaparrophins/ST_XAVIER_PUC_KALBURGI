@@ -204,12 +204,12 @@ if ($error) {
                                             <a class="btn btn-xs btn-primary mb-1" target="_blank"
                                             href="<?php echo base_url(); ?>viewStudentInfoById/<?php echo $std->row_id; ?>"
                                             title="View More"><i class="fa fa-eye"></i></a>
-                                            <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE){ ?>
+                                            <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_SUPER_ADMIN){ ?>
                                                 <a class="btn btn-xs btn-info mb-1" target="_blank"
                                                 href="<?php echo base_url(); ?>editStudent/<?php echo $std->row_id; ?>" title="Edit Student"><i
                                                     class="fas fa-pencil-alt"></i></a>
                                              <?php } ?>
-                                            <?php if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR){ ?>
+                                            <?php if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_SUPER_ADMIN){ ?>
                                                 <a class="btn btn-xs btn-danger deleteStudent mb-1"
                                                 data-row_id="<?php echo $std->application_no; ?>" href="#" title="Delete">
                                                 <i class="fas fa-trash"></i></a>

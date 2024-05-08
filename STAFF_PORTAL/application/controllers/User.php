@@ -407,6 +407,376 @@ class User extends BaseController
     }
    
 
+    public function adminDashboard()
+    {
+        $todayDate = date('Y-m-d');
+        $data['staffInfo'] = $this->staff->getStaffInfoForProfile($this->staff_id);
+        $data['allStudentInfo'] = $this->student->getAllCurrentStudentInfo();
+        $data['AllstaffInfo'] = $this->staff->getAllStaffInfo();
+        $subjects_code = array();
+        $exam_mark_first_test = array();
+
+        // $filter['by_role'] = ROLE_TEACHING_STAFF;
+        // $data['teaching_staffs_total']= $this->staff->staffListingCount($filter);
+        // $filter['by_role'] = ROLE_NON_TEACHING_STAFF;
+        // $data['non_teaching_staffs_total']= $this->staff->staffListingCount($filter);
+        // $filter['by_role'] = ROLE_SUPPORT_STAFF;
+        // $data['support_staffs_total']= $this->staff->staffListingCount($filter);
+        // $filter['by_role'] = ROLE_ADMIN;
+        // $data['admin_total']= $this->staff->staffListingCount($filter);
+        $deptInfo = $this->staff->getStaffDepartment();
+        $data['total_staff'] = 0;
+        foreach($deptInfo as $dept){
+            $filter['by_dept'] = $dept->dept_id;
+            $countStaff = $this->staff->staffListingCount($filter);
+            $staffCount[$dept->dept_id] = $countStaff;
+            $data['total_staff'] += $countStaff;
+        }
+        $data['staffCount'] = $staffCount;
+       
+        $data['deptInfo'] = $deptInfo;
+        // $data['staffInTime']= $this->staff->getStaffAttendanceInTimeByID($todayDate,$this->staff_id);
+        // $data['staffOutTime']= $this->staff->getStaffAttendanceOutTimeByID($todayDate,$this->staff_id);
+        
+        // $data['notificationLeave']= $this->leave->getStaffAppliedLeaveInfoByDate($todayDate, $this->staff_id);
+        
+        // $data['totalPresentsTeachingStaffs']= $this->staff->getCountOfTotalPresentedStaffByRole($todayDate,ROLE_TEACHING_STAFF);
+        // $data['totalNonTeachingPresents']= $this->staff->getCountOfTotalPresentedStaffByRole($todayDate,ROLE_NON_TEACHING_STAFF);
+        // $data['totalSupportStaffPresents']= $this->staff->getCountOfTotalPresentedStaffByRole($todayDate,ROLE_SUPPORT_STAFF);
+        // $data['totalAdminStaffPresents']= $this->staff->getCountOfTotalPresentedStaffByRole($todayDate,ROLE_ADMIN);
+        $filter['by_intake_year'] = ''.FIRST_YEAR.'';
+        $filter['term'] = 'I PUC';
+       $data['totalFirstYearStudents']= $this->student->getCountOfStudents($filter,);
+       $filter['term'] = 'II PUC';
+        $filter['by_intake_year'] = ''.SECOND_YEAR.'';
+        $staff_id = '';
+       $data['totalSecondYearStudents']= $this->student->getCountOfStudents($filter);
+       $data['staffSubjectInfo']= $this->staff->getAllSubjectByStaffId($this->staff_id);
+        $staffClass = $this->staff->getStaffSubjectSectionByStaffId($this->staff_id);
+        $subjectInfo = $this->subject->getStaffSubjectCodebyStaffId($this->staff_id);
+       $data['assignedStaffsection'] = $this->staff->getSectionByStaffId($this->staff_id);
+       $data['alumniStudents'] =  $this->student->getAlumniStudentCount($filter);
+      //  $data['staffClassCompletedInfo'] = $this->attendance->getStaffClassCompletenfoById();
+        $classCompletedCount = array();
+        $data['assignedStaffClass'] = $staffClass;
+        foreach($staffClass as $class){
+            for($i=0;$i<count($subjectInfo);$i++){
+                $subject_code[$i] = $subjectInfo[$i]->subject_id;
+            }
+            $subjectCode = $subject_code;
+            $staff_id = $this->staff_id;
+            $classCompletedCount[$class->row_id] = $this->staff->geStaffClassCompletetedCount($staff_id,$class->term_name,$class->section_name,$class->stream_name);
+        }
+        $data['classCompletedCount'] = $classCompletedCount;
+     
+        
+        // $filter['search_date'] = $todayDate;
+        // $data['classCompletedInfo'] = $this->attendance->getAttendanceClassCompletedInfo();
+        // $isExists = $this->attendance->CheckTimetableDayShiftExists($filter);
+        // if($this->role == ROLE_TEACHING_STAFF){
+        //     $filter['staff_id'] = $this->staff_id;
+        // }
+        // if(!empty($isExists)){
+        //     $filter['week'] = $isExists->week_name;
+        //     $data['attendanceDate']= date('d-m-Y', strtotime($todayDate));
+        //     $data['attendanceInfo'] = $this->attendance->getShiftTimetableInfo($filter,$returns = '',$returns = '');
+        // }else{
+        //     $data['attendanceDate']= date('d-m-Y', strtotime($todayDate));
+        //     $filter['weekName'] = date('l',strtotime($todayDate));
+        //     $data['attendanceInfo'] = $this->attendance->getClassForAttendance($filter,$returns = '',$returns = '');
+        // }
+        
+        $exam_mark_first_test = array();
+        $student_id = $this->security->xss_clean($this->input->post('student_id'));
+        if(!empty($student_id)){
+            $filter['student_id'] = $student_id;
+            $studentRecord = $this->student->getStudentInfoByStudentId($filter); 
+            if(!empty($studentRecord)){
+                $std_batch = $studentRecord->batch;
+                $filter['doj'] = '';
+                if(date('Y-m-d',strtotime($studentRecord->doj))){
+                    $filter['doj'] = date('Y-m-d',strtotime($studentRecord->doj));
+                } else{
+                    $filter['doj'] = '';
+                }
+                // $filter['stream_name'] = $studentRecord->stream_name;
+                // $filter['section_name'] = $studentRecord->section_name;
+                // $filter['term_name'] = $studentRecord->term_name; 
+                $data['studentsRecords'] = $studentRecord;
+                $elective_sub = strtoupper($studentRecord->elective_sub);            
+                if($elective_sub == "KANNADA"){
+                    array_push($subjects_code, '01');
+                }else if($elective_sub == 'HINDI'){
+                    array_push($subjects_code, '03');
+                } else if($elective_sub == 'FRENCH'){
+                    array_push($subjects_code, '12');
+                }else{
+                    array_push($subject_mark_chart,0);
+                    array_push($subject_names, 'EXM');
+                }
+                array_push($subjects_code, '02');
+                $subjects = $this->getSubjectCodes($studentRecord->stream_name);
+               // log_message('debug','subjectsss'.print_r($subjects,true));
+               // log_message('debug','subjectssscodeee'.print_r($subjects_code,true));
+
+                $subjects_code = array_merge($subjects_code,$subjects);
+                $data['subject_code'] = $subjects_code;
+                // $filter['term_name'] = $studentRecord->term_name; 
+                $filter['term'] = '';
+
+                for($i=0;$i<count($subjects_code);$i++){
+
+                $class_held[] = 0;
+                $class_held_lab[]  = 0;
+                $class_attended = 0;
+                $absent_count[] = 0;
+                $std_absent_count[] = 0;
+                $absent_count_theory[] = 0;
+                $absent_count_lab[] = 0;
+                $absent_countLab[] = 0;
+                $subInfo[$subjects_code[$i]] = $this->subject->getAllSubjectByID($subjects_code[$i]);
+
+                    $type="THEORY";
+                    $filter['std_batch'] = '';
+                    $class_held[$subjects_code[$i]]+= $this->attendance->getClassInfoAttendanceReportStudent($subjects_code[$i],$filter,$type);
+                    
+                    $type="LAB";
+                    $filter['std_batch'] = $std_batch;
+                    $class_held_lab[$subjects_code[$i]]+= $this->attendance->getClassInfoAttendanceReportStudent($subjects_code[$i],$filter,$type);
+
+                    // if($class_held_lab != 0){
+                        $class_held[$subjects_code[$i]]+= ($class_held_lab[$subjects_code[$i]] * 2);
+                    // }
+                    // $data['classHeldDate'] = $this->attendance->getTotalClassHeldByStaff($subjects_code[$i],$filter,$type);
+                    
+                    // foreach($data['classHeldDate'] as $classdata){
+                    $type="THEORY";
+                    $absent_count_theory[$subjects_code[$i]] = $this->attendance->isStudentIsAbsentForClass($studentRecord->student_id,$subjects_code[$i],$filter,$type);
+                    
+                    // log_message('debug','absent_count_theory='.print_r($absent_count_theory,true));
+                    $type="LAB";
+                    $absent_count_lab[$subjects_code[$i]] = $this->attendance->isStudentIsAbsentForClass($studentRecord->student_id,$subjects_code[$i],$filter,$type);
+                    $absent_countLab[$subjects_code[$i]] = $absent_count_lab[$subjects_code[$i]] * 2;
+
+                    $std_absent_count[$subjects_code[$i]] = $absent_count_theory[$subjects_code[$i]] + $absent_countLab[$subjects_code[$i]];
+                    //     if($absent_count_theory != NULL){
+                    //         $absent_count += 1;
+                    //     }
+                    
+                    // }
+                
+                    
+                    //no change
+                    // $total_class_held_per_std+= $class_held;
+                    $absent_count[$subjects_code[$i]] = $class_held[$subjects_code[$i]] - $std_absent_count[$subjects_code[$i]];
+                    $absentCount[$subjects_code[$i]]+= $std_absent_count[$subjects_code[$i]];
+                    // $total_attd_class_std = $absentCount[$subjects_code[$i]];
+
+                    $data['class_held'] = $class_held;
+                    $data['class_attended'] = $absent_count;
+                    $data['subjects'] = $subInfo;
+                    
+                    // if($class_held != 0){
+                    //     $avg = ($absent_count)/$class_held;
+                    //     $percentage = round($avg*100, 2);
+                    // }else{
+                    //     $percentage = 0;
+                    // }
+                    // if(!empty($percentage_sort)){
+                    //     if($percentage <= $percentage_sort){
+                    //         $percentage_active = true;
+                    //     }
+                    // }
+                     $getMarkOfFirstUnitTest = $this->student->getFirstInternaltMark($studentRecord->student_id,$subjects_code[$i]);
+                
+                    $exam_mark_first_test[$i] = $getMarkOfFirstUnitTest;
+
+                    $getMarkOfmidTermExam = $this->student->getMidTermMark($studentRecord->student_id,$subjects_code[$i]); 
+                    $exam_mark_mid_term[$i] = $getMarkOfmidTermExam;
+                }
+                $data['firstUnitTestMarkInfo'] = $exam_mark_first_test;
+                $data['midTermMarkInfo'] = $exam_mark_mid_term;
+
+            } else {
+                $data['studentsRecords'] = '';
+                $data['studentSearchMsg'] = '<div class="alert alert-danger p-1 mb-0" role="alert">
+                Invalid Student ID
+              </div>';
+            }
+            $data['student_id'] =  $student_id;
+      
+        } else {
+            $data['student_id'] =  '';
+            $data['studentsRecords'] = '';
+            $data['studentSearchMsg'] = '<div class="alert card_head_dashboard p-1 mb-0" role="alert" style="color: #373737;">
+            Search by Student ID 
+          </div>';
+        }
+     
+        $staff_id = $this->security->xss_clean($this->input->post('staff_id'));
+        if(!empty($staff_id)){
+            $staffRecord = $this->staff->getStaffInfoForProfile($staff_id); 
+            if(!empty($staffRecord)){ 
+                $data['staffSectionInfo'] = $this->staff->getSectionByStaffId($staff_id);
+                $data['staffSubjectInfo'] = $this->staff->getAllSubjectByStaffId($staff_id);
+                $data['staffRecord'] = $staffRecord;
+            } else {
+                $data['staffRecord'] = '';
+                $data['staffSearchMsg'] = '<div class="alert alert-danger p-1 mb-0" role="alert">
+                    Invalid Staff ID
+                </div>';
+            }
+            $data['staff_id'] =  $staff_id;
+      
+        } else {
+            $data['staff_id'] =  '';
+            $data['staffRecord'] = '';
+            $data['staffSearchMsg'] = '<div class="alert  card_head_dashboard p-1 mb-0" role="alert" style="color: #373737;">
+                Search by Staff ID 
+            </div>';
+        }
+
+        $current_date_month =date('m-d');
+        $staffDob = array();
+        $staffbirthDate = $this->staff->getAllStaffInfo();
+        //log_message('debug','data'.print_r($staffbirthDate,true));
+        for($i=0;$i<count($staffbirthDate);$i++) {
+            $staff_dob = date('m-d',strtotime($staffbirthDate[$i]->dob));
+            //log_message('debug','data'.print_r($staff_dob,true));
+                if($staffbirthDate[$i]->dob != '0000-00-00' && $staffbirthDate[$i]->dob != ''){
+                 if($staff_dob == $current_date_month){
+                    $staffDob[$i] = $staffbirthDate[$i]->staff_id;
+                 }
+    
+               }
+            }
+
+            if(!empty($staffDob)){
+                $data['staffsBirthday'] = $this->staff->getStaffBirthdayInfoById($staffDob);
+               // log_message('debug','data'.print_r($data['staffsBirthday'],true));
+                }else{
+                    $data['staffDob'] =  '';
+                    $data['staffsBirthday'] = '';
+                    $data['staffbirthdayMsg'] = '<div class=" p-1 mb-0" role="alert">
+                            No Birthdays Today!
+                          </div>';
+                }
+
+                $studentDob = array();
+           $studentbirthDate = $this->student->getstudentInfo();
+            for($j=0;$j<count($studentbirthDate);$j++) {
+               if(!empty($studentbirthDate[$j]->dob)){
+                 if($studentbirthDate[$i]->dob != '0000-00-00' && $studentbirthDate[$i]->dob != ''){
+               $student_dob = date('m-d',strtotime($studentbirthDate[$j]->dob));
+                     if($student_dob == $current_date_month){
+                       
+                        $studentDob[$j] = $studentbirthDate[$j]->dob;
+                     }  
+               }
+            }   
+           }
+
+           if(!empty($studentDob)){
+            $data['studentsBirthday'] = $this->student->getStudentsBirthdayNotification($studentDob);
+            }else{
+                $data['studentDob'] =  '';
+                $data['studentsBirthday'] = '';
+                $data['studentbirthdayMsg'] = '<div class=" p-1 mb-0" role="alert">
+                        No Birthdays Today!
+                      </div>';
+            }
+                
+                $start_date = date('d')+1;
+            $end_date = date('d')+6;
+            // log_message('debug','data'.print_r($end_date,true));
+            $fromDate = date('m').'-'.$start_date;
+            $toDate = date('m').'-'.$end_date;
+
+            $staff_upcoming = array();
+            $staffUpcomingBday =  $this->staff->getAllStaffInfo();
+
+            for($i=0;$i<count($staffUpcomingBday);$i++) {
+                $staff_up = date('m-d',strtotime($staffUpcomingBday[$i]->dob));
+                if($staffUpcomingBday[$i]->dob != '0000-00-00' && $staffUpcomingBday[$i]->dob != ''){
+                        if($staff_up >= $fromDate && $staff_up <= $toDate){
+                            $staff_upcoming[$i] = $staffUpcomingBday[$i]->staff_id;
+                        }
+                        }
+           }
+
+           if(!empty($staff_upcoming)){
+            $data['staffUpcomingBday'] = $this->staff->getStaffBirthdayInfoById($staff_upcoming);
+            }else{
+                $data['staff_upcoming'] =  '';
+                $data['staffUpcomingBday'] = '';
+                $data['staffUpcomingbirthdayMsg'] = '<div class=" p-1 mb-0" role="alert">
+                        No Upcoming Birthdays!
+                      </div>';
+            }
+
+            $student_upcoming = array();
+       $studentUpcomingBday = $this->student->getstudentInfo();
+        for($j=0;$j<count($studentUpcomingBday);$j++) {
+            if(!empty($studentUpcomingBday[$j]->dob)){
+           $student_up = date('m-d',strtotime($studentUpcomingBday[$j]->dob));
+                 if($student_up >= $fromDate && $student_up <= $toDate){
+                   
+                    $student_upcoming[$j] = $studentUpcomingBday[$j]->dob;
+                    
+                 }
+            }
+
+       }
+
+       if(!empty($student_upcoming)){
+        $data['studentUpcomingBday'] = $this->student->getStudentsBirthdayNotification($student_upcoming);
+
+        }else{
+            $data['student_upcoming'] =  '';
+            $data['studentUpcomingBday'] = '';
+            $data['studentUpcomingbirthdayMsg'] = '<div class=" p-1 mb-0" role="alert">
+                    No Upcoming Birthdays!
+                  </div>';
+        }
+    
+        if($this->role == ROLE_TEACHING_STAFF){
+            $filter['role'] = 'Staff';
+            $filter['role_one'] = 'ALL';
+        }
+        $this->load->library('pagination');
+        $newsCount = $this->staff->getNewsFeedCount($filter);
+        $returns = $this->paginationCompress("facultyDashboard/", $newsCount, 4);
+       // log_message('debug','count'.print_r($returns,true));
+        $filter['page'] = $returns["page"];
+        $filter['segment'] = $returns["segment"];
+        $data['newsInfo'] = $this->staff->getNewsFeed($filter);
+        $data['from_date'] = $from_date = $this->security->xss_clean($this->input->post('from_date'));
+     $data['to_date'] = $to_date = $this->security->xss_clean($this->input->post('to_date'));
+     if(empty($from_date)){
+         $from_date = date('Y-m-d');
+         $to_date = date('Y-m-d');
+        
+     }
+     
+     $data['from_date'] = $from_date;
+     $data['to_date'] = $to_date;
+ 
+     $data['fees_paid'] = $this->fee->getTotalPaidAmountByDate($from_date,$to_date);
+     $data['mis_paid'] = $this->fee->getTotalMisAmountByDate($from_date,$to_date);
+  
+       // $newsCount = $this->staff->getNewsFeedCount($filter);
+        $returns = $this->paginationCompress("facultyDashboard/", $newsCount, 4);
+        $filter['page'] = $returns["page"];
+        $filter['segment'] = $returns["segment"];
+       // $data['newsInfo'] = $this->staff->getNewsFeed($filter);
+        // foreach($data['newsInfo'] as $news){
+        //     $news->isLiked=$this->staff->isLiked($news->row_id,$this->session->userdata('staff_id'));
+        //     $news->totalLikes=$this->staff->totalLikes($news->row_id);
+        // }
+        $this->global['pageTitle'] = ''.TAB_TITLE.' : Teaching Staff Dashboard';
+        $this->loadViews("adminDashboard", $this->global, $data, null);
+    }
+
     public function viewMyProfile($active = "details")
     {
         if ($this->isAdmin() == true) {

@@ -197,7 +197,7 @@ if ($success) {
                                                 <?php if(!empty($library->upload_pdf)){ ?>
                                                     <a href="<?php echo $library->upload_pdf; ?>" target="_blank" class="btn btn-xs btn-primary"><i class="fa fa-file"></i>Preview</a>
                                                 <?php  } ?>
-                                                <?php if ($role == ROLE_ADMIN || $role == ROLE_LIBRARY || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_RECEPTION) { ?>
+                                                <?php if ($role == ROLE_ADMIN || $role == ROLE_LIBRARY || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_RECEPTION || $role == ROLE_SUPER_ADMIN) { ?>
                                                     <a class="btn btn-xs btn-info" target="_blank" href="<?php echo base_url(); ?>editLibrary/<?php echo $library->row_id; ?>" title="Edit Library Info"><i class="fas fa-pencil-alt"></i></a>
                                                     <a class="btn btn-xs btn-danger deleteLibraryDetails" href="#" data-row_id="<?php echo $library->row_id; ?>" title="Delete Library details"><i class="fa fa-trash"></i></a>
                                                 <?php } ?>
