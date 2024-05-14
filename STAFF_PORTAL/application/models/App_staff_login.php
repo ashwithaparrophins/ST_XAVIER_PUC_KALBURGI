@@ -354,6 +354,61 @@ class App_staff_login extends CI_Model
         return $query->result();
     }
 
+    function getManagmentStatus($staff_id)
+    {
+        $this->db->select('management_view_status');
+        $this->db->from('tbl_staff');
+        $this->db->where('staff_id', $staff_id); // Modified line
+        $this->db->where('is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+   
+
+    function updateOtp($info, $mblNumber)
+    {
+        $this->db->group_start();
+        $this->db->where('mobile_one', $mblNumber);
+        $this->db->or_where('mobile_two', $mblNumber);
+        $this->db->group_end();
+        $this->db->update('tbl_staff', $info);
+        return true;
+    }
+
+    function checkOtp($mblNumber, $otp)
+    {
+        $this->db->from('tbl_staff');
+        $this->db->where('is_deleted', 0);
+        $this->db->group_start();
+        $this->db->where('mobile_one', $mblNumber);
+        $this->db->or_where('mobile_two', $mblNumber);
+        $this->db->group_end();
+        $this->db->where('last_otp', $otp);
+        $query = $this->db->get();
+        $user = $query->row();
+        return $user;
+    }
+
+    function getAllApproveLeaveList($staff_id)
+    {
+        $this->db->select(
+            'leave.row_id, leave.staff_id, leave.applied_date_time, leave.date_from, leave.date_to, leave.approved_status, leave.total_days_leave, leave.leave_reason, leave.remark, leave.leave_type, leave.leave_name, leave.approved_by, leave.rejected_by, leave.created_by, leave.created_date_time, leave.updated_date_time, leave.updated_by, leave.is_deleted, leave.medical_certificate'
+        );
+        $this->db->from('tbl_staff_applied_leave as leave');
+        $this->db->join(
+            'tbl_staff as staff',
+            'staff.staff_id = leave.staff_id'
+        );
+        $this->db->where('leave.staff_id !=', $staff_id); // Modified line
+        $this->db->order_by('leave.created_date_time', 'desc'); // Sort by created_date_time in descending order
+        $this->db->where('leave.is_deleted', 0);
+        $this->db->where('staff.management_view_status', 1);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+
 
 
     

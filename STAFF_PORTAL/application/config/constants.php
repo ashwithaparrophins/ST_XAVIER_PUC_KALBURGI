@@ -364,3 +364,12 @@ define('STAFF_PUBLIC_FCM_SERVER_VAPID_KEY',                  'BAuVZCqXmNYTPdCWlC
 
 
 define('PASSWORD','parro@123');
+
+define('APP_USERNAME_TEXTLOCAL',                            'kjes@schoolphins.com'); 
+define('APP_HASH_TEXTLOCAL',                                'fc8d5300f261a57362c974bdd0a3ed81862f874df4f99fc1b4004673ff97b40c'); 
+define('APP_SENDERID_TEXTLOCAL',                            'PARROP');   
+define('APP_API_KEY',                                       'MzE2ZTcyNTkzODM1NDE2MjM5NmMzNTczNzA0ODY4NGU='); 
+
+define('KJES_LINK',                                       'http://192.168.0.65/KJES_STAFF/ADMIN_PANEL/apifetchTokenSuperAdmin/'); 
+
+//define('KJES_LINK',                                       'https://kjes.schoolphins.com/apifetchTokenSuperAdmin/'); 

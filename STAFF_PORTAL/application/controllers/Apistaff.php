@@ -24,23 +24,28 @@ class ApiStaff extends CI_Controller
 
         $isExist = $this->app_staff_login->checkMobNo($mbl_number);
         if ($isExist > 0) {
-            //         $otp = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-            //         $appId="WPtmySv14q3";
-            //         $message = "$otp is your verification code for PARROPASS. $appId
-            // Regards, Parrophins.";
-            //         $result_sms = $this->sendOtpmsg($mbl_number, $message);
+            $otp = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+            $appId = 'BVnhKhGtGAc';
+            $message = "$otp is your verification code for STAFF APP $appId Regards, Parrophins.";
+            $result_sms = $this->sendOtpmsg($mbl_number, $message);
 
-            //        if($mbl_number!='1234567891' && $mbl_number!='1231231231' && $mbl_number!='1212121212'  && $mbl_number!='1313131313'){
-            //             if($result_sms == 'success'){
+            if (
+                $mbl_number != '1234567891' &&
+                $mbl_number != '1231231231' &&
+                $mbl_number != '1212121212' &&
+                $mbl_number != '1313131313'
+            ) {
+                if ($result_sms == 'success') {
+                    $otpUpdate = [
+                        'last_otp' => $otp,
+                    ];
 
-            //                 $otpUpdate = array(
-            //                     'last_otp'=>$otp
-            //                 );
-
-            //                 $update = $this->login_model->updateUserOtp($mbl_number,$otpUpdate);
-
-            //             }
-            //        }
+                    $update = $this->app_staff_login->updateOtp(
+                        $otpUpdate,
+                        $mbl_number
+                    );
+                }
+            }
             $msg = 'isExist';
         } else {
             $msg = 'failed';
@@ -48,6 +53,48 @@ class ApiStaff extends CI_Controller
 
         echo json_encode($msg);
     }
+
+    public function sendOtpmsg($mobile, $msg)
+    {
+
+        $message = rawurlencode($msg);
+
+        $data = "username=" . APP_USERNAME_TEXTLOCAL . "&hash=" . APP_HASH_TEXTLOCAL . "&message=" . $message . "&sender=" . APP_SENDERID_TEXTLOCAL . "&numbers=" . $mobile;
+
+        $ch = curl_init('https://api.textlocal.in/send/?');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result_sms = curl_exec($ch); // This is the result from the API
+
+        $json = json_decode($result_sms, true);
+        $status = $json['status'];
+
+        curl_close($ch);
+        return $status;
+    }
+
+    public function checkOtp(){
+        $json = file_get_contents('php://input'); 
+        $obj = json_decode($json,true);  
+       // log_message('debug','obj--->'.print_r($obj,true));
+        $mbl_number = $obj['mobile_number'];
+        $otp=$obj['otp'];
+    
+        
+        $isExist = $this->app_staff_login->checkOtp($mbl_number,$otp);
+
+        if($isExist > 0) {  
+            $msg='success'; 
+        }else { 
+            $msg= 'failed'; 
+        }     
+        //log_message('debug','msg-->'.print_r($msg,true));
+    
+        echo json_encode($msg);
+    }
+
 
     public function fetchstaffDetails()
     {
@@ -396,7 +443,7 @@ class ApiStaff extends CI_Controller
         $leaveName = $obj['leave_name'];
         $staffName = $obj['staff_name'];
 
-        //log_message('debug', 'leaveName is -->' . print_r($leaveName, true));
+      //  log_message('debug', 'leaveName is -->' . print_r($leaveName, true));
 
         $leaveInfo = [
             'staff_id' => $staff_id,
@@ -417,32 +464,63 @@ class ApiStaff extends CI_Controller
         if ($insertLeave > 0) {
             $fetchApproversList = $this->app_staff_login->fetchApproverList();
 
-            foreach ($fetchApproversList as $info) {
-                $title = 'Leave Request';
+            $fetchMangementStatus = $this->app_staff_login->getManagmentStatus($staff_id);
+            //log_message('debug', 'fetchMangementStatus: '.print_r($fetchMangementStatus,true));
 
-                $body = "$staffName  has requested leave for $totalLeave days";
+            $title = 'Leave Request';
 
-               // log_message('debug', 'body-->' . print_r($body, true));
+            $body = "$staffName  has requested leave for $totalLeave days";
 
-                $staff_token = $this->app_staff_login->getToken(
-                    $info->staff_id
-                );
-
-                $tokenCheck = $staff_token[0]->token;
-                // log_message(
-                //     'debug',
-                //     'tokenCheck-->' . print_r($tokenCheck, true)
-                // );
-
-                if (!empty($tokenCheck)) {
-                    $this->app_staff_login->sendMessage(
-                        $title,
-                        $body,
-                        $tokenCheck,
-                        ''
-                    );
+            if ($fetchMangementStatus[0]->management_view_status == 1) {
+                // Make GET request to the API endpoint
+                $apiUrl = KJES_LINK;
+                $ch = curl_init($apiUrl);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec($ch);
+                curl_close($ch);
+                // Parse JSON response
+                $tokens = json_decode($response, true);
+            
+                // Log tokens
+                if ($tokens !== null) {
+                    foreach ($tokens as $tokenData) {
+                        if (isset($tokenData['token'])) {
+                            $token = $tokenData['token'];
+                            $this->app_staff_login->sendMessage(
+                                $title,
+                                $body,
+                                $token,
+                                ''
+                            );
+                          //  log_message('debug', 'Token: '.print_r($token,true));
+                        }
+                    }
+                } else {
+                   // log_message('error', 'Failed to fetch tokens from the API.');
                 }
+            }else{
+
+                foreach ($fetchApproversList as $info) {
+               
+
+                    $staff_token = $this->app_staff_login->getToken(
+                        $info->staff_id
+                    );
+    
+                    $tokenCheck = $staff_token[0]->token;
+                    
+                    if (!empty($tokenCheck)) {
+                        $this->app_staff_login->sendMessage(
+                            $title,
+                            $body,
+                            $tokenCheck,
+                            ''
+                        );
+                    }
+                }
+
             }
+                   
 
             $msg = 'success';
         } else {
@@ -501,38 +579,96 @@ class ApiStaff extends CI_Controller
         if ($insertLeave > 0) {
             $fetchApproversList = $this->app_staff_login->fetchApproverList();
 
-            foreach ($fetchApproversList as $info) {
-                $title = 'Leave Request';
 
-                $body = "$staffName  has requested leave for $totalLeave days";
+            $fetchMangementStatus = $this->app_staff_login->getManagmentStatus($staff_id);
+          //  log_message('debug', 'fetchMangementStatus: '.print_r($fetchMangementStatus,true));
 
-               // log_message('debug', 'body-->' . print_r($body, true));
+            $title = 'Leave Request';
 
-                $staff_token = $this->app_staff_login->getToken(
-                    $info->staff_id
-                );
+            $body = "$staffName  has requested leave for $totalLeave days";
 
-                $tokenCheck = $staff_token[0]->token;
-                // log_message(
-                //     'debug',
-                //     'tokenCheck-->' . print_r($tokenCheck, true)
-                // );
-
-                if (!empty($tokenCheck)) {
-                    $this->app_staff_login->sendMessage(
-                        $title,
-                        $body,
-                        $tokenCheck,
-                        ''
-                    );
+            if ($fetchMangementStatus[0]->management_view_status == 1) {
+                // Make GET request to the API endpoint
+                $apiUrl = KJES_LINK;
+                $ch = curl_init($apiUrl);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec($ch);
+                curl_close($ch);
+                // Parse JSON response
+                $tokens = json_decode($response, true);
+            
+                // Log tokens
+                if ($tokens !== null) {
+                    foreach ($tokens as $tokenData) {
+                        if (isset($tokenData['token'])) {
+                            $token = $tokenData['token'];
+                            $this->app_staff_login->sendMessage(
+                                $title,
+                                $body,
+                                $token,
+                                ''
+                            );
+                            //log_message('debug', 'Token: '.print_r($token,true));
+                        }
+                    }
+                } else {
+                   // log_message('error', 'Failed to fetch tokens from the API.');
                 }
+            }else{
+
+                foreach ($fetchApproversList as $info) {
+               
+
+                    $staff_token = $this->app_staff_login->getToken(
+                        $info->staff_id
+                    );
+    
+                    $tokenCheck = $staff_token[0]->token;
+                    
+                    if (!empty($tokenCheck)) {
+                        $this->app_staff_login->sendMessage(
+                            $title,
+                            $body,
+                            $tokenCheck,
+                            ''
+                        );
+                    }
+                }
+
             }
+
+            // foreach ($fetchApproversList as $info) {
+            //     $title = 'Leave Request';
+
+            //     $body = "$staffName  has requested leave for $totalLeave days";
+
+            //     log_message('debug', 'body-->' . print_r($body, true));
+
+            //     $staff_token = $this->app_staff_login->getToken(
+            //         $info->staff_id
+            //     );
+
+            //     $tokenCheck = $staff_token[0]->token;
+            //     log_message(
+            //         'debug',
+            //         'tokenCheck-->' . print_r($tokenCheck, true)
+            //     );
+
+            //     if (!empty($tokenCheck)) {
+            //         $this->app_staff_login->sendMessage(
+            //             $title,
+            //             $body,
+            //             $tokenCheck,
+            //             ''
+            //         );
+            //     }
+            // }
             $msg = 'success';
         } else {
             $msg = 'failed';
         }
 
-      //  log_message('debug', 'leaveInfo is -->' . print_r($leaveInfo, true));
+       // log_message('debug', 'leaveInfo is -->' . print_r($leaveInfo, true));
 
         echo json_encode($msg);
     }
@@ -577,6 +713,7 @@ class ApiStaff extends CI_Controller
         $leaveId = $obj['leave_id'];
         $staffName = $obj['name'];
         $totalLeave = $obj['total_leave'];
+        $staff_id = $obj['staff_id'];
       //  log_message('debug', 'leaveId-->' . print_r($leaveId, true));
 
         $leaveInfo = [
@@ -591,34 +728,90 @@ class ApiStaff extends CI_Controller
         if ($cancellLeave > 0) {
             $fetchApproversList = $this->app_staff_login->fetchApproverList();
 
-            foreach ($fetchApproversList as $info) {
-                $title = 'Leave Cancelled';
+            $fetchMangementStatus = $this->app_staff_login->getManagmentStatus($staff_id);
+          //  log_message('debug', 'fetchMangementStatus: '.print_r($fetchMangementStatus,true));
 
-                $body = "$staffName  has cancelled leave request for $totalLeave days";
+            $title = 'Leave Cancelled';
 
-              //  log_message('debug', 'body-->' . print_r($body, true));
+            $body = "$staffName  has cancelled leave request for $totalLeave days";
 
-                $staff_token = $this->app_staff_login->getToken(
-                    $info->staff_id
-                );
-
-                $tokenCheck = $staff_token[0]->token;
-                // log_message(
-                //     'debug',
-                //     'tokenCheck-->' . print_r($tokenCheck, true)
-                // );
-
-                if (!empty($tokenCheck)) {
-                    $this->app_staff_login->sendMessage(
-                        $title,
-                        $body,
-                        $tokenCheck,
-                        ''
-                    );
+            if ($fetchMangementStatus[0]->management_view_status == 1) {
+                // Make GET request to the API endpoint
+                $apiUrl = KJES_LINK;
+                $ch = curl_init($apiUrl);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec($ch);
+                curl_close($ch);
+                // Parse JSON response
+                $tokens = json_decode($response, true);
+            
+                // Log tokens
+                if ($tokens !== null) {
+                    foreach ($tokens as $tokenData) {
+                        if (isset($tokenData['token'])) {
+                            $token = $tokenData['token'];
+                            $this->app_staff_login->sendMessage(
+                                $title,
+                                $body,
+                                $token,
+                                ''
+                            );
+                           // log_message('debug', 'Token: '.print_r($token,true));
+                        }
+                    }
+                } else {
+                   // log_message('error', 'Failed to fetch tokens from the API.');
                 }
-            }
-            $msg = 'success';
+            }else{
 
+                foreach ($fetchApproversList as $info) {
+               
+
+                    $staff_token = $this->app_staff_login->getToken(
+                        $info->staff_id
+                    );
+    
+                    $tokenCheck = $staff_token[0]->token;
+                    
+                    if (!empty($tokenCheck)) {
+                        $this->app_staff_login->sendMessage(
+                            $title,
+                            $body,
+                            $tokenCheck,
+                            ''
+                        );
+                    }
+                }
+
+            }
+
+            // foreach ($fetchApproversList as $info) {
+              
+
+            //     log_message('debug', 'body-->' . print_r($body, true));
+
+                
+
+            //     $staff_token = $this->app_staff_login->getToken(
+            //         $info->staff_id
+            //     );
+
+            //     $tokenCheck = $staff_token[0]->token;
+            //     log_message(
+            //         'debug',
+            //         'tokenCheck-->' . print_r($tokenCheck, true)
+            //     );
+
+            //     if (!empty($tokenCheck)) {
+            //         $this->app_staff_login->sendMessage(
+            //             $title,
+            //             $body,
+            //             $tokenCheck,
+            //             ''
+            //         );
+            //     }
+            // }
+            $msg = 'success';
         } else {
             $msg = 'failed';
         }
@@ -627,6 +820,7 @@ class ApiStaff extends CI_Controller
 
         echo json_encode($msg);
     }
+
 
     function dashboardMenu()
     {
@@ -1250,6 +1444,143 @@ class ApiStaff extends CI_Controller
         // );
 
         echo json_encode($fetchDetails);
+    }
+
+    public function approveAllLeaveList()
+    {
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json, true);
+        //log_message('debug', 'obj-->' . print_r($obj, true));
+        $staff_id = $obj['staff_id'];
+        //  log_message('debug', 'staff_id-->' . print_r($staff_id, true));
+
+        $fetchLeaveHistory = $this->app_staff_login->getAllApproveLeaveList(
+            $staff_id
+        );
+       // log_message('debug', 'all fetchLeaveHistory-->' . print_r($fetchLeaveHistory, true));
+
+        $db_data = [];
+        foreach ($fetchLeaveHistory as $info) {
+            $info->date_from = date('d-m-Y', strtotime($info->date_from));
+            $info->date_to = date('d-m-Y', strtotime($info->date_to));
+            $info->applied_date_time = date(
+                'd-m-Y',
+                strtotime($info->applied_date_time)
+            );
+
+            $getStaffDetails = $this->app_staff_login->getStaffName(
+                $info->staff_id
+            );
+
+            $fetchLeaveManagement = $this->app_staff_login->fetchLeaveMangementInfo(
+                $info->staff_id
+            );
+
+            $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP'];
+
+            $leaveCounts = [];
+            foreach ($leaveTypes as $type) {
+                $leaveCount = $this->app_staff_login->getLeaveUsedSum(
+                    $info->staff_id,
+                    $type
+                )->total_days_leave;
+                $leaveCounts[$type] = $leaveCount;
+
+                if ($type == 'CL') {
+                    $casualLeaveEarned =
+                        $fetchLeaveManagement[0]->casual_leave_earned;
+                    // log_message(
+                    //     'debug',
+                    //     '$casualLeaveEarned' . $casualLeaveEarned
+                    // );
+
+                    $casualLeaveUsed = $leaveCount;
+                    $casualRemaining =
+                        $fetchLeaveManagement[0]->casual_leave_earned -
+                        $leaveCount;
+                } elseif ($type == 'ML') {
+                    $medicalEraned =
+                        $fetchLeaveManagement[0]->sick_leave_earned;
+                    $medicalUsed = $leaveCount;
+                    $medicalRemaining =
+                        $fetchLeaveManagement[0]->sick_leave_earned -
+                        $leaveCount;
+                } elseif ($type == 'MARL') {
+                    $marriageLeaveEarned =
+                        $fetchLeaveManagement[0]->marriage_leave_earned;
+                    $marriageLeaveUsed = $leaveCount;
+                    $marriageLeaveRemaining =
+                        $fetchLeaveManagement[0]->marriage_leave_earned -
+                        $leaveCount;
+                } elseif ($type == 'PL') {
+                    $paternityLeaveEarned =
+                        $fetchLeaveManagement[0]->paternity_leave_earned;
+                    $paternityLeaveUsedd = $leaveCount;
+                    $paternityLeaveRemaining =
+                        $fetchLeaveManagement[0]->paternity_leave_earned -
+                        $leaveCount;
+                } elseif ($type == 'MATL') {
+                    $maternityLeaveEarned =
+                        $fetchLeaveManagement[0]->maternity_leave_earned;
+                    $maternityLeaveUsed = $leaveCount;
+                    $maternityLeaveRemaining =
+                        $fetchLeaveManagement[0]->maternity_leave_earned -
+                        $leaveCount;
+                } elseif ($type == 'LOP') {
+                    $lopUsed = $leaveCount;
+                }
+
+               // log_message('debug', "$type count: $leaveCount");
+            }
+
+            if ($info->approved_status == 0) {
+                $info->status = 'Pending';
+            } elseif ($info->approved_status == 1) {
+                $info->status = 'Approved';
+            } else {
+                $info->status = 'Rejected';
+            }
+
+            $info->staff_name = $getStaffDetails[0]->name;
+
+            //csual leave
+
+            $info->casualLeaveEarned = $casualLeaveEarned ?? 0;
+            $info->casualLeaveUsed = $casualLeaveUsed ?? 0;
+            $info->casualLeaveRemain = $casualRemaining ?? 0;
+
+            //medical leave
+
+            $info->medicalLeaveEarned = $medicalEraned ?? 0;
+            $info->medicalLeaveUsed = $medicalUsed ?? 0;
+            $info->medicalLeaveRemain = $medicalRemaining ?? 0;
+
+            //marriage leave
+
+            $info->marriageLeaveEarned = $marriageLeaveEarned ?? 0;
+            $info->marriageLeaveUsed = $marriageLeaveUsed ?? 0;
+            $info->marriageLeaveRemain = $marriageLeaveRemaining ?? 0;
+
+            //paternity Leave
+
+            $info->paternityLeaveEarned = $paternityLeaveEarned ?? 0;
+            $info->paternityLeaveUsed = $paternityLeaveUsedd ?? 0;
+            $info->paternityLeaveRemain = $paternityLeaveRemaining ?? 0;
+
+            //maternity leave
+            $info->maternityLeaveEarned = $maternityLeaveEarned ?? 0;
+            $info->maternityLeaveUsed = $maternityLeaveUsed ?? 0;
+            $info->maternityLeaveRemain = $maternityLeaveRemaining ?? 0;
+
+            //LOP
+            $info->lopused = $lopUsed ?? '0';
+
+            $db_data[] = $info;
+        }
+      //  log_message('debug', 'db_data-->' . print_r($db_data, true));
+
+        $data = json_encode($db_data);
+        echo $data;
     }
 }
 ?>
