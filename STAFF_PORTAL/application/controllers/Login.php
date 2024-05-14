@@ -95,7 +95,7 @@ class Login extends CI_Controller
 
 
     public function directLogin($staff_id,$type){
-        $result = $this->login->loginMe($staff_id, "parro@123");
+        $result = $this->login->loginMe($staff_id, PASSWORD);
         if(!empty($result)){
             $lastLogin = $this->login->lastLoginInfo($result->staff_id);
             $sessionArray = array('staff_id'=>$result->staff_id,                    
@@ -114,13 +114,13 @@ class Login extends CI_Controller
             unset($sessionArray['userId'], $sessionArray['isLoggedIn'], $sessionArray['lastLogin']);
             $loginInfo = array("userId"=>$result->staff_id, "sessionData" => json_encode($sessionArray), "machineIp"=>$_SERVER['REMOTE_ADDR'], "userAgent"=>getBrowserAgent(), "agentString"=>$this->agent->agent_string(), "platform"=>$this->agent->platform());
             $this->login->lastLogin($loginInfo); 
-            if($type== "staffListing"){  
-              redirect('schoolStaffDetails');
-            }else if($type== "admissionDashboard"){
-              redirect('viewAdmissionDashboard');
-            }else{
+            // if($type== "staffListing"){  
+            //   redirect('schoolStaffDetails');
+            // }else if($type== "admissionDashboard"){
+            //   redirect('viewAdmissionDashboard');
+            // }else{
               redirect('adminDashboard');
-            }
+            // }
         } else {
             $this->session->set_flashdata('error', 'Username or Password Mismatch');
             $this->index();
