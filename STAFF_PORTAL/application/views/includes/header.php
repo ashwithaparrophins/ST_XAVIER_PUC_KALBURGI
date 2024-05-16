@@ -1408,120 +1408,120 @@
     </a>
     <div class="dropdown-menu dropdown-menu-small styleClass" aria-labelledby="dropdownMenuLink">
     <a class="dropdown-item"
-            href="http://localhost/KJES_STAFF/ADMIN_PANEL/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/indian.png" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">KJES</p>
-            </div>
-        </a>
-        <a class="dropdown-item"
-            href="http://localhost/INDIAN_INSTITUTE_HIGH_SCHOOL/STAFF/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/indian.png" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">INDIAN INSTITUTE HIGH SCHOOL</p>
-            </div>
-        </a>
+    href="https://kjes.schoolphins.com/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/KJES.jpeg" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">KJES</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item"
+                                href="https://sjhigh.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/indian.png" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">INDIAN INSTITUTE HIGH SCHOOL</p>
+                                </div>
+                            </a>
 
-        <a class="dropdown-item"
-            href="http://localhost/XAVIER_SCHOOL_GULBARGA/STAFF/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/XAVIER.jpg" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">XAVIER SCHOOL GULBARGA</p>
-            </div>
-        </a>
-       
-        <a class="dropdown-item" href="http://localhost/INDIAN_JOSEPH_CBSE_SCHOOL/STAFF_PORTAL/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/joseph.jpg" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">ST JOSEPH'S SCHOOL</p>
-            </div>
-        </a>
-        <a class="dropdown-item" href="http://localhost/ST_XAVIER_PUC_KALBURGI/STAFF_PORTAL/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/logo_stxpuc.jpg" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">ST XAVIER'S PRE–UNIVERSITY COLLEGE, KALABURAGI</p>
-            </div>
-        </a>
-        <a class="dropdown-item" href="https://localhost/SJ_COMMUNITY_COLLEGE_BANGALORE/STAFF/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/sjcc.png" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">ST. JOSEPH SKILL ACADEMY</p>
-            </div>
-        </a>
-        <a class="dropdown-item" href="http://localhost/INDIAN_INSTITUTE_PUC_BANGALORE/STAFF/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/composite.png" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">ST JOSEPH'S INDIAN COMPOSITE PU COLLEGE</p>
-            </div>
-        </a>
-        <a class="dropdown-item" href="http://localhost/JOSEPH_INDIAN_PRIMARY_SCHOOL_BANGALORE/STAFF_PORTAL/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/joseph_logo.png" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">ST JOSEPH'S INDIAN PRIMARY SCHOOL</p>
-            </div>
-        </a>
-        <a class="dropdown-item" href="http://localhost/ST_JOSEPH_JNANA_ANEKAL/STAFF/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/anekal_logo.png" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">ST JOSEPH'S SCHOOL ANEKAL</p>
-            </div>
-        </a>
-        <a class="dropdown-item" href="http://localhost/ST_JOSEPHS_JNANA_JYOTHI_PUC_ANEKAL/STAFF_PORTAL/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/anekal_logo2.jpg" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">ST JOSEPH'S PUC ANEKAL</p>
-            </div>
-        </a>
-        <a class="dropdown-item" href="http://localhost/HOLY_ANGEL_SCHOOL/STAFF_PORTAL/directLogin/<?php echo $this->staff_id; ?>/dashboard">
-            <div class="notification__icon-wrapper">
-                <div class="notification__icon">
-                <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/Holyangle_logo.png" class="round-image" alt="Image">
-                </div>
-            </div>
-            <div class="notification__content">
-                <p style="color: #000000; font-weight: bold;">ST. JOSEPH SCHOOL PANDITAHALLI</p>
-            </div>
-        </a>
+                            <a class="dropdown-item"
+                                href="https://kxschool.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/XAVIER.jpg" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">XAVIER SCHOOL GULBARGA</p>
+                                </div>
+                            </a>
+                           
+                            <a class="dropdown-item" href="https://sjscbse.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/joseph.jpg" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">ST JOSEPH'S SCHOOL</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item" href="https://kxpuc.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/logo_stxpuc.jpg" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">ST XAVIER'S PRE–UNIVERSITY COLLEGE, KALABURAGI</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item" href="https://sjcc.collegephins.com/staff/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/sjcc.png" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">ST. JOSEPH SKILL ACADEMY</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item" href="https://sjicpuc.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/composite.png" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">ST JOSEPH'S INDIAN COMPOSITE PU COLLEGE</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item" href="https://sjips.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/joseph_logo.png" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">ST JOSEPH'S INDIAN PRIMARY SCHOOL</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item" href="https://stja.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/anekal_logo.png" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">ST JOSEPH'S SCHOOL ANEKAL</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item" href="https://stjpuc.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/anekal_logo2.jpg" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">ST JOSEPH'S PUC ANEKAL</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item" href="https://sjsp.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/dashboard">
+                                <div class="notification__icon-wrapper">
+                                    <div class="notification__icon">
+                                    <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/Holyangle_logo.png" class="round-image" alt="Image">
+                                    </div>
+                                </div>
+                                <div class="notification__content">
+                                    <p style="color: #000000; font-weight: bold;">ST. JOSEPH SCHOOL PANDITAHALLI</p>
+                                </div>
+                            </a>
          <!-- 
         <a class="dropdown-item" href="https://kmsc.collegephins.com/staff/directLogin/<?php echo $staff_id; ?>">
             <div class="notification__icon-wrapper">
