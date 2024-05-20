@@ -518,4 +518,21 @@ class Settings_model extends CI_Model{
 
     }
 
+
+    function getEmployeeId() {
+        $this->db->from('tbl_staff');
+        $this->db->where('staff_id!=','123456');
+        $this->db->where('role!=','50');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function updateEmployeeIdInfo($idInfo, $staff_id) {   
+        $this->db->where('row_id', $staff_id);
+        $this->db->update('tbl_staff', $idInfo);
+        return TRUE;
+
+    }
+
+
 }

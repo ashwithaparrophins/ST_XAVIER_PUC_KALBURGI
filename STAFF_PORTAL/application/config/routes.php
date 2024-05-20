@@ -1281,5 +1281,8 @@ $route['deleteDocument'] = "staffs/deleteDocument";
 $route['addDocName'] = "settings/addDocName";
 $route['deleteDocumentType'] = "settings/deleteDocumentType";
 
+$route['employeeIdUpdate'] = "settings/employeeIdUpdate";
+
+
 
 

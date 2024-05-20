@@ -1380,4 +1380,38 @@ $count++;
         }
 
 
+        public function employeeIdUpdate() {
+            if($this->isAdmin() == TRUE)
+            {
+                $this->loadThis();
+            }  else {
+                $employeeIdInfo = $this->settings->getEmployeeId();
+                $number_part_15 = 0;
+                
+                foreach($employeeIdInfo as $info){
+                    if(!empty($info->doj) && $info->doj!= '0000-00-00'){
+                    $dateOfJoin = str_replace(".", "-", $info->doj);
+                  
+                        $number_part_15++;
+                        $unitName = "SXPUK";
+                        $number_part_15 = sprintf('%03d',$number_part_15);
+                        $employee_id = date('Y',strtotime($dateOfJoin)).$unitName.$number_part_15; 
+                       
+                        $staffInfo = array(
+                            'employee_id'   => trim($employee_id));
+        
+                        $result = $this->settings->updateEmployeeIdInfo($staffInfo,trim($info->row_id));
+                    
+                  }
+                }
+                if($result > 0){
+                    $this->session->set_flashdata('success', 'Updated successfully');
+                } else{
+                    $this->session->set_flashdata('error', 'Update failed');
+                }
+                redirect('viewSettings');
+            }
+        }
+
+
 }
