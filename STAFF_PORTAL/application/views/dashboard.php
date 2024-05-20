@@ -194,11 +194,11 @@ if ($warning) {
     <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_VICE_PRINCIPAL) { ?>
         <div class="row ">
             <div class="col-lg-3 col-6 mb-2 column_padding_card">
-                <div class="card card-small dash-card" style="background: #6aacc5;">
+                <div class="card card-small dash-card" style="background: linear-gradient(45deg,#1ce0b9,#55e7ca);">
                     <a onclick="showLoader();" href="<?php echo base_url(); ?>studentDetails" class="dashboard_link">
                         <div class="card-body pt-1 pb-1">
-                            <span class="stats-small__label text-uppercase text-white text-center">Students</span>
-                            <h6 class="stats-small__value count text-white">
+                            <span class="text-uppercase text-black text-center" style="font-size:18px;">Students</span>
+                            <h6 class="stats-small__value count text-black">
                                 <?php echo $totalFirstYearStudents + $totalSecondYearStudents; ?>
                             </h6>
                             <div class="icon pull-right">
@@ -206,18 +206,18 @@ if ($warning) {
                             </div>
                         </div>
                         <div class="card-footer text-center dash-footer p-1">
-                            <a class="more-info text-white" href="#"></a>
-                            <span class="text-center">View Students</span>
+                            <a class="more-info text-black" href="#"></a>
+                            <span class="text-center text-black">View Students</span>
                         </div>
                     </a>
                 </div>
             </div>
             <div class="col-lg-3 col-6 mb-2 column_padding_card">
-                <div class="card card-small dash-card" style="background: #6aacc5;">
+                <div class="card card-small dash-card" style="background: linear-gradient(45deg,#4099ff,#73b4ff);">
                     <a onclick="showLoader();" href="<?php echo base_url(); ?>staffDetails" class="dashboard_link">
                         <div class="card-body pt-1 pb-1">
-                            <span class="stats-small__label text-uppercase text-white text-center">Staff</span>
-                            <h6 class="stats-small__value count text-white">
+                            <span class=" text-uppercase text-black text-center" style="font-size:18px;">Staff</span>
+                            <h6 class="stats-small__value count text-black">
                                 <?php echo $total_staff; ?>
                             </h6>
                             <div class="icon pull-right">
@@ -225,8 +225,8 @@ if ($warning) {
                             </div>
                         </div>
                         <div class="card-footer text-center dash-footer p-1">
-                            <a class="more-info text-white" href="#"></a>
-                            <span class="text-center">View Staff</span>
+                            <a class="more-info text-black" href="#"></a>
+                            <span class="text-center text-black">View Staff</span>
                         </div>
                     </a>
                 </div>
@@ -249,18 +249,18 @@ if ($warning) {
                 </div>
             </div> -->
             <div class="col-lg-3 col-6 mb-2 column_padding_card">
-                <div class="card card-small dash-card" style="background: #6aacc5;">
+                <div class="card card-small dash-card" style="background: linear-gradient(45deg,#FFB64D,#ffcb80);">
                     <a  href="<?php echo base_url(); ?>studentAlumniInfo" class="dashboard_link">
                         <div class="card-body pt-1 pb-1">
-                            <span class="stats-small__label text-uppercase text-white text-center">Alumni</span>
-                            <h6 class="stats-small__value count text-white"><?php echo $alumniStudents; ?></h6>
+                            <span class=" text-uppercase text-black text-center" style="font-size:18px;">Alumni</span>
+                            <h6 class="stats-small__value count text-black"><?php echo $alumniStudents; ?></h6>
                             <div class="icon pull-right">
                                 <i class="fa fa-graduation-cap dash-icons"></i>
                             </div>
                         </div>
                         <div class="card-footer text-center dash-footer p-1">
-                            <a class="more-info text-white" href="#"></a>
-                            <span class="text-center">View Alumni</span>
+                            <a class="more-info text-black" href="#"></a>
+                            <span class="text-center text-black">View Alumni</span>
                         </div>
                     </a>
                 </div>
