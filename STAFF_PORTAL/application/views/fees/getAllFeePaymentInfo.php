@@ -70,14 +70,17 @@ if ($error) {
                         <form action="<?php echo base_url(); ?>getAllFeePaymentInfo" method="POST" id="byFilterMethod">
                             <div class="row c-m-b">
                                 <div class="col-lg-2 col-12 col-md-5 box-tools">
-                                    <span class="page-title">
+                                    <span class="page-title" style="font-size: 18px;">
                                         <i class="material-icons">book</i> Fee Paid Info
                                     </span>
                                 </div>
-                                <div class="col-lg-2 col-12 col-md-3 box-tools ">
-                                    <span class="page-title float-right">
-                                        Total Receipt: <b><?php echo $online_pay_count; ?></b>
-                                    </span>
+                               
+                                <div class="col-lg-3 col-12 col-md-5 box-tools">
+                                    <b class="text-dark" style="font-size: 15px;">Total Students: <?php echo $online_pay_count; ?></b>
+                                    <a href="#" data-toggle="modal" data-target="#filterMoreModel"
+                                        class="btn btn_back primary_color mobile-btn float-right text-white"
+                                        value=""><i class="fa fa-filter"></i> Filter More
+                                    </a>
                                 </div>
                                 <div class="col-lg-3 col-md-5 col-12">
                                
@@ -118,7 +121,7 @@ if ($error) {
                                         <button class="btn btn-success" type="submit">Search</button>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-md-5 col-12">
+                                <div class="col-lg-2 col-md-5 col-12">
 
 
 
@@ -457,7 +460,53 @@ if ($error) {
     </div>
 </div>
 
+<div class="modal fade-scale" id="filterMoreModel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
 
+            <!-- Modal Header -->
+            <div class="modal-header bg-blue ">
+                <h4 class="modal-title">Filter More</h4>
+                <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body p-2">
+                <form action="<?php echo base_url() ?>getAllFeePaymentInfo" role="form" method="post">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Created Staff ID</label>
+                                <input type="text" class="form-control required" value="<?php echo $created_by ?>"
+                                    id="" name="created_by"
+                                    placeholder="Created Staff ID" autocomplete="off" />
+                            </div>
+                        </div>
+                       
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Created Date</label>
+                                <input type="text" class="form-control datepicker" value="<?php echo $created_date_time ?>" 
+                                    id="" name="created_date_time" 
+                                    placeholder="Created Date" autocomplete="off" />
+                            </div>
+                        </div>
+                              
+                    </div>
+                    <!-- <hr class="mt-1 mb-2"> -->
+
+                    <div class="modal-footer pb-0 px-2">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span> Close</button>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- The Modal for bank settlement-->
 <div class="modal" id="bankSettlementModel">

@@ -258,30 +258,23 @@
                 </div>
                 <?php } ?>
                 <form action="<?php echo base_url(); ?>loginMe" method="post" id="login">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text material-icons text-dark">person</span>
-                        </div>
-                        <input type="text" class="form-control input_type" id="username" placeholder="Username (Employee ID)"
-                            name="username"  required />
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text material-icons text-dark">person</span>
                     </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text material-icons text-dark">lock</span>
-                        </div>
-                        <input type="password" class="form-control input_type" id="password" placeholder="Password" name="password"
-                             required />
-                    </div>
+                    <input type="text" class="form-control input_type" id="username" placeholder="Mobile Number" onkeypress="return isNumberKey(event)" maxlength="10"
+                       name="username"  required />
+                </div>
+              <span style="color:black;">Mobile No. should be registered in Institution Record.</span>
                     <div class="row">
                         <div class="col-sm-6 col-md-6">
-                            <input type="checkbox" value="remember-me" id="remember_me" class="mr-2"> Remember me
+                            <!-- <input type="checkbox" value="remember-me" id="remember_me" class="mr-2"> Remember me -->
                         </div>
                         <div class="col-sm-6 col-md-6">
                             <!-- <a class="float-right" style="margin-top: 10px;" href="<?php echo base_url() ?>forgotPassword">Forgot Password</a>-->
                         </div>
                     </div>
-                    <button type="submit" class="btn primary_color btn-block">Sign In</button>
-                    <button type="button" id="sjpuch_bang_staff_add_btn" class="btn btn-danger btn-block">Click here to install as App</button>
+                    <button type="submit" id="get_otp_btn" class="btn btn-success btn-block"><b>Get OTP</b></button>
 
                 </form>
 

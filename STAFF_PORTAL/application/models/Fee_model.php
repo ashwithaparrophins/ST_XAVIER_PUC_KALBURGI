@@ -832,7 +832,9 @@ class Fee_model extends CI_Model
         if(!empty($filter['date_from_filter'])){
             $this->db->where('fee.payment_date>=', $filter['date_from_filter']);
         }
-
+        if(!empty($filter['created_date_time'])){
+            $this->db->where('DATE(fee.created_date_time)', $filter['created_date_time']);
+        }
         
         if(!empty($filter['date_to_filter'])){
             $this->db->where('fee.payment_date<=', $filter['date_to_filter']);
@@ -850,7 +852,9 @@ class Fee_model extends CI_Model
            }else{
               $this->db->where('fee.payment_year', CURRENT_YEAR);
            }
-        
+           if(!empty($filter['created_by'])){
+            $this->db->where('fee.created_by', $filter['created_by']); 
+        }
        $this->db->where('fee.is_deleted', 0);
        $this->db->where('fee.is_deleted', 0);
        $query = $this->db->get();
@@ -919,9 +923,14 @@ class Fee_model extends CI_Model
                 $this->db->where('fee.payment_date>=', $filter['date_from_filter']);
             }
     
-            
+            if(!empty($filter['created_by'])){
+                $this->db->where('fee.created_by', $filter['created_by']); 
+            }
             if(!empty($filter['date_to_filter'])){
                 $this->db->where('fee.payment_date<=', $filter['date_to_filter']);
+            }
+            if(!empty($filter['created_date_time'])){
+                $this->db->where('DATE(fee.created_date_time)', $filter['created_date_time']);
             }
             $this->db->where('fee.is_deleted', 0);
            $this->db->order_by('fee.row_id', 'ASC');
@@ -1625,14 +1634,25 @@ class Fee_model extends CI_Model
         return $query->row();
     }
 
-    public function getPreviousFeePaidInfo($row_id,$application_no,$term_name){
+    public function getPreviousFeePaidInfo($row_id,$application_no,$fee_year){
         $this->db->from('tbl_students_overall_fee_payment_info_i_puc_2021 as fee'); 
         $this->db->where('fee.application_no', $application_no);
-        $this->db->where('fee.term_name',$term_name);
+        $this->db->where('fee.payment_year',$fee_year);
         $this->db->where('fee.row_id <', $row_id);
         $this->db->where('fee.is_deleted', 0);
         $query = $this->db->get();
         $result = $query->row();
+        return $result;
+    }
+
+    public function getPreviousFeePaidReceiptInfo($row_id,$application_no,$fee_year){
+        $this->db->from('tbl_students_overall_fee_payment_info_i_puc_2021 as fee'); 
+        $this->db->where('fee.application_no', $application_no);
+        $this->db->where('fee.payment_year',$fee_year);
+        $this->db->where('fee.row_id <', $row_id);
+        $this->db->where('fee.is_deleted', 0);
+        $query = $this->db->get();
+        $result = $query->result();
         return $result;
     }
 

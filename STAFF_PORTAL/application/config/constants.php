@@ -224,7 +224,7 @@ define('TITLE','ST XAVIER\'S PRE–UNIVERSITY COLLEGE, KALABURAGI');
 define('EXCEL_TITLE','ST XAVIER’S PRE–UNIVERSITY COLLEGE, KALABURAGI');
 define('ADDRESS', 'NH 218, SIRNOOR POST - 585 308 - GULBARGA DIST');
 
-define('SUB_TITLE','STXPUC');
+define('SUB_TITLE','STXPUC, KALABURAGI');
 
 define('INSTITUTION_LOGO','assets/dist/img/logo_stxpuc.jpg');
 
@@ -377,5 +377,12 @@ define('KJES_LINK',                                       'http://192.168.0.65/K
 define('LEAVE_YEAR', '2024');
 
 define('JOB_PORTAL_PATH','http://localhost/ST_XAVIER_PUC_KALBURGI/job_portal/');
+
+define('USERNAME',                             'kjes@schoolphins.com');
+define('HASH',                                 'fc8d5300f261a57362c974bdd0a3ed81862f874df4f99fc1b4004673ff97b40c');
+define('SENDERID',                              'PARROP');	
+define('API',                                   'MzE2ZTcyNTkzODM1NDE2MjM5NmMzNTczNzA0ODY4NGU=');
+
+define('OTP','1234');
 
 

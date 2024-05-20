@@ -146,13 +146,13 @@ if ($error) {
                                                     autocomplete="off" >
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="mobile">Contact Number (optional)</label>
+                                                <label for="mobile">Contact Number <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control required digits"
                                                     id="mobile"
                                                     value="<?php echo set_value('mobile'); ?>"
                                                     name="mobile" maxlength="10" minlength="10"
                                                     placeholder="Enter Contact Number"
-                                                    onkeypress="return isNumberKey(event)" autocomplete="off">
+                                                    onkeypress="return isNumberKey(event)" autocomplete="off" required>
                                             </div>
                                         </div>
                                         <div class="form-row">

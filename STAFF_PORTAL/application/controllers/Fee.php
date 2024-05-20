@@ -1017,9 +1017,12 @@ class Fee extends BaseController
             $year = $this->security->xss_clean($this->input->post('year'));
             $date_from_filter = $this->security->xss_clean($this->input->post('date_from_filter'));
             $date_to_filter = $this->security->xss_clean($this->input->post('date_to_filter'));
-            
+            $created_by = $this->security->xss_clean($this->input->post('created_by'));
+            $created_date_time = $this->security->xss_clean($this->input->post('created_date_time'));
             $searchText = "";
             $data['year'] = $filter['by_year'] = $year;
+            $filter['created_by'] = $data['created_by'] = $created_by;
+
             if(!empty($application_no)){
                 $filter['application_no'] = $application_no;
                 $data['application_no'] = $application_no;
@@ -1101,6 +1104,12 @@ class Fee extends BaseController
 	        }else{
 	            $data['date_to_filter'] = date('Y-m-t');
                 $filter['date_to_filter'] = date('Y-m-t');
+            }
+            if(!empty($created_date_time)){
+                $filter['created_date_time'] = date('Y-m-d',strtotime($created_date_time));
+                $data['created_date_time'] = date('d-m-Y',strtotime($created_date_time));
+            }else{
+                $data['created_date_time'] = '';
             }
             $this->load->library('pagination');
             $count = $this->fee->getAllFeePaymentInfoCount($filter);
@@ -1288,7 +1297,9 @@ class Fee extends BaseController
         $mpdf->AddPage('L','','','','',10,10,3,1,8,8);
         
         $data['paid_amount'] = $data['feeInfo']->paid_amount;
-        $data['previousFeePaidInfo'] = $this->fee->getPreviousFeePaidInfo($row_id,$data['feeInfo']->application_no, $studentInfo->term_name);
+
+        $data['previousFeePaidInfo'] = $this->fee->getPreviousFeePaidReceiptInfo($row_id,$data['feeInfo']->application_no, $data['feeInfo']->payment_year);
+
         $data['paid_amount_words'] = $this->getIndianCurrency(floatval($data['paid_amount']));
         $data['name_count'] = 0;
         $html_student_copy = $this->load->view('fees/feeReceiptPrint',$data,true);

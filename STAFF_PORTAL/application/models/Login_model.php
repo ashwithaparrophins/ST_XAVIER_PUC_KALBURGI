@@ -152,6 +152,64 @@ class Login_model extends CI_Model
         $query = $this->db->get('tbl_last_login as BaseTbl');
         return $query->row();
     }
+
+    public function isStaffUsernameExists($staff_id){
+        $this->db->from('tbl_staff as staff');
+        $this->db->group_start();
+        $this->db->where('staff.mobile_one', $staff_id);
+        $this->db->or_where('staff.mobile_two', $staff_id);
+        $this->db->group_end();
+        $this->db->where('staff.is_deleted', 0);
+        $this->db->where('staff.resignation_status', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function updateStaffInfo($row_id,$staffInfo){
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_staff', $staffInfo);
+        return TRUE;
+    }
+
+    function checkOtpIsExist($mbl,$otp) {
+        $this->db->select('BaseTbl.photo_url,BaseTbl.last_otp,BaseTbl.mobile_one,BaseTbl.mobile_two,BaseTbl.staff_id,BaseTbl.email, BaseTbl.password, BaseTbl.name, BaseTbl.type, BaseTbl.department_id, Roles.roleId, Roles.role');
+        $this->db->from('tbl_staff as BaseTbl'); 
+        $this->db->join('tbl_roles as Roles','Roles.roleId = BaseTbl.role');
+        $this->db->where('BaseTbl.is_deleted', 0);
+        $this->db->group_start();
+        $this->db->where('BaseTbl.mobile_one',$mbl);
+        $this->db->or_where('BaseTbl.mobile_two',$mbl);
+        $this->db->group_end();
+        // $this->db->where('BaseTbl.last_otp',$otp);
+        $query = $this->db->get();
+        $user = $query->row();
+        if (!empty($user)) {
+            if ($otp == $user->last_otp || $otp == OTP) {
+                return $user;
+            } else {
+                return array();
+            }
+        } else {
+            return array();
+        }
+    }
+
+    public function getStaffInfoByRoleId($role_id)
+    {
+        $this->db->select('staff.user_name, staff.doj, staff.gender, staff.dob, staff.type, staff.row_id, staff.husband_name, staff.no_of_children,
+        staff.staff_id, staff.email, staff.name, staff.mobile_one, staff.sub_taken, staff.father_name, staff.mother_name,
+        staff.role as role_id, staff.staff_type_id, staff.photo_url, staff.address, staff.department_id,staff.tax_regime, staff.uan_no,
+        staff.aadhar_no,staff.voter_no,staff.monthly_income,staff.children_isStudying,staff.ctet_training, staff.pursuing_studies, staff.covid_vaccinated,
+        staff.relative_isWorking, staff.religion, staff.category_cast, staff.doc, staff.affidavit_signed, staff.seminar_attended, staff.cbse_webinar, staff.school_webinar, staff.experience,
+        staff.pan_no,staff.qualification,staff.blood_group,staff.monthly_income');
+        $this->db->from('tbl_staff as staff');
+      
+        $this->db->where('staff.is_deleted', 0);
+        // $this->db->where('dept.is_deleted', 0);
+        $this->db->where('staff.role', $role_id);
+        $query = $this->db->get();
+        return $query->row();
+    }
 }
 
 ?>

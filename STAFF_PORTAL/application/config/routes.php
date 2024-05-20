@@ -1286,5 +1286,9 @@ $route['deleteDocumentType'] = "settings/deleteDocumentType";
 $route['employeeIdUpdate'] = "settings/employeeIdUpdate";
 
 
+//otp
+$route['generateOTP'] = "login/generateOTP";
+$route['checkStaffOtp'] = 'login/checkStaffOtp';
+$route['getOtp'] = 'login/getOtp';
 
 

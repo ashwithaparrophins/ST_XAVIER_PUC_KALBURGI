@@ -232,9 +232,14 @@ class Staffs extends BaseController
                 $gender = $this->input->post('gender');
                 $blood_group = $this->input->post('blood_group');
                 $staff_id = $this->security->xss_clean($this->input->post('staff_id'));
+                $mobile = $this->security->xss_clean($this->input->post('mobile'));
                 $isExist = $this->staff->checkStaffIdExists($staff_id);
+                $isExistMobileNo = $this->staff->checkStaffMobileNoExists($mobile);
                 if(!empty($isExist)){
                     $this->session->set_flashdata('error', 'Staff Id Already Exists');
+                    redirect('addNewStaff');
+                }else if(!empty($isExistMobileNo)){
+                    $this->session->set_flashdata('warning', 'Mobile No. Already Exists');
                     redirect('addNewStaff');
                 }
                 $name = $this->security->xss_clean($this->input->post('fname'));
@@ -244,7 +249,6 @@ class Staffs extends BaseController
                 // $shift_code = $this->input->post('shift_id');
                 $roleId = $this->input->post('role');
                 $department = $this->input->post('department');
-                $mobile = $this->security->xss_clean($this->input->post('mobile'));
                 $address = $this->input->post('address');
                 $aadhar_no = $this->security->xss_clean($this->input->post('aadhar_no'));
                 $pan_no = $this->security->xss_clean($this->input->post('pan_no'));
@@ -263,6 +267,7 @@ class Staffs extends BaseController
                     'password_text' => base64_encode($password), 
                     'role' => $roleId, 'name' => $name,
                     'mobile' => $mobile, 
+                    'mobile_one' => $mobile, 
                     'address' => $address, 
                     'aadhar_no' => $aadhar_no,
                     'pan_no' => $pan_no,

@@ -46,6 +46,20 @@ table{
     border-right: 1px solid transparent !important;
 }
 
+.table_border{
+    border-collapse: collapse;
+}
+.table_border th,.table_border td{
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 3px;
+}
+
+.table_border th .border_right_none,.table_border td .border_right_none{
+    border-right: 1px solid transparent !important;
+}
+
 .centered-td {
         text-align: center !important;
     }
@@ -127,7 +141,7 @@ table{
                 <td >Payment Received Mode : <?php if(!empty($feeInfo->payment_type)){ echo $feeInfo->payment_type; }else{ echo 'Online'; } ?></td>
                 </tr>
             </table>
-            <table class="table table_bordered" style="font-size: 12px;">
+            <table class="table table_bordered" style="font-size: 11px;">
                 <tr>
                     <!-- <th width="100">Sl.No.</th> -->
                     <th>Particulars</th>
@@ -188,7 +202,27 @@ table{
                     <td colspan="2"><b>Paid total amount in word: <span style="text-transform: capitalize;"><?php echo $paid_amount_words.' ONLY'; ?></span></b></td>
                 </tr>   
             </table>
+            <?php if (!empty($previousFeePaidInfo)) { ?>
+            <table class="table table_border" style="font-size: 12px;">
+                <tr>
+                    <th>Receipt No.</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Payment Type</th>
+                </tr> 
+                <?php foreach ($previousFeePaidInfo as $paid) { 
+        ?>
+                <tr>
+                    <td style="width:30%;vertical-align: middle;text-align: center;"><?php echo $paid->ref_receipt_no ?></td>
+                    <td style="width:40%;vertical-align: middle;text-align: center;"><?php echo date('d-m-Y', strtotime($paid->payment_date)) ?></td>
+                    <td style="width:30%;vertical-align: middle;text-align: center;"><?php echo $paid->paid_amount ?></td>
+                    <td style="width:30%;vertical-align: middle;text-align: center;"><?php echo $paid->payment_type ?></td>
 
+                </tr>
+                <?php } ?>
+             
+            </table>
+            <?php } ?>
         </div>
     </div>
     </div>
