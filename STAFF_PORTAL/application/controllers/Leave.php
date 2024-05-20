@@ -134,6 +134,7 @@ class Leave extends BaseController {
                 'total_days_leave' => $total_leave_days,
                 'medical_certificate' => $image_path,
                 'leave_type' => $leave_type,
+                'year' => LEAVE_YEAR,
                 'created_by' => $this->staff_id,
                 'created_date_time' => date('Y-m-d H:i:s'),
             );
@@ -303,7 +304,9 @@ class Leave extends BaseController {
         $row_id = $this->input->post('row_id');
         $type = $this->input->post('type');
         $AppliedLeaveInfo = $this->leave->getStaffLeaveInfoByRow_Id($row_id);
-        $leaveDetails = $this->leave->getLeaveInfoByStaffId($AppliedLeaveInfo->staff_id);
+        // $leaveDetails = $this->leave->getLeaveInfoByStaffId($AppliedLeaveInfo->staff_id);
+    $leaveDetails = $this->leave->getLeaveInfoByStaffIdYear($AppliedLeaveInfo->staff_id,$AppliedLeaveInfo->year);
+
         $updateLeaveInfo = array(
            'updated_date_time' => date('Y-m-d H:i:s'), 
         );
@@ -369,7 +372,9 @@ class Leave extends BaseController {
             'updated_by' => $this->staff_id,
         );
         }
-        $this->leave->updateStaffLeaveInfo($updateLeaveInfo, $AppliedLeaveInfo->staff_id);
+        // $this->leave->updateStaffLeaveInfo($updateLeaveInfo, $AppliedLeaveInfo->staff_id);
+    $this->leave->updateStaffLeaveInfoByYearNew($updateLeaveInfo, $AppliedLeaveInfo->staff_id,$AppliedLeaveInfo->year);
+
         $result = $this->leave->updateStaffAppliedLeaveInfo($staffInfo, $row_id);
         if ($result == true) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
     } 
@@ -620,6 +625,7 @@ public function applyStaffLeaveByAdmin(){
                 'leave_reason' => $leave_reason,
                 'total_days_leave' => $total_leave_days,
                 'leave_type' => $leave_type,
+                'year' => LEAVE_YEAR,
                 'medical_certificate' => $image_path,
                 'created_by' => $this->staff_id,
                 'created_date_time' => date('Y-m-d H:i:s'),

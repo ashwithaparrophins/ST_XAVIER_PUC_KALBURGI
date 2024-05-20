@@ -107,6 +107,7 @@
                                 <tr>
                                     <th width="25"><input type="checkbox" id="selectAll" /></th>
                                     <th>Staff ID</th>
+                                    <th>Employee ID</th>
                                     <th class="text-left" width="230">Name</th>
                                     <th>Department</th>
                                     <th>Role</th>
@@ -122,6 +123,7 @@
                                 <tr>
                                     <th width="25"><input type="checkbox" id="selectAll" /></th>
                                     <th>Staff ID</th>
+                                    <th>Employee ID</th>
                                     <th class="text-left" width="200">Name</th>
                                     <th>Department</th>
                                     <th>Role</th>

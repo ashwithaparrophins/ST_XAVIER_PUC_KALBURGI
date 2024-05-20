@@ -402,6 +402,9 @@ class User extends BaseController
         //     $news->isLiked=$this->staff->isLiked($news->row_id,$this->session->userdata('staff_id'));
         //     $news->totalLikes=$this->staff->totalLikes($news->row_id);
         // }
+        $data['documentInfo'] = $this->user_model->getAlldocumentInfoDashboard();
+        $data['UserModel'] = $this->user_model;
+        
         $this->global['pageTitle'] = ''.TAB_TITLE.' : Teaching Staff Dashboard';
         $this->loadViews("dashboard", $this->global, $data, null);
     }

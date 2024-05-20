@@ -32,8 +32,10 @@
                                 <i class="fa fa-users"></i>&nbsp;Job Applicant Info  <?=$info->fullname;?>
                             </div>
                             <div class="col-lg-4 col-md-4 col-4"> 
-                                <a href="#" onclick="GoBackWithRefresh();return false;" class="btn text-white primary_color btn-bck float-right mobile-bck ">
-                                <i class="fa fa-arrow-circle-left"></i>&nbsp;&nbsp;Back </a>
+                            <a href="<?php echo base_url().'jobPortal'?>" type="button"
+                                        class="btn btn-secondary text-white float-right">Back</a>
+                                        <!-- <a onclick="showLoader();window.history.back();" type="button"
+                                        class="btn btn-primary text-white">Back</a> -->
                             </div>
                         </div>
                     </div>
@@ -57,16 +59,20 @@
                             <div class="row">
                                 <div class="col profile-head">
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <!-- <li class="nav-item">
+                                        <li class="nav-item">
                                             <a class="nav-link active" id="personal-tab" data-toggle="tab"
                                                 href="#personal" role="tab" aria-controls="personal"
                                                 aria-selected="false">Personal Info</a>
-                                        </li> -->
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" id="academic-tab" data-toggle="tab" href="#academic"
-                                                role="tab" aria-controls="academic" aria-selected="true">Academic
-                                                Info</a>
-                                        </li> -->
+                                        </li>
+                                       
+                                        <?php if($info->shortlisted_status != 1 ){ ?>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="approve-tab" data-toggle="tab" href="#approve"
+                                                role="tab" aria-controls="approve" aria-selected="true">Approve/Reject</a>
+                                        </li>
+                                        <?php }?>
+
                                       
                                     </ul>
                                     <div class="tab-content personal-tab" id="myTabContent">
@@ -76,8 +82,8 @@
                                                 <table class="table table-bordered">
                                                     <input type="hidden"  value="<?=$info->row_id;?>" id="applicant_id" name="applicant_id"/>
                                                     <tr>
-                                                        <td colspan="1" rowspan="5" width="80">
-                                                            <img src="<?=JOB_PORTAL_PATH.$info->profile_picture;?>" alt="Applicant Profile Photo" class="mt-1" width="120" height="120">
+                                                        <td colspan="1" rowspan="6" width="80">
+                                                            <img src="<?=JOB_PORTAL_PATH.$info->profile_picture;?>" alt="Applicant Profile Photo" class="mt-1" width="140" height="140">
                                                         </td>
                                                         <td class="table-applicant">Full Name</td>
                                                         <th><?=$info->fullname;?></th>
@@ -130,6 +136,11 @@
                                                         <td class="table-applicant">Expected Salary</td>
                                                         <th><?=$info->expected_salary;?></th>
                                                     </tr>
+                                                    <tr>
+                                                        <td class="table-applicant">Jop post</td>
+                                                        <th><?=$info->job_post;?></th>
+                                                        
+                                                    </tr>
                                                 </table>
                                             </div>
                                             <div class="table-responsive-sm table-responsive-md table-responsive-xs">
@@ -161,8 +172,8 @@
                                                             <th><?=$info->additional_qualification;?></th>
                                                             <td class="table-applicant">Resume</td>
                                                             <th>
-                                                                <a class="btn btn-sm btn-block btn-danger" target="_blank" href="<?=JOB_PORTAL_PATH.$info->resume;?>" title="View Resume">
-                                                                    <i class="fa fa-file"></i> View
+                                                                <a class="btn btn-sm btn-block btn-secondary" target="_blank" href="<?=JOB_PORTAL_PATH.$info->resume;?>" title="View Resume">
+                                                                    <i class="fa fa-file"></i> View Resume
                                                                 </a>
                                                             </th>
                                                         </tr>
@@ -170,27 +181,37 @@
                                                 </table> 
                                             </div>
                                         </div>
-                                        <!-- <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
-                                            <table class="table table-bordered">
-                                                <tr>
-                                                    <th class="tbl-head" width="160">Student ID</th>
-                                                    <th class="tbl-head-content" width="140"><?php echo $studentInfo->student_id; ?></th>
-                                                    <th class="tbl-head">SAT Number</th>
-                                                    <th class="tbl-head-content"><?php echo $studentInfo->sat_number; ?></th>
-                                                    <th class="tbl-head">Term</th>
-                                                    <th class="tbl-head-content"><?php echo strtoupper($studentInfo->term_name); ?></th>
-                                                </tr>
-                                                <tr>
-                                                    <th class="tbl-head">Elective</th>
-                                                    <th class="tbl-head-content"><?php echo $studentInfo->elective_sub; ?></th>
-                                                    <th class="tbl-head">Stream</th>
-                                                    <th class="tbl-head-content"><?php echo strtoupper($studentInfo->stream_name); ?></th>
-                                                    <th class="tbl-head">Section</th>
-                                                    <th class="tbl-head-content"><?php echo strtoupper($studentInfo->section_name); ?></th>
-                                                </tr>
-                                            </table>
-                                        </div> -->
 
+                                        <div class="tab-pane fade" id="approve" role="tabpanel" aria-labelledby="approve-tab">
+                                            <input type="hidden" value="<?php echo $info->row_id; ?>" id="application_number" name="application_number">
+                                            <div class="row">
+                                                      
+                                                <div class="col-12">
+                                                <form role="form" action="<?php echo base_url() ?>updateStudentJobStatus" method="post">
+                                                        <input type="hidden" name="application_number" value="<?php echo $info->row_id; ?>"/>
+                                                        <!-- <input type="hidden" name="register_row_id" value="<?php //echo $info->resgisted_tbl_row_id; ?>"/> -->
+                                                        <div class="form-group">
+                                                            <textarea id="comments" class="form-control application_comments" rows="3" name="comments" id="comments" placeholder="Any Comment" autocomplete="off"><?php echo $info->comments; ?></textarea>
+                                                        </div> 
+
+                                                        <?php  
+                                                        if($info->approved_status != 2){ ?>
+                                                            <button type="submit" class="float-left btn btn-danger text-white" title="Reject" name="add"  id="rejectJobApplication"
+                                                            data-application_number="<?php echo $info->row_id; ?>">Reject</button>
+                                                        <?php }else{?>
+                                                            <b class="float-left text-danger">Rejected</b>
+                                                        <?php } ?>
+                                                    </form>
+                                                    <?php if($info->approved_status	!= 1){ ?>
+                                                        <button type="button" class="btn float-right btn-success text-white ml-2" title="Approve" id="approveJobApplication" name="add" data-dismiss="modal"
+                                                        data-application_number="<?php echo $info->row_id; ?>">Approve</button>
+                                                    <?php }else{?>
+                                                        <b class="float-right text-success">Approved</b>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
                                         
                                 </div>
                             </div>
@@ -204,3 +225,5 @@
         <?php } ?>
     </div>
 </div>
+
+<script src="<?php echo base_url(); ?>assets/js/jobportal.js" type="text/javascript"></script>      

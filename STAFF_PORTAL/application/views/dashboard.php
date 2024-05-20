@@ -277,6 +277,42 @@ if ($warning) {
 
     </div>
     <div class="row">
+        <!-- End Users By Device Stats -->
+        <!-- Notification Section -->
+        <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_SUPER_ADMIN) { ?>
+
+        <div class="col-lg-6 col-md-7 col-12 mb-2 mt-2   padding_left_right_null">
+            <div class="card card-small">
+                <div class="card-header border-bottom p-2 dashboard_card_header card_head_dashboard">
+                    <h6 class="m-0 dash_board_card_title text-dark"> Document Expiry Notification</h6>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-small list-group-flush">
+                        <?php
+                         foreach($documentInfo as $doc){
+                            $expiryNotification = $UserModel->getExpiryDocument($doc->row_id); 
+                            if(!empty($expiryNotification)){        
+                         ?>
+                        <table class="table table-padding mb-0">
+                            <tbody>
+                            <tr>
+                                <th width="30%" class="text-black"><?php echo $expiryNotification->type; ?> - <?php echo $expiryNotification->doc_name; ?><span class="float-right">:</span></th>
+                                <td>This document will expire on <?php echo date('d-m-Y', strtotime($expiryNotification->expiry_date)); ?></td>
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+                      <?php } ?>    
+
+                    <?php } ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+    </div>
+    <div class="row">
 
         <div class="col-lg-12 col-md-6 col-12 mb-2 padding_left_right_null">
             <div class="card card-small">

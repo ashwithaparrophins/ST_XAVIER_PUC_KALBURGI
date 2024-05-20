@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="theme-color" content="#317EFB" />
     <title><?php echo $pageTitle; ?></title>
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <!-- <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script> -->
     <link rel="icon" href="<?php echo base_url(); ?><?php echo INSTITUTION_LOGO; ?>">
     <link rel="apple-touch-icon" href="<?php echo base_url(); ?><?php echo INSTITUTION_LOGO; ?>">
     <link rel="stylesheet"
@@ -394,11 +394,23 @@
                         </li>
                         <?php } ?> -->
                         <li class="nav-item">
-                <a class="nav-link " href="<?php echo base_url(); ?>staffDetailsResigned">
-                    <i class="fas fa-chalkboard-teacher header_icons"></i>
-                    <span>Resigned Staff</span>
-                </a>
-            </li>
+                            <a class="nav-link " href="<?php echo base_url(); ?>staffDetailsResigned">
+                                <i class="fas fa-chalkboard-teacher header_icons"></i>
+                                <span>Resigned Staff</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="<?php echo base_url(); ?>staffDetailsRetired">
+                                <i class="fas fa-chalkboard-teacher header_icons"></i>
+                                <span>Retired Staff</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                                    <a class="nav-link " href="<?php echo base_url(); ?>salarySlipListing">
+                                        <i class="material-icons"><span class="material-symbols-outlined">payments</span></i>
+                                        <span>Salary Slip Info</span>
+                                    </a>
+                                </li>  
 
                     </ul>
                 </li>
@@ -940,7 +952,53 @@
                     </ul>
                 </li>
                 <?php } ?>
-
+                <?php if($role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_PRINCIPAL || $role == ROLE_ADMIN || $role == ROLE_SUPER_ADMIN) { ?>
+                        <li class="nav-item">
+                        <a href="#jobApplication_item" data-toggle="collapse" aria-expanded="false" class="nav-link  dropdown-toggle">
+                            <i class="material-icons">description</i>
+                            <span>Job Applications</span>
+                        </a>
+                        <ul class="collapse list-unstyled ml-3" id="jobApplication_item">
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                        href="<?php echo base_url(); ?>jobDashboard">
+                                        <i class="fas fa-tachometer-alt header_icons"></i>
+                                        <span> Dashboard</span>
+                                    </a>
+                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="<?php echo base_url(); ?>jobPortal">
+                                    <i class="material-icons">description</i>
+                                    <span>Application Stack</span>
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?php echo base_url(); ?>approvedJobApplication">
+                                    <i class="material-icons">account_box</i>
+                                    <span>Approved</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?php echo base_url(); ?>shorlistedJobApplication">
+                                    <i class="material-icons">account_box</i>
+                                    <span>Shortlisted</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?php echo base_url(); ?>rejectedJobApplication">
+                                    <i class="material-icons">account_box</i>
+                                    <span>Rejected</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>viewDocumentInfo">
+                            <i class="material-icons">book</i><span>Document Info</span>
+                        </a>
+                    </li>
+                <?php } ?>
                 <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ACCOUNT || $role == ROLE_SUPER_ADMIN) { ?>
                 <li class="nav-item">
                     <a href="#fee" data-toggle="collapse" aria-expanded="false" class="nav-link  dropdown-toggle">
@@ -1266,12 +1324,37 @@
                     </ul>
                 </li>
                 <?php } ?>
-                <!-- <li class="nav-item">
+                <?php if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE ) { ?>
+
+                <li class="nav-item">
+                    <a href="#PurchaseOrder" data-toggle="collapse" aria-expanded="false" class="nav-link  dropdown-toggle">
+                        <i class="material-icons">business</i>
+                        <span>Purchase Order</span>
+                    </a>
+                    <ul class="collapse list-unstyled ml-3" id="PurchaseOrder">
+                        <li class="nav-item">
+                                <a class="nav-link" href="<?php echo base_url(); ?>PartyDetails">
+                                <i class="material-icons">group</i>
+                                    <span>Party Details</span>
+                                </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="<?php echo base_url(); ?>PurchaseOrderListing">
+                                <i class="fa fa-file-alt"></i>
+                                    <span>Purchase Order</span>
+                                </a>
+                        </li>
+                    
+                    </ul>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link " href="<?php echo base_url(); ?>viewHolidayList">
                         <i class="material-icons">event</i>
                         <span>Holiday</span>
                     </a>
-                </li> -->
+                </li>
+                <?php } ?>
+
 
 
                 <!-- <?php if($role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ADMIN || $role == ROLE_OFFICE) { ?>

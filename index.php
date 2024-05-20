@@ -100,9 +100,9 @@ body {
     <form class="form-signin">
         <img class="mb-3" src="logo_stxpuc.jpg" alt="STXPUC" width="122" height="122">
         <h2 class="h3 mb-3 font-weight-bold text-white">Welcome to STXPUC Portal</h2>
-        <a style="color:black" href="https://sjpuchassan.schoolphins.com/staff" class="btn btn-lg btn-primary btn-block"
+        <a style="color:black" href="http://localhost/ST_XAVIER_PUC_KALBURGI/STAFF_PORTAL/" class="btn btn-lg btn-primary btn-block"
             type="submit">Faculty Login</a>
-        <a style="color:black" href="https://sjpuchassan.schoolphins.com/student" class="btn btn-lg btn-primary btn-block" type="submit">Student/Parent Login</a>
+        <a style="color:black" href="http://localhost/ST_XAVIER_PUC_KALBURGI/STUDENT_PORTAL/" class="btn btn-lg btn-primary btn-block" type="submit">Student/Parent Login</a>
 
         <button class="btn btn-block btn-success add-button">Click here to install as App</button>
         <p class="mt-5 mb-3 text-black">© 2023</p>

@@ -15,6 +15,7 @@ class Settings extends BaseController {
         $this->load->model('timetable_model','timetable');
         $this->load->model('admission_model','admission');
         $this->load->model('transport_model', 'transport');
+        $this->load->model('jobportal_model',"jobportal");
         $this->load->model('fee_model','fee');
         $this->isLoggedIn();
     }
@@ -42,6 +43,9 @@ class Settings extends BaseController {
             $data['postInfo'] = "";// $this->settings->getAllPostInfo();
             $data['feeTypeInfo'] = "";//$this->settings->getAllFeeTypeInfo();
 
+            $data['documentTypeInfo'] = $this->settings->getAllDocumentTypeInfo();
+            $data['jobPostInfo'] = $this->jobportal->getAllJobPostInfo();
+
 
             $this->global['pageTitle'] = ''.TAB_TITLE.' : Settings';
             $this->loadViews("settings/settingsDashboard", $this->global, $data, null);  
@@ -64,6 +68,42 @@ class Settings extends BaseController {
             //     $result = $this->fee->updateOverallFee($feeInfo,$fee->row_id);
             // }
         }
+    }
+
+    public function addDocName() {
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        }  else {
+            $doc_name =$this->security->xss_clean($this->input->post('doc_name'));
+            $isExist = $this->settings->checkDocNameExists($doc_name);
+            if ($isExist) { // Check if $isExist is truthy
+                $this->session->set_flashdata('error', 'Document is already Exist');
+                redirect('viewSettings');
+            }
+            $documentInfo = array('document_name'=>$doc_name,'created_by'=>$this->staff_id,'created_date_time'=>date('Y-m-d H:i:s'));
+            $result = $this->settings->addDocName($documentInfo);
+            if($result > 0){
+                $this->session->set_flashdata('success', 'New Document Type created successfully');
+            } else{
+                $this->session->set_flashdata('error', 'Document Type creation failed');
+            }
+            redirect('viewSettings');
+        }
+    }
+
+    public function deleteDocumentType(){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {   
+            $row_id = $this->input->post('row_id');
+            $categoryInfo = array('is_deleted' => 1,
+            'updated_date_time' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->staff_id
+            );
+            $result = $this->settings->updateDocumentType($categoryInfo, $row_id);
+            if ($result == true) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
+        } 
     }
 
     function addDepartment()

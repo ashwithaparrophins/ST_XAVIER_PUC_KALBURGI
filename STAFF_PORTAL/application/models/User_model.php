@@ -346,6 +346,28 @@ class User_model extends CI_Model
         
         return $this->db->affected_rows();
     }
+
+    public function getAlldocumentInfoDashboard(){
+        $this->db->from('tbl_college_document as doc'); 
+        $this->db->where('doc.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function getExpiryDocument($doc){
+
+        $this->db->from('tbl_college_document as document');
+        $todayDate=date('Y-m-d');
+        $NewDate=date('Y-m-d', strtotime("+10 days"));
+
+        $this->db->where('document.expiry_date BETWEEN "'.$todayDate. '" and "'. $NewDate.'"');
+        $this->db->where('document.row_id', $doc);
+        $this->db->where('document.is_deleted', 0);
+        $query = $this->db->get();
+        $result = $query->row();        
+        return $result;
+    
+    }
 }
 
   

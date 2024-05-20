@@ -18,6 +18,7 @@ class Staffs extends BaseController
         $this->load->model('staff_model','staff');
         $this->load->model('settings_model','settings');
         $this->load->model('subjects_model','subject');
+        $this->load->model('salary_model','salary');
         $this->load->model('feedback_model');
         $this->isLoggedIn();
 
@@ -104,6 +105,7 @@ class Staffs extends BaseController
             $data_array_new[] = array(
                 $checkbox,
                 $staff->staff_id,
+                $staff->employee_id,
                 strtoupper($staff_name),
                 $staff->department,
                 $staff->role,
@@ -366,6 +368,102 @@ class Staffs extends BaseController
             $this->loadViews("staffs/resignedStaff", $this->global, NULL , NULL);
         }
     }
+    function staffDetailsRetired()
+    {
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        } else {
+            $this->global['pageTitle'] = ''.TAB_TITLE.' : Staffs Details';
+            $this->loadViews("staffs/retiredStaff", $this->global, NULL , NULL);
+        }
+    }
+
+    public function get_staffs_retired(){
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        } else {
+        $draw = intval($this->input->post("draw"));
+        $start = intval($this->input->post("start"));
+        $length = intval($this->input->post("length"));
+          $data_array_new = [];
+        //   $staffInfo_ = $this->staff->getAllStaffInfoForJob();
+        //   foreach($staffInfo_ as $record) {
+        //   $user_name = sprintf('SJBHS%03d', $record->staff_id);
+        //   $staffInfo = array(
+        //       'user_name' => $user_name
+        //   );
+        //   $this->staff->updateStaff($staffInfo, $record->row_id);
+        // }
+          $staffInfo = $this->staff->getRetiredStaffInfo();
+          foreach($staffInfo as $staff) {
+              $editButton = "";
+              $deleteButton = "";
+              $staffViewMore = '<a class="btn btn-xs btn-primary"
+              href="'.base_url().'editStaff/'.$staff->row_id.'"
+              title="View More"><i class="fa fa-eye"></i></a>';
+                $date = date('d-m-Y',strtotime($staff->retired_date));
+            
+            // if($this->role == ROLE_ADMIN){
+            //     $deleteButton = '<a class="btn btn-xs btn-danger deleteStaff" href="#"
+            //     data-row_id="'.$staff->row_id.'" title="Delete Staff"><i
+            //         class="fa fa-trash"></i></a>';
+            // $editButton = '<a class="btn btn-xs btn-info"
+            // onclick="editResignDate(' . htmlspecialchars(json_encode($date), ENT_QUOTES, 'UTF-8') . ', ' .$staff->row_id . ','. htmlspecialchars(json_encode($staff->name), ENT_QUOTES, 'UTF-8') .')" title="Edit Date"><i
+            // class="fa fa-pen"></i></a>';
+    
+            // }
+             
+            $data_array_new[] = array(
+                $staff->staff_id,
+                $staff->name,
+                $staff->department,
+                $staff->role,
+                $staff->mobile_one,
+                $date,
+                $staffViewMore.' '.$editButton.' '.$deleteButton
+                );
+            }
+         $count = count($staffInfo);
+          $result = array(
+               "draw" => $draw,
+                "recordsTotal" => $count,
+                "recordsFiltered" => $count,
+                "data" => $data_array_new
+           );
+      echo json_encode($result);
+      exit();
+      }
+    }
+    // public function editStaff($staff_id = null)
+    // {
+    //     if ($this->isAdmin() == true ) {
+    //         $this->loadThis();
+    //     } else {
+    //         if ($staff_id == NULL) {
+    //             // log_message('debug','this is test');
+    //             redirect('staffDetails');
+               
+    //         }
+           
+    //         $data['active'] = $this->active_status;
+    //         $data['departments'] = $this->staff->getStaffDepartment();
+    //         $data['designation'] = $this->staff->getStaffRoles();
+    //         $data['shiftsInfo'] = $this->staff->getStaffShifts();
+    //         $staff = $this->staff->getStaffInfoById($staff_id);
+    //         $data['staffInfo'] = $staff;
+    //         $data['subjectInfo'] = $this->subject->getAllSubjectInfo();
+    //         $data['sectionInfo'] = $this->settings->getSectionInfo();
+    //         $data['staffSectionInfo'] = $this->staff->getSectionByStaffId($staff->staff_id);
+    //         $data['staffSubjectInfo'] = $this->staff->getAllSubjectByStaffId($staff->staff_id);
+    //         $data['leaveInfo'] = $this->leave->getLeaveInfoByStaffId($staff_id);
+         
+    //         $this->global['pageTitle'] = ''.TAB_TITLE.' : Edit Staff Details';
+    //         $this->loadViews("staffs/editStaffInfo", $this->global, $data, null);
+    //     }
+    // }
+
     public function editStaff($staff_id = null)
     {
         if ($this->isAdmin() == true ) {
@@ -388,13 +486,131 @@ class Staffs extends BaseController
             $data['staffSectionInfo'] = $this->staff->getSectionByStaffId($staff->staff_id);
             $data['staffSubjectInfo'] = $this->staff->getAllSubjectByStaffId($staff->staff_id);
             $data['leaveInfo'] = $this->leave->getLeaveInfoByStaffId($staff_id);
+
+            $data['AllstaffInfo'] = $this->staff->getAllStaffInfo();
+
+            $data['leaveInfoNew'] = $this->leave->getLeaveInfoByStaffIdNew($staff->staff_id);
+            $data['leaveInfoNew2024'] = $this->leave->getLeaveInfoByStaffIdNew2024($staff->staff_id);
+
+            $data['bankInfo'] = $this->staff->getStaffBankById($staff->staff_id);
+
+            $data['SalaryInfo'] = $this->staff->getSalaryInfoByStaffId($staff->staff_id);
+
+            $data['staffdocumentInfo'] = $this->staff->getStaffdocumentById($staff->staff_id);
+            $data['staffEducationInfo'] = $this->staff->getStaffEducationById($staff->staff_id);
+            $data['previousWorkInfo'] = $this->staff->getStaffWorkExperienceInfo($staff->staff_id);
+
+            $data['observationInfo'] = $this->staff->getStaffObservationInfo($data['staffInfo']->row_id);
+
+
+
+
+            $data['leaveModel'] = $this->leave;
+
          
             $this->global['pageTitle'] = ''.TAB_TITLE.' : Edit Staff Details';
-            $this->loadViews("staffs/editStaffInfo", $this->global, $data, null);
+            $this->loadViews("staffs/editStaffInfoNew", $this->global, $data, null);
         }
     }
 
 
+
+
+    // public function updateStaff(){
+    //     if($this->isAdmin() == TRUE)
+    //     {
+    //         $this->loadThis();
+    //     } else {
+    //         $row_id = $this->input->post('row_id');
+    //         $this->load->library('form_validation');
+    //         $this->form_validation->set_rules('fname','Staff Name','trim|required');
+    //         $this->form_validation->set_rules('staff_id','Staff Id','trim|required');
+    //         $this->form_validation->set_rules('role', 'Role', 'trim|required|numeric');
+    //         $this->form_validation->set_rules('gender', 'gender', 'trim|required');
+    //         $this->form_validation->set_rules('department', 'Department', 'trim|required|numeric');
+            
+    //         if($this->form_validation->run() == FALSE)
+    //         {
+    //             redirect('editStaff/'.$row_id);  
+    //         }
+    //         else
+    //         {
+    //             $image_path="";
+    //             $config=['upload_path' => './upload/',
+    //             'allowed_types' => 'jpg|png|jpeg','max_size' => '2048','overwrite' => TRUE,'file_ext_tolower' => TRUE];
+    //             $this->load->library('upload', $config);
+    //             if($this->upload->do_upload())
+    //             {
+    //                 $post=$this->input->post();
+    //                 $data=$this->upload->data();
+    //                 $image_path=base_url("upload/".$data['raw_name'].$data['file_ext']);
+    //                 $post['image_path']=$image_path;
+    //             }
+
+    //             $dob = $this->input->post('dob');
+    //             $date_of_join = $this->input->post('date_of_join');
+    //             if(!empty($date_of_join)) {
+    //                 $date_of_join = date('Y-m-d',strtotime($date_of_join));
+    //             } else {
+    //                 $date_of_join = "";
+    //             }
+    //             if(!empty($dob)) {
+    //                 $dob = date('Y-m-d',strtotime($dob));
+    //             } else {
+    //                 $dob = "";
+    //             }
+    //             $gender = $this->input->post('gender');
+    //             $blood_group = $this->input->post('blood_group');
+    //             $staff_id = $this->security->xss_clean($this->input->post('staff_id'));
+    //             $isExist = $this->staff->checkStaffIdExists($staff_id);
+    //             if(!empty($isExist)){
+    //                 if($row_id != $isExist->row_id){
+    //                     $this->session->set_flashdata('error', 'Staff Id Already Exists');
+    //                     redirect('editStaff/'.$row_id); 
+    //                 }
+    //             }
+    //             $name = $this->security->xss_clean($this->input->post('fname'));
+    //             $email = strtolower($this->security->xss_clean($this->input->post('email')));
+    //             // $shift_code = $this->input->post('shift_id');
+    //             $roleId = $this->input->post('role');
+    //             $department = $this->input->post('department');
+    //             $mobile = $this->security->xss_clean($this->input->post('mobile'));
+    //             $address = $this->input->post('address');
+    //             $aadhar_no = $this->security->xss_clean($this->input->post('aadhar_no'));
+    //             $pan_no = $this->security->xss_clean($this->input->post('pan_no'));
+    //             $voter_no = $this->security->xss_clean($this->input->post('voter_no'));
+    //                 $staffInfo = array(
+    //                 'staff_id' => $staff_id,
+    //                 'department_id'=>$department, 
+    //                 'email' => $email, 
+    //                 'dob' => $dob,
+    //                 'doj' => $date_of_join,
+    //                 'gender' => $gender,
+    //                 'role' => $roleId, 
+    //                 'name' => $name,
+    //                 'mobile' => $mobile, 
+    //                 'address' => $address, 
+    //                 'aadhar_no' => $aadhar_no,
+    //                 'pan_no' => $pan_no,
+    //                 'voter_no' => $voter_no,
+    //                 'blood_group' => $blood_group,
+    //                 'createdBy' => $this->staff_id, 
+    //                 'modified_date_time' => date('Y-m-d H:i:s'));
+
+    //                 if(!empty($image_path)){
+    //                     $staffInfo['photo_url'] = $image_path;
+    //                 }
+    //                 $result = $this->staff->updateStaff($staffInfo, $row_id);
+    //                 if($result == true)
+    //                 {
+    //                  $this->session->set_flashdata('success', 'Staff Updated Successfully');
+    //                 } else {
+    //                     $this->session->set_flashdata('error', 'Staff Modified failed');
+    //                 }
+    //                 redirect('editStaff/'.$row_id);  
+    //         }
+    //     }
+    // }
     public function updateStaff(){
         if($this->isAdmin() == TRUE)
         {
@@ -403,10 +619,10 @@ class Staffs extends BaseController
             $row_id = $this->input->post('row_id');
             $this->load->library('form_validation');
             $this->form_validation->set_rules('fname','Staff Name','trim|required');
-            $this->form_validation->set_rules('staff_id','Staff Id','trim|required');
-            $this->form_validation->set_rules('role', 'Role', 'trim|required|numeric');
+            // $this->form_validation->set_rules('staff_id','Staff Id','trim|required');
+            $this->form_validation->set_rules('role', 'Role', 'trim|required');
             $this->form_validation->set_rules('gender', 'gender', 'trim|required');
-            $this->form_validation->set_rules('department', 'Department', 'trim|required|numeric');
+            $this->form_validation->set_rules('department', 'Department', 'trim|required');
             
             if($this->form_validation->run() == FALSE)
             {
@@ -416,7 +632,8 @@ class Staffs extends BaseController
             {
                 $image_path="";
                 $config=['upload_path' => './upload/',
-                'allowed_types' => 'jpg|png|jpeg','max_size' => '2048','overwrite' => TRUE,'file_ext_tolower' => TRUE];
+                'allowed_types' => 'gif|jpg|png','overwrite' => TRUE,'max_size' => '2048',
+                'overwrite' => TRUE,'file_ext_tolower' => TRUE];
                 $this->load->library('upload', $config);
                 if($this->upload->do_upload())
                 {
@@ -439,57 +656,621 @@ class Staffs extends BaseController
                     $dob = "";
                 }
                 $gender = $this->input->post('gender');
-                $blood_group = $this->input->post('blood_group');
-                $staff_id = $this->security->xss_clean($this->input->post('staff_id'));
-                $isExist = $this->staff->checkStaffIdExists($staff_id);
-                if(!empty($isExist)){
-                    if($row_id != $isExist->row_id){
-                        $this->session->set_flashdata('error', 'Staff Id Already Exists');
-                        redirect('editStaff/'.$row_id); 
-                    }
-                }
+                // $staff_id = $this->security->xss_clean($this->input->post('staff_id'));
                 $name = $this->security->xss_clean($this->input->post('fname'));
                 $email = strtolower($this->security->xss_clean($this->input->post('email')));
-                // $shift_code = $this->input->post('shift_id');
                 $roleId = $this->input->post('role');
                 $department = $this->input->post('department');
+                $staff_type = $this->input->post('staff_type');
                 $mobile = $this->security->xss_clean($this->input->post('mobile'));
+                $prev_mobile = $this->security->xss_clean($this->input->post('prev_mobile'));
                 $address = $this->input->post('address');
                 $aadhar_no = $this->security->xss_clean($this->input->post('aadhar_no'));
                 $pan_no = $this->security->xss_clean($this->input->post('pan_no'));
                 $voter_no = $this->security->xss_clean($this->input->post('voter_no'));
-                    $staffInfo = array(
-                    'staff_id' => $staff_id,
-                    'department_id'=>$department, 
-                    'email' => $email, 
-                    'dob' => $dob,
-                    'doj' => $date_of_join,
-                    'gender' => $gender,
-                    'role' => $roleId, 
-                    'name' => $name,
-                    'mobile' => $mobile, 
-                    'address' => $address, 
-                    'aadhar_no' => $aadhar_no,
-                    'pan_no' => $pan_no,
-                    'voter_no' => $voter_no,
-                    'blood_group' => $blood_group,
-                    'createdBy' => $this->staff_id, 
-                    'modified_date_time' => date('Y-m-d H:i:s'));
+                $qualification = $this->security->xss_clean($this->input->post('qualification'));
+                $blood_group = $this->security->xss_clean($this->input->post('blood_group'));
+                $role = $this->staff->getStaffByRoles($roleId);
+                $dept = $this->staff->getStaffByDepartment($department);
+                $resign_date = $this->input->post('resign_date');
+                
+                if(!empty($resign_date)) {
+                    $resign_date = date('Y-m-d',strtotime($resign_date));
+                    $resignation_status = 1;
+                } else {
+                    $resign_date = "";
+                    $resignation_status = 0;
+                }
+                $retirement_date = $this->input->post('retirement_date');
+                if(!empty($retirement_date)) {
+                    $retirement_date = date('Y-m-d',strtotime($retirement_date));
+                } else {
+                    $retirement_date = "";
+                }
+                $retired_date = $this->input->post('retired_date');
+                if(!empty($retired_date)) {
+                    $retired_date = date('Y-m-d',strtotime($retired_date));
+                    $retirement_status = 1;
+                } else {
+                    $retired_date = "";
+                    $retirement_status = 0;
+                }
 
-                    if(!empty($image_path)){
-                        $staffInfo['photo_url'] = $image_path;
+                // $staffType = $this->staff->getStaffByStaffType($staff_type);
+                if($mobile != $prev_mobile){
+                    $isExistMobileNo = $this->staff->checkStaffMobileNoExists($mobile);
+                    if(!empty($isExistMobileNo)){
+                        $this->session->set_flashdata('error', 'Mobile No. Already Existss');
+                        redirect('editStaff/'.$row_id);
+                    }else{
+                        $staffInfo = array(
+                        //'photo_url'=>$image_path, 
+                        // 'staff_id' => $staff_id,
+                        'department_id'=> $dept->dept_id, 
+                        // 'staff_type_id' => '',
+                        'email' => $email, 
+                        'dob' => $dob,
+                        'doj' => $date_of_join,
+                        'gender' => $gender,
+                        'role' => $role->roleId, 
+                        'name' => $name,
+                        'mobile_one' => $mobile, 
+                        'address' => $address, 
+                        'address' => $address, 
+                        'aadhar_no' => $aadhar_no, 
+                        'pan_no' => $pan_no, 
+                        'resignation_date' => $resign_date, 
+                        'resignation_status' => $resignation_status,
+                        'retirement_date' => $retirement_date, 
+                        'retired_date' => $retired_date, 
+                        'retirement_status' => $retirement_status,
+                        'voter_no' => $voter_no, 
+                        'blood_group' => $blood_group, 
+                        'qualification' => $qualification,
+                        'updated_by' => $this->staff_id, 
+                        'modified_date_time' => date('Y-m-d H:i:s'));
+
+                        if(!empty($image_path)){
+                            $staffInfo['photo_url'] = $image_path;
+                        }
+                        $result = $this->staff->updateStaff($staffInfo, $row_id);
+                        if($result == true)
+                        {
+                        $this->session->set_flashdata('success', 'Staff Updated Successfully');
+                        } else {
+                            $this->session->set_flashdata('error', 'Staff Modified failed');
+                        }
                     }
-                    $result = $this->staff->updateStaff($staffInfo, $row_id);
-                    if($result == true)
-                    {
-                     $this->session->set_flashdata('success', 'Staff Updated Successfully');
-                    } else {
-                        $this->session->set_flashdata('error', 'Staff Modified failed');
-                    }
+                }else{
+                    $staffInfo = array(
+                        //'photo_url'=>$image_path, 
+                        // 'staff_id' => $staff_id,
+                        'department_id'=> $dept->dept_id, 
+                        // 'staff_type_id' => '',
+                        'email' => $email, 
+                        'dob' => $dob,
+                        'doj' => $date_of_join,
+                        'gender' => $gender,
+                        'role' => $role->roleId, 
+                        'name' => $name,
+                        'mobile_one' => $mobile, 
+                        'address' => $address, 
+                        'address' => $address, 
+                        'aadhar_no' => $aadhar_no, 
+                        'pan_no' => $pan_no, 
+                        'resignation_date' => $resign_date, 
+                        'resignation_date' => $resign_date, 
+                        'resignation_status' => $resignation_status,
+                        'retirement_date' => $retirement_date, 
+                        'retired_date' => $retired_date, 
+                        'retirement_status' => $retirement_status,
+                        'voter_no' => $voter_no, 
+                        'blood_group' => $blood_group, 
+                        'qualification' => $qualification,
+                        'updated_by' => $this->staff_id, 
+                        'modified_date_time' => date('Y-m-d H:i:s'));
+
+                        if(!empty($image_path)){
+                            $staffInfo['photo_url'] = $image_path;
+                        }
+                        $result = $this->staff->updateStaff($staffInfo, $row_id);
+                        if($result == true)
+                        {
+                        $this->session->set_flashdata('success', 'Staff Updated Successfully');
+                        } else {
+                            $this->session->set_flashdata('error', 'Staff Modified failed');
+                        }
+                }
                     redirect('editStaff/'.$row_id);  
             }
         }
     }
+
+    public function addSalaryDetails(){
+        if ($this->isAdmin() == true) {
+            $this->loadThis();
+        } else { 
+
+                $filter = array();
+                $row_id = $this->security->xss_clean($this->input->post('row_id'));
+                $staff_id = $this->security->xss_clean($this->input->post('staff_id'));
+                $hr = $this->security->xss_clean($this->input->post('hr'));
+                $con = $this->security->xss_clean($this->input->post('con'));
+                $year = $this->security->xss_clean($this->input->post('year'));
+                $basic_salary = $this->security->xss_clean($this->input->post('basic_salary'));
+                $pf = $this->security->xss_clean($this->input->post('pf'));
+                $esi = $this->security->xss_clean($this->input->post('esi'));
+                $da = $this->security->xss_clean($this->input->post('da'));
+                $pt = $this->security->xss_clean($this->input->post('pt'));
+                $StaffInfo= array(
+                    'staff_id' => $staff_id,
+                    'basic_salary' => $basic_salary,
+                    'date' =>date('Y-m-d'),
+                    'year' => $year,
+                    'hr' => $hr,
+                    'con' => $con,
+                    'da' => $da,
+                    'pt' => $pt,
+                    'pf'=>$pf,
+                    'esi'=>$esi,
+                    'created_by' => $this->staff_id,
+                    'created_date_time' => date('Y-m-d h:i:s'));
+
+                $return_id = $this->staff->addSalaryDetails($StaffInfo);
+                    
+                $staffInfo = array(
+                    'salary_id' => $return_id,
+                    );
+
+                    $this->staff->updateStaff($staffInfo, $row_id);
+
+                if($return_id > 0){
+                    $this->session->set_flashdata('success', 'Salary Info Added Successfully');
+                }else{
+                    $this->session->set_flashdata('error', 'Failed to add ');
+                }
+                redirect('editStaff/'.$row_id);  
+            
+            
+        }
+    }
+
+    public function updateSalaryInfoByID(){
+        $staff_row_id =$this->security->xss_clean($this->input->post('staff_row_id'));
+        $salary_row_id =$this->security->xss_clean($this->input->post('salary_row_id'));
+        $hr = $this->security->xss_clean($this->input->post('hr'));
+        $con = $this->security->xss_clean($this->input->post('con'));
+        $year = $this->security->xss_clean($this->input->post('year'));
+        $basic_salary = $this->security->xss_clean($this->input->post('basic_salary'));
+        $pf = $this->security->xss_clean($this->input->post('pf'));
+        $esi = $this->security->xss_clean($this->input->post('esi'));
+        $da = $this->security->xss_clean($this->input->post('da'));
+        $pt = $this->security->xss_clean($this->input->post('pt'));
+        $StaffInfo= array(
+            'basic_salary' => $basic_salary,
+            'year' => $year,
+            'hr' => $hr,
+            'con' => $con,
+            'pf'=>$pf,
+            'da' => $da,
+            'pt' => $pt,
+            'esi'=>$esi,
+            'updated_by' => $this->staff_id,
+            'updated_date_time' => date('Y-m-d H:i:s'));
+
+            $result = $this->salary->updateSalaryInfoByID($StaffInfo,$salary_row_id);
+                    
+            if($result > 0){
+                $this->session->set_flashdata('success', 'Salary Info Updated successfully');
+            } else{
+                $this->session->set_flashdata('error', 'Salary Info Updation failed');
+            }
+            redirect('editStaff/'.$staff_row_id);  
+    }
+
+
+    public function updateStaffDocuments(){
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        } else {
+            $row_id = $this->input->post('row_id');
+           
+            $staff_id = $this->input->post('staff_id');
+            $document_row_id = $this->security->xss_clean($this->input->post('document_row_id'));
+            $documentName = $this->security->xss_clean($this->input->post('document_name'));
+
+            $uploadPath = 'upload/personal_document/'.$staff_id.'/';
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            $config=['upload_path' => $uploadPath,
+            'allowed_types' => 'jpg|png|jpeg|pdf','max_size' => '2024','overwrite' => TRUE, ];
+            $this->load->library('upload', $config);
+            $files = $_FILES;
+            $ImgCount = count($_FILES['userfile']['name']);
+            for($i = 0; $i < $ImgCount; $i++){
+                if(!empty($_FILES['userfile']['name'][$i])){
+                    $config['file_name'] = $documentName[$i]; 
+                    $_FILES['file']['name']       = $files['userfile']['name'][$i];
+                    $_FILES['file']['type']       = $files['userfile']['type'][$i];
+                    $_FILES['file']['tmp_name']   = $files['userfile']['tmp_name'][$i];
+                    $_FILES['file']['error']      = $files['userfile']['error'][$i];
+                    $_FILES['file']['size']       = $files['userfile']['size'][$i];
+                    if($_FILES['file']['size'] >  405000) {
+                        $this->session->set_flashdata('error', 'File size should be less than 400KB');
+                        redirect('editStaff/'.$row_id);  
+                    } else{
+                        $this->upload->initialize($config);
+                        if($this->upload->do_upload('file')){
+                            $imageData = $this->upload->data();
+                            $uploadImgData[$i] = $uploadPath.$imageData['file_name'];
+                        }
+                    }
+                }
+            }
+
+               for($i=0;$i<count($documentName);$i++){
+                if(!empty($documentName[$i])){
+                // log_message('debug','hbh'.$documentName);
+               $document = array(
+               'staff_id' => $staff_id,
+               'document_name'=> $documentName[$i],
+                'created_by' => $this->staff_id, 
+                'created_date_time' => date('Y-m-d H:i:s'));
+                if(!empty($uploadImgData[$i])){
+                    $document = array(
+                        'staff_id' => $staff_id,
+                         'document_name'=> $documentName[$i],
+                         
+                         'document_path' => $uploadImgData[$i], 
+                         
+                         'created_by' => $this->staff_id, 
+                         'created_date_time' => date('Y-m-d H:i:s'));
+                }
+
+                 $updatedocument = array(
+                    'document_name' => $documentName[$i],
+                    
+                    'updated_by' => $this->staff_id, 
+                    'updated_date_time' => date('Y-m-d H:i:s'));
+                    if(!empty($uploadImgData[$i])){
+                        $updatedocument = array(
+                            
+                            'document_path' => $uploadImgData[$i], 
+                            'updated_by' => $this->staff_id, 
+                            'updated_date_time' => date('Y-m-d H:i:s'));
+                    }
+
+                   $isExists = $this->staff->checkStaffDocumentInfo($staff_id,$document_row_id[$i]);
+
+                            if($isExists > 0){     
+                                $result_edu = $this->staff->updateDocumentInfo($updatedocument,$staff_id,$document_row_id[$i]);
+                            }else{
+                                $result_edu = $this->staff->addDocumentInfo($document);
+                            }
+                    } 
+                }
+                if($result_edu > 0)
+                {
+                 $this->session->set_flashdata('success', 'Document Details Updated Successfully');
+                } else {
+                    $this->session->set_flashdata('error', 'Document Modified failed');
+                }
+                redirect('editStaff/'.$row_id);  
+           
+        }
+    }
+
+    public function updateStaffEducationInfo(){
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        } else {
+            $row_id = $this->input->post('row_id');
+            $education_row_id = $this->input->post('education_row_id');
+            $staff_id = $this->input->post('staff_id');
+            $course_name = $this->security->xss_clean($this->input->post('course_name'));
+            $board_name = $this->security->xss_clean($this->input->post('board_name'));
+            $year_of_passing = $this->security->xss_clean($this->input->post('year_of_passing'));
+            $percentage = $this->security->xss_clean($this->input->post('percentage'));
+            $course_row_id = $this->security->xss_clean($this->input->post('course_row_id'));
+            $documentName = $this->security->xss_clean($this->input->post('documentName'));
+
+            $uploadPath = 'upload/education/'.$staff_id.'/';
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            $config=['upload_path' => $uploadPath,
+            'allowed_types' => 'jpg|png|jpeg|pdf','max_size' => '2024','overwrite' => TRUE, ];
+            $this->load->library('upload', $config);
+            $files = $_FILES;
+            $ImgCount = count($_FILES['userfile']['name']);
+            for($i = 0; $i < $ImgCount; $i++){
+                if(!empty($_FILES['userfile']['name'][$i])){
+                    $config['file_name'] = $documentName[$i]; 
+                    $_FILES['file']['name']       = $files['userfile']['name'][$i];
+                    $_FILES['file']['type']       = $files['userfile']['type'][$i];
+                    $_FILES['file']['tmp_name']   = $files['userfile']['tmp_name'][$i];
+                    $_FILES['file']['error']      = $files['userfile']['error'][$i];
+                    $_FILES['file']['size']       = $files['userfile']['size'][$i];
+                    if($_FILES['file']['size'] >  405000) {
+                        $this->session->set_flashdata('error', 'File size should be less than 400KB');
+                        redirect('editStaff/'.$row_id);  
+                    } else{
+                        $this->upload->initialize($config);
+                        if($this->upload->do_upload('file')){
+                            $imageData = $this->upload->data();
+                            $uploadImgData[$i] = $uploadPath.$imageData['file_name'];
+                        }
+                    }
+                }
+            }
+
+
+               for($i=0;$i<count($course_name);$i++){
+                    if($year_of_passing[$i] != ''){ 
+               $educationInfo = array(
+               'staff_id' => $staff_id,
+                'course_name' => $course_name[$i],
+                'board_name'=>$board_name[$i], 
+                'year_of_passing' => $year_of_passing[$i], 
+                'percentage' => $percentage[$i],
+                'created_by' => $this->staff_id, 
+                'created_date_time' => date('Y-m-d H:i:s'));
+
+                if(!empty($uploadImgData[$i])){
+                    $educationInfo = array(
+                        'staff_id' => $staff_id,
+                         'course_name' => $course_name[$i],
+                         'board_name'=> $board_name[$i], 
+                         'year_of_passing' => $year_of_passing[$i], 
+                         'document_path' => $uploadImgData[$i], 
+                         'percentage' => $percentage[$i],
+                         'created_by' => $this->staff_id, 
+                         'created_date_time' => date('Y-m-d H:i:s'));
+                }
+
+
+                 $educationDetails = array(
+                    'course_name' => $course_name[$i],
+                    'board_name'=>$board_name[$i], 
+                    'year_of_passing' => $year_of_passing[$i], 
+                    'percentage' => $percentage[$i],
+                    'updated_by' => $this->staff_id, 
+                    'updated_date_time' => date('Y-m-d H:i:s'));
+
+                    if(!empty($uploadImgData[$i])){
+                        $educationDetails = array(
+                            'course_name' => $course_name[$i],
+                            'board_name'=>$board_name[$i], 
+                            'year_of_passing' => $year_of_passing[$i], 
+                            'percentage' => $percentage[$i],
+                            'document_path' => $uploadImgData[$i], 
+                            'updated_by' => $this->staff_id, 
+                            'updated_date_time' => date('Y-m-d H:i:s'));
+                    }
+
+                   $isExists = $this->staff->checkStaffEducationInfo($staff_id,$course_row_id[$i]);
+                            if($isExists > 0){
+                                $result = $this->staff->updateEducationInfo($educationDetails,$staff_id,$course_row_id[$i]);
+                            }else{
+                                $result = $this->staff->addEducationInfo($educationInfo);
+                            }
+                   }
+               }
+                if($result > 0)
+                {
+                 $this->session->set_flashdata('success', 'Education Details Updated Successfully');
+                } else {
+                    $this->session->set_flashdata('error', 'Education Modified failed');
+                }
+                redirect('editStaff/'.$row_id);  
+            
+        }
+    }
+
+    public function updateStaffWorkExperience(){
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        } else {
+            $row_id = $this->input->post('row_id');
+            $staff_id = $this->input->post('staff_id');
+            $organization_name = $this->security->xss_clean($this->input->post('organization_name'));
+            $no_of_years = $this->security->xss_clean($this->input->post('no_of_years'));
+            $work_row_id = $this->security->xss_clean($this->input->post('work_row_id'));
+
+            $documentName = $this->security->xss_clean($this->input->post('documentName'));
+
+            $uploadPath = 'upload/workExperience/'.$staff_id.'/';
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            $config=['upload_path' => $uploadPath,
+            'allowed_types' => 'jpg|png|jpeg|pdf','max_size' => '2024','overwrite' => TRUE, ];
+            $this->load->library('upload', $config);
+            $files = $_FILES;
+            $ImgCount = count($_FILES['userfile']['name']);
+            for($i = 0; $i < $ImgCount; $i++){
+                if(!empty($_FILES['userfile']['name'][$i])){
+                    $config['file_name'] = $documentName[$i]; 
+                    $_FILES['file']['name']       = $files['userfile']['name'][$i];
+                    $_FILES['file']['type']       = $files['userfile']['type'][$i];
+                    $_FILES['file']['tmp_name']   = $files['userfile']['tmp_name'][$i];
+                    $_FILES['file']['error']      = $files['userfile']['error'][$i];
+                    $_FILES['file']['size']       = $files['userfile']['size'][$i];
+                    if($_FILES['file']['size'] >  405000) {
+                        $this->session->set_flashdata('error', 'File size should be less than 400KB');
+                        redirect('editStaff/'.$row_id);  
+                    } else{
+                        $this->upload->initialize($config);
+                        if($this->upload->do_upload('file')){
+                            $imageData = $this->upload->data();
+                            $uploadImgData[$i] = $uploadPath.$imageData['file_name'];
+                        }
+                    }
+                }
+            }
+
+            for($i=0;$i<count($organization_name);$i++){
+                if($organization_name[$i] != ''){ 
+                    $workInfo = array(
+                        'staff_id' => $staff_id,
+                        'organization_name' => $organization_name[$i],
+                        'no_of_years'=>$no_of_years[$i],
+                        'org_type'   => $documentName[$i],
+                        'created_by' => $this->vendorId, 
+                        'created_date_time' => date('Y-m-d H:i:s'));
+
+                        if(!empty($uploadImgData[$i])){
+                            $workInfo = array(
+                                'staff_id' => $staff_id,
+                                'organization_name' => $organization_name[$i],
+                                'no_of_years'=>$no_of_years[$i],
+                                'org_type'   => $documentName[$i],
+                                'document_path' => $uploadImgData[$i], 
+                                'created_by' => $this->vendorId, 
+                                'created_date_time' => date('Y-m-d H:i:s'));
+                        }
+    
+                        $workDetails = array(
+                            'organization_name' => $organization_name[$i],
+                            'no_of_years'=>$no_of_years[$i],
+                            'updated_by' => $this->vendorId, 
+                            'updated_date_time' => date('Y-m-d H:i:s'));
+
+                            if(!empty($uploadImgData[$i])){
+                                $workDetails = array(
+                                    'organization_name' => $organization_name[$i],
+                                    'no_of_years'=>$no_of_years[$i],
+                                    'document_path' => $uploadImgData[$i], 
+                                    'updated_by' => $this->vendorId, 
+                                    'updated_date_time' => date('Y-m-d H:i:s'));
+                            }
+                        
+                        $isExists = $this->staff->checkStaffWorkExperience($staff_id,$work_row_id[$i]);
+                        if($isExists > 0){
+                            $result = $this->staff->updateStaffWorkExperience($workDetails,$staff_id,$work_row_id[$i]);
+                        }else{
+                            $result = $this->staff->addStaffWorkExperience($workInfo);
+                        }
+                }
+            }
+
+            if($result == true) {
+                $this->session->set_flashdata('success', 'Work Info Updated Successfully');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to Update');
+            }
+            redirect('editStaff/'.$row_id);  
+            
+        }
+    }
+
+    public function addRemarksToStaff(){
+        if ($this->isAdmin() == true) {
+            $this->loadThis();
+        } else { 
+
+            $filter = array();
+            $row_Id = $this->security->xss_clean($this->input->post('row_id'));
+            $remarks_type = $this->security->xss_clean($this->input->post('remarks_type'));
+            $date = $this->security->xss_clean($this->input->post('date'));
+            $description = $this->security->xss_clean($this->input->post('description'));
+        
+            $image_path="";
+            $target_dir="upload/observation/";
+            if(!file_exists($target_dir)){
+                mkdir($target_dir,0777);
+            }
+            $config=['upload_path' => $target_dir,
+            'allowed_types' => 'pdf|jpeg|jpg|png','overwrite' => TRUE,'max_size' => '2048',
+            'overwrite' => TRUE,'file_ext_tolower' => TRUE];
+            $this->load->library('upload', $config);
+            if($this->upload->do_upload()) {
+                $post=$this->input->post();
+                $data=$this->upload->data();
+                $image_path=$target_dir.$data['raw_name'].$data['file_ext'];
+                $post['image_path'] = $image_path;
+            }
+            $staff = $this->staff->getStaffInfoById($row_Id);
+
+            $remarkInfo= array(
+                'staff_row_id' => $row_Id,
+                'type' => $remarks_type,
+                'date' =>date('Y-m-d',strtotime($date)),
+                'year' => date('Y'),
+                'file_path' => $image_path,
+                'description' => $description,
+                'created_by' => $this->staff_id,
+                'created_date_time' => date('Y-m-d H:i:s'));
+
+            $return_id = $this->staff->addStaffRemarks($remarkInfo);
+                
+            if($return_id > 0){
+            
+                $this->session->set_flashdata('success', 'Remarks Added Successfully');
+            }else{
+                $this->session->set_flashdata('error', 'Failed to add ');
+            }
+            redirect('editStaff/'.$row_Id);  
+        }
+    }
+    public function updateStaffRemarks(){
+                
+        $row_id = $this->input->post('row_id');
+        $row_Id = $this->input->post('row_Id');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('date','Date','trim|required');
+        if($this->form_validation->run() == FALSE)
+        {
+            redirect('editStaff/'.$row_Id);  
+        }else{
+            $date = $this->input->post('date');
+            $type = $this->input->post('type');
+            $description = $this->input->post('description');
+            $management_reply = $this->input->post('management_reply');
+            $remarksInfo = array(
+                'date'=>date('Y-m-d',strtotime($date)),
+                'type'=>$type, 
+                'description'=>$description, 
+                'management_reply'=>$management_reply, 
+                'updated_by' => $this->staff_id, 
+                'updated_date_time' => date('Y-m-d H:i:s')
+            );
+                
+            $result = $this->staff->updateStaffRemarks($remarksInfo, $row_id);
+            if($result > 0){
+                $this->session->set_flashdata('success', 'Remarks Updated Successfully');
+            }else {
+                $this->session->set_flashdata('error', 'Remarks Update Failed');
+            }
+            redirect('editStaff/'.$row_Id);  
+        }
+    }
+
+    public function deleteStaffRemarkDetails(){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {   
+            $row_id = $this->input->post('row_id');
+            
+            $remarkInfo = array('is_deleted' => 1,
+                'updated_date_time' => date('Y-m-d H:i:s'),
+                'updated_by' => $this->staff_id
+            );
+            $result = $this->staff->updateStaffRemarks($remarkInfo, $row_id);
+        
+            if ($result == true) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
+        } 
+    }
+    
+
+
 //delete a staff 
         public function deleteStaff(){
             if($this->isAdmin() == TRUE){
@@ -1003,8 +1784,12 @@ public function addNewStaffAttendance(){
             $paternity_leave =$this->security->xss_clean($this->input->post('paternity_leave'));
             $maternity_leave =$this->security->xss_clean($this->input->post('maternity_leave')); 
             $marriage_leave =$this->security->xss_clean($this->input->post('marriage_leave')); 
+            $earned_leave = $this->security->xss_clean($this->input->post('earned_leave_earned')); 
+            $leave_year = $this->security->xss_clean($this->input->post('leave_year')); 
             $lop =$this->security->xss_clean($this->input->post('lop')); 
-            $leaveInfo = $this->leave->getLeaveInfoByStaffId($staff_id);
+
+            // $leaveInfo = $this->leave->getLeaveInfoByStaffId($staff_id);
+            $leaveInfo = $this->leave->getLeaveInfoByStaffIdYear($staff_id,$leave_year);
             if($leaveInfo == NULL){
                 $leaveInfo = array(
                     'staff_id' => $staff_id,
@@ -1013,11 +1798,12 @@ public function addNewStaffAttendance(){
                     'marriage_leave_earned' => $marriage_leave,
                     'paternity_leave_earned' => $paternity_leave,
                     'maternity_leave_earned' => $maternity_leave,
+                    'earned_leave' => $earned_leave,
                     'lop_leave' => $lop,
+                    'year' => $leave_year,                
                     'created_by' => $this->staff_id,
                     'created_date_time' => date('Y-m-d H:i:s')
                 );
-                log_message('debug','test'.print_r('$leaveInfo',true));
                 $return = $this->leave->addStaffLeaveInfo($leaveInfo);
                 if($return > 0) {
                     $this->session->set_flashdata('success', 'Leave details Added Successfully');
@@ -1032,12 +1818,14 @@ public function addNewStaffAttendance(){
                     'sick_leave_earned' => $sick_leave,
                     'marriage_leave_earned' => $marriage_leave,
                     'paternity_leave_earned' => $paternity_leave,
+                    'earned_leave' => $earned_leave,
+                    'lop_leave' => $lop,  
                     'maternity_leave_earned' => $maternity_leave,
-                    'lop_leave' => $lop,
                     'created_by' => $this->staff_id,
                     'updated_date_time' => date('Y-m-d H:i:s')
                 );
-                $return = $this->leave->updateStaffLeaveInfo($leaveInfo, $staff_id);
+                // $return = $this->leave->updateStaffLeaveInfo($leaveInfo, $staff_id);
+                $return = $this->leave->updateStaffLeaveInfoByYearNew($leaveInfo, $staff_id,$leave_year);
                 if($return) {
                     $this->session->set_flashdata('success', 'Leave details Updated Successfully');
                 } else {
@@ -1046,6 +1834,107 @@ public function addNewStaffAttendance(){
                 redirect('editStaff/'.$row_id);
             }
             
+        }
+    }
+
+    public function updateLeaveInfoByStaffId(){
+        if ($this->isAdmin() == true) {
+            $this->loadThis();
+        } else {
+            // $this->active_status = 'leave_info';
+            $row_id =$this->security->xss_clean($this->input->post('row_id_leave')); 
+            $staff_id = $this->security->xss_clean($this->input->post('staff_id_leave')); 
+            $year = $this->security->xss_clean($this->input->post('year')); 
+            $casual_leave =$this->security->xss_clean($this->input->post('casual_leave_earned')); 
+            $sick_leave =$this->security->xss_clean($this->input->post('sick_leave_earned')); 
+            $paternity_leave =$this->security->xss_clean($this->input->post('paternity_leave_earned'));
+            $maternity_leave =$this->security->xss_clean($this->input->post('maternity_leave_earned')); 
+            $marriage_leave =$this->security->xss_clean($this->input->post('marriage_leave_earned')); 
+            $earned_leave =$this->security->xss_clean($this->input->post('earned_leave')); 
+            $lop =$this->security->xss_clean($this->input->post('lop_leave')); 
+    
+                $leaveInfo = array(
+                
+                    'casual_leave_earned' => $casual_leave,
+                    'sick_leave_earned' => $sick_leave,
+                    'marriage_leave_earned' => $marriage_leave,
+                    'paternity_leave_earned' => $paternity_leave,
+                    'earned_leave' => $earned_leave,
+                    'maternity_leave_earned' => $maternity_leave,
+                    'lop_leave' => $lop,
+                    'created_by' => $this->staff_id,
+                    'updated_date_time' => date('Y-m-d H:i:s')
+                );
+                $return = $this->leave->updateStaffLeaveInfoByYearNew($leaveInfo, $staff_id,$year);
+                if($return) {
+                    $this->session->set_flashdata('success', 'Leave details Updated Successfully');
+                } else {
+                    $this->session->set_flashdata('error', 'Leave Details Update failed');
+                }
+                redirect('editStaff/'.$row_id);
+            }
+            
+    }
+
+    public function updateSalaryInfo(){
+        if($this->isAdmin() == TRUE)
+        {
+            $this->loadThis();
+        } else {
+            $row_id = $this->input->post('row_id');
+            $this->load->library('form_validation');
+            // $this->form_validation->set_rules('uan_no', 'UNIVERSAL ACCOUNT NUMBER (UAN)', 'trim|required');
+            $this->form_validation->set_rules('account_no', 'ACCOUNT NO', 'required');
+            
+            if($this->form_validation->run() == FALSE)
+            {
+                redirect('editStaff/'.$row_id);  
+            }
+            else
+            {
+                $staff_id = ucwords(strtolower($this->security->xss_clean($this->input->post('staff_id'))));
+                $uan_no = $this->security->xss_clean($this->input->post('uan_no'));
+                $tax_regime = $this->security->xss_clean($this->input->post('tax_regime'));
+                // $monthly_income = $this->security->xss_clean($this->input->post('monthly_income'));
+                    $staffInfo = array(
+                    // 'monthly_income' => $monthly_income,    
+                    'uan_no' => $uan_no,
+                    'tax_regime' => $tax_regime,
+                    'modified_date_time' => date('Y-m-d H:i:s'));
+
+                    $result = $this->staff->updateStaff($staffInfo, $row_id);
+
+                    $bank_row_id = $this->input->post('bank_row_id');
+                    $bank_name = $this->security->xss_clean($this->input->post('bank_name'));
+                    $branch_name = $this->security->xss_clean($this->input->post('branch_name'));
+                    $ifsc_code = $this->security->xss_clean($this->input->post('ifsc_code'));
+                    $account_no = $this->security->xss_clean($this->input->post('account_no'));
+        
+                    $bankInfo = array(
+                            'staff_id' => $staff_id,
+                            'bank_name' => $bank_name,
+                            'branch_name'=>$branch_name, 
+                            'ifsc_code' => $ifsc_code, 
+                            'account_no' => $account_no,
+                            'created_by' => $this->staff_id, 
+                            'created_date_time' => date('Y-m-d H:i:s'));
+                    $isExist = $this->staff->checkStaffIdExistsInBank($staff_id);
+                    if($isExist > 0){
+                        $bankInfo['updated_by'] = $this->staff_id;
+                        $bankInfo['updated_date_time'] = date('Y-m-d H:i:s');
+                        $this->staff->updateBankInfo($bankInfo,$bank_row_id);
+                    }else{
+                        $this->staff->addBankInfo($bankInfo);
+                    }
+
+                    if($result == true)
+                    {
+                        $this->session->set_flashdata('success', 'Staff Updated Successfully');
+                    } else {
+                        $this->session->set_flashdata('error', 'Staff Modified failed');
+                    }
+                    redirect('editStaff/'.$row_id);  
+            }
         }
     }
 
@@ -1097,6 +1986,328 @@ public function addNewStaffAttendance(){
             header('Content-Type: image/png');
             $store_image = imagepng($file,$barcodeRealPath);
             return $barcodePath.$code.'.png';
+        }
+
+        public function viewDocumentInfo(){
+
+            if ($this->isAdmin() == true) {
+    
+                $this->loadThis();
+    
+            } else { 
+    
+                $filter = array();
+    
+                $searchTextCust = $this->security->xss_clean($this->input->post('searchTextCust'));
+                $by_date = $this->security->xss_clean($this->input->post('by_date'));
+                $by_expiry_date = $this->security->xss_clean($this->input->post('by_expiry_date'));
+                $by_year = $this->security->xss_clean($this->input->post('by_year'));
+                $type = $this->security->xss_clean($this->input->post('type'));
+                $doc_name = $this->security->xss_clean($this->input->post('doc_name'));
+                $section_name = $this->security->xss_clean($this->input->post('section_name'));
+                $by_description = $this->security->xss_clean($this->input->post('by_description'));
+    
+                $data['searchTextCust'] = $searchTextCust;
+                if(!empty($by_date)){
+                    $data['by_date'] = date('d-m-Y',strtotime($by_date));
+                }else{
+                    $data['by_date'] = "";  
+                }
+    
+                if(!empty($by_expiry_date)){
+                    $data['by_expiry_date'] = date('d-m-Y',strtotime($by_expiry_date));
+                }else{
+                    $data['by_expiry_date'] = "";  
+                }
+    
+                $data['by_year'] = $by_year;
+    
+                $data['doc_name'] = $doc_name;
+    
+                $data['type'] = $type;
+                $data['by_description'] = $by_description;
+    
+                if(!empty($by_date)){
+                    $filter['by_date'] = date('Y-m-d',strtotime($by_date));
+                }else{
+                    $filter['by_date'] = "";  
+                }
+    
+                if(!empty($by_expiry_date)){
+                    $filter['by_expiry_date'] = date('Y-m-d',strtotime($by_expiry_date));
+                }else{
+                    $filter['by_expiry_date'] = "";  
+                }
+    
+                $filter['searchText'] = $searchTextCust;
+    
+                $filter['by_year']= $by_year;
+    
+                $filter['doc_name']= $doc_name;
+                $filter['by_description']= $by_description;
+    
+                $filter['type']= $type;
+    
+                if($this->role == ROLE_TEACHING_STAFF){
+    
+                    $filter['staff_id'] = $this->staff_id;
+    
+                }
+    
+                $this->load->library('pagination');
+    
+                $count = $this->staff->getCollegeDocumentsInfoCount($filter);
+    
+                $returns = $this->paginationCompress("viewDocumentInfo/", $count, 100);
+    
+                $data['studyRecordsCount'] = $count;
+    
+                $data['studyRecords'] = $this->staff->getCollegeDocumentsInfo($filter, $returns["page"], $returns["segment"]);
+    
+                $data['documentTypeInfo'] = $this->staff->getAllDocumentTypeInfo();
+    
+                $this->global['pageTitle'] = ''.TAB_TITLE.' : Document Details ';
+    
+                $this->loadViews("staffs/viewCollegeDocument", $this->global, $data, null);
+    
+            }
+    
+        }
+    
+        public function addNewDocumentDetails(){
+    
+            if ($this->isAdmin() == true) {
+    
+                $this->loadThis();
+    
+            } else { 
+    
+                $this->load->library('form_validation');
+                $this->form_validation->set_rules('doc_type','Doc Type ','required');
+    
+                if($this->form_validation->run() == FALSE){
+                    $this->viewDocumentInfo();
+                } else {
+    
+                    $date = $this->security->xss_clean($this->input->post('date'));
+                    $expiry_date = $this->security->xss_clean($this->input->post('expiry_date'));
+                    $doc_type = $this->security->xss_clean($this->input->post('doc_type'));
+                    $description = $this->security->xss_clean($this->input->post('description'));
+                    $doc_name = $this->security->xss_clean($this->input->post('doc_name'));
+                    $document_year = $this->security->xss_clean($this->input->post('document_year'));
+                    $subject_name =$this->security->xss_clean($this->input->post('subject_name'));
+    
+                    $uploadPath = './upload/documents/';
+    
+                    if (!file_exists($uploadPath)) {
+                        mkdir($uploadPath, 0777, true);
+                    }
+    
+                    $config = [
+                        'upload_path' => $uploadPath,
+                        'allowed_types' => 'pdf|doc|docx|xlsx|csv|xls|ppt|pptx|jpeg|jpg|png|gif',
+                        'max_size' => '51200', // 50 MB in kilobytes
+                        'overwrite' => TRUE,
+                    ];
+    
+                    $this->load->library('upload', $config);
+    
+                    if (!$this->upload->do_upload('doc_path')) {
+                        $error = ['error' => $this->upload->display_errors()];
+                    } else { 
+                        $data = ['upload_data' => $this->upload->data()];
+                    }
+    
+                    if (!empty($data['upload_data']['file_name'])) {
+                        // Compress the uploaded image if it's an image file
+                        $upload_file = $data['upload_data']['file_name'];
+                        $filePath = $uploadPath . $upload_file;
+                        
+                        // Check if it's an image file and compress it
+                        if (in_array($data['upload_data']['file_type'], ['image/jpeg', 'image/png', 'image/gif'])) {
+                            $this->compressImage($filePath, 200);
+                        } else {
+                            // If it's not an image, try compressing as PDF or Excel
+                            // $this->compressFile($filePath, 51200); // Assuming maximum size for other file types is 50MB
+                        }
+                        // Now $filePath contains the path of the compressed image or the original file if it's not an image
+                        // You can save $filePath to the database or handle it as needed
+                    } else {
+                        $this->session->set_flashdata('error', 'File Type Not Allowed and Maximum size of 50MB');
+                        redirect('viewDocumentInfo');
+                    }
+    
+                    if (!empty($expiry_date)) {
+                        $expiry_Date = date('Y-m-d', strtotime($expiry_date));
+                    } else {
+                        $expiry_Date = '';
+                    }
+    
+                    $importFileName = $filePath;
+    
+                        $metriInfo= array(
+    
+                            'date' => date('Y-m-d',strtotime($date)),
+                            'expiry_date' => $expiry_Date,
+                            'document_year' =>$document_year,
+                            'doc_name' =>$doc_name,
+                            'document_name_url' =>$importFileName,
+                            'type'=>$doc_type,
+                            'description' => $description,
+                            'name' => $upload_file,
+                            'created_by' => $this->staff_id,
+                            'created_date_time' => date('Y-m-d h:i:s'));
+    
+                        $return_id = $this->staff->addNewDocumentDetails($metriInfo);
+    
+                    if($return_id > 0){
+                        $this->session->set_flashdata('success', 'New Document Added Successfully');
+                    }else{
+                        $this->session->set_flashdata('error', 'Add Document Material Failed');
+                    }
+                }
+                redirect('viewDocumentInfo');
+            }
+        }
+    
+        public function deleteDocument(){
+            if ($this->isAdmin() == true) {
+                echo (json_encode(array('status' => 'access')));
+            } else {
+                $row_id = $this->input->post('row_id');
+                $studyInfo = array('is_deleted' => 1);
+                $result = $this->staff->updateDocumen($row_id, $studyInfo);
+                if ($result > 0) {echo (json_encode(array('status' => true)));} else {echo (json_encode(array('status' => false)));}
+            }
+        }  
+    
+        function compressImage($filePath, $targetSize)
+        {
+            // Maximum quality
+            $maxQuality = 100;
+    
+            // Read the image
+            $info = getimagesize($filePath);
+            $mime = $info['mime'];
+    
+            switch ($mime) {
+                case 'image/jpeg':
+                    $image = imagecreatefromjpeg($filePath);
+                    break;
+                case 'image/png':
+                    $image = imagecreatefrompng($filePath);
+                    break;
+                case 'image/gif':
+                    $image = imagecreatefromgif($filePath);
+                    break;
+                case 'xls':
+                    $image = imagecreatefromxls($filePath);
+                    break;
+                default:
+                    return;
+            }
+    
+            $currentSize = filesize($filePath);
+    
+            // Adjust quality until the file size meets the target
+            while ($currentSize > $targetSize * 1024 && $maxQuality >= 10) {
+                ob_start();
+                imagejpeg($image, null, $maxQuality);
+                $imageString = ob_get_clean();
+                $currentSize = strlen($imageString);
+    
+                // Resize the image to 90% of its original dimensions
+                $width = imagesx($image);
+                $height = imagesy($image);
+                $newWidth = $width * 0.9;
+                $newHeight = $height * 0.9;
+    
+                $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+                imagecopyresampled($resizedImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+    
+                imagedestroy($image);
+                $image = $resizedImage;
+    
+                $maxQuality -= 5; // Adjust quality for the next iteration
+            }
+    
+            // Save the compressed image
+            imagejpeg($image, $filePath, $maxQuality);
+    
+            // Clear the memory
+            imagedestroy($image);
+        }
+    
+        function compressFile($filePath, $targetSize)
+        {
+            // Check the file type
+            $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+            
+            switch ($fileExtension) {
+                case 'pdf':
+                    // Compress PDF
+                    require_once('vendor/autoload.php'); // Load FPDI library
+                    
+                    $pdf = new \setasign\Fpdi\Fpdi();
+                    $pdf->AddPage();
+                    $pdf->setSourceFile($filePath);
+                    
+                    // Iterate through each page to import and compress
+                    for ($page = 1; $page <= $pdf->setSourceFile($filePath); $page++) {
+                        $tplIdx = $pdf->importPage($page);
+                        $pdf->useTemplate($tplIdx, 0, 0);
+                    }
+                    
+                    $outputPath = 'compressed.pdf'; // Output path for compressed PDF
+                    $pdf->Output($outputPath, 'F');
+                    break;
+                    
+                    case 'xls':
+                        case 'xlsx':
+                            // Compress Excel
+                            require_once('vendor/autoload.php'); // Load PhpSpreadsheet library
+                        
+                            // Load the spreadsheet
+                            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+                            if ($fileExtension == 'xlsx') {
+                                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+                            }
+                            $spreadsheet = $reader->load($filePath);
+                        
+                            // Remove unused cells and formatting
+                            foreach ($spreadsheet->getAllSheets() as $sheet) {
+                                $sheet->calculateColumnWidths();
+                                $highestRow = $sheet->getHighestRow();
+                                $highestColumn = $sheet->getHighestColumn();
+                                $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
+                                for ($row = 1; $row <= $highestRow; ++$row) {
+                                    for ($col = 'A'; $col <= $highestColumn; ++$col) {
+                                        $cell = $sheet->getCell($col . $row);
+                                        if ($cell->getValue() === null) {
+                                            $sheet->removeColumn($col, 1);
+                                            $col--; // Adjust column index after removal
+                                            $highestColumnIndex--; // Adjust highest column index after removal
+                                        }
+                                    }
+                                }
+                            }
+                        
+                            // Save the compressed Excel
+                            $outputPath = 'compressed.xls'; // Output path for compressed Excel
+                            $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+                            if ($fileExtension == 'xlsx') {
+                                $outputPath = 'compressed.xlsx'; // Output path for compressed Excel
+                                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+                            }
+                            $writer->save($outputPath);
+                        
+                            break;
+                default:
+                    // For other file types, just return
+                    return;
+            }
+    
+            // You might want to check the resulting file size and loop until it meets the target size
         }
 
 }

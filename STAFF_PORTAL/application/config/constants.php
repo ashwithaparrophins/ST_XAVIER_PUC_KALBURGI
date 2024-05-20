@@ -373,3 +373,9 @@ define('APP_API_KEY',                                       'MzE2ZTcyNTkzODM1NDE
 define('KJES_LINK',                                       'http://192.168.0.65/KJES_STAFF/ADMIN_PANEL/apifetchTokenSuperAdmin/'); 
 
 //define('KJES_LINK',                                       'https://kjes.schoolphins.com/apifetchTokenSuperAdmin/'); 
+
+define('LEAVE_YEAR', '2024');
+
+define('JOB_PORTAL_PATH','http://localhost/ST_XAVIER_PUC_KALBURGI/job_portal/');
+
+

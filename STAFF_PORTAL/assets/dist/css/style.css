@@ -111,14 +111,14 @@
 }
 
 .profile-head .nav-tabs .nav-link {
-    font-weight: 600;
+    font-weight: 700;
     border: none;
 }
 
 .profile-head .nav-tabs .nav-link.active {
     border: none;
-    border-bottom: 2px solid #0062cc;
-    color: #8bdc55;
+    border-bottom: 2px solid #7addad;
+    color: #495057;
 }
 
 .profile_table td {
@@ -1038,9 +1038,9 @@ input[type=checkbox]:checked:after {
 
 .nav-tabs .nav-link.active {
     border-color: transparent;
-    color: #34c134;
-    padding: 5px 5px;
-    font-size: 18px;
+    color: #555a55;
+    padding: 10px 5px;
+    font-size: 16px;
     border-bottom-color: #0012e6;
 }
 
@@ -1612,3 +1612,12 @@ a:focus {
 .mdc-menu-surface--open {
     z-index: 9999 !important;
 }
+
+.tbl-head1{
+    color: #424242;
+    background: #c5cce9;
+  }
+  .tbl-head-content1{
+    background: #94e2bc;
+    color: #424242;
+  }

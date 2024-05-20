@@ -49,6 +49,7 @@ class BaseController extends CI_Controller {
 			$this->profileImg = $this->session->userdata ('photo_url');
 			$this->global ['name'] = $this->name;
 			$this->global ['role'] = $this->role;
+			$this->global ['staffID'] = $this->staff_id;
 			$this->global ['role_text'] = $this->roleText;
 			$this->global ['last_login'] = $this->lastLogin;
 			$this->global ['staffType'] = $this->staffType;

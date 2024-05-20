@@ -479,4 +479,43 @@ class Settings_model extends CI_Model{
         return TRUE;
     }
 
+    public function getAllDocumentTypeInfo() {
+        $this->db->from('tbl_document_type_info as doc');
+        $this->db->where('doc.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function checkDocNameExists($doc_name) {
+        $this->db->from('tbl_document_type_info as doc');
+        $this->db->where('doc.document_name', $doc_name);
+        $this->db->where('doc.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function addDocName($villageInfo) {
+
+        $this->db->trans_start();
+
+        $this->db->insert('tbl_document_type_info', $villageInfo);
+
+        $insert_id = $this->db->insert_id();
+
+        $this->db->trans_complete();
+
+        return $insert_id;
+
+    }
+
+    public function updateDocumentType($categoryInfo, $row_id) {
+
+        $this->db->where('row_id', $row_id);
+
+        $this->db->update('tbl_document_type_info', $categoryInfo);
+
+        return TRUE;
+
+    }
+
 }

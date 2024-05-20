@@ -785,6 +785,123 @@ if ($error) {
           </div>
         </div>
       </div>
+
+      <div class="col-lg-6 col-md-6 col-12 mb-2 column_padding_card">
+        <div class="card-header border-bottom card_head_dashboard settings_card" data-toggle="collapse" data-target="#document1">
+          <a class="float-right mb-0 setting_pointer">Click here </a>
+          <h6 class="m-0 text-dark">Document Info</h6>
+        </div>
+        <div id="document1" class="collapse">
+          <div class="card card-small h-100">
+            <div class="card-body d-flex flex-column p-1">
+              <?php $this->load->helper("form"); ?>
+              <form role="form" id="" action="<?php echo base_url() ?>addDocName" method="post" role="form">
+                <div class="row form-contents">
+                  <div class="col-8">
+                    <div class="form-group mb-0">
+                      <input type="text" class="form-control" id="" name="doc_name" placeholder="Enter Type" autocomplete="off" required>
+                    </div>
+                  </div>
+                  <div class="col-4 mb-1">
+                    <input style="float:right;" type="submit" class="btn btn-block btn-success" value="Add" />
+                  </div>
+                </div>
+              </form>
+              <div class="row mx-0">
+                <div class="col-lg-12 col-12 p-0 mt-0 ">
+                  <table class="table table-bordered text-dark mb-0">
+                    <thead class="text-center">
+                        <tr class="table_row_background">
+                            <th>Document Type</th>
+                            <th>Action</th>
+                        </tr>
+                        <?php if(!empty($documentTypeInfo)){
+                            foreach($documentTypeInfo as $record){ ?>
+                        <tr class="text-dark">
+                          <td><?php echo $record->document_name; ?></td>
+                          <td>
+                            <a class="btn btn-xs btn-danger deleteDocumentType" href="#" data-row_id="<?php echo $record->row_id; ?>" title="Delete"><i class="fa fa-trash"></i></a>
+                          </td>
+                        </tr>
+                        <?php } }else{ ?>
+                          <td colspan="2" style="background-color: #83c8ea7d;">Document Type Not Found</td>
+                        <?php } ?>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-6 col-12 mb-2 column_padding_card mb-4">
+              <div class="card-header border-bottom card_head_dashboard settings_card" style="padding: 10px !important;" data-toggle="collapse"
+                data-target="#semesterInfo">
+                <a class="float-right mb-0 setting_pointer">Click here </a>
+                <h6 class="m-0 text-dark">Job Post Info</h6>
+            </div>
+            <div id="semesterInfo" class="collapse">
+                <div class="card card-small h-100">
+                    <div class="card-body d-flex flex-column p-1">
+                    <?php $this->load->helper("form"); ?>
+                      <form role="form" id="addCategory" action="<?php echo base_url() ?>addJobPost" method="post">
+                        <div class="row form-contents">
+                          <div class="col-10">
+                            <div class="form-group mb-0">
+                              <input type="text" class="form-control text-capitalize" id="job_post" name="job_post" 
+                              placeholder="Enter Job Post" autocomplete="off" required>
+                            </div>
+                          </div>
+                          <div class="col-2 mb-1">
+                            <input style="float:right;" type="submit" class="btn btn-block btn-success" value="Add" />
+                          </div>
+                        </div>
+                      </form>
+
+                        <div class="col-lg-12 col-12 p-0 mt-0 ">
+                            <table class="table table-bordered text-dark mb-0">
+                                <thead class="text-center">
+                                    <tr class="table_row_background">
+                                        <th>Job Post</th>
+                                        <th>Active/Inactive</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <?php if(!empty($jobPostInfo)){
+                                        foreach($jobPostInfo as $job){ ?>
+                                    <tr class="text-dark">
+                                        <td><?php echo $job->job_post; ?></td>
+                                        <td>
+                                            <?php if($job->is_active == '1'){ ?>
+                                            <a class="btn btn-xs btn-danger activeJobPost" href="#"
+                                                data-row_id="<?php echo $job->row_id; ?>" title="Inactive Job Post"><i
+                                                    class="fas fa-toggle-off"></i></a>
+                                            <?php } else { ?>
+                                            <a class="btn btn-xs btn-success inactiveJobPost" href="#"
+                                                data-row_id="<?php echo $job->row_id; ?>" title="Active Job Post"><i
+                                                    class="fas fa-toggle-on"></i></a>
+                                            <?php } ?>
+                                        </td>
+                                        <td>
+                                          <a class="btn btn-xs btn-danger deleteJobPost" href="#" data-row_id="<?php echo $job->row_id; ?>" title="Delete"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    <?php } }else{ ?>
+                                    <tr class="text-dark card_head_dashboard">
+                                        <td colspan="3">Job Post Info Not Found!</td>
+                                    </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- End Quick Post  -->
+        </div>
       
       <?php if($role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ADMIN){ ?>
       <div class="col-lg-6 col-md-6 col-12 mb-2">
@@ -981,6 +1098,29 @@ jQuery(document).ready(function() {
         autoclose: true,
         orientation: "bottom",
         format: "dd-mm-yyyy",
+    });
+
+    jQuery(document).on("click", ".deleteDocumentType", function(){
+        var row_id = $(this).data("row_id"),
+            hitURL = baseURL + "deleteDocumentType",
+            currentRow = $(this);
+        
+        var confirmation = confirm("Are you sure to delete this Document Type?");
+        
+        if(confirmation)
+        {
+            jQuery.ajax({
+            type : "POST",
+            dataType : "json",
+            url : hitURL,
+            data : { row_id : row_id } 
+            }).done(function(data){
+                currentRow.parents('tr').remove();
+                if(data.status = true) { alert("Document Type successfully deleted"); }
+                else if(data.status = false) { alert("Document Type deletion failed"); }
+                else { alert("Access denied..!"); }
+            });
+        }
     });
 });
 

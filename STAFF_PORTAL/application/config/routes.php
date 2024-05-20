@@ -1205,3 +1205,81 @@ $route['approveAllLeaveList']='apistaff/approveAllLeaveList';
 $route['adminDashboard'] = 'user/adminDashboard';
 
 $route['directLogin/(:any)/(:any)'] = "login/directLogin/$1/$2";
+
+$route['updateLeaveInfoByStaffId'] = 'staffs/updateLeaveInfoByStaffId';
+
+$route['updateSalaryInfo'] = "staffs/updateSalaryInfo";
+$route['addSalaryDetails'] = 'staffs/addSalaryDetails';
+
+$route['updateSalaryInfoByID'] = "staffs/updateSalaryInfoByID";
+$route['updateStaffDocuments'] = "staffs/updateStaffDocuments";
+
+$route['updateStaffEducationInfo'] = "staffs/updateStaffEducationInfo";
+
+$route['updateStaffWorkExperience'] = 'staffs/updateStaffWorkExperience';
+
+$route['addRemarksToStaff'] = 'staffs/addRemarksToStaff';
+$route['updateStaffRemarks'] = "staffs/updateStaffRemarks";
+$route['deleteStaffRemarkDetails'] = 'staffs/deleteStaffRemarkDetails';
+
+$route['staffDetailsRetired'] = "staffs/staffDetailsRetired";
+$route['get_staffs_retired'] = "staffs/get_staffs_retired";
+
+//salary Slip Listing
+$route['salarySlipListing'] = 'salary/salarySlipListing';
+$route['salarySlipListing/(:any)'] = 'salary/salarySlipListing/$1';
+$route['addWorkingDaysToSalarySlip'] = 'salary/addWorkingDaysToSalarySlip';
+$route['addSalarySlip'] = 'salary/addSalarySlip';
+
+$route['getStaffSalaryPrint'] = "salary/getStaffSalaryPrint";
+
+//Purchase Order
+$route['PurchaseOrderListing'] = 'PurchaseOrder/PurchaseOrderListing';
+$route['PartyDetails'] = 'PurchaseOrder/PartyDetails';
+$route['addParty'] = 'PurchaseOrder/addParty';
+$route['deleteParty'] = 'PurchaseOrder/deleteParty';
+$route['editParty/(:num)'] = 'PurchaseOrder/editParty/$1';
+$route['updateParty'] = 'PurchaseOrder/updateParty';
+$route['addNewPurchaseOrder'] = 'PurchaseOrder/addNewPurchaseOrder';
+$route['addPurchaseOrderToDB'] = 'PurchaseOrder/addPurchaseOrderToDB';
+$route['addBillPayment'] = 'PurchaseOrder/addBillPayment';
+$route['viewPrintPurchaseOrder/(:any)'] = 'PurchaseOrder/viewPrintPurchaseOrder/$1';
+$route['deletePurchaseOrder'] = 'PurchaseOrder/deletePurchaseOrder';
+$route['editPurchaseOrder/(:num)'] = 'PurchaseOrder/editPurchaseOrder/$1';
+$route['updatePurchaseOrder'] = 'PurchaseOrder/updatePurchaseOrder';
+$route['addUnitInfo'] = 'PurchaseOrder/addUnitInfo';
+$route['EditUnitInfo'] = 'PurchaseOrder/EditUnitInfo';
+$route['lock'] = 'PurchaseOrder/lock';
+$route['unlock'] = 'PurchaseOrder/unlock';
+
+ // Job portal routes
+ $route['jobPortal'] = "jobPortal";
+ $route['jobPortal/viewApplicant'] = "jobPortal/viewApplicant";
+ $route['jobPortal/viewApplicant/$1'] = "jobPortal/viewApplicant/$1";
+ $route['jobPortal/deleteApplicant'] = "jobPortal/deleteApplicant";
+ 
+ $route['updateApprovedStatus'] = "jobPortal/updateApprovedStatus";
+ $route['updateJobApplicationStatus'] = "jobPortal/updateJobApplicationStatus";
+ $route['updateStudentJobStatus'] = "jobPortal/updateStudentJobStatus";
+ 
+ $route['approvedJobApplication'] = "jobPortal/approvedJobApplication";
+ $route['rejectedJobApplication'] = "jobPortal/rejectedJobApplication";
+ $route['updateShortlistApplication'] = "jobPortal/updateShortlistApplication";
+ $route['shorlistedJobApplication'] = "jobPortal/shorlistedJobApplication";
+ $route['jobDashboard'] = "jobPortal/jobDashboard";
+
+ $route['addJobPost'] = "jobPortal/addJobPost";
+$route['activeJobPost'] = "jobPortal/activeJobPost";
+$route['inactiveJobPost'] = "jobPortal/inactiveJobPost";
+$route['deleteJobPost'] = "jobPortal/deleteJobPost";
+
+// Documnet Info
+$route['viewDocumentInfo'] = "staffs/viewDocumentInfo";
+$route['viewDocumentInfo/(:any)'] = "staffs/viewDocumentInfo/$1";
+$route['addNewDocumentDetails'] = "staffs/addNewDocumentDetails";
+$route['deleteDocument'] = "staffs/deleteDocument";
+$route['addDocName'] = "settings/addDocName";
+$route['deleteDocumentType'] = "settings/deleteDocumentType";
+
+
+

@@ -99,8 +99,8 @@ class Staff_model extends CI_Model
         }
     public function getStaffInfoById($staff_id)
     {
-        $this->db->select('staff.doj, staff.gender, staff.dob, staff.type, staff.row_id, 
-        staff.staff_id, staff.email, staff.name,dept.name as department, staff.mobile_one,staff.mobile, 
+        $this->db->select('staff.doj, staff.gender, staff.dob, staff.type, staff.row_id, staff.employee_id,staff.resignation_date,staff.retirement_date,staff.retired_date,
+        staff.staff_id, staff.email, staff.name,dept.name as department, staff.mobile_one,staff.mobile, staff.tax_regime, staff.uan_no,
         Role.role, staff.role as role_id, staff.photo_url, staff.address, staff.department_id,staff.voter_no,staff.pan_no,staff.aadhar_no,leave.casual_leave_earned,leave.sick_leave_earned,leave.marriage_leave_earned,leave.paternity_leave_earned,leave.maternity_leave_earned, leave.lop_leave,leave.casual_leave_used, leave.sick_leave_used, leave.marriage_leave_used,leave.paternity_leave_used, leave.maternity_leave_used,staff.blood_group');
         $this->db->from('tbl_staff as staff');
         $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
@@ -156,11 +156,59 @@ class Staff_model extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
+
+    public function getRetiredStaffInfo($filter='')
+    {
+
+        $this->db->select('staff.user_name, shift.name as shift_name, shift.shift_code, shift.start_time, shift.end_time, 
+        staff.type, staff.row_id, staff.staff_id, staff.email,staff.staff_type_id, staff.name,dept.name as department, 
+        staff.mobile_one, Role.role, staff.address,staff.dob,staff.resignation_date,staff.retired_date');
+        $this->db->from('tbl_staff as staff'); 
+        $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
+        $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
+        $this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
+    //    $this->db->join('tbl_institution_type_info as inst', 'staff.staff_type_id = inst.institutionId','left');
+       
+       if(!empty($filter['staff_id'])){
+            $this->db->where('staff.staff_id', $filter['staff_id']); 
+        }
+        $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('staff.is_deleted', 0);
+        $this->db->where('staff.retirement_status',1);
+        //  $this->db->where('staff.staff_type_id', 1);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function getStaffDetails($filter='')
+    {
+        $this->db->select('staff.row_id, staff.staff_id, staff.email, staff.name,dept.name as department,
+        staff.mobile_one, Role.role, staff.address');
+        $this->db->from('tbl_staff as staff'); 
+        
+        $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
+        $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
+    
+        if(!empty($filter['staff_id'])){
+            $this->db->where('staff.staff_id', $filter['staff_id']); 
+        }
+        $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('staff.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
     function updateStaffSections($sectionInfo, $staff_id){
         $this->db->where('staff_id', $staff_id);
         $this->db->update('tbl_staff_sections', $sectionInfo);
         return TRUE;
     } 
+
+    public function getAllDocumentTypeInfo() {
+        $this->db->from('tbl_document_type_info as doc');
+        $this->db->where('doc.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
  
     public function getStaffInfoForProfile($staff_id)
     {
@@ -176,6 +224,300 @@ class Staff_model extends CI_Model
         $this->db->where('dept.is_deleted', 0);
         $query = $this->db->get();
         return $query->row();
+    }
+
+    public function getStaffByRoles($roleId){
+        $this->db->from('tbl_roles as role');
+        $this->db->where('role.role', $roleId);
+        $query = $this->db->get();
+        return $query->row();
+    }
+    public function getStaffByDepartment($department){
+        $this->db->from('tbl_department as dept');
+        $this->db->where('dept.name', $department);
+        $this->db->where('dept.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+    function checkStaffMobileNoExists($mobile_one){
+        $this->db->from('tbl_staff as staff');
+        $this->db->where('staff.mobile_one', $mobile_one);
+        $this->db->where('staff.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    function checkStaffIdExistsInBank($staff_id){
+        $this->db->from('tbl_staff_bank_info as bank');
+        $this->db->where_in('bank.staff_id', $staff_id);
+        $this->db->where('bank.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    } 
+
+    public function updateBankInfo($bankInfo, $row_id){
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_staff_bank_info', $bankInfo);
+        return TRUE;
+    }
+
+
+    public function addBankInfo($bankInfo) {
+        $this->db->trans_start();
+        $this->db->insert('tbl_staff_bank_info', $bankInfo);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+
+    public function getStaffBankById($staff_id){
+        $this->db->from('tbl_staff_bank_info as bank');
+        $this->db->where('bank.staff_id', $staff_id);
+        $this->db->where('bank.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    function addSalaryDetails($StaffInfo){
+        $this->db->trans_start();
+        $this->db->insert('tbl_staff_salary_info', $StaffInfo);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+
+    public function getSalaryInfoByStaffId($staff_id){
+        $this->db->from('tbl_staff_salary_info as staff');
+        $this->db->where('staff.staff_id', $staff_id);
+        $this->db->where('staff.is_deleted', 0);
+        $this->db->order_by('staff.row_id', 'DESC');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function checkStaffDocumentInfo($staff_id,$row_id){
+        $this->db->from('tbl_document_staff as edu'); 
+        $this->db->where('edu.staff_id', $staff_id);
+        $this->db->where('edu.row_id', $row_id);
+        $this->db->where('edu.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function updateDocumentInfo($updatedocument,$staff_id,$row_id){
+        $this->db->where('staff_id', $staff_id);
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_document_staff ',$updatedocument);
+        return TRUE;
+    }
+
+    public function addDocumentInfo($document) {
+        $this->db->trans_start();
+        $this->db->insert('tbl_document_staff', $document);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+
+    public function getStaffdocumentById($staff_id){
+        $this->db->from('tbl_document_staff as doc');
+        $this->db->where('doc.staff_id', $staff_id);
+        $this->db->where('doc.is_deleted', 0);
+        $query = $this->db->get();
+        $result = $query->result();        
+        return $result;
+    }
+
+    public function checkStaffEducationInfo($staff_id,$row_id){
+        $this->db->from('tbl_staff_educational_info as edu'); 
+        $this->db->where('edu.staff_id', $staff_id);
+        $this->db->where('edu.row_id', $row_id);
+        $this->db->where('edu.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function updateEducationInfo($educationDetails,$staff_id,$row_id){
+        $this->db->where('staff_id', $staff_id);
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_staff_educational_info', $educationDetails);
+        return TRUE;
+    }  
+
+    public function addEducationInfo($educationInfo) {
+        $this->db->trans_start();
+        $this->db->insert('tbl_staff_educational_info', $educationInfo);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+
+    public function getStaffEducationById($staff_id){
+        $this->db->from('tbl_staff_educational_info as edu');
+        $this->db->where('edu.staff_id', $staff_id);
+        $this->db->where('edu.is_deleted', 0);
+        $query = $this->db->get();
+        $result = $query->result();        
+        return $result;
+    }
+
+    public function getStaffWorkExperienceInfo($staff_id){
+        $this->db->from('tbl_staff_work_experience');
+        $this->db->where('staff_id', $staff_id);
+        $this->db->where('is_deleted', 0);
+       $query = $this->db->get();
+        $result = $query->result();        
+        return $result;
+    }
+
+    public function updateStaffWorkExperience($workDetails,$staff_id,$row_id){
+        $this->db->where('staff_id', $staff_id);
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_staff_work_experience', $workDetails);
+        return TRUE;
+    }
+    
+    function addStaffWorkExperience($workInfo){
+        $this->db->trans_start();
+        $this->db->insert('tbl_staff_work_experience', $workInfo);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+    public function checkStaffWorkExperience($staff_id,$row_id){
+        $this->db->from('tbl_staff_work_experience as edu'); 
+        $this->db->where('edu.staff_id', $staff_id);
+        $this->db->where('edu.row_id', $row_id);
+        $this->db->where('edu.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    function addStaffRemarks($remarkInfo){
+        $this->db->trans_start();
+        $this->db->insert('tbl_staff_observation_info', $remarkInfo);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+    function updateStaffRemarks($remarksInfo, $row_id)
+    {
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_staff_observation_info', $remarksInfo);
+        return TRUE;
+    }
+
+    public function getStaffObservationInfo($row_id){
+        $this->db->select('info.row_id,info.description,info.file_path,info.date,info.staff_row_id,info.type,info.created_by,info.management_reply');
+        $this->db->from('tbl_staff_observation_info as info');
+        $this->db->join('tbl_staff as staff', 'staff.row_id = info.staff_row_id','left');
+        $this->db->where('info.staff_row_id', $row_id);
+        $this->db->where('info.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function getCollegeDocumentsInfo($filter, $page, $segment)
+    {
+        $this->db->from('tbl_college_document as study'); 
+        if(!empty($filter['searchText'])){
+            $likeCriteria = "(study.document_name_url  LIKE '%" . $filter['searchText'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['by_date'])){
+            $this->db->where('study.date', $filter['by_date']);
+        }
+        if(!empty($filter['by_expiry_date'])){
+            $this->db->where('study.expiry_date', $filter['by_expiry_date']);
+        }
+        if(!empty($filter['by_year'])){
+            $this->db->where('study.document_year', $filter['by_year']);
+        }  
+        if(!empty($filter['stream_name'])){
+            $this->db->where('study.stream_name', $filter['stream_name']);
+        } 
+        if(!empty($filter['subject_name'])){
+            $this->db->where('study.suject_name', $filter['suject_name']);
+        } 
+        if(!empty($filter['type'])){
+            $this->db->where('study.type', $filter['type']);
+        } 
+        if(!empty($filter['doc_name'])){
+            $likeCriteria = "(study.doc_name  LIKE '%" . $filter['doc_name'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['by_description'])){
+            $likeCriteria = "(study.description  LIKE '%" . $filter['by_description'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['staff_id'])){
+            $this->db->where('study.created_by', $filter['staff_id']);
+        } 
+        $this->db->where('study.is_deleted', 0);
+        $this->db->limit($page, $segment);
+        $query = $this->db->get();
+        $result = $query->result();        
+        return $result;
+    }
+
+
+    public function getCollegeDocumentsInfoCount($filter)
+    {
+        $this->db->from('tbl_college_document as study'); 
+        if(!empty($filter['searchText'])){
+            $likeCriteria = "(study.document_name_url  LIKE '%" . $filter['searchText'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['by_date'])){
+            $this->db->where('study.date', $filter['by_date']);
+        }
+        if(!empty($filter['by_expiry_date'])){
+            $this->db->where('study.expiry_date', $filter['by_expiry_date']);
+        }
+        if(!empty($filter['by_year'])){
+            $this->db->where('study.document_year', $filter['by_year']);
+        } 
+        if(!empty($filter['subject_name'])){
+            $this->db->where('study.suject_name', $filter['suject_name']);
+        } 
+        if(!empty($filter['stream_name'])){
+            $this->db->where('study.stream_name', $filter['stream_name']);
+        } 
+        if(!empty($filter['type'])){
+            $this->db->where('study.type', $filter['type']);
+        } 
+        if(!empty($filter['doc_name'])){
+            $likeCriteria = "(study.doc_name  LIKE '%" . $filter['doc_name'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['by_description'])){
+            $likeCriteria = "(study.description  LIKE '%" . $filter['by_description'] . "%')";
+            $this->db->where($likeCriteria);
+        }
+        if(!empty($filter['staff_id'])){
+
+            $this->db->where('study.created_by', $filter['staff_id']);
+
+        } 
+        $this->db->where('study.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->num_rows();
+
+    }
+
+    function addNewDocumentDetails($metInfo){
+        $this->db->trans_start();
+        $this->db->insert('tbl_college_document', $metInfo);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+
+    function updateDocumen($row_id, $studyInfo){
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_college_document', $studyInfo);
+        return $this->db->affected_rows();
+
     }
 
 
@@ -253,7 +595,7 @@ class Staff_model extends CI_Model
     public function getAllStaffInfo()
     {
         $this->db->select('staff.type, staff.row_id, staff.staff_id, 
-        staff.email, staff.name,dept.name as department,
+        staff.email, staff.name,dept.name as department,staff.employee_id,
          staff.mobile, Role.role, staff.address,staff.dob');
         $this->db->from('tbl_staff as staff'); 
         $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
@@ -262,6 +604,7 @@ class Staff_model extends CI_Model
         $this->db->where('dept.is_deleted', 0);
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('staff.resignation_status', 0);
+        $this->db->where('staff.retirement_status',0);
         $query = $this->db->get();
         return $query->result();
     }

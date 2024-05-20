@@ -244,6 +244,70 @@ public function getAllStaffLeavePendingInfoForReport2($staff_id,$year)
     $query = $this->db->get();
     return $query->result();
 }
+
+public function getLeaveInfoByStaffIdNew($staff_id)
+    {
+        $this->db->from('tbl_staff_leave_management as leave');
+        $this->db->where('leave.staff_id', $staff_id);
+        $this->db->order_by('leave.year','DESC');
+        $this->db->where('leave.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function getLeaveInfoByStaffIdNew2024($staff_id)
+
+    {
+
+        $this->db->from('tbl_staff_leave_management as leave');
+
+        $this->db->where('leave.staff_id', $staff_id);
+        $this->db->where('leave.year','2024');
+
+        $this->db->where('leave.is_deleted', 0);
+
+        $query = $this->db->get();
+
+        return $query->result();
+
+    }
+
+    public function getLeaveUsedSum($staff_id,$type,$year)
+    {
+        $this->db->select_sum('leave.total_days_leave');
+        $this->db->from('tbl_staff_applied_leave as leave');
+        $this->db->where('leave.staff_id', $staff_id);
+        $this->db->where('leave.leave_type', $type);
+        $this->db->where('leave.is_deleted', 0);
+        $this->db->where('leave.approved_status', 1);
+        $this->db->where('leave.year', $year);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function getLeaveInfoByStaffIdYear($staff_id,$year)
+    {
+        $this->db->from('tbl_staff_leave_management as leave');
+        $this->db->where('leave.staff_id', $staff_id);
+        $this->db->where('leave.year', $year);
+        $this->db->where('leave.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    function updateStaffLeaveInfoByYearNew($leaveInfo, $staff_id,$year)
+    {
+        $this->db->where('staff_id', $staff_id);
+        $this->db->where('year', $year);
+        $this->db->update('tbl_staff_leave_management', $leaveInfo);
+        return TRUE;
+    } 
+
+    
+
+
+
+
 }
 
 

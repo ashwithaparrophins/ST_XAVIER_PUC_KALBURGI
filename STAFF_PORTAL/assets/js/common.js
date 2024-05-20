@@ -955,5 +955,114 @@ jQuery(document).ready(function(){
 			}
 		});
 
+		jQuery(document).on("click", ".activeJobPost", function(){
+
+			var row_id = $(this).data("row_id"),
+	
+				hitURL = baseURL + "activeJobPost",
+	
+				currentRow = $(this);
+			var confirmation = confirm("Are you sure to Activate this Job Post ?");
+			if(confirmation)
+	
+			{
+	
+				jQuery.ajax({
+	
+				type : "POST",
+	
+				dataType : "json",
+	
+				url : hitURL,
+	
+				data : { row_id : row_id } 
+	
+				}).done(function(data){
+	
+					 
+	
+					if(data.status = true) { alert("Job Post successfully activated");
+					location.reload(); }
+	
+					else if(data.status = false) { alert("Job Post activation failed");
+					location.reload(); }
+	
+					else { alert("Access denied..!");
+					location.reload(); }
+	
+				});
+	
+			}
+	
+		
+	
+		});
+	
+		jQuery(document).on("click", ".inactiveJobPost", function(){
+	
+			var row_id = $(this).data("row_id"),
+	
+				hitURL = baseURL + "inactiveJobPost",
+	
+				currentRow = $(this);
+	
+			var confirmation = confirm("Are you sure to inactivate this Job Post ?");
+			if(confirmation)
+	
+			{
+	
+				jQuery.ajax({
+	
+				type : "POST",
+	
+				dataType : "json",
+	
+				url : hitURL,
+	
+				data : { row_id : row_id } 
+	
+				}).done(function(data){
+	
+					if(data.status = true) { alert("Job Post successfully inactivated");
+					location.reload(); }
+	
+					else if(data.status = false) { alert("Job Post inactivation failed");
+					location.reload(); }
+	
+					else { alert("Access denied..!");
+					location.reload(); }
+	
+				});
+	
+			}
+	
+		
+	
+		});
+		jQuery(document).on("click", ".deleteJobPost", function(){
+			var row_id = $(this).data("row_id"),
+				hitURL = baseURL + "deleteJobPost",
+				currentRow = $(this);
+			
+			var confirmation = confirm("Are you sure to delete this Job Post Info?");
+			
+			if(confirmation)
+			{
+				jQuery.ajax({
+				type : "POST",
+				dataType : "json",
+				url : hitURL,
+				data : { row_id : row_id } 
+				}).done(function(data){
+						
+					currentRow.parents('tr').remove();
+					if(data.status = true) { alert("Job Post Info successfully deleted"); }
+					else if(data.status = false) { alert("Job Post Info deletion failed"); }
+					else { alert("Access denied..!"); }
+				});
+			}
+		});
+		
+
 });
 
