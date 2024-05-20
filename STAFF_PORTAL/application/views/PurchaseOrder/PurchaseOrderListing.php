@@ -325,17 +325,7 @@ if ($error) {
  
 <script type="text/javascript">
 
- $('.start_time').datetimepicker(
-        {
-            
-          format: 'hh:mm A',
-          icons: {
-                    up: "fa fa-chevron-up",
-                  down: "fa fa-chevron-down"
-                 },
 
-       });
- 
 jQuery(document).ready(function() {
     $("form").submit(()=>{
         showLoader();
@@ -356,7 +346,6 @@ jQuery(document).ready(function() {
     });
 
     jQuery(document).on("click", ".deletePurchaseOrder", function(){
-            
             var row_id = $(this).data("row_id"),
                 hitURL = baseURL + "deletePurchaseOrder",
                 currentRow = $(this);
@@ -379,7 +368,17 @@ jQuery(document).ready(function() {
                 });
             }
         });
+    //     $('.start_time').datetimepicker(
+    //     {
+            
+    //       format: 'hh:mm A',
+    //       icons: {
+    //                 up: "fa fa-chevron-up",
+    //               down: "fa fa-chevron-down"
+    //              },
 
+    //    });
+ 
     jQuery('.dateSearch').datepicker({
         autoclose: true,
         orientation: "bottom",

@@ -296,16 +296,16 @@ if ($error) {
 
 <script type="text/javascript">
 
- $('.start_time').datetimepicker(
-        {
+//  $('.start_time').datetimepicker(
+//         {
             
-          format: 'hh:mm A',
-          icons: {
-                    up: "fa fa-chevron-up",
-                  down: "fa fa-chevron-down"
-                 },
+//           format: 'hh:mm A',
+//           icons: {
+//                     up: "fa fa-chevron-up",
+//                   down: "fa fa-chevron-down"
+//                  },
 
-       });
+//        });
  
 jQuery(document).ready(function() {
     $("form").submit(()=>{
@@ -327,7 +327,7 @@ jQuery(document).ready(function() {
     });
 
     jQuery(document).on("click", ".deleteParty", function(){
-        alert('hi');
+        // alert('hi');
             
             var row_id = $(this).data("row_id"),
                 hitURL = baseURL + "deleteParty",
