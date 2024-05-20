@@ -1161,6 +1161,12 @@
                     </ul>
                 </li>
                 <?php } ?>
+                <li class="nav-item">
+                    <a class="nav-link " href="<?php echo base_url(); ?>getMyAttendanceInfoPage">
+                        <i class="material-icons">fingerprint</i>
+                        <span>My Attendance</span>
+                    </a>
+                </li>
                 <?php if ($role == EXAM_COMMITTEE || $role == ROLE_TEACHING_STAFF || $role == ROLE_OFFICE || $role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_VICE_PRINCIPAL) { ?>
                 <li class="nav-item">
                     <a href="#exam" data-toggle="collapse" aria-expanded="false" class="nav-link  dropdown-toggle">

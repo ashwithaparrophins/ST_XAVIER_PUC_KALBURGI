@@ -1141,6 +1141,15 @@ public function getStaffAttendanceInfoByRowId($row_id){
             return $query->row();
     }
 
+    public function getPunchDateByStaffId($staff_id){
+        $this->db->select('DISTINCT(punch_date) as punch_date');
+        $this->db->from('tbl_staff_attendance_info as staff_att'); 
+        $this->db->where('staff_att.staff_id', $staff_id);
+        $this->db->where('staff_att.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     public function getStaffInfoForReportDownload($filter=''){
         $this->db->select('staff.row_id, staff.staff_id, staff.email, staff.dob, staff.doj, staff.blood_group, staff.present_address, 
         staff.voter_no, staff.aadhar_no, staff.pan_no, staff.name,dept.name as department, staff.mobile, Role.role, 

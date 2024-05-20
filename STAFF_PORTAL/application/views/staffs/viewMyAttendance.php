@@ -193,10 +193,10 @@ jQuery(document).ready(function() {
 
 
     var table = $('#item-list').DataTable({
-        columnDefs: [{
-            className: "text-left",
-            targets: 2
-        }],
+        // columnDefs: [{
+        //     className: "text-left",
+        //     targets: 
+        // }],
         lengthMenu: [
             [200, 150, 100, 50, 20, 10],
             [200, 150, 100, 50, 20, 10]
