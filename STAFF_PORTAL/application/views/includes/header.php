@@ -384,15 +384,15 @@
                                 <span>Deleted Staff Details</span>
                             </a>
                         </li>
-                        <!-- <?php }
+                        <?php }
                             if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_RECEPTION) { ?>
                         <li class="nav-item">
                             <a class="nav-link " href="<?php echo base_url(); ?>getStaffAttendanceInfo">
                                 <i class="material-icons">access_time</i>
-                                <span>Attendance</span>
+                                <span>Staff Attendance</span>
                             </a>
                         </li>
-                        <?php } ?> -->
+                        <?php } ?>
                         <li class="nav-item">
                             <a class="nav-link " href="<?php echo base_url(); ?>staffDetailsResigned">
                                 <i class="fas fa-chalkboard-teacher header_icons"></i>

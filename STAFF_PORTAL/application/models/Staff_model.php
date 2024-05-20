@@ -209,6 +209,96 @@ class Staff_model extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
+
+    public function getAllCurrentStaffInfo()
+    {
+        $this->db->select('staff.user_name, shift.name as shift_name, shift.shift_code, shift.start_time, shift.end_time, staff.type, staff.row_id, staff.staff_id, staff.email,staff.staff_type_id, staff.name,dept.name as department, staff.mobile_one, Role.role, staff.address,staff.role as role_id');
+        $this->db->from('tbl_staff as staff'); 
+        $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
+        $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
+        $this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
+        $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('staff.is_deleted', 0);
+        $this->db->where('staff.resignation_status', 0); 
+        $this->db->where('staff.retirement_status',0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+     //get staff attendance 
+     public function getAllStaffAttendanceFromModel($staff_id,$date){
+        $this->db->select('att.punch_out_time as out_time, att.punch_time as in_time, att.punch_date,
+        staff.doj, staff.gender, staff.dob, staff.type, att.row_id, 
+        staff.staff_id, staff.email, staff.name,dept.name as department, staff.mobile_one, 
+        leave.casual_leave_earned,leave.sick_leave_earned,leave.marriage_leave_earned,leave.paternity_leave_earned,
+        leave.maternity_leave_earned, leave.lop_leave,
+        leave.casual_leave_used, leave.sick_leave_used, leave.marriage_leave_used,leave.paternity_leave_used, leave.maternity_leave_used,
+        shift.name as shift_name, shift.start_time, shift.end_time, shift.shift_code,
+        Role.role, staff.role as role_id, staff.photo_url, staff.address, staff.department_id');
+        $this->db->from('tbl_staff as staff');
+        $this->db->join('tbl_staff_attendance_info as att', 'staff.staff_id = att.staff_id','left');
+        $this->db->join('tbl_staff_leave_management as leave', 'staff.staff_id = leave.staff_id','left');
+        $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
+        $this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
+        $this->db->join('tbl_department as dept', 'staff.department_id = dept.dept_id','left');
+        $this->db->where('staff.is_deleted', 0);
+        $this->db->where('att.is_deleted', 0);
+        $this->db->where('att.staff_id', $staff_id);
+        $this->db->where('att.punch_date', $date);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    //add new staff attendance
+public function addNewStaffAttendance($attInfo){
+    $this->db->trans_start();
+    $this->db->insert('tbl_staff_attendance_info', $attInfo);
+    $insert_id = $this->db->insert_id();
+    $this->db->trans_complete();
+    return $insert_id;
+}
+
+public function getAllStaffAttendanceDisplay($staff_id,$date){
+    $this->db->select('att.punch_out_time as out_time, att.punch_time as in_time, att.punch_date,
+    staff.doj, staff.gender, staff.dob, staff.type, att.row_id, 
+    staff.staff_id, staff.email, staff.name,dept.name as department, staff.mobile_one, 
+    leave.casual_leave_earned,leave.sick_leave_earned,leave.marriage_leave_earned,leave.paternity_leave_earned,
+    leave.maternity_leave_earned, leave.lop_leave,
+    leave.casual_leave_used, leave.sick_leave_used, leave.marriage_leave_used,leave.paternity_leave_used, leave.maternity_leave_used,
+    shift.name as shift_name, shift.start_time, shift.end_time, shift.shift_code,
+    Role.role, staff.role as role_id, staff.photo_url, staff.address, staff.department_id');
+    $this->db->from('tbl_staff as staff');
+    $this->db->join('tbl_staff_attendance_info as att', 'staff.staff_id = att.staff_id','left');
+    $this->db->join('tbl_staff_leave_management as leave', 'staff.staff_id = leave.staff_id','left');
+    $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
+    $this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
+    $this->db->join('tbl_department as dept', 'staff.department_id = dept.dept_id','left');
+    $this->db->where('staff.is_deleted', 0);
+    $this->db->where('att.is_deleted', 0);
+    $this->db->where('att.row_id', $staff_id);
+    $this->db->where('att.punch_date', $date);
+    $query = $this->db->get();
+    return $query->row();
+}
+
+public function getStaffAttendanceInfoByRowId($row_id){
+    $this->db->select('att.punch_time, att.punch_out_time, att.punch_date,att.punch_out_date,
+    staff.doj, staff.gender, staff.dob, staff.type, att.row_id, 
+    staff.staff_id, staff.email, staff.name,dept.name as department, 
+    shift.name as shift_name, shift.start_time, shift.end_time, shift.shift_code,
+    Role.role, staff.role as role_id, staff.photo_url, staff.address, staff.department_id');
+    $this->db->from('tbl_staff as staff');
+    $this->db->join('tbl_staff_attendance_info as att', 'staff.staff_id = att.staff_id','left');
+    $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
+    $this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
+    $this->db->join('tbl_department as dept', 'staff.department_id = dept.dept_id','left');
+    $this->db->where('staff.is_deleted', 0);
+    $this->db->where('att.is_deleted', 0);
+    $this->db->where('att.row_id', $row_id);
+    $query = $this->db->get();
+    return $query->row();
+}
+
  
     public function getStaffInfoForProfile($staff_id)
     {
@@ -1037,25 +1127,18 @@ class Staff_model extends CI_Model
 
      //get single staff attandance
      public function getSingleStaffAttendanceInfo($staff_id,$date_today){
-      
-
-        $query = $this->db->query("SELECT MIN(from_unixtime(sa.attendance_time)) as in_time, 
-        MAX(from_unixtime(sa.attendance_time)) as out_time, staff.staff_id,
-        sa.punch_time, staff.type, staff.row_id, staff.name,dept.name as department,
-        staff.mobile,staff.mobile_two, role_.role, role_.roleId FROM 
-        tbl_staff_attendance_info as sa, tbl_staff as staff, tbl_roles as role_,
-        tbl_department as dept WHERE
-        staff.staff_id = sa.staff_id AND
-        
-        role_.roleId = staff.role AND
-       
-        dept.dept_id = staff.department_id AND staff.is_deleted = 0 AND
-        sa.staff_id = $staff_id AND
-        sa.punch_date = '$date_today'
-        GROUP BY staff.staff_id
-       ");
-        $result = $query->row();        
-        return $result;
+        $query = $this->db->query("SELECT sa.punch_time as in_time, sa.punch_out_time as out_time, staff.staff_id,
+            sa.punch_date, sa.punch_time, staff.type, staff.row_id, staff.name,dept.name as department, staff.mobile_one, role_.role, role_.roleId
+             FROM 
+            tbl_staff_attendance_info as sa, tbl_staff as staff, tbl_roles as role_,
+            tbl_department as dept
+            WHERE
+            staff.staff_id = sa.staff_id AND
+            role_.roleId = staff.role AND
+            dept.dept_id = staff.department_id AND staff.is_deleted = 0 AND sa.is_deleted = 0 AND
+            sa.staff_id = '$staff_id' AND
+            sa.punch_date = '$date_today'");
+            return $query->row();
     }
 
     public function getStaffInfoForReportDownload($filter=''){
@@ -1145,5 +1228,63 @@ class Staff_model extends CI_Model
           $query = $this->db->get();
           return $query->row();
       }
+      public function updateStaffAttendanceByID($row_id, $attInfo){
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_staff_attendance_info', $attInfo);
+        return TRUE;
+    }
    
+    public function getAllStaffInfoByDeptName($dept_id)
+    {
+        $this->db->select('staff.user_name,staff.type, staff.row_id, staff.staff_id, staff.email, staff.name,dept.name as department, staff.mobile_one, Role.roleId, Role.role, staff.address');
+        $this->db->from('tbl_staff as staff'); 
+        $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
+        $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
+        $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('staff.department_id', $dept_id);
+        $this->db->where('staff.resignation_status', 0);
+        $this->db->where('staff.retirement_status',0);
+        $this->db->where('staff.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    function getStaffAllDepartmentInfoForReport(){
+        $this->db->select('id, name, dept_id');
+        $this->db->from('tbl_department');
+        $this->db->where('is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function getAllStaffInfoByDeptIdReport($dept_id,$staff_id = 'ALL') {
+        $this->db->select('staff.user_name, staff.type, staff.row_id, staff.staff_id, staff.email, staff.name,dept.name as department, staff.mobile_one, Role.roleId, Role.role, staff.address');
+        $this->db->from('tbl_staff as staff'); 
+        $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
+        $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
+        $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('staff.department_id', $dept_id);
+        if($staff_id != 'ALL'){
+            $this->db->where('staff.staff_id', $staff_id);
+        }
+        $this->db->where('staff.is_deleted', 0);
+        $this->db->where('staff.resignation_status', 0);
+        $this->db->where('staff.retirement_status',0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function getStaffAttendanceByRowId($row_id){
+        $this->db->from('tbl_staff_attendance_info as att');
+        $this->db->where('att.row_id', $row_id);
+        $this->db->where('att.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+     //delete staff attendance info 
+     public function deleteStaffAttendanceInfo($staff_id, $punch_date, $attInfo){
+        $this->db->where('punch_date', $punch_date);
+        $this->db->where('staff_id', $staff_id);
+        $this->db->update('tbl_staff_attendance_info', $attInfo);
+        return TRUE;
+    }
 }

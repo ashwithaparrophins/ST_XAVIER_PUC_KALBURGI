@@ -58,5 +58,20 @@
             $query = $this->db->get();
             return $query->row();
         }
+
+        public function getHolidayInfoByRole($role){
+            $this->db->from('tbl_college_holiday_info as holiday');
+            if($role == ROLE_TEACHING_STAFF){
+                $this->db->where('holiday.teaching_staff_status', 1);
+            } else if($role == ROLE_NON_TEACHING_STAFF || $role == ROLE_ADMIN){
+                $this->db->where('holiday.non_teaching_staff_status', 1);
+            } else if($role == ROLE_SUPPORT_STAFF){
+                $this->db->where('holiday.support_staff_status', 1);
+            }
+            $this->db->where('holiday.is_deleted', 0);
+            $query = $this->db->get();
+            return $query->result();          
+        }
+
         
     }

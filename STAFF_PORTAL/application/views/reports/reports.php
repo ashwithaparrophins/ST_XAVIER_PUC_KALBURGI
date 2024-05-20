@@ -1,4 +1,18 @@
 <!-- <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> -->
+<style>
+    input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+</style>
 <?php
     $this->load->helper('form');
     ?>
@@ -379,6 +393,22 @@
                 </div>
             </a>
         </div>
+        <div class="col-lg-3 col-6 mb-2 column_padding_card">
+            <a data-toggle="modal" data-target="#downloadStaffAttendanceMonthlyReportPdf" class="more-info text-white dashboard_link" href="#">
+                <div class="card card-small dash-card" style="background: #3e50b3;">
+                    <div class="card-body pt-1 pb-1">
+                        <h6 class="stats-small__value text-uppercase text-white">Staff Monthly Attendance - PDF </h6>
+                        <div class="icon pull-right mt-4">
+                            <i class="fas fa-file dash-icons"></i></i>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center dash-footer p-1">
+                        <div class="more-info text-white"></div>
+                        <span class="text-center">Download</span>
+                    </div>
+                </div>
+            </a>
+        </div>
         <?php }
          if($role == ROLE_ADMIN || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_PRINCIPAL){ ?>
         <!-- <div class="col-lg-3 col-6 mb-2 column_padding_card">
@@ -591,6 +621,91 @@
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="downloadStaffAttendanceMonthlyReportPdf">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header ">
+                <h4 class="modal-title">Staff Attendance Monthly Report</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="padding:0px;">
+                <div class="card-body contents-body">
+                
+                    <form id="" method="POST" data-download_form="true" action="<?php echo base_url(); ?>downloadStaffAttendanceMonthlyReportPdf" target="_blank">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Date From</label>
+                                    <input type="date" class=" form-control" name="date_from" 
+                                        placeholder="Date From" required autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Date To</label>
+                                    <input type="date" class="form-control" name="date_to" 
+                                        placeholder="Date To" required autocomplete="off">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-12">
+                                <div class="form-group ">
+                                    <label for="team_id">By Staff</label>
+                                    <select class="form-control input-sm selectpicker" id="staffIdd"
+                                        name="by_staff_id_report" data-live-search="true">
+                                        <option value="ALL">ALL</option>
+                                        <?php if(!empty($currentStaffInfo)) {
+                                            foreach ($currentStaffInfo as $rl) {  ?>
+                                        <option value="<?php echo $rl->staff_id ?>">
+                                            <?php echo $rl->name ?></option>
+                                        <?php } } ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group ">
+                                    <label for="team_id">Department Sort</label>
+                                    <select required name="department" id="departmentStaffId"
+                                        class="form-control required selectpicker" data-live-search="true">
+                                        <option value="">Select One Dept.</option>
+                                        <option value="ALL">ALL</option>
+                                        <?php if(!empty($departments)) {
+                                                foreach ($departments as $rl) { ?>
+                                                <option value="<?php echo $rl->dept_id ?>"
+                                            <?php if($rl->id == set_value('role')) {echo "selected=selected";} ?>>
+                                            <?php echo $rl->name; ?></option>
+                                        <?php } } ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="mt-1 mb-1">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-12">
+                            <button type="submit" class="btn pull-right btn-primary text-white" id="downloadMonthlyReportStaff">Download</button>
+                            <button type="button" class="btn btn-danger pull-left"  data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                                    </form>
+                    <!-- Modal footer -->
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

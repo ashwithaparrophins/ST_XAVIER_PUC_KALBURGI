@@ -172,22 +172,24 @@ $route['api/v1/user/login'] = 'api/login';
 $route['api/v1/user/view'] = 'api/view';
 
 //attendance info staff
-$route['getStaffAttendanceInfo'] = "staffs/getStaffAttendanceInfo";
-$route['get_attendance'] = "staffs/get_attendance";
+$route['getStaffAttendanceInfo'] = "attendance/getStaffAttendanceInfo";
+$route['get_attendance'] = "attendance/get_attendance";
 
 $route['get_my_attendance_info'] = "attendance/get_my_attendance_info";
 
 $route['getMyAttendanceInfoPage'] = "attendance/getMyAttendanceInfoPage";
 $route['downloadStaffAttendanceReport'] = "attendance/downloadStaffAttendanceReport";
 
+$route['downloadStaffAttendanceMonthlyReportPdf'] = "attendance/downloadStaffAttendanceMonthlyReportPdf";
+
 
 //delete staff Attendance
 $route['deleteStaffAttendance'] = "attendance/deleteStaffAttendance";
 
 //add new staff Attendance
-$route['addNewStaffAttendance'] = "staffs/addNewStaffAttendance";
-$route['getStaffAttendanceInfoByDate_Staff_Id'] = "staffs/getStaffAttendanceInfoByDate_Staff_Id";
-$route['updateStaffAttendance'] = "staffs/updateStaffAttendance";
+$route['addNewStaffAttendance'] = "attendance/addNewStaffAttendance";
+$route['getStaffAttendanceInfoByDate_Staff_Id'] = "attendance/getStaffAttendanceInfoByDate_Staff_Id";
+$route['updateStaffAttendance'] = "attendance/updateStaffAttendance";
 
 //permisssion routes
 $route['viewPermissions'] = "permission/viewPermissions";

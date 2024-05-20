@@ -48,6 +48,7 @@ class Reports extends BaseController
             $data['subjectInfo'] = $this->subject->getAllSubjectInfo();
             $data['routeInfo'] = $this->transport->getTransportNameInfo();
             $data['busNoInfo'] = $this->transport->getTransportBusNo();
+            $data['currentStaffInfo'] = $this->staff->getAllCurrentStaffInfo();
             $data['miscellaneousTypeInfo'] = $this->settings->getAllMiscellaneousTypeInfo();
             $this->global['pageTitle'] = '' . TAB_TITLE . ' : Reports';
             $this->loadViews("reports/reports", $this->global, $data, NULL);

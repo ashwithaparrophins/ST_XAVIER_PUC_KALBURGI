@@ -96,9 +96,9 @@ if ($error) {
                                     data-target="#addNewStaffAttendance"><i class="fa fa-plus"></i>
                                     Add New</button>
 
-                                <!-- <button class="btn btn-primary mobile-btn pull-right" data-toggle="modal"
+                                <button class="btn btn-primary mobile-btn pull-right" data-toggle="modal"
                                     data-target="#leaveInfoModel"><i class="fa fa-eye"></i>
-                                    Analysis</button> -->
+                                    Analysis</button>
 
                                 <button class="btn btn-success mobile-btn pull-left" data-toggle="modal"
                                     data-target="#staffAttendanceDownlaod"><i class="fa fa-download"></i>
@@ -127,8 +127,8 @@ if ($error) {
                                     <th>Role</th>
                                     <th>In-Time</th>
                                     <th>Out-Time</th>
-                                   
-                                    <?php if($role == ROLE_ADMIN) {?>
+                                    <!-- <th>Shift</th> -->
+                                    <?php if($role == ROLE_ADMIN || $this->staff_id == '123456') {?>
                                     <th>Action</th>
                                     <?php } ?>
                                 </tr>
@@ -145,8 +145,8 @@ if ($error) {
                                     <th>Role</th>
                                     <th>In-Time</th>
                                     <th>Out-Time</th>
-                                  
-                                    <?php if($role == ROLE_ADMIN) {?>
+                                    <!-- <th>Shift</th> -->
+                                    <?php if($role == ROLE_ADMIN || $this->staff_id == '123456') {?>
                                     <th>Action</th>
                                     <?php } ?>
                                 </tr>
@@ -174,7 +174,61 @@ if ($error) {
                         <div class="card-body contents-body">
                             <div class="row">
 
-                                <h5>Coming Soon</h5>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Total Late Teaching Staff</th>
+                                        <th id="total_late_year" scope="col ">
+                                            <?php echo $analysis_count['late_count_teaching_staff']; ?></th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">Total Late Non-Teaching Staff</th>
+                                        <th id="total_late_year" scope="col ">
+                                            <?php echo $analysis_count['late_count_non_teaching_staff']; ?></th>
+                                    </tr>
+
+                                    <tr>
+                                        <th scope="col">Total Late Support Staff</th>
+                                        <th id="total_late_year" scope="col ">
+                                            <?php echo $analysis_count['late_count_support_staff']; ?></th>
+                                    </tr>
+
+                                    <tr>
+                                        <th scope="col">Total Absent Teaching Staff</th>
+                                        <th id="total_late_year" scope="col ">
+                                            <?php echo $analysis_count['absent_count_teaching_staff']; ?></th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">Total Absent Non-Teaching Staff</th>
+                                        <th id="total_late_year" scope="col ">
+                                            <?php echo $analysis_count['absent_count_non_teaching_staff']; ?></th>
+                                    </tr>
+
+                                    <tr>
+                                        <th scope="col">Total Absent Support Staff</th>
+                                        <th id="total_late_year" scope="col ">
+                                            <?php echo $analysis_count['absent_count_support_staff']; ?></th>
+                                    </tr>
+
+                                    <tr>
+                                        <th scope="col">Without Punch-Out Teaching Staff</th>
+                                        <th id="total_late_year" scope="col ">
+                                            <?php echo $analysis_count['no_punch_count_teaching_staff']; ?></th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">Without Punch-Out Non-Teaching Staff</th>
+                                        <th id="total_late_year" scope="col ">
+                                            <?php echo $analysis_count['no_punch_count_non_teaching_staff']; ?></th>
+                                    </tr>
+
+                                    <tr>
+                                        <th scope="col">Without Punch-Out Support Staff</th>
+                                        <th id="total_late_year" scope="col ">
+                                            <?php echo $analysis_count['no_punch_count_support_staff']; ?></th>
+                                    </tr>
+                                </thead>
+
+                            </table>
 
                             </div>
 
@@ -202,13 +256,13 @@ if ($error) {
                     <!-- Modal body -->
                     <div class="modal-body" style="padding:0px;">
                         <div class="card-body contents-body">
-                            <form id="downloadReportForm">
+                            <form id="downloadReportForm" data-download_form="true">
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Date From</label>
                                             <input type="text" class="dateFrom form-control" name="fromDate"
-                                                id="fromDate" placeholder="Date From" autocomplete="off" required>
+                                                id="fromDate" placeholder="Date From" required>
                                         </div>
                                     </div>
 
@@ -216,7 +270,7 @@ if ($error) {
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Date To</label>
                                             <input type="text" class="dateTo form-control" name="toDate" id="toDate"
-                                                placeholder="Date To" autocomplete="off" required>
+                                                placeholder="Date To" required>
                                         </div>
                                     </div>
 
@@ -326,7 +380,7 @@ if ($error) {
                                     <div class="col-lg-12 col-md-12 col-12">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Attendance Date</label>
-                                            <input type="text" class="addNewDate form-control" name="new_date"
+                                            <input type="text" class="addNewDate form-control" name="new_date" value="<?php echo date('d-m-Y')?>"
                                                 id="addNewDate" placeholder="Select Date" required>
                                         </div>
                                     </div>
@@ -351,11 +405,11 @@ if ($error) {
                                         <label for="exampleInputEmail1">Check-Out Time(Eg: HH:MM:SS)</label>
                                         <div class="input-group">
                                             <input min="1" max="24" type="number" class="form-control"
-                                                name="check_out_hh" id="check_out" placeholder="HH" required>
+                                                name="check_out_hh" id="check_out" placeholder="HH" >
                                             <input min="0" max="60" type="number" class="form-control"
-                                                name="check_out_mm" id="check_out" placeholder="MM" required>
+                                                name="check_out_mm" id="check_out" placeholder="MM" >
                                             <input min="0" max="60" type="number" class="form-control"
-                                                name="check_out_ss" id="check_out" placeholder="SS" required>
+                                                name="check_out_ss" id="check_out" placeholder="SS" >
                                         </div>
                                     </div>
                                 </div>
@@ -365,7 +419,7 @@ if ($error) {
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-12">
                                         <div id="loader"></div>
-                                        <button type="submit" class="btn pull-right btn-primary text-white"
+                                        <button type="submit" class="btn pull-right btn-primary text-white" onclick="showLoader();"
                                             id="downloadReportButton" name="add">Add</button>
                                         <button type="button" class="btn btn-danger pull-left"
                                             data-dismiss="modal">Close</button>
@@ -400,6 +454,7 @@ if ($error) {
                             <form method="POST" id="addNewStaff" action="<?php echo base_url() ?>updateStaffAttendance">
                                 <input type="hidden" value="" id="editStaffId" name="staff_id" required />
                                 <input type="hidden" value="" id="editPunchDate" name="punch_date" required />
+                                <input type="hidden" id="staff_attendance_row_id" name="staff_attendance_row_id" />
                                 <div class="row">
                                     <div class="col-12 col-lg-12">
                                         <table class="table table-bordered table-sm">
@@ -417,7 +472,10 @@ if ($error) {
                                                     <th>Role</th>
                                                     <th id="staff_role_edit_view">--</th>
                                                 </tr>
-                                               
+                                                <!-- <tr>
+                                                    <th>Shift Name</th>
+                                                    <th id="staff_shift_edit_view">--</th>
+                                                </tr> -->
                                                 <tr>
                                                     <th>Check-In</th>
                                                     <th id="staff_check_in_edit_view">--</th>
@@ -437,11 +495,11 @@ if ($error) {
                                         <label for="exampleInputEmail1">New Check-In Time(Eg: HH:MM:SS)</label>
                                         <div class="input-group">
                                             <input min="1" max="24" type="number" class="form-control"
-                                                name="check_in_hh" id="check_out" placeholder="HH" required>
+                                                name="check_in_hh" id="check_out" placeholder="HH" >
                                             <input min="0" max="60" type="number" class="form-control"
-                                                name="check_in_mm" id="check_out" placeholder="MM" required>
+                                                name="check_in_mm" id="check_out" placeholder="MM" >
                                             <input min="0" max="60" type="number" class="form-control"
-                                                name="check_in_ss" id="check_out" placeholder="SS" required>
+                                                name="check_in_ss" id="check_out" placeholder="SS" >
                                         </div>
                                     </div>
                                 </div>
@@ -452,11 +510,11 @@ if ($error) {
                                         <label for="exampleInputEmail1">New Check-Out Time(Eg: HH:MM:SS)</label>
                                         <div class="input-group">
                                             <input min="1" max="24" type="number" class="form-control"
-                                                name="check_out_hh" id="check_out" placeholder="HH" required>
+                                                name="check_out_hh" id="check_out" placeholder="HH" >
                                             <input min="0" max="60" type="number" class="form-control"
-                                                name="check_out_mm" id="check_out" placeholder="MM" required>
+                                                name="check_out_mm" id="check_out" placeholder="MM" >
                                             <input min="0" max="60" type="number" class="form-control"
-                                                name="check_out_ss" id="check_out" placeholder="SS" required>
+                                                name="check_out_ss" id="check_out" placeholder="SS" >
                                         </div>
                                     </div>
                                 </div>
@@ -466,7 +524,7 @@ if ($error) {
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-12">
                                         <div id="loader"></div>
-                                        <button type="submit" class="btn pull-right btn-primary text-white"
+                                        <button type="submit" class="btn pull-right btn-primary text-white" onclick="showLoader();"
                                             id="downloadReportButton" name="add">Add</button>
                                         <button type="button" class="btn btn-danger pull-left"
                                             data-dismiss="modal">Close</button>
@@ -562,8 +620,7 @@ if ($error) {
             jQuery('.datepicker, .dateSearch, .dateFrom, .dateTo, .addNewDate').datepicker({
                 autoclose: true,
                 orientation: "bottom",
-                format: "dd-mm-yyyy",
-                dateFormat: "dd-mm-yy",
+                format: "dd-mm-yyyy"
 
             });
 
@@ -586,29 +643,25 @@ if ($error) {
                     },
                     success: function(data) {
                         $('#loader').html("");
-                        hideLoader();
-                        $('.loaderScreen').hide();
                         $("#downloadReportButton").prop('disabled', false);
                         var $a = $("<a>");
                         $a.attr("href", data.file);
                         $("body").append($a);
                         $a.attr("download", $('#department_sort :selected').text() +
-                            "_STAFF_LIST_2021.xls");
+                            "_STAFF_LIST_2019.xls");
                         $a[0].click();
                         $a.remove();
                     },
                     error: function(result) {
-                        $('.loaderScreen').hide();
                         $("#downloadReportButton").prop('disabled', false);
                         alert("Server Error!!  Failed");
                     },
                     fail: (function(status) {
-                        $('.loaderScreen').hide();
                         $("#downloadReportButton").prop('disabled', false);
                         alert("Server Error!!  Failed");
                     }),
                     beforeSend: function(d) {
-                       // $('#loader').html(loader);
+                        $('#loader').html(loader);
                         $("#downloadReportButton").prop('disabled', true);
                     }
                 });
@@ -635,6 +688,7 @@ if ($error) {
                     $('#staff_shift_edit_view').html(data.shift_name);
                     $('#staff_check_in_edit_view').html(data.in_time);
                     $('#staff_check_out_edit_view').html(data.out_time);
+                    $('#staff_attendance_row_id').val(data.row_id);
                     $('#editStaffAttendanceModel').modal('show');
                 },
                 error: function(result) {
