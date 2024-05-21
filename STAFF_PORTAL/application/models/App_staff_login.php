@@ -409,6 +409,32 @@ class App_staff_login extends CI_Model
     }
 
 
+    function getAllStaffList()
+    {
+        $this->db->select(
+            'staff.name,staff.staff_id,staff.row_id,staff.user_name,staff.mobile_one,staff.mobile_two,dept.name as department_name,Roles.role'
+        );
+        $this->db->from('tbl_staff as staff');
+        $this->db->join('tbl_roles as Roles', 'Roles.roleId = staff.role');
+        $this->db->join(
+            'tbl_department as dept',
+            'dept.dept_id = staff.department_id'
+        );
+        $this->db->where('staff.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function addStaffNotification($info)
+    {
+        $this->db->trans_start();
+        $this->db->insert('tbl_staff_notifications', $info);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
+    }
+
+
 
 
     

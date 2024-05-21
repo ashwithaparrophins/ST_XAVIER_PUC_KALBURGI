@@ -993,6 +993,16 @@ class ApiStaff extends CI_Controller
         redirect('viewStudyMaterials');
     }
 
+    function superAdminFeesDashboard()
+    {
+        $staff_id = $_GET['staffId'];
+       // log_message('debug','staff_id-->'.print_r($staff_id,true));
+
+        $this->webLogin($staff_id);
+        redirect('viewFeeDashboard');
+    }
+
+
     public function approveLeaveList()
     {
         $json = file_get_contents('php://input');
@@ -1581,6 +1591,52 @@ class ApiStaff extends CI_Controller
 
         $data = json_encode($db_data);
         echo $data;
+    }
+
+
+    public function listallStaff()
+    {
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json, true);
+        $fetchAllSTaff = $this->app_staff_login->getAllStaffList();
+        log_message('debug', 'fetchAllSTaff-->' . print_r($fetchAllSTaff, true));
+        $data = json_encode($fetchAllSTaff);
+        echo $data;
+    }
+
+    
+    public function fetchNotifiationData()
+    {
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json, true);
+        $title=$obj['title'];
+        $description=$obj['description'];
+        $sendByStaffId = $obj['send_by_staffId'];
+        $sendbyStaffName = $obj['send_by_staffName'];
+        $staff_id=$obj['staff_id'];
+        $type=$obj['type'];
+
+        if($type=='all'){
+          $department='ALL';  
+        }else{
+          $department = $staff_id;
+        }
+
+        $notification = [
+            'department' => $department,
+            'subject' => $title,
+            'message' => $description,
+            'filepath' => '',
+            'sent_by' => $sendbyStaffName,
+            'date_time' =>  date('Y-m-d H:i:s'),
+            'is_deleted'=>0,
+            'updated_date_time' => date('Y-m-d H:i:s'),
+        ];
+
+        $this->app_staff_login->addStaffNotification($notification);
+
+       
+
     }
 }
 ?>

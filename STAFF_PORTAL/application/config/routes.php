@@ -1204,7 +1204,19 @@ $route['checkOtp']='apistaff/checkOtp';
 
 $route['approveAllLeaveList']='apistaff/approveAllLeaveList'; 
 
+$route['superAdminFeesDashboard']='apistaff/superAdminFeesDashboard';
+
+$route['listallStaff']='apistaff/listallStaff';
+
+$route['fetchNotifiationData']='apistaff/fetchNotifiationData';
+
+
+
+
 $route['adminDashboard'] = 'user/adminDashboard';
+
+
+
 
 $route['directLogin/(:any)/(:any)'] = "login/directLogin/$1/$2";
 
