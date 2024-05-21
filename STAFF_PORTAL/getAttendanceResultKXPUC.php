@@ -83,20 +83,16 @@ function  handle_attendance_log($stgid, $rawdata, $con)
     
 	$strTime = $request->RealTime->PunchLog->LogTime;
 
-	$stmt = $con->prepare("SELECT * FROM tbl_staff WHERE employee_id LIKE ?");
-	$searchTerm = "%$UserId%";
-	$stmt->execute([$searchTerm]); 
+	$stmt = $con->prepare("SELECT * FROM tbl_staff WHERE employee_id LIKE '%$UserId'");
+	$stmt->execute(); 
 	$staff_result = $stmt->fetch();
 	$staff_id = $staff_result['staff_id'];
+
 	$query= "SELECT * from  tbl_staff_attendance_info WHERE staff_id = '$staff_id' ORDER BY row_id  DESC LIMIT 1";
-	// $CheckInInfo = mysqli_query($con, $q);
-	// $result = $con->mysqli_fetch_assoc($CheckInInfo);
-	//$result = $mysqli->query($query);
 	$stmt = $con->prepare($query); 
-	$stmt->execute([$UserId]); 
+	$stmt->execute([$staff_id]); 
 	$result = $stmt->fetch();
-//$row = $result->fetch_assoc();
-	// date_default_timezone_set('Asia/Kolkata');
+
 	$todayDateTime = date('Y-m-d H:i:s');
 
 	if(!empty($result)){
