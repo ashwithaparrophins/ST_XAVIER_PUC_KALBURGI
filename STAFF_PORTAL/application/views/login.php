@@ -277,6 +277,23 @@
                     <button type="submit" id="get_otp_btn" class="btn btn-success btn-block"><b>Get OTP</b></button>
 
                 </form>
+                <div class="row">
+                <!-- <div class="col-sm-6 col-md-6">
+                  <a target="_blank" href="<?php echo base_url() ?>assets/downloads/student_SJPUC_UserGuide.pdf" class="float-left" style="margin-top: 10px;">Click here to help <i class="far fa-question-circle"></i></a><br>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                  <a class="float-right" style="margin-top: 10px;" href="<?php echo base_url() ?>forgotPassword">Forgot Password</a>
+              </div> -->
+              <div class="col-lg-6">
+              <a href="<?php echo base_url() ?>assets/dist/img/app-release.apk" download style="margin-top:10px;"> 
+              <img src="<?php echo base_url() ?>assets/dist/img/AgnesPlaystore1.jpg" alt="" height="50" width="140"  style="margin-top:10px;"></a>
+              </div>
+              <div class="col-lg-6">
+              <a href="https://apps.apple.com/in/app/kjes-staff/id6499444716" >
+              <img src="<?php echo base_url() ?>assets/dist/img/AgnesAppstore2.png" alt="" height="50" width="140"  style="margin-top:10px;">
+              </a>
+              </div>
+          </div>
 
             </div>
             <div class="card-footer">
