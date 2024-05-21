@@ -52,7 +52,7 @@ public function viewFeeDashboard()
           
                 $studentPUCFeePaid[$stream][$class] = $this->fee->getSumOfPUCFeesPaidClassWise($class,$stream);
                 $feeConcessionPUC[$stream][$class] = $this->fee->getSumOfPUCFeesConcession($class,$stream); 
-                $feeScholarshipPUC[$stream][$class] = $this->fee->getSumOfPUCFeesScholarship($class,$stream); 
+                // $feeScholarshipPUC[$stream][$class] = $this->fee->getSumOfPUCFeesScholarship($class,$stream); 
             $studentPUCCount = $this->fee->getTotalPUStudentsCount($class,$stream);
             // $studentII_PUCCount = $this->fee->getTotalPUStudentsCount($class,$stream);
             $filter['term_name'] = $class;
