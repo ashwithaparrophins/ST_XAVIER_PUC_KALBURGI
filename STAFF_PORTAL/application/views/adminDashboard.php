@@ -194,7 +194,7 @@ if ($warning) {
     <?php if ($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_SUPER_ADMIN) { ?>
         <div class="row ">
             <div class="col-lg-3 col-6 mb-2 column_padding_card">
-                <div class="card card-small dash-card" style="background: #6aacc5;">
+                <div class="card card-small dash-card" style="background: linear-gradient(45deg,#1ce0b9,#55e7ca);">
                     <a onclick="showLoader();" href="<?php echo base_url(); ?>studentDetails" class="dashboard_link">
                         <div class="card-body pt-1 pb-1">
                             <span class="stats-small__label text-uppercase text-white text-center">Students</span>
@@ -213,7 +213,7 @@ if ($warning) {
                 </div>
             </div>
             <div class="col-lg-3 col-6 mb-2 column_padding_card">
-                <div class="card card-small dash-card" style="background: #6aacc5;">
+                <div class="card card-small dash-card" style="background: linear-gradient(45deg,#4099ff,#73b4ff);">
                     <a onclick="showLoader();" href="<?php echo base_url(); ?>staffDetails" class="dashboard_link">
                         <div class="card-body pt-1 pb-1">
                             <span class="stats-small__label text-uppercase text-white text-center">Staff</span>
@@ -249,7 +249,7 @@ if ($warning) {
                 </div>
             </div> -->
             <div class="col-lg-3 col-6 mb-2 column_padding_card">
-                <div class="card card-small dash-card" style="background: #6aacc5;">
+                <div class="card card-small dash-card" style="background: linear-gradient(45deg,#FF5370,#ff869a);">
                     <a  href="<?php echo base_url(); ?>studentAlumniInfo" class="dashboard_link">
                         <div class="card-body pt-1 pb-1">
                             <span class="stats-small__label text-uppercase text-white text-center">Alumni</span>
@@ -265,7 +265,25 @@ if ($warning) {
                     </a>
                 </div>
             </div>
+            <div class="col-lg-3 col-6 mb-1 column_padding_card">
+                <div class="card card-small dash-card" style="background: linear-gradient(45deg,#90EE90,#90EE90);">
+                    <a onclick="showLoader();" href="<?php echo base_url(); ?>viewFeeDashboard">
+                        <div class="card-body pt-1 pb-1">
+                            <span class=" text-uppercase text-black text-center" style="font-size:18px;">Fee Dashboard </span>
+                            <h6 class="stats-small__value count text-transparent"><?php //echo $totalAdmissionCount; ?></h6>
+                            <div class="icon pull-right pt-4">
+                                <i class="fa fa-file-invoice dash-icons"></i>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center dash-footer p-1">
+                            <a class="more-info text-black" href="<?php echo base_url(); ?>viewFeeDashboard"><span
+                                    class="text-center text-black">View Fee</span></a>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
+      
     <?php } ?>
 
     <div class="row ">

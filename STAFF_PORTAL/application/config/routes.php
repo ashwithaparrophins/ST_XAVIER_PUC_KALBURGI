@@ -1291,4 +1291,6 @@ $route['generateOTP'] = "login/generateOTP";
 $route['checkStaffOtp'] = 'login/checkStaffOtp';
 $route['getOtp'] = 'login/getOtp';
 
+//fee dashboard
+$route["viewFeeDashboard"] = "feeDashboard/viewFeeDashboard";
 
