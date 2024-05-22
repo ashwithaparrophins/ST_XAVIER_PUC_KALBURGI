@@ -1635,7 +1635,7 @@
             </div>
         </a>
         <a class="dropdown-item"
-            href="http://localhost/LOYOLA_PUC_VIJAPURA/STAFF_PORTAL/directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
+            href="https://lpuvj.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
             <div class="notification__icon-wrapper">
                 <div class="notification__icon">
                     <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/loyolapu.png"
@@ -1647,7 +1647,7 @@
             </div>
         </a>
         <a class="dropdown-item"
-            href="http://localhost/LOYOLA_SCHOOL_VIJAPURA/STAFF/directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
+            href="https://lsvj.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
             <div class="notification__icon-wrapper">
                 <div class="notification__icon">
                     <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/loyolaschool.jpg"
@@ -1659,7 +1659,7 @@
             </div>
         </a>
         <a class="dropdown-item"
-            href="http://localhost/ST_JOSEPHS_PUC_HASSAN/STAFF_PORTAL/directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
+            href="https://sjpuchassan.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
             <div class="notification__icon-wrapper">
                 <div class="notification__icon">
                     <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/hasana_puc_new.png"
@@ -1672,7 +1672,7 @@
             </div>
         </a>
         <a class="dropdown-item"
-            href="http://localhost/-ST_JOSEPHS_HIGH_SCHOOL_HASSAN/STAFF/directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
+            href="https://sjhshassan.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
             <div class="notification__icon-wrapper">
                 <div class="notification__icon">
                     <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/highschool_Logo png.png"
@@ -1684,7 +1684,7 @@
             </div>
         </a>
         <a class="dropdown-item"
-            href="http://localhost/HASSAN_PRIMARY_SCHOOL/STAFF/directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
+            href="https://sjpsh.schoolphins.com/staff/directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
             <div class="notification__icon-wrapper">
                 <div class="notification__icon">
                     <img src="<?php echo base_url(); ?>assets/dist/img/kjes_logo/highschool_Logo.png"
@@ -1697,6 +1697,7 @@
         </a>
     </div>
 </li>
+
 
 <?php } ?>
 
