@@ -285,7 +285,7 @@
                   <a class="float-right" style="margin-top: 10px;" href="<?php echo base_url() ?>forgotPassword">Forgot Password</a>
               </div> -->
               <div class="col-lg-6">
-              <a href="<?php echo base_url() ?>assets/dist/img/app-release.apk" download style="margin-top:10px;"> 
+              <a href="https://play.google.com/store/apps/details?id=com.parrophins.kjes_staff_app&pli=1"  style="margin-top:10px;"> 
               <img src="<?php echo base_url() ?>assets/dist/img/AgnesPlaystore1.jpg" alt="" height="50" width="140"  style="margin-top:10px;"></a>
               </div>
               <div class="col-lg-6">
