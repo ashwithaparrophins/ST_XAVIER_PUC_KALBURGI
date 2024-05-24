@@ -1358,7 +1358,7 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                                
                             </div>
                             <div class="tab-pane fade" id="used_leave" role="tabpanel" aria-labelledby="used_leave-tab">
-                            <div class="row">
+                                <div class="row">
                                     <div class="col-12">
                                     
                                         <div class="form-row">
@@ -1422,16 +1422,16 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                                                  name="row_id_leave"> <input type="hidden"
                                                 value="<?php echo $staffInfo->staff_id; ?>" name="staff_id_leave" />
                                             <?php
-                                                $used_leave_cl = $leaveModel->getLeaveUsedSum($staff->staff_id,'CL',$leaveInfoNew[$i]->year);
-                                                $used_leave_el = $leaveModel->getLeaveUsedSum($staff->staff_id,'EL',$leaveInfoNew[$i]->year);
-                                                $used_leave_ml = $leaveModel->getLeaveUsedSum($staff->staff_id,'ML',$leaveInfoNew[$i]->year);
-                                                $used_leave_marl = $leaveModel->getLeaveUsedSum($staff->staff_id,'MARL',$leaveInfoNew[$i]->year);
-                                                $used_leave_pl = $leaveModel->getLeaveUsedSum($staff->staff_id,'PL',$leaveInfoNew[$i]->year);
-                                                $used_leave_matl = $leaveModel->getLeaveUsedSum($staff->staff_id,'MATL',$leaveInfoNew[$i]->year);
-                                                $used_leave_lop = $leaveModel->getLeaveUsedSum($staff->staff_id,'LOP',$leaveInfoNew[$i]->year);
-                                                $used_leave_od = $leaveModel->getLeaveUsedSum($staff->staff_id,'OD',$leaveInfoNew[$i]->year);
-                                                $used_leave_wfh = $leaveModel->getLeaveUsedSum($staff->staff_id,'WFH',$leaveInfoNew[$i]->year);
-                                                $used_leave_mgml = $leaveModel->getLeaveUsedSum($staff->staff_id,'MGML',$leaveInfoNew[$i]->year); 
+                                                $used_leave_cl = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'CL',$leaveInfoNew[$i]->year);
+                                                $used_leave_el = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'EL',$leaveInfoNew[$i]->year);
+                                                $used_leave_ml = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'ML',$leaveInfoNew[$i]->year);
+                                                $used_leave_marl = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'MARL',$leaveInfoNew[$i]->year);
+                                                $used_leave_pl = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'PL',$leaveInfoNew[$i]->year);
+                                                $used_leave_matl = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'MATL',$leaveInfoNew[$i]->year);
+                                                $used_leave_lop = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'LOP',$leaveInfoNew[$i]->year);
+                                                $used_leave_od = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'OD',$leaveInfoNew[$i]->year);
+                                                $used_leave_wfh = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'WFH',$leaveInfoNew[$i]->year);
+                                                $used_leave_mgml = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'MGML',$leaveInfoNew[$i]->year); 
                                             ?>
 
                                                       <td><?php echo $leaveInfoNew[$i]->year;?></td>

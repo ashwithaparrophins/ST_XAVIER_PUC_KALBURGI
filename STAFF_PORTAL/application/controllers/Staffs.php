@@ -772,6 +772,11 @@ class Staffs extends BaseController
                         'voter_no' => $voter_no, 
                         'blood_group' => $blood_group, 
                         'qualification' => $qualification,
+                        'resignation_date' => $resign_date, 
+                        'resignation_status' => $resignation_status,
+                        'retirement_date' => $retirement_date, 
+                        'retired_date' => $retired_date, 
+                        'retirement_status' => $retirement_status,
                         'updated_by' => $this->staff_id, 
                         'modified_date_time' => date('Y-m-d H:i:s'));
 
