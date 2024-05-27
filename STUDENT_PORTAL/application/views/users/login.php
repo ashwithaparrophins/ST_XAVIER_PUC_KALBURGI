@@ -32,7 +32,7 @@
               <img src="<?php echo base_url(); ?><?php echo INSTITUTION_LOGO; ?>" height="80px">
             </div>
             <div class="col-xs-12 mb-2">
-              <span><b style="font-size: 25px;"><span class="title_green">School</span><span class="title_blue">Phins</span> - <span class="title_blue"><?php echo SUB_TITLE; ?></span></b></span>
+              <span><b style="font-size: 25px;"><span class="title_blue"><?php echo TITLE; ?></span></b></span>
             </div>
             <?php $this->load->helper('form'); ?>
             <div class="row">
