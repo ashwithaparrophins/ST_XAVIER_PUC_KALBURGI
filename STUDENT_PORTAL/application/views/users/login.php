@@ -24,7 +24,7 @@
         <div class="card mx-auto login_card">
           <div class="card-header pb-0">
             <div class="col-xs-12">
-              <h6><b>Sign In</b></h6>
+              <h6><b>Student/Parent - Sign In</b></h6>
             </div>
           </div>
           <div class="card-body">
@@ -88,11 +88,11 @@
               </div> -->
               <div class="col-lg-6">
               <!-- <a href="<?php echo base_url() ?>assets/dist/img/app-release.apk" download style="margin-top:10px;"> -->
-              <a href="https://play.google.com/store/apps/details?id=com.parrophins.indian_cbse" style="margin-top:10px;"> 
+              <a href="https://play.google.com/store/apps/details?id=com.parrophins.xavior_puc" style="margin-top:10px;"> 
               <img src="<?php echo base_url() ?>assets/dist/img/play2.png" alt="" height="50" width="140"  style="margin-top:10px;border-radius:5px;"></a>
               </div>
               <div class="col-lg-6">
-              <a href="https://apps.apple.com/in/app/st-josephs-school-bangalore/id6447512347" >
+              <a href="https://apps.apple.com/in/app/st-xaviers-puc-kalaburagi/id6499569836" >
               <img src="<?php echo base_url() ?>assets/dist/img/app1.jpg" alt="" height="50" width="140"  style="margin-top:10px;border-radius:5px;" >
               </a>
               </div>
