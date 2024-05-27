@@ -58,7 +58,7 @@
                       <?php echo $success; ?>                    
                   </div>
               <?php } ?>
-            <form action="<?php echo base_url(); ?>loginMe" method="post" id="login">
+            <!-- <form action="<?php echo base_url(); ?>loginMe" method="post" id="login">
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text material-icons text-dark">person</span>
@@ -72,14 +72,29 @@
                 <input type="password" class="form-control input_type" placeholder="Password" name="password" autocomplete="off" required/>
               </div>
               <button type="submit" class="btn btn-log btn-block">Student/Parent Log in</button>
-              <!-- <a href="<?php echo base_url() ?>userRegistration" class="btn btn_submit btn-block" value="Registration" style="margin-top:10px;">New Registration</a> -->
-            </form>
+            </form> -->
+            <div class="col-xs-12 mb-2 text-center">
+              <span><b style="font-size: 20px;"><span>Student or Parent Android and iOS App is available</span>  <span class="title_blue"></span></b></span>
+            </div>
+            <div class="col-xs-12 mb-2 text-center">
+              <span><b style="font-size: 20px;"><span>Click here to download </span>  <span class="title_blue"></span></b></span>
+            </div>
             <div class="row">
-                <div class="col-sm-6 col-md-6">
+                <!-- <div class="col-sm-6 col-md-6">
                   <a target="_blank" href="<?php echo base_url() ?>assets/downloads/student_SJPUC_UserGuide.pdf" class="float-left" style="margin-top: 10px;"></i></a><br>
                 </div>
                 <div class="col-sm-6 col-md-6">
                   <a class="float-right" style="margin-top: 10px;" href="<?php echo base_url() ?>forgotPassword">Forgot Password</a>
+              </div> -->
+              <div class="col-lg-6">
+              <!-- <a href="<?php echo base_url() ?>assets/dist/img/app-release.apk" download style="margin-top:10px;"> -->
+              <a href="https://play.google.com/store/apps/details?id=com.parrophins.indian_cbse" style="margin-top:10px;"> 
+              <img src="<?php echo base_url() ?>assets/dist/img/play2.png" alt="" height="50" width="140"  style="margin-top:10px;border-radius:5px;"></a>
+              </div>
+              <div class="col-lg-6">
+              <a href="https://apps.apple.com/in/app/st-josephs-school-bangalore/id6447512347" >
+              <img src="<?php echo base_url() ?>assets/dist/img/app1.jpg" alt="" height="50" width="140"  style="margin-top:10px;border-radius:5px;" >
+              </a>
               </div>
               </div>
           </div>

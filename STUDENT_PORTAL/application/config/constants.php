@@ -95,7 +95,7 @@ define('SEGMENT',								2);
 define('ADMIN_PORTAL',                         'https://kxpuc.schoolphins.com/staff/');
 
 define('TITLE','ST. XAVIER\'S PRE–UNIVERSITY COLLEGE, KALABURAGI');
-define('SUB_TITLE','STXPUC');
+define('SUB_TITLE','STXPUC, KALABURAGI');
 define('INSTITUTION_LOGO','assets/dist/img/logo_stxpuc.jpg');
 define('TAB_TITLE','SchoolPhins-STXPUC');
 define('ADMIN_PATH','//localhost/ST_XAVIER_PUC_KALBURGI/STAFF_PORTAL/');
