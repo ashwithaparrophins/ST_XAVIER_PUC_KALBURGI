@@ -90,6 +90,7 @@ if ($error) {
                             <label for="employee_id">Staff ID<span class="text-danger">*</span></label>
                             <input type="text" class="form-control required" value="" id="staff_id" name="staff_id"
                                 maxlength="128" placeholder="Enter Staff ID" autocomplete="off" required>
+                            <h6 class="error-hint display-none accessHide" style="color:red">Staff Id Already exists</h6>
                         </div>
                         <div class="form-group">
                             <label for="fname">Full Name<span class="text-danger">*</span></label>
@@ -157,12 +158,12 @@ if ($error) {
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label for="mobile">Date of Join (optional)</label>
+                                                <label for="mobile">Date of Join<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker_doj"
                                                     id="alternative_contact_number"
                                                     value="<?php echo set_value('date_of_join'); ?>"
                                                     name="date_of_join" maxlength="15"
-                                                    placeholder="Select Date of Join" autocomplete="off"/>
+                                                    placeholder="Select Date of Join" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="role">Role<span class="text-danger">*</span></label>
@@ -274,6 +275,34 @@ function isNumberKey(evt) {
 }
 
 jQuery(document).ready(function() {
+    $('.accessHide').hide();
+    $('#staff_id').on('keyup', function(evt){
+            let staffId = $(this).val();
+            $('.accessHide').hide();
+            $.ajax({
+                url: '<?php echo base_url(); ?>/getStaffIdCode',
+                type: 'POST',
+                dataType: "json",
+                data: { 
+                    staffId : staffId
+                },
+                success: function(data) {
+                    //var examObject = JSON.parse(data);
+                    var examObject = JSON.stringify(data)
+                    var count = data.result.length;
+                    if(count != 0){
+                        if(data.result.staff_id == staffId){
+                            $('.accessHide').show();
+                        }else{
+                            $('.accessHide').hide();
+                        }
+                    }else{
+                        $('.accessHide').hide();
+                    }
+                }
+            });
+        });
+        
     $('select').selectpicker();
     jQuery('ul.pagination li a').click(function(e) {
         e.preventDefault();

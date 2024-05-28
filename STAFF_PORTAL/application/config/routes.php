@@ -1306,3 +1306,6 @@ $route['getOtp'] = 'login/getOtp';
 //fee dashboard
 $route["viewFeeDashboard"] = "feeDashboard/viewFeeDashboard";
 
+$route['getStaffIdCode'] = "staffs/getStaffIdCode";
+
+

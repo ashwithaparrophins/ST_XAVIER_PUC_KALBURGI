@@ -136,6 +136,23 @@ class Staffs extends BaseController
             $this->loadViews("staffs/addNewStaff", $this->global, $data, NULL);
         }
     }
+
+    public function getStaffIdCode(){
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {   
+            $filter = array();
+            $staffId = $this->input->post("staffId");
+            
+            $data['result'] = $this->staff->getCheckStaffId($staffId);
+            header('Content-type: text/plain'); 
+            header('Content-type: application/json'); 
+            echo json_encode($data);
+            exit(0);
+        }
+    }
+
+
     public function updateResignedDate(){
         if($this->isAdmin() == TRUE){
             $this->loadThis();
@@ -246,6 +263,18 @@ class Staffs extends BaseController
                 $email = strtolower($this->security->xss_clean($this->input->post('email')));
                 $password = 'kxpuc@123';
 
+                if(!empty($date_of_join)){
+                    $dateOfJoin = str_replace(".", "-", $date_of_join);  
+                    $previousEmployeeId = $this->staff->getPreviousEmployeeIdInfo();
+                    if(!empty($previousEmployeeId)){ 
+                        $appNo = substr($previousEmployeeId->employee_id, 9);
+                        $number_part_15 = $appNo + 1;
+                     }             
+                        $unitName = "SXPUK";
+                        $number_part_15 = sprintf('%03d',$number_part_15);
+                        $employee_id = date('Y',strtotime($dateOfJoin)).$unitName.$number_part_15;              
+                  }
+
                 // $shift_code = $this->input->post('shift_id');
                 $roleId = $this->input->post('role');
                 $department = $this->input->post('department');
@@ -270,6 +299,7 @@ class Staffs extends BaseController
                     'mobile_one' => $mobile, 
                     'address' => $address, 
                     'aadhar_no' => $aadhar_no,
+                    'employee_id' => $employee_id,
                     'pan_no' => $pan_no,
                     'voter_no' => $voter_no,
                     'blood_group' => $blood_group,
@@ -661,7 +691,7 @@ class Staffs extends BaseController
                     $dob = "";
                 }
                 $gender = $this->input->post('gender');
-                // $staff_id = $this->security->xss_clean($this->input->post('staff_id'));
+                $staff_id = $this->security->xss_clean($this->input->post('hidden_staff_id'));
                 $name = $this->security->xss_clean($this->input->post('fname'));
                 $email = strtolower($this->security->xss_clean($this->input->post('email')));
                 $roleId = $this->input->post('role');
@@ -700,6 +730,30 @@ class Staffs extends BaseController
                     $retired_date = "";
                     $retirement_status = 0;
                 }
+                $isExistEmployeeId = $this->staff->checkStaffEmployeeIdExists($staff_id);
+                if(empty($isExistEmployeeId)){
+                if(!empty($date_of_join)){
+                    $dateOfJoin = str_replace(".", "-", $date_of_join);  
+                    $previousEmployeeId = $this->staff->getPreviousEmployeeIdInfo();
+                    if(!empty($previousEmployeeId)){ 
+                        $appNo = substr($previousEmployeeId->employee_id, 9);
+                        $number_part_15 = $appNo + 1;
+                     }             
+                        $unitName = "SXPUK";
+                        $number_part_15 = sprintf('%03d',$number_part_15);
+                        $employee_id = date('Y',strtotime($dateOfJoin)).$unitName.$number_part_15;              
+                  }
+                }else{
+                    $dateOfJoin = str_replace(".", "-", $date_of_join);  
+
+                        $appNo = substr($isExistEmployeeId->employee_id, 9);
+                        $number_part_15 = $appNo;
+                                 
+                        $unitName = "SXPUK";
+                        $number_part_15 = sprintf('%03d',$number_part_15);
+                        $employee_id = date('Y',strtotime($dateOfJoin)).$unitName.$number_part_15;  
+                }
+
 
                 // $staffType = $this->staff->getStaffByStaffType($staff_type);
                 if($mobile != $prev_mobile){
@@ -731,6 +785,7 @@ class Staffs extends BaseController
                         'retirement_status' => $retirement_status,
                         'voter_no' => $voter_no, 
                         'blood_group' => $blood_group, 
+                        'employee_id' => $employee_id, 
                         'qualification' => $qualification,
                         'updated_by' => $this->staff_id, 
                         'modified_date_time' => date('Y-m-d H:i:s'));
@@ -776,6 +831,7 @@ class Staffs extends BaseController
                         'resignation_status' => $resignation_status,
                         'retirement_date' => $retirement_date, 
                         'retired_date' => $retired_date, 
+                        'employee_id' => $employee_id, 
                         'retirement_status' => $retirement_status,
                         'updated_by' => $this->staff_id, 
                         'modified_date_time' => date('Y-m-d H:i:s'));

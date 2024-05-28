@@ -369,6 +369,7 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                             <input type="hidden" value="<?php echo $staffInfo->row_id; ?>" id="row_id" name="row_id">
                             <input type="hidden" value="<?php echo $staffInfo->mobile_one; ?>" id="prev_mobile"
                                 name="prev_mobile">
+                            <input name="hidden_staff_id" type="hidden" value="<?php echo $staffInfo->staff_id;?>">
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="card card-small c-border mb-4 p-2">
@@ -512,7 +513,7 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                                                 <div class="form-group col-md-6">
                                                     <label class="doj mdc-text-field mdc-text-field--filled ">
                                                         <span class="mdc-text-field__ripple"></span>
-                                                        <input name="date_of_join" id="date_of_join"
+                                                        <input name="date_of_join" id="date_of_join" required
                                                             class="mdc-text-field__input datepicker_doj" type="text"
                                                             aria-labelledby="my-label-id" value="<?php  if(empty($staffInfo->doj) || $staffInfo->doj == '0000-00-00'){
                                                 echo "";
@@ -520,7 +521,7 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                                                 echo date('d-m-Y',strtotime($staffInfo->doj));
                                             } ?>" autocomplete="off">
                                                         <span class="mdc-floating-label" id="my-label-id">Date of Join
-                                                            (Optional)</span>
+                                                            </span>
                                                         <span class="mdc-line-ripple"></span>
                                                     </label>
                                                 </div>
