@@ -543,7 +543,7 @@ input[type=number]::-webkit-outer-spin-button {
 
                                             $total_mark = 0;
 
-                                            $student_id = trim($record->student_id);
+                                            $student_id = trim($record->row_id);
 
                                            
 
@@ -685,9 +685,9 @@ function isAddditionaDetailsExists($con,$student_id,$subject_id,$month){
 
     $query = "SELECT * FROM tbl_attendance_additional_info as attd 
 
-    WHERE attd.student_id = '$student_id' AND attd.subject_code = '$subject_id' 
+    WHERE attd.student_row_id = '$student_id' AND attd.subject_code = '$subject_id' 
 
-    AND attd.month = '$month' AND attd.year='2023' AND attd.is_deleted = 0";
+    AND attd.month = '$month' AND attd.year='2024' AND attd.is_deleted = 0";
 
     $pdo_statement = $con->prepare($query);
 

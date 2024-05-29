@@ -234,6 +234,17 @@ class students_model extends CI_Model
         return $query->row();
     }
 
+    public function getStudentInfoByStudentRowId($filter=''){
+        $this->db->from('tbl_students_info as student'); 
+        if(!empty($filter['student_id'])){
+            $this->db->where('student.row_id', $filter['student_id']);
+        } 
+        $this->db->where('student.is_deleted', 0);
+        $this->db->where('student.is_active', 1);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
     //get data for tc
     public function getStudentById($student_id) {
         $this->db->from('tbl_students_info as std');
@@ -529,6 +540,9 @@ class students_model extends CI_Model
         if(!empty($filter['student_id'])){
             $this->db->where_in('student.student_id', $filter['student_id']);
         }
+        if(!empty($filter['row_id'])){
+            $this->db->where_in('student.row_id', $filter['row_id']);
+        }
         if(!empty($filter['class_batch'])){
             $this->db->where_in('student.batch', $filter['class_batch']);
         }
@@ -613,7 +627,7 @@ class students_model extends CI_Model
     public function getStudentAbsentInfo($student_id,$subject_code){
         $this->db->from('tbl_student_attendance_details as std');
         $this->db->where_in('std.subject_code', $subject_code);
-        $this->db->where_in('std.student_id', $student_id);
+        $this->db->where_in('std.student_row_id', $student_id);
         $this->db->where('std.is_deleted', 0);
         $query = $this->db->get();
         return $query->num_rows();

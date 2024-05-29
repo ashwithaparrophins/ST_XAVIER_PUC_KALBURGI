@@ -180,12 +180,11 @@ class StudentAttendance extends BaseController
                 }
                 
             }
-
             $attendanceDate = date("Y-m-d", strtotime($attendance_date));
             $filter['term_name'] = $term_name;
             $filter['stream_name'] = $stream_name;
             $filter['subject_name'] = $subject_name;
-            $filter['student_id'] = $students;
+            $filter['row_id'] = $students;
             $sectionName = $section_name; 
             if($section_name == "ALL"){
                 $filter['section_name'] = '';
@@ -241,12 +240,13 @@ class StudentAttendance extends BaseController
             $timeID = $this->timetable->getTimeInfoByRowID($time_row_id);
             //$this->attendance->getStudentInfoForAttendance($filter);
             foreach($data['studentRecords'] as $student){
-                if($students[$student->student_id] == $student->student_id){
+                if($students[$student->row_id] == $student->row_id){
                     $attendanceInfo = array (
                         'class_section_row_id' => $section_row_id,
                         'staff_subject_row_id' => $staff_subject_row_id,
                         'class_row_id' => $class_row_id,
                         'student_id' => $student->student_id,
+                        'student_row_id' => $student->row_id,
                         'subject_code' => $subject_code,
                         'absent_date' => $attendanceDate,
                         'time_row_id' => $time_row_id,
@@ -537,7 +537,7 @@ class StudentAttendance extends BaseController
             $this->excel->getActiveSheet()->setTitle($stream_name);
             $this->excel->getActiveSheet()->getPageSetup()->setPrintArea('A1:H500');
             $this->excel->getActiveSheet()->setCellValue('A1', EXCEL_TITLE);
-            $this->excel->getActiveSheet()->setCellValue('A2', $term_name.'-'.$stream_name." Attendance Report 2022-2023");
+            $this->excel->getActiveSheet()->setCellValue('A2', $term_name.'-'.$stream_name." Attendance Report 2023-2024");
             $this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(18);
             $this->excel->getActiveSheet()->getStyle('A2')->getFont()->setSize(14);
             $this->excel->getActiveSheet()->getStyle('A1:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -672,7 +672,7 @@ class StudentAttendance extends BaseController
             $this->excel->getActiveSheet()->setTitle($stream_name);
             $this->excel->getActiveSheet()->getPageSetup()->setPrintArea('A1:W500');
             $this->excel->getActiveSheet()->setCellValue('A1', EXCEL_TITLE);
-            $this->excel->getActiveSheet()->setCellValue('A2', $term_name.'-'. $stream_name.'-'.$section_name." Section Attendance Report 2022-23");
+            $this->excel->getActiveSheet()->setCellValue('A2', $term_name.'-'. $stream_name.'-'.$section_name." Section Attendance Report 2023-24");
             $this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(18);
             $this->excel->getActiveSheet()->getStyle('A2')->getFont()->setSize(14);
             $this->excel->getActiveSheet()->mergeCells('A1:W1');
@@ -1005,7 +1005,7 @@ class StudentAttendance extends BaseController
             $this->excel->getActiveSheet()->setTitle($stream_name);
             $this->excel->getActiveSheet()->getPageSetup()->setPrintArea('A1:U500');
             $this->excel->getActiveSheet()->setCellValue('A1', EXCEL_TITLE);
-            $this->excel->getActiveSheet()->setCellValue('A2', "Attendance Report - 2023");
+            $this->excel->getActiveSheet()->setCellValue('A2', "Attendance Report - 2024");
             $this->excel->getActiveSheet()->setCellValue('A3', $term_name . ' - ' . $stream_name . ' - ' . $section_name .' - ' . $subjectDisplay->sub_name);
             $this->excel->getActiveSheet()->setCellValue('A4', "Report Date: " . $date_description);
 
@@ -1612,7 +1612,7 @@ class StudentAttendance extends BaseController
                
                 $return_id = 0;
                 foreach($data['studentsInfo'] as $student){
-                    $student_id = trim($student->student_id);
+                    $student_id = trim($student->row_id);
                     $class_attended = $this->input->post("class_attended_".$student_id);
                     $classHeld = $this->input->post("class_held_".$student_id);
                     if(!empty($class_held)){
@@ -1623,7 +1623,8 @@ class StudentAttendance extends BaseController
                     }
                     
                     $attendanceInfo = array(
-                        'student_id' => $student_id,
+                        'student_id' => $student->student_id,
+                        'student_row_id' => $student_id,
                         'staff_id' => $this->staff_id,
                         'subject_code' => $subject_id,
                         'class_attended' => $class_attended,
@@ -1635,7 +1636,8 @@ class StudentAttendance extends BaseController
                     $attendanceInfoUpdate = array(
                         'subject_code' => $subject_id,
                         'staff_id' => $this->staff_id,
-                        'student_id' => $student_id,
+                        'student_id' => $student->student_id,
+                        'student_row_id' => $student_id,
                         'class_attended' => $class_attended,
                         'class_held' => $classHeld,
                         'updated_by' => $this->staff_id,
@@ -1779,7 +1781,6 @@ class StudentAttendance extends BaseController
         // curl_close($ch);
         // echo $curl_scraped_page;
        // $response = json_decode($result_sms, true);
-        log_message('debug', 'JSON='.print_r($result_sms,true));
      
         curl_close($ch);
         return $response;

@@ -247,11 +247,11 @@ class Students extends BaseController
                     
                     // foreach($data['classHeldDate'] as $classdata){
                     $type="THEORY";
-                    $absent_count_theory[$subjects_code[$i]] = $this->attendance->isStudentIsAbsentForClass($student->student_id,$subjects_code[$i],$filter,$type);
+                    $absent_count_theory[$subjects_code[$i]] = $this->attendance->isStudentIsAbsentForClass($student->row_id,$subjects_code[$i],$filter,$type);
                     
                     // log_message('debug','absent_count_theory='.print_r($absent_count_theory,true));
                     $type="LAB";
-                    $absent_count_lab[$subjects_code[$i]] = $this->attendance->isStudentIsAbsentForClass($student->student_id,$subjects_code[$i],$filter,$type);
+                    $absent_count_lab[$subjects_code[$i]] = $this->attendance->isStudentIsAbsentForClass($student->row_id,$subjects_code[$i],$filter,$type);
                     $absent_countLab[$subjects_code[$i]] = $absent_count_lab[$subjects_code[$i]] * 2;
 
                     $std_absent_count[$subjects_code[$i]] = $absent_count_theory[$subjects_code[$i]] + $absent_countLab[$subjects_code[$i]];
@@ -302,7 +302,7 @@ class Students extends BaseController
 
                 $subject_attendance[$subjects_code[$i]]['sub_name'] = $this->subject->getSubjectInfoById($subjects_code[$i]);
                 $subject_attendance[$subjects_code[$i]]['class_held'] = $this->student->getClassHeldInfo($filter,$subjects_code[$i]);
-                $class_absent = $this->student->getStudentAbsentInfo($student->student_id,$subjects_code[$i]);
+                $class_absent = $this->student->getStudentAbsentInfo($student->row_id,$subjects_code[$i]);
                 $subject_attendance[$subjects_code[$i]]['class_attended'] = $subject_attendance[$subjects_code[$i]]['class_held'] - $class_absent;
                 if($subject_attendance[$subjects_code[$i]]['class_held'] == 0){
                     $subject_attendance[$subjects_code[$i]]['percentage'] = 0;
@@ -1973,8 +1973,20 @@ log_message('debug','admissin_student'.print_r($tcInfo,true));
 
         $filter['student_id'] =  $student_id;
         if(!empty($student_id)){
-            $result = $this->student->getStudentInfoByStudentId($filter);
+            $result = $this->student->getStudentInfoByStudentRowId($filter);
             if(!empty($result)) echo $result->student_name;
+            // log_message('debug','info'.print_r($result->student_name,true));}
+            else echo 0;
+        }else echo 0;
+    }
+
+    public function getStudentIdByAdmissionNo(){
+        $student_id = trim($this->input->post('student_id'));
+
+        $filter['student_id'] =  $student_id;
+        if(!empty($student_id)){
+            $result = $this->student->getStudentInfoByStudentRowId($filter);
+            if(!empty($result)) echo $result->student_id;
             // log_message('debug','info'.print_r($result->student_name,true));}
             else echo 0;
         }else echo 0;

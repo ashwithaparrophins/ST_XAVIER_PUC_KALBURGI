@@ -1308,4 +1308,7 @@ $route["viewFeeDashboard"] = "feeDashboard/viewFeeDashboard";
 
 $route['getStaffIdCode'] = "staffs/getStaffIdCode";
 
+$route['getStudentIdByAdmissionNo'] = "students/getStudentIdByAdmissionNo";
+
+
 

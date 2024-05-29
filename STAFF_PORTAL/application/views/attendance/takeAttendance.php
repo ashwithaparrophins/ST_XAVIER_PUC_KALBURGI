@@ -135,7 +135,7 @@ if ($success) {  ?>
                                         foreach($studentRecord as $std){ 
                                             $s++;
                                             $absentDate = date('Y-m-d',strtotime($attendance_date));
-                                            $absentData = getAbsentStudentList($con,$std->student_id,$section_row_id,$time_row_id,$absentDate,$subject_code,$class_batch);
+                                            $absentData = getAbsentStudentList($con,$std->row_id,$section_row_id,$time_row_id,$absentDate,$subject_code,$class_batch);
                                             if(!empty($absentData)){
                                                 $isAbsent = true;
                                             }else{
@@ -148,10 +148,10 @@ if ($success) {  ?>
                                             <td><?php echo $std->student_name; ?></td>
                                             <th class="text-center">
                                                 <?php if($isAbsent == 'true'){ ?>
-                                                    <input type="checkbox" class="singleSelect" checked data-toggle="toggle" data-size="xs" name="<?php echo $std->student_id; ?>" value="true" data-off="Present" data-on="Absent"  data-onstyle="danger" data-offstyle="success" checked>
+                                                    <input type="checkbox" class="singleSelect" checked data-toggle="toggle" data-size="xs" name="<?php echo $std->row_id; ?>" value="true" data-off="Present" data-on="Absent"  data-onstyle="danger" data-offstyle="success" checked>
                                                     <!-- <input name="<?php echo $std->student_id; ?>" type="checkbox" class="singleSelect" value="true" checked /> -->
                                                 <?php }else{ ?>
-                                                    <input type="checkbox" class="singleSelect" data-toggle="toggle" data-size="xs" name="<?php echo $std->student_id; ?>" value="true" data-off="Present" data-on="Absent"  data-onstyle="danger" data-offstyle="success">
+                                                    <input type="checkbox" class="singleSelect" data-toggle="toggle" data-size="xs" name="<?php echo $std->row_id; ?>" value="true" data-off="Present" data-on="Absent"  data-onstyle="danger" data-offstyle="success">
                                                     <!-- <input name="<?php echo $std->student_id; ?>" type="checkbox" class="singleSelect" value="true" /> -->
                                                 <?php } ?>
                                             </td>
@@ -328,7 +328,7 @@ function confirmAbsentedStudents(){
         $("#subject_nameConfirm").html(field.value);
         }else if(field.name == "attendance_date"){
         $('#attendanceDateConfirm').html(field.value);
-        }else if(field.value == 'true'){
+        }else if(field.value == 'true'){ 
         total_absent_count++;
         var str = field.name;  
         var student_id = str.split(" ",1);
@@ -340,8 +340,15 @@ function confirmAbsentedStudents(){
         }catch(err){
             std_name = "";
         }
+
+        let student_id_display = "";
+        try{
+            student_id_display = await getStudentIdByAdmissionNo(student_id[0]);
+        }catch(err){
+            student_id_display = "";
+        }
         $(".absentList > tr.all-present").remove()
-        $(".absentList").append("<tr><td>" + student_id + "</td><td>" + std_name + "</td><td style='color:red'> Absent </td></tr>");
+        $(".absentList").append("<tr><td>" + student_id_display + "</td><td>" + std_name + "</td><td style='color:red'> Absent </td></tr>");
         }
     });
     $("#countAbsent").html(total_absent_count);
@@ -371,12 +378,32 @@ function confirmAbsentedStudents(){
             }
         });
     }
+
+    const getStudentIdByAdmissionNo = student_id =>{
+        return new Promise((resolve, reject)=>{
+            try{
+                $.post('<?=base_url()?>getStudentIdByAdmissionNo', { student_id })
+                .then(result=>{
+                    if(result === '0'){
+                        reject('404');
+                    }else{
+                        resolve(result);
+                    }
+                }).catch(err2=>{
+                    reject(err2);
+                });;
+            }catch(err){
+                reject(err);
+            }
+        });
+    }
+
 </script>
 
 <?php
 function getAbsentStudentList($con,$student_id,$section_row_id,$time_row_id,$absentDate,$subject_code,$class_batch){
     $query = "SELECT * FROM tbl_student_attendance_details as attendance 
-    WHERE attendance.student_id = '$student_id' AND attendance.class_section_row_id = '$section_row_id' 
+    WHERE attendance.student_row_id = '$student_id' AND attendance.class_section_row_id = '$section_row_id' 
     AND attendance.time_row_id = '$time_row_id' AND attendance.absent_date = '$absentDate' 
     AND attendance.subject_code = '$subject_code' AND attendance.student_batch = '$class_batch' AND attendance.is_deleted = 0";
     $pdo_statement = $con->prepare($query);

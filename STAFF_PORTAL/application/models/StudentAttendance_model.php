@@ -278,7 +278,7 @@ class StudentAttendance_model extends CI_Model{
         $this->db->join('tbl_staff as staff', 'staff.staff_id = staff_sub.staff_id','left');
         $this->db->join('tbl_class_timings as time', 'time.row_id = attendance.time_row_id','left');
       //  $this->db->join('tbl_student_academic_info as std', 'std.student_id = attendance.student_id','right');
-        $this->db->join('tbl_students_info as student', 'student.student_id = attendance.student_id','right');
+        $this->db->join('tbl_students_info as student', 'student.row_id = attendance.student_row_id','left');
         
         if(!empty($filter['absentDate'])){
             $this->db->where('attendance.absent_date',$filter['absentDate']); 
@@ -332,7 +332,7 @@ class StudentAttendance_model extends CI_Model{
         $this->db->join('tbl_staff as staff', 'staff.staff_id = staff_sub.staff_id','left');
         $this->db->join('tbl_class_timings as time', 'time.row_id = attendance.time_row_id','left');
        // $this->db->join('tbl_student_academic_info as std', 'std.student_id = attendance.student_id','right');
-        $this->db->join('tbl_students_info as student', 'student.student_id = attendance.student_id','right');
+        $this->db->join('tbl_students_info as student', 'student.row_id = attendance.student_row_id','left');
         
         if(!empty($filter['absentDate'])){
             $this->db->where('attendance.absent_date',$filter['absentDate']); 
@@ -482,7 +482,7 @@ class StudentAttendance_model extends CI_Model{
         $this->db->join('tbl_staff as staff', 'staff.staff_id = staff_sub.staff_id','left');
         $this->db->join('tbl_class_timings as time', 'time.row_id = attendance.time_row_id','left');
        // $this->db->join('tbl_student_academic_info as std', 'std.student_id = attendance.student_id','right');
-        $this->db->join('tbl_students_info as student', 'student.student_id = attendance.student_id','right');
+        $this->db->join('tbl_students_info as student', 'student.row_id = attendance.student_row_id','left');
         
         if(!empty($filter['student_id'])){
             $this->db->where('attendance.student_id',$filter['student_id']); 
@@ -554,7 +554,7 @@ class StudentAttendance_model extends CI_Model{
         if(!empty($filter['std_batch'])){
             $this->db->where('class.batch',$filter['std_batch']); 
         }
-        $this->db->where('class.class_year', 2023);
+        $this->db->where('class.class_year', 2024);
         $this->db->where('class.is_deleted', 0);
         $this->db->where('class.subject_type', $type);
         $query = $this->db->get();
@@ -576,11 +576,11 @@ class StudentAttendance_model extends CI_Model{
             $this->db->where('abclass.absent_date <=',$filter['date_to']);
         }
         $this->db->where('staff_sub.subject_type',$type);
-        $this->db->where('abclass.student_id', $student_id);
+        $this->db->where('abclass.student_row_id', $student_id);
         $this->db->where('abclass.subject_code', $subject_code);
         // $this->db->where('abclass.absent_date', date("Y-m-d", strtotime($date)));
         // $this->db->where('abclass.office_verified_status', 0);
-        $this->db->where('abclass.year', 2023);
+        $this->db->where('abclass.year', 2024);
         $this->db->where('abclass.is_deleted', 0);
         $query = $this->db->get();
         return $query->num_rows();  
@@ -667,7 +667,7 @@ class StudentAttendance_model extends CI_Model{
     public function getAttendanceAdditionalById($subject_id,$student_id,$month,$year){
         $this->db->from('tbl_attendance_additional_info as attd');
         $this->db->where('attd.subject_code', $subject_id);
-        $this->db->where('attd.student_id', $student_id);
+        $this->db->where('attd.student_row_id', $student_id);
         $this->db->where('attd.month', $month);
         $this->db->where('attd.year', $year);
         $this->db->where('attd.is_deleted', 0);
@@ -686,7 +686,7 @@ class StudentAttendance_model extends CI_Model{
 
     public function updateStudentAttendanceAdditional($subject_id,$student_id,$month,$year,$attendanceInfoUpdate){
         $this->db->where('subject_code', $subject_id);
-        $this->db->where('student_id', $student_id);
+        $this->db->where('student_row_id', $student_id);
         $this->db->where('month', $month);
         $this->db->where('year', $year);
         $this->db->update('tbl_attendance_additional_info', $attendanceInfoUpdate);
@@ -730,7 +730,7 @@ class StudentAttendance_model extends CI_Model{
             $this->db->where('class.batch',$filter['std_batch']); 
         }
         $this->db->where('class.date <',  $filter['date_from']);
-        $this->db->where('class.class_year', 2023);
+        $this->db->where('class.class_year', 2024);
         $this->db->where('class.is_deleted', 0);
         // $this->db->where('class.subject_type', $type);
         $query = $this->db->get();
@@ -765,7 +765,7 @@ class StudentAttendance_model extends CI_Model{
             $this->db->where('class.batch',$filter['std_batch']); 
         }
         $this->db->where('class.date',  $date);
-        $this->db->where('class.class_year', 2023);
+        $this->db->where('class.class_year', 2024);
         $this->db->where('class.is_deleted', 0);
         // $this->db->where('class.subject_type', $type);
         $query = $this->db->get();
@@ -790,7 +790,7 @@ class StudentAttendance_model extends CI_Model{
         $this->db->where('abclass.subject_code', $subject_code);
         // $this->db->where('abclass.absent_date', date("Y-m-d", strtotime($date)));
         // $this->db->where('abclass.office_verified_status', 0);
-        $this->db->where('abclass.year', 2023);
+        $this->db->where('abclass.year', 2024);
         $this->db->where('abclass.is_deleted', 0);
         $this->db->where('abclass.absent_date <',  $filter['date_from']);
         $query = $this->db->get();
@@ -816,7 +816,7 @@ class StudentAttendance_model extends CI_Model{
         $this->db->where('abclass.subject_code', $subject_code);
         // $this->db->where('abclass.absent_date', date("Y-m-d", strtotime($date)));
         // $this->db->where('abclass.office_verified_status', 0);
-        $this->db->where('abclass.year', 2023);
+        $this->db->where('abclass.year', 2024);
         $this->db->where('abclass.is_deleted', 0);
         $this->db->where('abclass.absent_date', $date);
         $query = $this->db->get();
