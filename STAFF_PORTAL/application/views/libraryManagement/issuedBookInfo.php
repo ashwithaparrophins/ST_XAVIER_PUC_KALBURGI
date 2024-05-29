@@ -323,7 +323,7 @@ if ($success) {
         jQuery('.datepicker, .dateSearch').datepicker({
             autoclose: true,
             orientation: "bottom",
-            format: "dd-mm-yyyy"
+            dateFormat: "dd-mm-yy"
 
         });
 
