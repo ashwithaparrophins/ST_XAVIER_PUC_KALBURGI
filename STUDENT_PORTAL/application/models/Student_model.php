@@ -692,7 +692,7 @@ public function updateCoursePaymentLogByRowId($paymentInfo,$order_id) {
             $this->db->from('tbl_student_attendance_details as attendance');
             $this->db->join('tbl_subjects as sub','sub.subject_code = attendance.subject_code');
             $this->db->join('tbl_class_timings as time','time.row_id = attendance.time_row_id');
-            $this->db->where('attendance.student_id', $student_id);
+            $this->db->where('attendance.student_row_id', $student_id);
             $this->db->where('attendance.year',CURRENT_YEAR);
             $this->db->where('attendance.is_deleted',0);
             $this->db->where('sub.is_deleted',0);
@@ -814,7 +814,7 @@ public function updateCoursePaymentLogByRowId($paymentInfo,$order_id) {
         $this->db->from('tbl_student_attendance_details as attendance');
         $this->db->join('tbl_subjects as sub','sub.subject_code = attendance.subject_code');
         $this->db->join('tbl_class_timings as time','time.row_id = attendance.time_row_id');
-        $this->db->where('attendance.student_id', $student_id);
+        $this->db->where('attendance.student_row_id', $student_id);
         $this->db->where('attendance.year',CURRENT_YEAR);
         $this->db->where('attendance.is_deleted',0);
         $this->db->where('sub.is_deleted',0);

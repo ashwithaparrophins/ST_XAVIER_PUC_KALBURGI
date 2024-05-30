@@ -714,11 +714,9 @@ public function collegeNotificationsApi(){
         $row_id = $obj['row_id'];
         $student = $this->student_model->getStudentInfoBystudId($student_id);
         $notifications = $this->student_model->getStudentfeedNotifications($student->term_name,$student->section_name,$student->stream_name);
-        log_message('debug','notification'.print_r($notifications,true));
         $bulkNotifications = $this->student_model->getStudentfeedBulkNotificationsApi($student_id);  
-        log_message('debug',' $bulkNotifications '.print_r( $bulkNotifications ,true));
        
-        $absentInfo= $this->student_model->getabsentDetailsfeed($student_id);
+        $absentInfo= $this->student_model->getabsentDetailsfeed($row_id);
         $data1 = array();
         foreach($bulkNotifications as $info){
                 $info->date =date('d-m-Y h:i A',strtotime($info->updated_date_time));
@@ -2118,7 +2116,8 @@ public function absentDetails(){
     $json = file_get_contents('php://input');
     $obj = json_decode($json,true);
     $student_id = $obj['student_id'];
-    $absentInfo= $this->student_model->getabsentDetails($student_id);
+    $row_id = $obj['row_id'];
+    $absentInfo= $this->student_model->getabsentDetails($row_id);
 
     $data = json_encode($absentInfo);
     echo $data;
