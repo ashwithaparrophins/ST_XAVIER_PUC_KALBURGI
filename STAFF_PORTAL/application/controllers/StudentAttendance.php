@@ -672,7 +672,7 @@ class StudentAttendance extends BaseController
             $this->excel->getActiveSheet()->setTitle($stream_name);
             $this->excel->getActiveSheet()->getPageSetup()->setPrintArea('A1:W500');
             $this->excel->getActiveSheet()->setCellValue('A1', EXCEL_TITLE);
-            $this->excel->getActiveSheet()->setCellValue('A2', $term_name.'-'. $stream_name.'-'.$section_name." Section Attendance Report 2023-24");
+            $this->excel->getActiveSheet()->setCellValue('A2', $term_name.'-'. $stream_name.'-'.$section_name." Section Attendance Report 2024-25");
             $this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(18);
             $this->excel->getActiveSheet()->getStyle('A2')->getFont()->setSize(14);
             $this->excel->getActiveSheet()->mergeCells('A1:W1');
@@ -832,11 +832,11 @@ class StudentAttendance extends BaseController
                     
                     // foreach($data['classHeldDate'] as $classdata){
                     $type="THEORY";
-                    $absent_count_theory = $this->attendance->isStudentIsAbsentForClass($student->student_id,$subjects_code[$i],$filter,$type);
+                    $absent_count_theory = $this->attendance->isStudentIsAbsentForClass($student->row_id,$subjects_code[$i],$filter,$type);
                     
                     // log_message('debug','absent_count_theory='.print_r($absent_count_theory,true));
                     $type="LAB";
-                    $absent_count_lab = $this->attendance->isStudentIsAbsentForClass($student->student_id,$subjects_code[$i],$filter,$type);
+                    $absent_count_lab = $this->attendance->isStudentIsAbsentForClass($student->row_id,$subjects_code[$i],$filter,$type);
                     $absent_countLab = $absent_count_lab * 2;
 
                     $std_absent_count = $absent_count_theory + $absent_countLab;
@@ -1229,11 +1229,11 @@ class StudentAttendance extends BaseController
                         $type="THEORY";  
                       }
 
-                    $class_attended_previous = $this->attendance->isStudentIsAbsentForClassPrevious($student->student_id, $sub->subject_code, $filter, $type);
+                    $class_attended_previous = $this->attendance->isStudentIsAbsentForClassPrevious($student->row_id, $sub->subject_code, $filter, $type);
 
                     $check1 = 0;
                     foreach ($class_held_value as $index => $value) {
-                    $class_attended_current[date('d-m-Y',strtotime($index))] = $this->attendance->isStudentIsAbsentForClassCurrent($student->student_id, $sub->subject_code, $filter, $type,date('Y-m-d',strtotime($index)));
+                    $class_attended_current[date('d-m-Y',strtotime($index))] = $this->attendance->isStudentIsAbsentForClassCurrent($student->row_id, $sub->subject_code, $filter, $type,date('Y-m-d',strtotime($index)));
                     if($check1 == 0){
                     $class_attended_current[date('d-m-Y',strtotime($index))] = $class_attended_current[date('d-m-Y',strtotime($index))] + $class_attended_previous;
                     }

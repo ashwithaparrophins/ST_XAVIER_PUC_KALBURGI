@@ -786,7 +786,7 @@ class StudentAttendance_model extends CI_Model{
         //     $this->db->where('abclass.absent_date <=',$filter['date_to']);
         // }
         // $this->db->where('staff_sub.subject_type',$type);
-        $this->db->where('abclass.student_id', $student_id);
+        $this->db->where('abclass.student_row_id', $student_id);
         $this->db->where('abclass.subject_code', $subject_code);
         // $this->db->where('abclass.absent_date', date("Y-m-d", strtotime($date)));
         // $this->db->where('abclass.office_verified_status', 0);
@@ -812,7 +812,7 @@ class StudentAttendance_model extends CI_Model{
         //     $this->db->where('abclass.absent_date <=',$filter['date_to']);
         // }
         // $this->db->where('staff_sub.subject_type',$type);
-        $this->db->where('abclass.student_id', $student_id);
+        $this->db->where('abclass.student_row_id', $student_id);
         $this->db->where('abclass.subject_code', $subject_code);
         // $this->db->where('abclass.absent_date', date("Y-m-d", strtotime($date)));
         // $this->db->where('abclass.office_verified_status', 0);
