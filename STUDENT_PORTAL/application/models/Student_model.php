@@ -18,6 +18,7 @@ class Student_model extends CI_Model
         $query = $this->db->get();
         return $query->row();
     }
+
     
 
     public function getStudentAppInfoById($student_id,$term_name){

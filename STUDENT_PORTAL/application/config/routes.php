@@ -243,3 +243,5 @@ $route['apiviewNotificationFeed'] = "api/viewNotificationFeed";
 $route['examAnnualPerformance'] = "performance/examAnnualPerformance";
 
 $route['apiexamAnnualPerformance'] = "api/examAnnualPerformance";
+
+$route['apiappsharedprefsReset'] = "api/appsharedprefsReset";

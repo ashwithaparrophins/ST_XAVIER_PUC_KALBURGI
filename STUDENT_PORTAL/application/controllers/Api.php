@@ -47,6 +47,19 @@ class Api extends CI_Controller
             echo $InvalidMSGJSon ;
         }
     }
+
+    public function appsharedprefsReset(){
+        $json = file_get_contents('php://input'); 
+        $obj = json_decode($json,true);
+        $row_id = $obj['row_id'];
+        $studentInfo = $this->student_model->getStudentInfoByRowId($row_id);
+        $data = new stdClass(); 
+        $data->term = $studentInfo->term_name;
+        $data->section = $studentInfo->section_name;
+        echo json_encode($data);
+       
+        
+    }
     
     /**
      * This function used to generate reset password request link
@@ -409,10 +422,11 @@ class Api extends CI_Controller
         $json = file_get_contents('php://input'); 
         $obj = json_decode($json,true);
         $student_id = $obj['student_id'];
+        $row_id = $obj['row_id'];
         $term_name = $obj['term_name'];
         $filter['student_id'] = $student_id;
 
-        $student = $this->student_model->getStudentInfoBystudId($student_id);
+        $student = $this->student_model->getStudentInfoByRowId($row_id);
         $filter = array();
 
         $subject_attendance = array();
@@ -445,9 +459,9 @@ class Api extends CI_Controller
         for($i=0;$i<count($subjects_code);$i++){
             $subject_attendance[$subjects_code[$i]]['name'] = $this->attendance_model->getSubjectInfo($subjects_code[$i]);
 
-            $studentAttendance = $this->attendance_model->getSumOfAttendanceMonthBased($student->student_id,$subjects_code[$i]);
+            $studentAttendance = $this->attendance_model->getSumOfAttendanceMonthBased($row_id,$subjects_code[$i]);
             if($studentAttendance->class_held<1){
-                $studentAttendance = $this->attendance_model->getSumOfAttendancelastMonth($student->student_id,$subjects_code[$i]);
+                $studentAttendance = $this->attendance_model->getSumOfAttendancelastMonth($row_id,$subjects_code[$i]);
             }
             $subject_attendance[$subjects_code[$i]]['class_held'] = $studentAttendance->class_held;
             $subject_attendance[$subjects_code[$i]]['class_attended'] = $studentAttendance->class_attended;
