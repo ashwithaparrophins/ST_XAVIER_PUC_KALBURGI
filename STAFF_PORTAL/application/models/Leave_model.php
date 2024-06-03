@@ -16,6 +16,7 @@
         //$this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
         $this->db->order_by('leave.date_from', 'DESC');
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('leave.is_deleted', 0);
         $query = $this->db->get();
@@ -165,6 +166,7 @@ public function checkLeaveAppliedAlready($date_from,$staff_id)
         
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('leave.is_deleted', 0);
         $this->db->order_by('cast(staff.staff_id as unsigned)', 'ASC');
         $query = $this->db->get();
@@ -200,6 +202,7 @@ public function checkLeaveAppliedAlready($date_from,$staff_id)
     }
    
     $this->db->where('staff.staff_id !=', '123456');
+    $this->db->where('Role.roleId !=', '50');
     $this->db->where('staff.is_deleted', 0);
     $this->db->where('leave.is_deleted', 0);
     $this->db->order_by('cast(staff.staff_id as unsigned)', 'ASC');
@@ -238,6 +241,7 @@ public function getAllStaffLeavePendingInfoForReport2($staff_id,$year)
     }
    
     $this->db->where('staff.staff_id !=', '123456');
+    $this->db->where('Role.roleId !=', '50');
     $this->db->where('staff.is_deleted', 0);
     $this->db->where('leave.is_deleted', 0);
     $this->db->order_by('cast(staff.staff_id as unsigned)', 'ASC');

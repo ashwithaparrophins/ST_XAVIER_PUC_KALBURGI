@@ -21,6 +21,7 @@ class Staff_model extends CI_Model
         }
         
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.resignation_status', 0);
         $this->db->where('staff.is_deleted', 0);
         $query = $this->db->get();
@@ -150,6 +151,7 @@ class Staff_model extends CI_Model
             $this->db->where('staff.staff_id', $filter['staff_id']); 
         }
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('staff.resignation_status',1);
         //  $this->db->where('staff.staff_type_id', 1);
@@ -173,6 +175,7 @@ class Staff_model extends CI_Model
             $this->db->where('staff.staff_id', $filter['staff_id']); 
         }
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('staff.retirement_status',1);
         //  $this->db->where('staff.staff_type_id', 1);
@@ -193,6 +196,7 @@ class Staff_model extends CI_Model
             $this->db->where('staff.staff_id', $filter['staff_id']); 
         }
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.is_deleted', 0);
         $query = $this->db->get();
         return $query->result();
@@ -218,6 +222,7 @@ class Staff_model extends CI_Model
         $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
         $this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('staff.resignation_status', 0); 
         $this->db->where('staff.retirement_status',0);
@@ -691,6 +696,7 @@ public function getStaffAttendanceInfoByRowId($row_id){
         $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
         $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('dept.is_deleted', 0);
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('staff.resignation_status', 0);
@@ -711,6 +717,7 @@ public function getStaffAttendanceInfoByRowId($row_id){
         $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
       //  $this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.department_id', $dept_id);
         $this->db->where('staff.is_deleted', 0);
         $query = $this->db->get();
@@ -833,6 +840,7 @@ public function getStaffAttendanceInfoByRowId($row_id){
         $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
      //   $this->db->where('staff.role', '2');
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('dept.is_deleted', 0);
         $this->db->where('staff.is_deleted', 0);
         $query = $this->db->get();
@@ -1166,6 +1174,7 @@ public function getStaffAttendanceInfoByRowId($row_id){
         }
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.resignation_status', 0);
         //  $this->db->where('staff.staff_type_id', 1);
         $query = $this->db->get();
@@ -1190,6 +1199,7 @@ public function getStaffAttendanceInfoByRowId($row_id){
         $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
         $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('dept.is_deleted', 0);
         $this->db->where('staff.is_deleted', 1);
         $query = $this->db->get();
@@ -1250,6 +1260,7 @@ public function getStaffAttendanceInfoByRowId($row_id){
         $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
         $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.department_id', $dept_id);
         $this->db->where('staff.resignation_status', 0);
         $this->db->where('staff.retirement_status',0);
@@ -1270,6 +1281,7 @@ public function getStaffAttendanceInfoByRowId($row_id){
         $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
         $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.department_id', $dept_id);
         if($staff_id != 'ALL'){
             $this->db->where('staff.staff_id', $staff_id);

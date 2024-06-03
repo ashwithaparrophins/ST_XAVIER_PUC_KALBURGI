@@ -260,6 +260,7 @@ class salary_model extends CI_Model
         $this->db->join('tbl_staff_advance_payment_info as advance', 'advance.staff_id = staff.staff_id','left');
         $this->db->join('tbl_factory_name as factory', 'factory.row_id = staff.factory_id','left');
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.is_deleted', 0);
         // $this->db->where('staff.resignation_status', 0);
         $this->db->where('advance.is_deleted', 0);
@@ -364,7 +365,7 @@ class salary_model extends CI_Model
         $this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
         $this->db->join('tbl_staff_bank_info as bank', 'bank.staff_id  = staff.staff_id','left');
         $this->db->where('staff.staff_id !=', '123456');
-        $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('staff.resignation_status', 0);
         $this->db->where('staff.retirement_status', 0);
@@ -397,6 +398,7 @@ class salary_model extends CI_Model
         $this->db->join('tbl_staff_bank_info as bank', 'bank.staff_id = staff.staff_id','left');
      
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('staff.resignation_status', 0);
         $query = $this->db->get();

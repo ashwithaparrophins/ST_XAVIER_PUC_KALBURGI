@@ -234,6 +234,7 @@ class Library_model extends CI_Model
         $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
         $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('dept.is_deleted', 0);
         $this->db->where('staff.is_deleted', 0);
         $query = $this->db->get();

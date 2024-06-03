@@ -1394,7 +1394,7 @@ $count++;
                   
                         $number_part_15++;
                         $unitName = "SXPUK";
-                        $number_part_15 = sprintf('%03d',$number_part_15);
+                        $number_part_15 = sprintf('%04d',$number_part_15);
                         $employee_id = date('Y',strtotime($dateOfJoin)).$unitName.$number_part_15; 
                        
                         $staffInfo = array(

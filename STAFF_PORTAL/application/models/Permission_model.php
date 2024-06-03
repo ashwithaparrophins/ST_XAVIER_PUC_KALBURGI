@@ -19,6 +19,7 @@
             $this->db->join('tbl_staff_shift_info as shift', 'staff.shift_code = shift.shift_code','left');
             $this->db->where('staff.is_deleted', 0);
             $this->db->where('staff.staff_id !=', '123456');
+            $this->db->where('Role.roleId !=', '50');
             $this->db->where('permission.is_deleted', 0);
             if(!empty($filter['staff_id'])){ 
                 $this->db->where('permission.staff_id', $filter['staff_id']);
@@ -118,6 +119,7 @@
         $this->db->where('permission.approved_status', 1);
         $this->db->where('staff.is_deleted', 0);
         $this->db->where('staff.staff_id !=', '123456');
+        $this->db->where('Role.roleId !=', '50');
         $this->db->where('permission.is_deleted', 0);
         $query = $this->db->get();
         return $query->result();

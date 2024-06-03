@@ -183,6 +183,22 @@ jQuery(document).ready(function() {
         });
     });
 
+    jQuery.fn.dataTable.ext.order['last-four-digits'] = function(settings, col) {
+            return this.api().column(col, {
+                order: 'index'
+            }).nodes().map(function(td, i) {
+                // Extract the last four digits
+                var text = $(td).text().trim();
+                var lastFourDigits = text.substr(-4);
+
+                // If empty or non-numeric, return a very high value
+                if (lastFourDigits === "" || isNaN(lastFourDigits)) {
+                    return 'zzzz'; // A string that will push empty values to the end when sorting
+                }
+                return lastFourDigits;
+            });
+        };
+
 
     var table = $('#item-list').DataTable({
         columnDefs: [
@@ -190,6 +206,7 @@ jQuery(document).ready(function() {
             {
                 className: "text-left",
                 targets: 2,
+                orderDataType: 'last-four-digits'
 
             }
         ],
@@ -201,6 +218,9 @@ jQuery(document).ready(function() {
         orderCellsTop: true,
         fixedHeader: true,
         responsive: true,
+        order: [
+                [2, 'asc']
+            ],
         language: {
             "info": "Showing _START_ to _END_ of _TOTAL_ Staff",
             "infoFiltered": "(filtered from _MAX_ total staff)",
