@@ -1321,36 +1321,43 @@ public function getStaffAttendanceInfoByRowId($row_id){
     //     return $query->row();   
     // }
 
-    public function getPreviousEmployeeIdInfo() {
-        // Custom SQL query to order by last three digits of employee_id after the 9th place
-        $sql = "
-            SELECT * FROM (
-                SELECT staff.*, SUBSTRING(staff.employee_id, -3) AS last_three_digits,
-                    ROW_NUMBER() OVER (ORDER BY staff.employee_id DESC) AS row_num
-                FROM tbl_staff AS staff
-                WHERE staff.is_deleted = 0
-                AND staff.employee_id != ''
-            ) AS subquery
-            ORDER BY
-                CASE
-                    WHEN row_num > 9 THEN last_three_digits
-                    ELSE employee_id
-                END DESC
-            LIMIT 1
-        ";
+    // public function getPreviousEmployeeIdInfo() {
+    //     // Custom SQL query to order by last three digits of employee_id after the 9th place
+    //     $sql = "
+    //         SELECT * FROM (
+    //             SELECT staff.*, SUBSTRING(staff.employee_id, -3) AS last_three_digits,
+    //                 ROW_NUMBER() OVER (ORDER BY staff.employee_id DESC) AS row_num
+    //             FROM tbl_staff AS staff
+    //             WHERE staff.is_deleted = 0
+    //             AND staff.employee_id != ''
+    //         ) AS subquery
+    //         ORDER BY
+    //             CASE
+    //                 WHEN row_num > 9 THEN last_three_digits
+    //                 ELSE employee_id
+    //             END DESC
+    //         LIMIT 1
+    //     ";
     
-        // Execute the query
-        $query = $this->db->query($sql);
+    //     // Execute the query
+    //     $query = $this->db->query($sql);
     
-        // Return the first row of the result
-        return $query->row();
-    }
+    //     // Return the first row of the result
+    //     return $query->row();
+    // }
     
-
+       public function getPreviousEmployeeIdInfo(){
+            $this->db->from('tbl_staff as staff'); 
+            $this->db->where('staff.employee_id!=', "");
+            $this->db->where('staff.employee_id!=', "0");
+            $this->db->where('staff.is_deleted', 0);
+            $query = $this->db->get();
+            return $query->result();
+        }
 
     function checkStaffEmployeeIdExists($staff_id){
         $this->db->from('tbl_staff as staff');
-        $this->db->where('staff.staff_id', $staff_id);
+        $this->db->where('staff.row_id', $staff_id);
         $this->db->where('staff.employee_id!=', '');
         $this->db->where('staff.is_deleted', 0);
         $query = $this->db->get();
@@ -1360,7 +1367,7 @@ public function getStaffAttendanceInfoByRowId($row_id){
 
     public function getCheckStaffId($staff_id){
         $this->db->from('tbl_staff as staff'); 
-        $this->db->where('staff.staff_id', $staff_id);
+        $this->db->where('staff.row_id', $staff_id);
         $this->db->where('staff.is_deleted', 0);
         $query = $this->db->get();
         return $query->row();

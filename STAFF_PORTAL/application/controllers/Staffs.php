@@ -266,12 +266,24 @@ class Staffs extends BaseController
                 if(!empty($date_of_join)){
                     $dateOfJoin = str_replace(".", "-", $date_of_join);  
                     $previousEmployeeId = $this->staff->getPreviousEmployeeIdInfo();
-                    if(!empty($previousEmployeeId)){ 
-                        $appNo = substr($previousEmployeeId->employee_id, 9);
+                    $largestEmployeeId = null;
+                    $largestLastFourDigits = 0;
+                    foreach ($previousEmployeeId as $staff) {
+                        // Extract the last four digits of the employee_id
+                        $lastFourDigits = intval(substr($staff->employee_id, -4));
+
+                        // Compare and update the largest last four digits and corresponding employee_id
+                        if ($lastFourDigits > $largestLastFourDigits) {
+                            $largestLastFourDigits = $lastFourDigits;
+                            $largestEmployeeId = $staff->employee_id;
+                        }
+                    }
+                    if(!empty($largestEmployeeId)){ 
+                        $appNo = substr($largestEmployeeId, 9);
                         $number_part_15 = $appNo + 1;
                      }             
                         $unitName = "SXPUK";
-                        $number_part_15 = sprintf('%03d',$number_part_15);
+                        $number_part_15 = sprintf('%04d',$number_part_15);
                         $employee_id = date('Y',strtotime($dateOfJoin)).$unitName.$number_part_15;              
                   }
 
@@ -730,17 +742,29 @@ class Staffs extends BaseController
                     $retired_date = "";
                     $retirement_status = 0;
                 }
-                $isExistEmployeeId = $this->staff->checkStaffEmployeeIdExists($staff_id);
+                $isExistEmployeeId = $this->staff->checkStaffEmployeeIdExists($row_id);
                 if(empty($isExistEmployeeId)){
                 if(!empty($date_of_join)){
                     $dateOfJoin = str_replace(".", "-", $date_of_join);  
                     $previousEmployeeId = $this->staff->getPreviousEmployeeIdInfo();
-                    if(!empty($previousEmployeeId)){ 
-                        $appNo = substr($previousEmployeeId->employee_id, 9);
+                    $largestEmployeeId = null;
+                    $largestLastFourDigits = 0;
+                    foreach ($previousEmployeeId as $staff) {
+                        // Extract the last four digits of the employee_id
+                        $lastFourDigits = intval(substr($staff->employee_id, -4));
+
+                        // Compare and update the largest last four digits and corresponding employee_id
+                        if ($lastFourDigits > $largestLastFourDigits) {
+                            $largestLastFourDigits = $lastFourDigits;
+                            $largestEmployeeId = $staff->employee_id;
+                        }
+                    }
+                    if(!empty($largestEmployeeId)){ 
+                        $appNo = substr($largestEmployeeId, 9);
                         $number_part_15 = $appNo + 1;
                      }             
                         $unitName = "SXPUK";
-                        $number_part_15 = sprintf('%03d',$number_part_15);
+                        $number_part_15 = sprintf('%04d',$number_part_15);
                         $employee_id = date('Y',strtotime($dateOfJoin)).$unitName.$number_part_15;              
                   }
                 }else{
@@ -750,7 +774,7 @@ class Staffs extends BaseController
                         $number_part_15 = $appNo;
                                  
                         $unitName = "SXPUK";
-                        $number_part_15 = sprintf('%03d',$number_part_15);
+                        $number_part_15 = sprintf('%04d',$number_part_15);
                         $employee_id = date('Y',strtotime($dateOfJoin)).$unitName.$number_part_15;  
                 }
 
