@@ -28,6 +28,7 @@ class User_model extends CI_Model
         }
         $this->db->where('BaseTbl.isDeleted', 0);
         $this->db->where('BaseTbl.roleId !=', 1);
+        $this->db->where('BaseTbl.roleId !=', '50');
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -59,6 +60,7 @@ class User_model extends CI_Model
         }
         $this->db->where('BaseTbl.isDeleted', 0);
         $this->db->where('BaseTbl.roleId !=', 1);
+        $this->db->where('BaseTbl.roleId !=', '50');
         $this->db->order_by('BaseTbl.userId', 'DESC');
         $this->db->limit($page, $segment);
         $query = $this->db->get();
@@ -153,6 +155,7 @@ class User_model extends CI_Model
         $this->db->from('tbl_users');
         $this->db->where('isDeleted', 0);
 		$this->db->where('roleId !=', 1);
+		$this->db->where('roleId !=', '50');
         $this->db->where('userId', $userId);
         $query = $this->db->get();
         
