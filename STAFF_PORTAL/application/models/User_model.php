@@ -76,6 +76,7 @@ class User_model extends CI_Model
         $this->db->select('roleId, role');
         $this->db->from('tbl_roles');
         $this->db->where('roleId !=', 1);
+        $this->db->where('roleId !=', '50');
         $this->db->where('roleId !=', $role);
         if($role == ROLE_MANAGER){
             $this->db->where('roleId !=', ROLE_EMPLOYEE);  

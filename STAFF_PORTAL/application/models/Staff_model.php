@@ -69,7 +69,7 @@ class Staff_model extends CI_Model
         function getStaffRoles(){
             $this->db->select('roleId, role');
             $this->db->from('tbl_roles');
-          //  $this->db->where('roleId !=', 1);
+            $this->db->where('roleId !=', '50');
             $query = $this->db->get();
             return $query->result();
         }
