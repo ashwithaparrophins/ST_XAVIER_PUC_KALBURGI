@@ -455,7 +455,7 @@ class ApiStaff extends CI_Controller
             'leave_type' => $leaveType,
             'created_by' => $staff_id,
             'leave_name' => $leaveName,
-
+            'year' => LEAVE_YEAR,
             'created_date_time' => date('Y-m-d H:i:s'),
         ];
 
@@ -571,6 +571,7 @@ class ApiStaff extends CI_Controller
             'created_by' => $staff_id,
             'created_date_time' => date('Y-m-d H:i:s'),
             'leave_name' => $leaveName,
+            'year' => LEAVE_YEAR,
             'medical_certificate' => $targetPath,
         ];
 
@@ -857,6 +858,12 @@ class ApiStaff extends CI_Controller
                 }else{
                     continue;
                 }
+            } elseif($info->title == 'SEND NOTIFICATION'){
+                if($role == ROLE_PRINCIPAL || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR ){
+                    $db_data[] = $info;
+                }else{
+                    continue;
+                }
             }
             elseif (
                 $info->title == 'TAKE ATTENDANCE' ||
@@ -1001,6 +1008,13 @@ class ApiStaff extends CI_Controller
         $this->webLogin($staff_id);
         redirect('viewFeeDashboard');
     }
+    function staffSendNotification()
+    {
+        $staff_id = $_GET['staffId'];
+        $this->webLogin($staff_id);
+        redirect('pushNotification');
+    }
+
 
 
     public function approveLeaveList()
@@ -1637,6 +1651,52 @@ class ApiStaff extends CI_Controller
 
        
 
+    }
+
+
+    public function listAllNotification()
+    {
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json, true);
+        $staff_id = $obj['staff_id'];
+      //  log_message('debug', 'staff_id-->' . print_r($staff_id, true));
+    
+        $fetchStaffInfo = $this->app_staff_login->fetchStaffById($staff_id);
+    
+        $fetchNotification = $this->app_staff_login->getAllNotification($fetchStaffInfo[0]->dept_id);
+        
+    
+        foreach ($fetchNotification as &$notification) {
+            $notification->time_ago = $this->timeAgo($notification->date_time);
+        }
+    
+       // log_message('debug', 'fetchNotification with time_ago-->' . print_r($fetchNotification, true));
+    
+        $data = json_encode($fetchNotification);
+        echo $data;
+    }
+    
+    private function timeAgo($datetime)
+    {
+        $now = new DateTime();
+        $notificationTime = new DateTime($datetime);
+        $interval = $now->diff($notificationTime);
+    
+        if ($interval->y > 0) {
+            return $interval->y . ' y ago';
+        } elseif ($interval->m > 0) {
+            return $interval->m . ' m ago';
+        } elseif ($interval->d >= 7) {
+            return floor($interval->d / 7) . ' w ago';
+        } elseif ($interval->d > 0) {
+            return $interval->d . ' d ago';
+        } elseif ($interval->h > 0) {
+            return $interval->h . ' h ago';
+        } elseif ($interval->i > 0) {
+            return $interval->i . ' min ago';
+        } else {
+            return 'Just now';
+        }
     }
 }
 ?>

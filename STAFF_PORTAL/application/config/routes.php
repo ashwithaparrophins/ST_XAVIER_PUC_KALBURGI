@@ -1210,6 +1210,9 @@ $route['listallStaff']='apistaff/listallStaff';
 
 $route['fetchNotifiationData']='apistaff/fetchNotifiationData';
 
+$route['listAllNotification']='apistaff/listAllNotification';
+
+$route['staffSendNotification']='apistaff/staffSendNotification';
 
 
 

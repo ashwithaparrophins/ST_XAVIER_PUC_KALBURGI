@@ -76,6 +76,7 @@ class App_staff_login extends CI_Model
         $this->db->from('tbl_staff_applied_leave');
         $this->db->where('staff_id', $staff_id);
         $this->db->where('is_deleted', 0);
+        $this->db->where('year',LEAVE_YEAR);
         $this->db->order_by('created_date_time', 'desc'); // Sort by created_date_time in descending order
         $query = $this->db->get();
         return $query->result();
@@ -87,6 +88,7 @@ class App_staff_login extends CI_Model
         $this->db->where('staff_id !=', $staff_id); // Modified line
         $this->db->order_by('created_date_time', 'desc'); // Sort by created_date_time in descending order
         $this->db->where('is_deleted', 0);
+        $this->db->where('year',LEAVE_YEAR);
         $query = $this->db->get();
         return $query->result();
     }
@@ -126,6 +128,7 @@ class App_staff_login extends CI_Model
         $this->db->where('leave.staff_id', $staff_id);
         $this->db->where('leave.leave_type', $type);
         $this->db->where('leave.is_deleted', 0);
+        $this->db->where('leave.year',LEAVE_YEAR);
         $this->db->where('leave.approved_status', 1);
         // $this->db->where('leave.date_from >=', LEAVE_DATE_FROM);
         // $this->db->where('leave.date_to <=', LEAVE_DATE_TO);
@@ -139,6 +142,7 @@ class App_staff_login extends CI_Model
         $this->db->from('tbl_staff_applied_leave as leave');
         $this->db->where('leave.staff_id', $staff_id);
         $this->db->where('leave.leave_type', $type);
+        $this->db->where('leave.year',LEAVE_YEAR);
         $this->db->where('leave.is_deleted', 0);
         $this->db->where_in('leave.approved_status', [0, 1]); // Include both approved statuses
         // $this->db->where('leave.date_from >=', LEAVE_DATE_FROM);
@@ -403,6 +407,7 @@ class App_staff_login extends CI_Model
         $this->db->where('leave.staff_id !=', $staff_id); // Modified line
         $this->db->order_by('leave.created_date_time', 'desc'); // Sort by created_date_time in descending order
         $this->db->where('leave.is_deleted', 0);
+        $this->db->where('leave.year',LEAVE_YEAR);
         $this->db->where('staff.management_view_status', 1);
         $query = $this->db->get();
         return $query->result();
@@ -432,6 +437,36 @@ class App_staff_login extends CI_Model
         $insert_id = $this->db->insert_id();
         $this->db->trans_complete();
         return $insert_id;
+    }
+
+    
+    function fetchStaffById($staffId)
+    {
+        // log_message('debug','model_mbl_number'.print_r($mblNumber,true));
+        $this->db->select(
+            'staff.name,staff.staff_id,staff.row_id,staff.user_name,staff.type,staff.mobile_one,staff.mobile_two,staff.email,staff.address,staff.photo_url,staff.dob,staff.doj,staff.aadhar_no,staff.pan_no,staff.voter_no,staff.gender,staff.qualification,staff.blood_group,dept.name as department_name,dept.dept_id,Roles.role'
+        );
+        $this->db->from('tbl_staff as staff');
+        $this->db->join('tbl_roles as Roles', 'Roles.roleId = staff.role');
+        $this->db->join(
+            'tbl_department as dept',
+            'dept.dept_id = staff.department_id'
+        );
+        $this->db->where('staff.is_deleted', 0);
+        $this->db->where('staff.staff_id', $staffId);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+
+    function getAllNotification($dept_id)
+    {
+        $this->db->from('tbl_staff_notifications');
+        $this->db->where('is_deleted', 0);
+        $this->db->where('department', $dept_id);
+        $this->db->order_by('date_time', 'DESC'); // Sort by created_date_time in descending order
+        $query = $this->db->get();
+        return $query->result();
     }
 
 
