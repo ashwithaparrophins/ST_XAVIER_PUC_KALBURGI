@@ -74,6 +74,18 @@ class Staff_model extends CI_Model
             return $query->result();
         }
 
+        function getStaffRolesForStaff($staff_id)
+        {
+            $this->db->select('roleId, role');
+            $this->db->from('tbl_roles');
+            if($staff_id != '123456'){
+            $this->db->where('roleId !=', 15);
+            $this->db->where('roleId !=', 50);
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+
         function addNewStaff($staffInfo){
             $this->db->trans_start();
             $this->db->insert('tbl_staff', $staffInfo);

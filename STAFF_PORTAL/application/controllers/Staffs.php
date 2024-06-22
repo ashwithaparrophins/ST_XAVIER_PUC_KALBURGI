@@ -130,7 +130,7 @@ class Staffs extends BaseController
             $this->loadThis();
         } else {
             $data['departments'] = $this->staff->getStaffDepartment();
-            $data['designation'] = $this->staff->getStaffRoles();
+            $data['designation'] = $this->staff->getStaffRolesForStaff($this->staff_id);
             $data['shiftsInfo'] = $this->staff->getStaffShifts();
             $this->global['pageTitle'] = ''.TAB_TITLE.' : Add New Staff';
             $this->loadViews("staffs/addNewStaff", $this->global, $data, NULL);
@@ -524,7 +524,7 @@ class Staffs extends BaseController
            
             $data['active'] = $this->active_status;
             $data['departments'] = $this->staff->getStaffDepartment();
-            $data['designation'] = $this->staff->getStaffRoles();
+            $data['designation'] = $this->staff->getStaffRolesForStaff($this->staff_id);
             $data['shiftsInfo'] = $this->staff->getStaffShifts();
             $staff = $this->staff->getStaffInfoById($staff_id);
             $data['staffInfo'] = $staff;
