@@ -537,7 +537,7 @@ class StudentAttendance extends BaseController
             $this->excel->getActiveSheet()->setTitle($stream_name);
             $this->excel->getActiveSheet()->getPageSetup()->setPrintArea('A1:H500');
             $this->excel->getActiveSheet()->setCellValue('A1', EXCEL_TITLE);
-            $this->excel->getActiveSheet()->setCellValue('A2', $term_name.'-'.$stream_name." Attendance Report 2023-2024");
+            $this->excel->getActiveSheet()->setCellValue('A2', $term_name.'-'.$stream_name." Attendance Report 2024-2025");
             $this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(18);
             $this->excel->getActiveSheet()->getStyle('A2')->getFont()->setSize(14);
             $this->excel->getActiveSheet()->getStyle('A1:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -672,7 +672,7 @@ class StudentAttendance extends BaseController
             $this->excel->getActiveSheet()->setTitle($stream_name);
             $this->excel->getActiveSheet()->getPageSetup()->setPrintArea('A1:W500');
             $this->excel->getActiveSheet()->setCellValue('A1', EXCEL_TITLE);
-            $this->excel->getActiveSheet()->setCellValue('A2', $term_name.'-'. $stream_name.'-'.$section_name." Section Attendance Report 2023-24");
+            $this->excel->getActiveSheet()->setCellValue('A2', $term_name.'-'. $stream_name.'-'.$section_name." Section Attendance Report 2024-25");
             $this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(18);
             $this->excel->getActiveSheet()->getStyle('A2')->getFont()->setSize(14);
             $this->excel->getActiveSheet()->mergeCells('A1:W1');

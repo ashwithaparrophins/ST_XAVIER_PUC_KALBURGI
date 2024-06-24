@@ -507,7 +507,7 @@ class StudentAttendance_model extends CI_Model{
             $this->db->where('student.section_name',$filter['section_name']); 
         }
 
-        $this->db->where('attendance.year', 2023);
+        $this->db->where('attendance.year', CURRENT_YEAR);
         $this->db->where('attendance.is_deleted', 0);
         $this->db->order_by('attendance.absent_date', 'DESC');
         $query = $this->db->get();
@@ -554,7 +554,7 @@ class StudentAttendance_model extends CI_Model{
         if(!empty($filter['std_batch'])){
             $this->db->where('class.batch',$filter['std_batch']); 
         }
-        $this->db->where('class.class_year', 2023);
+        $this->db->where('class.class_year', 2024);
         $this->db->where('class.is_deleted', 0);
         $this->db->where('class.subject_type', $type);
         $query = $this->db->get();
@@ -580,7 +580,7 @@ class StudentAttendance_model extends CI_Model{
         $this->db->where('abclass.subject_code', $subject_code);
         // $this->db->where('abclass.absent_date', date("Y-m-d", strtotime($date)));
         // $this->db->where('abclass.office_verified_status', 0);
-        $this->db->where('abclass.year', 2023);
+        $this->db->where('abclass.year', 2024);
         $this->db->where('abclass.is_deleted', 0);
         $query = $this->db->get();
         return $query->num_rows();  
@@ -730,7 +730,7 @@ class StudentAttendance_model extends CI_Model{
             $this->db->where('class.batch',$filter['std_batch']); 
         }
         $this->db->where('class.date <',  $filter['date_from']);
-        $this->db->where('class.class_year', 2023);
+        $this->db->where('class.class_year', 2024);
         $this->db->where('class.is_deleted', 0);
         // $this->db->where('class.subject_type', $type);
         $query = $this->db->get();
@@ -765,7 +765,7 @@ class StudentAttendance_model extends CI_Model{
             $this->db->where('class.batch',$filter['std_batch']); 
         }
         $this->db->where('class.date',  $date);
-        $this->db->where('class.class_year', 2023);
+        $this->db->where('class.class_year', 2024);
         $this->db->where('class.is_deleted', 0);
         // $this->db->where('class.subject_type', $type);
         $query = $this->db->get();
@@ -790,7 +790,7 @@ class StudentAttendance_model extends CI_Model{
         $this->db->where('abclass.subject_code', $subject_code);
         // $this->db->where('abclass.absent_date', date("Y-m-d", strtotime($date)));
         // $this->db->where('abclass.office_verified_status', 0);
-        $this->db->where('abclass.year', 2023);
+        $this->db->where('abclass.year', 2024);
         $this->db->where('abclass.is_deleted', 0);
         $this->db->where('abclass.absent_date <',  $filter['date_from']);
         $query = $this->db->get();
@@ -816,7 +816,7 @@ class StudentAttendance_model extends CI_Model{
         $this->db->where('abclass.subject_code', $subject_code);
         // $this->db->where('abclass.absent_date', date("Y-m-d", strtotime($date)));
         // $this->db->where('abclass.office_verified_status', 0);
-        $this->db->where('abclass.year', 2023);
+        $this->db->where('abclass.year', 2024);
         $this->db->where('abclass.is_deleted', 0);
         $this->db->where('abclass.absent_date', $date);
         $query = $this->db->get();
