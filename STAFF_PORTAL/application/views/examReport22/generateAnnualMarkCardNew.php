@@ -322,6 +322,8 @@ foreach ($studentsRecords as $record) {
                     <?php
                     $fail_flag = false;
                     $lang_total = 0;
+                    $total_theory = 0;
+                    $total_lab = 0;
                     $first_lang_mark = 0;
                     foreach ($subjects_code as $subject) {
                         $subjectInfo = getSubjectInfo($con, $subject);
