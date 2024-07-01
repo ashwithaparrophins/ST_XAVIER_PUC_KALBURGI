@@ -172,6 +172,253 @@ class Students extends BaseController
         }
     } 
 
+    function addNewStudent() {
+        if($this->isAdmin() == TRUE){
+            $this->loadThis();
+        } else {
+           // $data['termInfo'] = $this->student->getTermInfo();
+           $data['streamInfo'] = $this->student->getAllStreamName();
+             $data['religionInfo'] = $this->settings->getAllReligionInfo();
+            $data['nationalityInfo'] = $this->settings->getAllNationalityInfo();
+            log_message('debug','$nationalityInfo -->'.print_r($data['nationalityInfo'],true));
+            $data['casteInfo'] = $this->settings->getAllCasteInfo();
+            $data['categoryInfo'] = $this->settings->getAllCategoryInfo();
+            $this->global['pageTitle'] = ''.TAB_TITLE.' : Add New Student';
+            $this->loadViews("students/addStudentNew", $this->global,$data, NULL);
+        }
+    }
+    public function addStudentInfoToDB(){
+
+        if ($this->isAdmin() == true) {
+            $this->loadThis();
+        } else {
+            $this->load->library('form_validation');
+            $row_id = $this->input->post('row_id');
+            $this->form_validation->set_rules('student_name','Student Name','trim|required');
+            // $this->form_validation->set_rules('dob','DOB','required'); 
+            $this->form_validation->set_rules('gender','Gender','required');
+            $this->form_validation->set_rules('term_name','Term Name','trim|required');
+            //$this->form_validation->set_rules('date_of_admission','Date of Admission','required');
+            // $this->form_validation->set_rules('admission_no','Admission No','required'); 
+            $this->form_validation->set_rules('father_name', 'Father Name', 'trim|required');
+            $this->form_validation->set_rules('mother_name', 'Mother Name', 'trim|required');
+            $this->form_validation->set_rules('father_mobile_one','Father Mobile','required|numeric|min_length[10]');
+            $this->form_validation->set_rules('mother_mobile_one','Mother Mobile','required|numeric|min_length[10]');
+            // $this->form_validation->set_rules('permanent_address', 'Permanent Address', 'trim|required');
+            // $this->form_validation->set_rules('present_address', 'Present Address', 'trim|required');
+
+            if($this->form_validation->run() == FALSE) {
+                $this->studentDetails();
+            } else {
+                       $image_path="";
+                       $config=['upload_path' => './upload/',
+                       'allowed_types' => 'gif|jpg|png','overwrite' => TRUE,];
+                       $this->load->library('upload', $config);
+                       if($this->upload->do_upload())
+                       {
+                           $post=$this->input->post();
+                           $data=$this->upload->data();
+                           $image_path= base_url("upload/".$data['raw_name'].$data['file_ext']);
+                           $post['image_path']=$image_path;
+                    }   
+                log_message('debug','$image_path '.$image_path);
+                
+                $student_name = ucwords(strtolower($this->security->xss_clean($this->input->post('student_name'))));
+                $term_name =$this->security->xss_clean($this->input->post('term_name'));
+                 $section_name =$this->security->xss_clean($this->input->post('section_name'));
+                $sat_number =$this->security->xss_clean($this->input->post('sat_number'));
+                
+                $student_id =$this->security->xss_clean($this->input->post('student_id'));
+             
+                $application_no =$this->security->xss_clean($this->input->post('application_no'));
+                $date_of_admission =$this->security->xss_clean($this->input->post('date_of_admission'));
+                $stream_name = $this->security->xss_clean($this->input->post('stream_name'));
+                $gender = $this->security->xss_clean($this->input->post('gender'));
+                $nationality = $this->security->xss_clean($this->input->post('nationality_name'));
+                // log_message('debug','$nationality '.$nationality);
+                $religion_name = $this->security->xss_clean($this->input->post('religion_name'));
+                $category_name = $this->security->xss_clean($this->input->post('category_name'));
+                $mother_tongue = $this->security->xss_clean($this->input->post('mother_tongue'));
+                $present_address = $this->security->xss_clean($this->input->post('present_address'));
+                $permanent_address = $this->security->xss_clean($this->input->post('permanent_address'));
+                $dob = $this->security->xss_clean($this->input->post('dob'));
+                $father_name = $this->security->xss_clean($this->input->post('father_name'));
+                $father_mobile_one = $this->security->xss_clean($this->input->post('father_mobile_one'));
+                $father_email = $this->security->xss_clean($this->input->post('father_email'));
+                $father_aadhar = $this->security->xss_clean($this->input->post('father_aadhar'));
+                $father_profession = $this->security->xss_clean($this->input->post('father_profession'));
+                $mother_name = $this->security->xss_clean($this->input->post('mother_name'));
+                $mother_mobile_one = $this->security->xss_clean($this->input->post('mother_mobile_one'));
+                $mother_email = $this->security->xss_clean($this->input->post('mother_email'));
+                $mother_aadhar = $this->security->xss_clean($this->input->post('mother_aadhar'));
+                $mother_profession = $this->security->xss_clean($this->input->post('mother_profession'));
+                $blood_group = $this->security->xss_clean($this->input->post('blood_group'));
+                $email = $this->security->xss_clean($this->input->post('email'));
+                $aadhar_no = $this->security->xss_clean($this->input->post('aadhar_no'));
+                $house_name_id = $this->security->xss_clean($this->input->post('house_name_id'));
+                $previous_class = $this->security->xss_clean($this->input->post('previous_class'));
+                $caste = $this->security->xss_clean($this->input->post('caste'));
+                $sub_caste = $this->security->xss_clean($this->input->post('sub_caste'));
+                $guardian_name = $this->security->xss_clean($this->input->post('guardian_name'));
+                $guardian_mobile_no = $this->security->xss_clean($this->input->post('guardian_mobile_no'));
+                $guardian_email = $this->security->xss_clean($this->input->post('guardian_email'));
+
+                $doctor_name = $this->security->xss_clean($this->input->post('doctor_name'));
+                $doctor_mobile = $this->security->xss_clean($this->input->post('doctor_mobile'));
+                $allergies = $this->security->xss_clean($this->input->post('allergies'));
+                $chronic_ailment = $this->security->xss_clean($this->input->post('chronic_ailment'));
+                $history_of_surgeries = $this->security->xss_clean($this->input->post('history_of_surgeries'));
+                $other_health_issues = $this->security->xss_clean($this->input->post('other_health_issues'));
+                $name_for_emergency = $this->security->xss_clean($this->input->post('name_for_emergency'));
+                $emergency_mobile = $this->security->xss_clean($this->input->post('emergency_mobile'));
+                $relation_type = $this->security->xss_clean($this->input->post('relation_type'));
+                $place_of_birth =$this->security->xss_clean($this->input->post('place_of_birth'));
+                $district =$this->security->xss_clean($this->input->post('district'));
+                $taluk =$this->security->xss_clean($this->input->post('taluk'));
+                $state =$this->security->xss_clean($this->input->post('state'));
+                $pincode =$this->security->xss_clean($this->input->post('pincode'));
+                $bank_name =$this->security->xss_clean($this->input->post('bank_name'));
+                $bank_account_no =$this->security->xss_clean($this->input->post('bank_account_no'));
+                $branch_name =$this->security->xss_clean($this->input->post('branch_name'));
+                $ifsc_code =$this->security->xss_clean($this->input->post('ifsc_code'));
+                $parent_annual_income = $this->security->xss_clean($this->input->post('parent_annual_income'));
+                $no_of_dependent = $this->security->xss_clean($this->input->post('no_of_dependent'));
+                $previous_school = $this->security->xss_clean($this->input->post('previous_school'));
+                $previous_class = $this->security->xss_clean($this->input->post('previous_class'));
+                $previous_tc_no = $this->security->xss_clean($this->input->post('previous_tc_no'));
+                $tc_date = $this->security->xss_clean($this->input->post('tc_date'));
+                $village_name = $this->security->xss_clean($this->input->post('village_name'));
+                $pu_board_number =$this->security->xss_clean($this->input->post('pu_board_number'));
+                $hall_ticket_number =$this->security->xss_clean($this->input->post('hall_ticket_number'));
+                $father_annual_income =$this->security->xss_clean($this->input->post('father_annual_income'));
+                $mother_annual_income =$this->security->xss_clean($this->input->post('mother_annual_income'));
+                $father_qualification = $this->security->xss_clean($this->input->post('father_qualification'));
+                $mother_qualification = $this->security->xss_clean($this->input->post('mother_qualification'));
+                $is_handicapped = $this->security->xss_clean($this->input->post('is_handicapped'));
+                $is_dyslexic = $this->security->xss_clean($this->input->post('is_dyslexic'));
+                log_message('debug','$is_handicapped '.$is_handicapped);
+                log_message('debug','$is_dyslexic '.$is_dyslexic);
+                $type = $this->input->post('type');
+                $admission_status =$this->security->xss_clean($this->input->post('admission_status'));
+                $intake_year =$this->security->xss_clean($this->input->post('intake_year'));
+                $program_name =$this->security->xss_clean($this->input->post('program_name'));
+                $elective_sub =$this->security->xss_clean($this->input->post('elective_sub'));
+                // $special_course =$this->security->xss_clean($this->input->post('special_course'));
+                $last_studied =$this->security->xss_clean($this->input->post('last_studied'));
+                $admission_no =$this->security->xss_clean($this->input->post('admission_no'));
+                $percentage =$this->security->xss_clean($this->input->post('percentage'));
+                $sslc_marks =$this->security->xss_clean($this->input->post('sslc_marks'));
+                $primary_mobile =$this->security->xss_clean($this->input->post('primary_mobile'));
+            //     $admission_no = $this->student->getLastAdmissionNo();
+            //     if(empty($admission_no)){
+            //         $admission_no = 0;
+            //    }
+            //     $admission_no += 1;
+            //     //add 0000 to recept number
+            //     // $admission_number = sprintf('%04d', $admission_no);
+
+          
+            //     $admission_number = $admission_no . '/2024-25'; 
+
+
+
+              
+
+                if($admission_status == 1){
+                    
+                    $intake_year = '2024-25';
+                }
+
+                if($term_name == 'I PUC'){
+                    
+                    $intake_year_id = '2024';
+                }else{
+                    $intake_year_id = '2023';
+                }
+               
+            $studentInfo = array(
+                    'student_name'=>$student_name,
+                    'term_name'=>$term_name,
+                    'gender'=>$gender,
+                    'dob' => date('Y-m-d',strtotime($dob)),
+                    'student_id' =>$student_id,
+                    'register_no' =>$student_id,
+                    'date_of_admission' =>$date_of_admission,
+                    'admission_no'=>$admission_no,
+                    'application_no'=>$application_no,
+                    'sat_number'=>$sat_number,
+                    'section_name'=>$section_name,
+                    'blood_group'=>$blood_group,
+                    'email'=>$email,
+                    'aadhar_no'=>$aadhar_no,
+                    'caste' =>$caste,
+                    'sub_caste' =>$sub_caste,
+                    'nationality' =>$nationality,
+                    'category' =>$category_name,
+                    'religion' => $religion_name,
+                    'stream_name' => $stream_name,
+                    'mother_tongue' => $mother_tongue,
+                    'father_name'=>$father_name,
+                    'father_email'=>$father_email,
+                    'father_mobile'=>$father_mobile_one,
+                    'father_profession'=>$father_profession,
+                    'mother_name'=>$mother_name,
+                    'mother_email'=>$mother_email,
+                   
+                    'mother_mobile'=>$mother_mobile_one,
+                    'mother_profession'=>$mother_profession,
+                    'guardian_name'=>$guardian_name,
+                    'guardian_email'=>$guardian_email,
+                    // 'last_studied'=>$last_studied,
+                 
+                    'permanent_address'=>$permanent_address,
+                    'present_address'=>$present_address,
+                  
+                    'place_of_birth'=>$place_of_birth,
+                    'district'=>$district,
+                    'taluk'=>$taluk,
+                    'state'=>$state,
+                    'pincode'=>$pincode,
+                    'hall_ticket_no'=>$hall_ticket_number,
+                 
+                    'pu_board_number' =>$pu_board_number,
+                    'father_annual_income' =>$father_annual_income,
+                    'mother_annual_income' =>$mother_annual_income,
+                    'father_educational_qualification' =>$father_qualification,
+                    'mother_educational_qualification' =>$mother_qualification,
+                    'Is_physically_challenged' =>$is_handicapped,
+                    'is_dyslexic' =>$is_dyslexic,
+                   // 'is_admitted' => $type,
+                    'is_active' =>1,
+                    'intake_year_id' => $intake_year_id,
+                    'intake_year' =>$intake_year,
+                    'program_name' =>$program_name,
+                    'admission_status' =>$admission_status,
+                    // 'special_course' =>$special_course,
+                    'elective_sub' =>$elective_sub,
+                    'sslc_percentage' =>$percentage,
+                    'sslc_marks' =>$sslc_marks,
+                    'primary_mobile' =>$primary_mobile,
+                    'created_by'=>$this->staff_id,
+                    'created_date_time'=>date('Y-m-d H:i:s'));
+                    if(!empty($image_path)){
+                        $studentInfo['photo_url'] = $image_path;
+    
+                    }  
+                $result = $this->student->addStudentInfo($studentInfo);
+                    
+                 if($result > 0){
+
+                    $this->session->set_flashdata('success', 'Student Info Added Successfully');
+                } else {
+                    $this->session->set_flashdata('error', 'Student Adding  failed');
+                } 
+                redirect('addNewStudent');  
+        
+        }
+        }
+    }
+
     public function viewStudentInfoById($row_id = null) {
         if($this->isAdmin() == TRUE  ){
             $this->loadThis();
@@ -436,6 +683,13 @@ class Students extends BaseController
                 $sub_caste = $this->security->xss_clean($this->input->post('sub_caste'));
                 $route = $this->input->post('route');
 
+                $state = $this->security->xss_clean($this->input->post('state'));
+                $pincode = $this->security->xss_clean($this->input->post('pincode'));
+                $aadhar_no = $this->security->xss_clean($this->input->post('aadhar_no'));
+                $place_of_birth = $this->security->xss_clean($this->input->post('place_of_birth'));
+                $taluk = $this->security->xss_clean($this->input->post('taluk'));
+                $district = $this->security->xss_clean($this->input->post('district'));
+
                 
                 $father_name = $this->security->xss_clean($this->input->post('father_name'));
                 $father_educational_qualification = $this->security->xss_clean($this->input->post('father_educational_qualification'));
@@ -475,7 +729,7 @@ class Students extends BaseController
                     'sub_caste' => $sub_caste, 
                     'blood_group'=> $blood_group,
                     'present_address'=> $present_address,
-                    'residential_address' => $permanent_address,
+                    'permanent_address' => $permanent_address,
                     'Is_physically_challenged' => $is_handicapped,
                     'is_dyslexic' => $is_dyslexic,
                     'father_name' => $father_name,
@@ -485,12 +739,18 @@ class Students extends BaseController
                     'father_mobile' => $father_mobile,
                     'father_email' => $father_email,
                     'mother_name' => $mother_name,
+                    'state' => $state,
+                    'pincode' => $pincode,
+                    'aadhar_no' => $aadhar_no,
                     'mother_educational_qualification'=> $mother_educational_qualification,
                     'mother_profession'=> $mother_profession,
                     'mother_annual_income' => $mother_annual_income,
                     'mother_mobile' => $mother_mobile,
                     'mother_email' => $mother_email,
                     'primary_mobile' => $primary_mobile,
+                    'place_of_birth' => $place_of_birth,
+                    'taluk' => $taluk,
+                    'district' => $district,
                     'route_id' => $route,
                     'updated_by'=>$this->staff_id, 
                     'updated_date_time'=>date('Y-m-d H:i:s'),

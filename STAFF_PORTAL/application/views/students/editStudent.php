@@ -77,7 +77,7 @@ if ($error) {
                                                 <div class="table-responsive-sm table-responsive-md table-responsive-xs">
                                                     <table class="table table-bordered table-striped table_edit_student">
                                                         <tr>
-                                                            <td style="background:white" width="100" rowspan="7" class="p-0">
+                                                            <td style="background:white" width="100" rowspan="8" class="p-0">
                                                                 <div class="profile-img">
                                                                 <?php
                                                         $profileImg = $studentInfo->photo_url;
@@ -246,6 +246,76 @@ if ($error) {
                                                           
                                                         </tr>
                                                         <tr>
+                                                            <th class="tbl-head">State</th>
+                                                            <th>
+                                                                <div class="form-group mb-0">
+                                                                    <div class="form-group mb-0">
+                                                                        <input value="<?php echo $studentInfo->state; ?>" type="text" 
+                                                                        class="form-control required" placeholder="State" 
+                                                                        id="state" name="state" maxlength="280" autocomplete="off">
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+
+
+                                                            <th class="tbl-head">Pincode</th>
+                                                            <th>
+                                                                <div class="form-group mb-0">
+                                                                    <div class="form-group mb-0">
+                                                                        <input value="<?php echo $studentInfo->pincode; ?>" type="text" 
+                                                                        class="form-control required" placeholder="Pincode" 
+                                                                        id="pincode" name="pincode" maxlength="280" autocomplete="off">
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+                                                            <th class="tbl-head">Aadhar No</th>
+                                                            <th>
+                                                                <div class="form-group mb-0">
+                                                                    <div class="form-group mb-0">
+                                                                        <input value="<?php echo $studentInfo->aadhar_no; ?>" type="text" 
+                                                                        class="form-control required" placeholder="Aadhar No" onkeypress="return isNumberKey(event)"
+                                                                        id="aadhar_no" name="aadhar_no" maxlength="12" minlength="12" autocomplete="off">
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+
+                                                        </tr>
+                                                        <tr>
+                                                        <th class="tbl-head">Place of Birth</th>
+                                                            <th>
+                                                                <div class="form-group mb-0">
+                                                                    <div class="form-group mb-0">
+                                                                        <input value="<?php echo $studentInfo->place_of_birth; ?>" type="text" 
+                                                                        class="form-control required" placeholder="Place of Birth" 
+                                                                        id="place_of_birth" name="place_of_birth" maxlength="280" autocomplete="off">
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+
+
+                                                            <th class="tbl-head">Taluk</th>
+                                                            <th>
+                                                                <div class="form-group mb-0">
+                                                                    <div class="form-group mb-0">
+                                                                        <input value="<?php echo $studentInfo->taluk; ?>" type="text" 
+                                                                        class="form-control required" placeholder="Taluk" 
+                                                                        id="taluk" name="taluk" maxlength="280" autocomplete="off">
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+                                                            <th class="tbl-head">District</th>
+                                                            <th>
+                                                                <div class="form-group mb-0">
+                                                                    <div class="form-group mb-0">
+                                                                        <input value="<?php echo $studentInfo->district; ?>" type="text" 
+                                                                        class="form-control required" placeholder="District"
+                                                                        id="district" name="district" autocomplete="off">
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+
+                                                        </tr>
+                                                        <tr>
                                                             <th class="tbl-head" >Transport Route</th>
                                                             <th width="240">
                                                                 <div class="form-group mb-0 input_mobile_width">
@@ -321,7 +391,7 @@ if ($error) {
                                                             <div class="card-body p-1">
                                                             <div class="form-group mb-0">
                                                                 <textarea type="text" rows="4" class="form-control required p-1" placeholder="Permanent Address" id="permanent_address"
-                                                                 name="permanent_address"autocomplete="off"><?php echo $studentInfo->residential_address; ?></textarea>
+                                                                 name="permanent_address"autocomplete="off"><?php echo $studentInfo->permanent_address; ?></textarea>
                                                             </div>
                                                             </div>
                                                         </div>

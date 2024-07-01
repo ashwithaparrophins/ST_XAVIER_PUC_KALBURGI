@@ -103,7 +103,7 @@
                                             <div class="table-responsive-sm table-responsive-md table-responsive-xs">
                                                 <table class="table table-bordered">
                                                     <tr>
-                                                        <td style="background:white" width="160" rowspan="7" class="p-0">
+                                                        <td style="background:white" width="160" rowspan="8" class="p-0">
                                                             <div class="profile-img">
                                                         
                                                             <?php  ;
@@ -176,6 +176,36 @@
                                                             <?php echo $studentInfo->mobile; ?>
                                                         </th>
                                                     </tr>
+                                                    <tr>
+                                                    <th class="tbl-head">State</th>
+                                                        <th class="tbl-head-content">
+                                                            <?php echo $studentInfo->state; ?>
+                                                        </th>
+                                                        <th class="tbl-head">Pincode</th>
+                                                        <th class="tbl-head-content text-uppercase">
+                                                            <?php echo $studentInfo->pincode; ?>
+                                                        </th>
+                                                        <th class="tbl-head">Aadhar No</th>
+                                                        <th class="tbl-head-content text-uppercase">
+                                                            <?php echo $studentInfo->aadhar_no; ?>
+                                                        </th>
+                                                    
+                                                    </tr>
+                                                    <tr>
+                                                    <th class="tbl-head">Place of Birth</th>
+                                                        <th class="tbl-head-content">
+                                                            <?php echo $studentInfo->place_of_birth; ?>
+                                                        </th>
+                                                        <th class="tbl-head">Taluk</th>
+                                                        <th class="tbl-head-content text-uppercase">
+                                                            <?php echo $studentInfo->taluk; ?>
+                                                        </th>
+                                                        <th class="tbl-head">District</th>
+                                                        <th class="tbl-head-content text-uppercase">
+                                                            <?php echo $studentInfo->district; ?>
+                                                        </th>
+                                                    
+                                                    </tr>
 
                                                     <tr>
                                                         <th class="tbl-head">Primary Mobile</th>
@@ -238,7 +268,7 @@
                                                         <div class="card-header head-title text-center p-1 tbl-head">
                                                             <span style="font-size:16px; font-weight:900">Permanent Address</span></div>
                                                         <div class="card-body p-1 tbl-head-content font-weight-bold">
-                                                            <?php echo $studentInfo->residential_address; ?>
+                                                            <?php echo $studentInfo->permanent_address; ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -248,7 +278,9 @@
                                                     <tr>
                                                         <th class="tbl-head" width="250">Physically Challenged</th>
                                                         <th class="tbl-head-content">
-                                                            <?php if($studentInfo->Is_physically_challenged == 0){ echo "No"; } else { echo "Yes"; } ?> 
+                                                            <?php //if($studentInfo->Is_physically_challenged == 0){ echo "No"; } else { echo "Yes"; } ?> 
+                                                        <?php echo $studentInfo->Is_physically_challenged; ?> 
+
                                                         </th>
                                                         <th class="tbl-head" width="250">Dyslexia</th>
                                                         <th class="tbl-head-content">
@@ -289,9 +321,13 @@
                                                 <th class="tbl-head">SAT Number</th>
                                                     <th class="tbl-head-content"><?php echo $studentInfo->sat_number; ?></th>
                                                     <th class="tbl-head">Date of Join</th>
-                                                    <th class="tbl-head-content"><?php echo date('d-m-Y',strtotime($studentInfo->doj)); ?></th>
+                                                    <th class="tbl-head-content"><?php if($studentInfo->doj == '0000-00-00' || $studentInfo->doj == '1970-01-01' || is_null($studentInfo->doj)){   
+                                                      echo '';}else{ echo date('d-m-Y',strtotime($studentInfo->doj));} ?></th>
+                                                      <th class="tbl-head">Admission No</th>
+                                                      <th class="tbl-head-content"><?php echo strtoupper($studentInfo->admission_no); ?></th>
 
                                                     </tr>
+                                                    
                                             </table>
                                         </div>
                                         <div class="tab-pane fade" id="first_unit_test" role="tabpanel" aria-labelledby="first_unit_test-tab">

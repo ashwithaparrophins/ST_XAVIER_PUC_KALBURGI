@@ -200,8 +200,8 @@ class students_model extends CI_Model
     }
 
     public function getStudentsInfoById($row_id=''){
-        $this->db->select('student.row_id,student.blood_group,student.student_no,student.application_no,student.register_no, student.cancel_bus_status,
-        student.student_id,student.hall_ticket_no,student.admission_no,student.admission_number,student.student_name,student.elective_sub,student.dob,student.mobile,student.email,
+        $this->db->select('student.row_id,student.blood_group,student.student_no,student.application_no,student.register_no, student.cancel_bus_status,student.place_of_birth,student.taluk,student.district,student.state,
+        student.student_id,student.hall_ticket_no,student.admission_no,student.admission_number,student.student_name,student.elective_sub,student.dob,student.mobile,student.email,student.pincode,student.aadhar_no,student.photo_url,
         student.date_of_admission,student.roll_number,student.gender,student.student_status,student.residential_address,student.nationality,student.mother_educational_qualification,student.mother_annual_income,
         student.pu_board_number,student.category,student.last_board_name,student.present_address,student.permanent_address,student.religion,student.father_email,student.mother_profession,student.mother_email,
         student.father_name,student.father_mobile,student.mother_name,student.mother_mobile,student.program_name,student.stream_name,student.father_profession,student.father_annual_income,
@@ -1916,4 +1916,14 @@ class students_model extends CI_Model
         return $query->result();
     }
 
+    public function addStudentInfo($studentInfo) {
+        $this->db->trans_start();
+        $this->db->insert('tbl_students_info', $studentInfo);
+        $insert_id = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $insert_id;
     }
+
+
+
+}

@@ -222,6 +222,7 @@ $route['updateStdInfo'] = "settings/updateStdInfo";
 $route['studentDetails'] = "students/studentDetails";
 $route['studentDetails/(:any)'] = "students/studentDetails/$1";
 $route['addNewStudent'] = "students/addNewStudent";
+$route['addStudentInfoToDB'] = "students/addStudentInfoToDB";
 $route['get_students'] = "students/get_students";
 $route['viewStudentInfoById/(:any)'] = "students/viewStudentInfoById/$1";
 $route['editStudent/(:any)'] = "students/editStudent/$1";

@@ -573,9 +573,14 @@
 
 .bootstrap-select,
 .form-control {
-    border: 1px solid #e1e5eb !important;
+    border: 1px solid #090a0a !important;
 }
-
+.input-group-prepend {
+    border: 1px solid #101011 !important;
+}
+.input-group-append {
+    border: 1px solid #101011 !important;
+}
 label {
     display: inline-block;
     font-weight: 500 !important;

@@ -100,6 +100,7 @@ if ($error) {
                                         <!-- <a class="dropdown-item" href="#" id="study_certificate"><i class="fa fa-file"></i> Study Certificate</a>
                                         <div class="dropdown-divider m-0"></div> -->
                                         <?php if($role != ROLE_TEACHING_STAFF){ ?>
+                                      <a class="dropdown-item" onclick="showLoader();" href="<?php echo base_url(); ?>addNewStudent"><i class="fa fa-plus"></i> Add New</a>
                                         <a class="dropdown-item" href="#" id="conduct_certificate"><i class="fa fa-file"></i> Conduct Certificate</a>
                                         <div class="dropdown-divider m-0"></div>
                                         <a class="dropdown-item" href="#" id="first_year_hall_ticket"><i class="fa fa-file"></i> Hall ticket</a>
