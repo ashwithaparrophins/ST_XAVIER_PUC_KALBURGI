@@ -44,6 +44,48 @@ class ApiAdmin extends CI_Controller
          echo $data;
      }
 
+     public function GetPrincipalName()
+    {
+        log_message('debug', 'I HAVE BEEN HIT STAFF');
+
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json, true);
+        $filter = array();
+        $filter['role'] = '1';
+        $result = $this->staff->getStaffByRole($filter);
+        log_message('debug', 'data11' . $result);
+        $data = json_encode($result);
+
+        echo $data;
+    }
+
+    public function GetPrimaryAdminName()
+    {
+        log_message('debug', 'I HAVE BEEN HIT STAFF');
+
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json, true);
+        $filter = array();
+        $filter['role'] = '15';
+        $result = $this->staff->getStaffByRole($filter);
+        log_message('debug', 'data11' . $result);
+        $data = json_encode($result);
+
+        echo $data;
+    }
+
+    public function getInstutitionName()
+    {
+        log_message('debug', 'I HAVE BEEN HIT STAFF');
+
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json, true);
+        $baseUrl = base_url();
+        $data = json_encode(['baseUrl' => $baseUrl]); // Encode the base URL in a JSON object.
+        echo $data;
+    }
+
+
 
 }
 ?>

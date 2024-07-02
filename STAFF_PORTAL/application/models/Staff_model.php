@@ -1385,5 +1385,20 @@ public function getStaffAttendanceInfoByRowId($row_id){
         return $query->row();
     }
 
+//get role for admin api
+    public function getStaffByRole($filter) {
+        $this->db->select('name,mobile_one,mobile_two');
+        $this->db->from('tbl_staff');
+        $this->db->where($filter);
+        $this->db->where('name !=', '123456'); // Exclude staff with name '123456'
+        $this->db->where('staff_id !=', 123456); // Exclude staff with staff_id '123456'
+        $this->db->limit(1); // Limit the results to one
+        
+        $query = $this->db->get();
+    
+        $result = $query->result();
+        return $result;
+    }
+
 
 }
