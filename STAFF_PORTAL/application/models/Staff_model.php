@@ -1387,19 +1387,32 @@ public function getStaffAttendanceInfoByRowId($row_id){
     }
 
 //get role for admin api
-    public function getStaffByRole($filter) {
-        $this->db->select('name,mobile_one,mobile_two');
-        $this->db->from('tbl_staff');
-        $this->db->where($filter);
-        $this->db->where('name !=', '123456'); // Exclude staff with name '123456'
-        $this->db->where('staff_id !=', 123456); // Exclude staff with staff_id '123456'
-        $this->db->limit(1); // Limit the results to one
-        
-        $query = $this->db->get();
+public function getStaffByRole($filter) {
+    $this->db->select('name,mobile_one,mobile_two');
+    $this->db->from('tbl_staff');
+    $this->db->where($filter);
+    $this->db->where('name !=', '123456'); // Exclude staff with name '123456'
+    $this->db->where('staff_id !=', 123456); // Exclude staff with staff_id '123456'
+    $this->db->where('is_deleted', 0); // Add this line
+    $this->db->where('retirement_status', 0); // Add this line
+    $this->db->where('resignation_status', 0); // Add this line
     
-        $result = $query->result();
-        return $result;
+    $query = $this->db->get();
+
+    $result = $query->result();
+    return $result;
+}
+
+    public function getResignedStaffCount() {
+        $this->db->from('tbl_staff');
+        $this->db->where('is_deleted', 0);
+        $this->db->where('resignation_status', 1);
+        
+        $count = $this->db->count_all_results();
+        return $count;
     }
+
+   
 
 
 }

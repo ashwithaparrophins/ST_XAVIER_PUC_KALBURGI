@@ -44,6 +44,16 @@ class ApiAdmin extends CI_Controller
          echo $data;
      }
 
+     public function GetResignedStaffCountApi()
+     {
+         log_message('debug', 'I HAVE BEEN HIT');
+         $json = file_get_contents('php://input');
+         $obj = json_decode($json, true);     
+         $result = $this->staff->getResignedStaffCount();
+         $data = json_encode($result);
+         echo $data;
+     }
+
      public function GetPrincipalName()
     {
         log_message('debug', 'I HAVE BEEN HIT STAFF');
