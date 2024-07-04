@@ -23,6 +23,7 @@ class Staff_model extends CI_Model
         $this->db->where('staff.staff_id !=', '123456');
         $this->db->where('Role.roleId !=', '50');
         $this->db->where('staff.resignation_status', 0);
+        $this->db->where('staff.retirement_status',0);
         $this->db->where('staff.is_deleted', 0);
         $query = $this->db->get();
         return $query->num_rows();
