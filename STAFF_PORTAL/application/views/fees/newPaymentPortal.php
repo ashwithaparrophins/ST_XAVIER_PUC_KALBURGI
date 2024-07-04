@@ -267,7 +267,7 @@ if ($error) {
                                                         </tr>
                                                         <?php } ?>
 
-                                                    <?php if ($term_name == "II PUC" && $studentInfo->intake_year != '2024-25') { ?>
+                                                    <?php if ($term_name == "II PUC" && $studentInfo->intake_year != '2024-2025') { ?>
                                                     <tr class="table-danger text-white">
                                                         <th class="text-left" scope="col">I PUC Balance</th>
                                                         <th class="text-left" scope="col">
