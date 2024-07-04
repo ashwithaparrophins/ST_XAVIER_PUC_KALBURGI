@@ -105,9 +105,9 @@ class Students extends BaseController
                 }
                // ENDDD
             $count = $this->student->getAllstudentInfoCount($filter,$student_row_id);
-            $newAdmittedCount = $this->student->getAllstudentNewAdmiitedCount($filter,$student_row_id);
+            // $newAdmittedCount = $this->student->getAllstudentNewAdmiitedCount($filter,$student_row_id);
             $returns = $this->paginationCompress("studentDetails/", $count, 100);
-            $data['totalCount'] = $count - $newAdmittedCount;
+            $data['totalCount'] = $count;
             // log_message('debug','as'.print_r( $data['totalCount'],true));
             $filter['page'] = $returns["page"];
             $filter['segment'] = $returns["segment"];
