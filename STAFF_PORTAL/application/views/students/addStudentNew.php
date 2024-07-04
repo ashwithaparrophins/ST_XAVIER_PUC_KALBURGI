@@ -226,11 +226,11 @@ if ($error) {
                                             <label for="intake_year">Intake year<span class="text-danger required_star">*</span></label>
                                             <select class="form-control" id="intake_year" name="intake_year" required>
                                                 <option value="">Select Intake year</option>
-                                                <option value="2024-25">2024-25</option>
-                                                <option value="2023-24">2023-24</option>
-                                                <option value="2022-23">2022-23</option>
-                                                <option value="2021-22">2021-22</option>
-                                                <option value="2020-21">2020-21</option>
+                                                <option value="2024-2025">2024-25</option>
+                                                <option value="2023-2024">2023-24</option>
+                                                <option value="2022-2023">2022-23</option>
+                                                <option value="2021-2022">2021-22</option>
+                                                <option value="2020-2021">2020-21</option>
                                             </select>
                                     </div>
 
@@ -796,8 +796,8 @@ if ($error) {
                                                 <label for="is_handicapped">Physically Challenged<span
                                                         class="text-danger"></span></label>
                                                 <select class="form-control" id="is_handicapped" name="is_handicapped" required>
-                                                    <option value="YES">YES</option>
                                                     <option value="NO">NO</option>
+                                                    <option value="YES">YES</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -806,8 +806,8 @@ if ($error) {
                                                 <label for="is_dyslexic">Dyslexia<span
                                                         class="text-danger"></span></label>
                                                 <select class="form-control" id="is_dyslexic" name="is_dyslexic" required>
-                                                    <option value="YES">YES</option>
                                                     <option value="NO">NO</option>
+                                                    <option value="YES">YES</option>
                                                 </select>
                                             </div>
                                         </div>
