@@ -109,7 +109,7 @@ class Staffs extends BaseController
                 strtoupper($staff_name),
                 $staff->department,
                 $staff->role,
-                $staff->mobile,
+                $staff->mobile_one,
                 $staffViewMore.' '.$editButton.' '.$deleteButton.' '.$viewFeedback.' '.$printFeedback.' '.$printFeedback22
                 );
             }
@@ -1862,25 +1862,27 @@ public function addNewStaffAttendance(){
         } 
     }
 
-    public function updateLeaveInfo(){
+    public function updateLeaveInfo()
+    {
         if ($this->isAdmin() == true) {
             $this->loadThis();
         } else {
             $this->active_status = 'leave_info';
-            $row_id =$this->security->xss_clean($this->input->post('row_id_leave')); 
-            $staff_id = $this->security->xss_clean($this->input->post('staff_id_leave')); 
-            $casual_leave =$this->security->xss_clean($this->input->post('casual_leave')); 
-            $sick_leave =$this->security->xss_clean($this->input->post('sick_leave')); 
-            $paternity_leave =$this->security->xss_clean($this->input->post('paternity_leave'));
-            $maternity_leave =$this->security->xss_clean($this->input->post('maternity_leave')); 
-            $marriage_leave =$this->security->xss_clean($this->input->post('marriage_leave')); 
-            $earned_leave = $this->security->xss_clean($this->input->post('earned_leave_earned')); 
-            $leave_year = $this->security->xss_clean($this->input->post('leave_year')); 
-            $lop =$this->security->xss_clean($this->input->post('lop')); 
+            $row_id = $this->security->xss_clean($this->input->post('row_id_leave'));
+            $staff_id = $this->security->xss_clean($this->input->post('staff_id_leave'));
+            $casual_leave = $this->security->xss_clean($this->input->post('casual_leave'));
+            $sick_leave = $this->security->xss_clean($this->input->post('sick_leave'));
+            $paternity_leave = $this->security->xss_clean($this->input->post('paternity_leave'));
+            $maternity_leave = $this->security->xss_clean($this->input->post('maternity_leave'));
+            $marriage_leave = $this->security->xss_clean($this->input->post('marriage_leave'));
+            $earned_leave = $this->security->xss_clean($this->input->post('earned_leave_earned'));
+            $official_duty = $this->security->xss_clean($this->input->post('official_duty')); 
+            $leave_year = $this->security->xss_clean($this->input->post('leave_year'));
+            // $lop =$this->security->xss_clean($this->input->post('lop')); 
 
             // $leaveInfo = $this->leave->getLeaveInfoByStaffId($staff_id);
-            $leaveInfo = $this->leave->getLeaveInfoByStaffIdYear($staff_id,$leave_year);
-            if($leaveInfo == NULL){
+            $leaveInfo = $this->leave->getLeaveInfoByStaffIdYear($staff_id, $leave_year);
+            if ($leaveInfo == NULL) {
                 $leaveInfo = array(
                     'staff_id' => $staff_id,
                     'casual_leave_earned' => $casual_leave,
@@ -1889,19 +1891,20 @@ public function addNewStaffAttendance(){
                     'paternity_leave_earned' => $paternity_leave,
                     'maternity_leave_earned' => $maternity_leave,
                     'earned_leave' => $earned_leave,
-                    'lop_leave' => $lop,
-                    'year' => $leave_year,                
+                    // 'lop_leave' => $lop,
+                    'official_duty_earned' => $official_duty,
+                    'year' => $leave_year,
                     'created_by' => $this->staff_id,
                     'created_date_time' => date('Y-m-d H:i:s')
                 );
                 $return = $this->leave->addStaffLeaveInfo($leaveInfo);
-                if($return > 0) {
+                if ($return > 0) {
                     $this->session->set_flashdata('success', 'Leave details Added Successfully');
                 } else {
                     $this->session->set_flashdata('error', 'Leave Details Update failed');
                 }
-                redirect('editStaff/'.$row_id);
-            }else{
+                redirect('editStaff/' . $row_id);
+            } else {
                 $leaveInfo = array(
                     'staff_id' => $staff_id,
                     'casual_leave_earned' => $casual_leave,
@@ -1909,61 +1912,63 @@ public function addNewStaffAttendance(){
                     'marriage_leave_earned' => $marriage_leave,
                     'paternity_leave_earned' => $paternity_leave,
                     'earned_leave' => $earned_leave,
-                    'lop_leave' => $lop,  
+                    // 'lop_leave' => $lop,  
+                    'official_duty_earned' => $official_duty,
                     'maternity_leave_earned' => $maternity_leave,
                     'created_by' => $this->staff_id,
                     'updated_date_time' => date('Y-m-d H:i:s')
                 );
                 // $return = $this->leave->updateStaffLeaveInfo($leaveInfo, $staff_id);
-                $return = $this->leave->updateStaffLeaveInfoByYearNew($leaveInfo, $staff_id,$leave_year);
-                if($return) {
+                $return = $this->leave->updateStaffLeaveInfoByYearNew($leaveInfo, $staff_id, $leave_year);
+                if ($return) {
                     $this->session->set_flashdata('success', 'Leave details Updated Successfully');
                 } else {
                     $this->session->set_flashdata('error', 'Leave Details Update failed');
                 }
-                redirect('editStaff/'.$row_id);
+                redirect('editStaff/' . $row_id);
             }
-            
         }
     }
 
-    public function updateLeaveInfoByStaffId(){
+    public function updateLeaveInfoByStaffId()
+    {
         if ($this->isAdmin() == true) {
             $this->loadThis();
         } else {
             // $this->active_status = 'leave_info';
-            $row_id =$this->security->xss_clean($this->input->post('row_id_leave')); 
-            $staff_id = $this->security->xss_clean($this->input->post('staff_id_leave')); 
-            $year = $this->security->xss_clean($this->input->post('year')); 
-            $casual_leave =$this->security->xss_clean($this->input->post('casual_leave_earned')); 
-            $sick_leave =$this->security->xss_clean($this->input->post('sick_leave_earned')); 
-            $paternity_leave =$this->security->xss_clean($this->input->post('paternity_leave_earned'));
-            $maternity_leave =$this->security->xss_clean($this->input->post('maternity_leave_earned')); 
-            $marriage_leave =$this->security->xss_clean($this->input->post('marriage_leave_earned')); 
-            $earned_leave =$this->security->xss_clean($this->input->post('earned_leave')); 
-            $lop =$this->security->xss_clean($this->input->post('lop_leave')); 
-    
-                $leaveInfo = array(
-                
-                    'casual_leave_earned' => $casual_leave,
-                    'sick_leave_earned' => $sick_leave,
-                    'marriage_leave_earned' => $marriage_leave,
-                    'paternity_leave_earned' => $paternity_leave,
-                    'earned_leave' => $earned_leave,
-                    'maternity_leave_earned' => $maternity_leave,
-                    'lop_leave' => $lop,
-                    'created_by' => $this->staff_id,
-                    'updated_date_time' => date('Y-m-d H:i:s')
-                );
-                $return = $this->leave->updateStaffLeaveInfoByYearNew($leaveInfo, $staff_id,$year);
-                if($return) {
-                    $this->session->set_flashdata('success', 'Leave details Updated Successfully');
-                } else {
-                    $this->session->set_flashdata('error', 'Leave Details Update failed');
-                }
-                redirect('editStaff/'.$row_id);
+            $row_id = $this->security->xss_clean($this->input->post('row_id_leave'));
+            $staff_id = $this->security->xss_clean($this->input->post('staff_id_leave'));
+            $year = $this->security->xss_clean($this->input->post('year'));
+            $casual_leave = $this->security->xss_clean($this->input->post('casual_leave_earned'));
+            $sick_leave = $this->security->xss_clean($this->input->post('sick_leave_earned'));
+            $paternity_leave = $this->security->xss_clean($this->input->post('paternity_leave_earned'));
+            $maternity_leave = $this->security->xss_clean($this->input->post('maternity_leave_earned'));
+            $marriage_leave = $this->security->xss_clean($this->input->post('marriage_leave_earned'));
+            $official_duty_earned = $this->security->xss_clean($this->input->post('official_duty_earned'));
+            $earned_leave = $this->security->xss_clean($this->input->post('earned_leave'));
+            // $lop =$this->security->xss_clean($this->input->post('lop_leave')); 
+
+            $leaveInfo = array(
+
+                'casual_leave_earned' => $casual_leave,
+                'sick_leave_earned' => $sick_leave,
+                'marriage_leave_earned' => $marriage_leave,
+                'official_duty_earned' => $official_duty_earned,
+                'paternity_leave_earned' => $paternity_leave,
+                'earned_leave' => $earned_leave,
+                'maternity_leave_earned' => $maternity_leave,
+                // 'lop_leave' => $lop,
+                'created_by' => $this->staff_id,
+                'updated_date_time' => date('Y-m-d H:i:s')
+            );
+            $return = $this->leave->updateStaffLeaveInfoByYearNew($leaveInfo, $staff_id, $year);
+            if ($return) {
+                $this->session->set_flashdata('success', 'Leave details Updated Successfully');
+            } else {
+                $this->session->set_flashdata('error', 'Leave Details Update failed');
             }
-            
+            redirect('editStaff/' . $row_id);
+        }
     }
 
     public function updateSalaryInfo(){

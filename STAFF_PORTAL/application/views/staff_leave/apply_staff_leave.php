@@ -104,28 +104,44 @@ input[type=number]::-webkit-outer-spin-button {
                                                 <div class="row">
                                                     <div class="col-lg-3 col-md-3 col-12">
                                                         <div class="form-group">
-                                                            <label for="exampleInputEmail1">Leave Date From</label>
-                                                            <input type="text" class="ldatefrom form-control"
-                                                            autocomplete="off" name="fromDate" id="fromDate" placeholder="Date From"
-                                                                required autocomplete="off">
+                                                            <label for="leave_type">Leave Type</label>
+                                                            <select name="leave_type" class="form-control" id="leaveType" required>
+                                                            <option value="">Select Leave Type</option>
+                                                                <?php if(($leaveInfo->casual_leave_earned - $used_leave_cl->total_days_leave) != 0 ){ ?>
+                                                                <option value="CL">Casual Leave(CL) (rem: <?php echo $leaveInfo->casual_leave_earned - $used_leave_cl->total_days_leave; ?>)</option>
+                                                                <?php } ?>
+                                                                <?php if(($leaveInfo->sick_leave_earned - $used_leave_ml->total_days_leave) != 0 ){ ?>
+                                                                <option value="ML">Medical Leave(ML)(rem: <?php echo $leaveInfo->sick_leave_earned - $used_leave_ml->total_days_leave; ?>)</option>
+                                                                <?php } ?>
+                                                                <?php if(($leaveInfo->marriage_leave_earned - $used_leave_marl->total_days_leave) != 0 ){ ?>
+                                                                <option value="MARL">Marriage Leave(ML)(rem: <?php echo $leaveInfo->marriage_leave_earned - $used_leave_marl->total_days_leave; ?>)</option>
+                                                                <?php } ?>
+                                                                <?php if(($leaveInfo->paternity_leave_earned - $used_leave_pl->total_days_leave) != 0 ){ ?>
+
+                                                                <option value="PL">Paternity Leave(PL)(rem: <?php echo $leaveInfo->paternity_leave_earned - $used_leave_pl->total_days_leave;?>)</option>
+                                                                <?php } ?>
+                                                                <?php if(($leaveInfo->maternity_leave_earned - $used_leave_matl->total_days_leave) != 0 ){ ?>
+
+                                                                <option value="MATL">Maternity Leave(ML)(rem: <?php echo $leaveInfo->maternity_leave_earned - $used_leave_matl->total_days_leave;?>)</option>
+                                                                <?php } ?>
+                                                                <?php if(($leaveInfo->earned_leave - $used_leave_el->total_days_leave) != 0 ){ ?>
+
+                                                                <option value="EL">Earned Leave(EL)(rem: <?php echo $leaveInfo->earned_leave - $used_leave_el->total_days_leave;?>)</option>
+                                                                <?php } ?>
+                                                                <?php if(($leaveInfo->official_duty_earned - $used_leave_od->total_days_leave) != 0 ){ ?>
+
+                                                                <option value="OD">Offical Duty(OD)(rem: <?php echo $leaveInfo->official_duty_earned - $used_leave_od->total_days_leave;?>)</option>
+                                                                <?php } ?>
+                                                                <option value='LOP'>Loss Of Pay(LOP)</option>
+                                                            </select>
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-lg-3 col-md-3 col-12">
-                                                        <div class="form-group">
-                                                            <label for="exampleInputEmail1">Leave Date To</label>
-                                                            <input type="text" class="ldateto form-control"
-                                                            autocomplete="off" name="toDate" id="toDate" placeholder="Date To"
-                                                                required autocomplete="off">
-                                                        </div>
-                                                    </div>
-
                                                     <div class="col-lg-3 col-md-3 col-12">
                                                         <div class="form-group">
                                                             <label for="exampleInputEmail1">Total Number of
                                                                 Leave</label>
                                                             <input min="0" max="31" step=".10"  placeholder="Total Number of Leave"
-                                                                class=" form-control" name="total_leave_days"
+                                                                class=" form-control" name="total_leave_days" id="days_no"
                                                                 type="number" list="leaves" required />
                                                             <datalist id="leaves">
                                                                 <option value="0.5">Half Day</option>
@@ -152,32 +168,27 @@ input[type=number]::-webkit-outer-spin-button {
                                                             </datalist>
                                                         </div>
                                                     </div>
-
                                                     <div class="col-lg-3 col-md-3 col-12">
                                                         <div class="form-group">
-                                                            <label for="leave_type">Leave Type</label>
-                                                            <select name="leave_type" class="form-control" id="leaveType" required>
-                                                                <?php if(($leaveInfo->casual_leave_earned - $leaveInfo->casual_leave_used) != 0 ){ ?>
-                                                                <option value="CL">Casual Leave(CL)</option>
-                                                                <?php } ?>
-                                                                <?php if(($leaveInfo->sick_leave_earned - $leaveInfo->sick_leave_used) != 0 ){ ?>
-                                                                <option value="ML">Medical Leave(ML)</option>
-                                                                <?php } ?>
-                                                                <?php if(($leaveInfo->marriage_leave_earned - $leaveInfo->marriage_leave_used) != 0 ){ ?>
-                                                                <option value="MARL">Marriage Leave(ML)</option>
-                                                                <?php } ?>
-                                                                <?php if(($leaveInfo->paternity_leave_earned - $leaveInfo->paternity_leave_used) != 0 ){ ?>
-
-                                                                <option value="PL">Paternity Leave(PL)</option>
-                                                                <?php } ?>
-                                                                <?php if(($leaveInfo->maternity_leave_earned - $leaveInfo->maternity_leave_used) != 0 ){ ?>
-
-                                                                <option value="MATL">Maternity Leave(ML)</option>
-                                                                <?php } ?>
-                                                                <option value='LOP'>Loss Of Pay(LOP)</option>
-                                                            </select>
+                                                            <label for="exampleInputEmail1">Leave Date From</label>
+                                                            <input type="text" class="ldatefrom form-control"
+                                                            autocomplete="off" name="fromDate" id="fromDate" placeholder="Date From"
+                                                                required autocomplete="off">
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-lg-3 col-md-3 col-12 dateTo">
+                                                        <div class="form-group">
+                                                            <label for="exampleInputEmail1">Leave Date To</label>
+                                                            <input type="text" class="ldateto form-control"
+                                                            autocomplete="off" name="toDate" id="toDate" placeholder="Date To"
+                                                                required autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+                                                    
+
+                                                    
                                                 </div>
 
                                                 <div class="row">
@@ -207,7 +218,7 @@ input[type=number]::-webkit-outer-spin-button {
                                                     </div>
                                                 </div>
 
-                                                <!-- <div class="card">
+                                                <div class="card">
                                                     <div class="card-header">
                                                         <h6 class="mb-1 pull-left">Work Assign during my absence.</h6>
                                                         <button type="button" class="btn btn-danger pull-right"
@@ -234,7 +245,7 @@ input[type=number]::-webkit-outer-spin-button {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div> -->
+                                                </div>
 <!-- 
                                                 <hr class="mt-0 mb-1"> -->
                                                 <div class="row">
@@ -258,11 +269,11 @@ input[type=number]::-webkit-outer-spin-button {
                                                             <?php echo $leaveInfo->casual_leave_earned;  ?></td>
                                                         <th width="150" class="text-center">Remaining </th>
                                                         <td width="80">
-                                                            <?php echo $leaveInfo->casual_leave_earned - $leaveInfo->casual_leave_used; ?>
+                                                            <?php echo $leaveInfo->casual_leave_earned - $used_leave_cl->total_days_leave; ?>
                                                         </td>
                                                         <th width="130" class="text-center">Used </th>
                                                         <td width="80">
-                                                            <?php echo $leaveInfo->casual_leave_used; ?>
+                                                            <?php echo $used_leave_cl->total_days_leave; ?>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -270,61 +281,89 @@ input[type=number]::-webkit-outer-spin-button {
                                                         <td class="text-center">
                                                             <?php echo $leaveInfo->sick_leave_earned;  ?></td>
                                                         <th class="text-center">Remaining </th>
-                                                        <td><?php echo $leaveInfo->sick_leave_earned-$leaveInfo->sick_leave_used; ?>
+                                                        <td><?php echo $leaveInfo->sick_leave_earned - $used_leave_ml->total_days_leave; ?>
                                                         </td>
                                                         <th width="130" class="text-center">Used </th>
                                                         <td width="80">
-                                                            <?php echo $leaveInfo->sick_leave_used; ?>
+                                                            <?php echo $used_leave_ml->total_days_leave; ?>
                                                         </td>
                                                     </tr>
-                                                    <?php if(!empty($leaveInfo->marriage_leave_earned)){ ?>
-                                                    <tr>
-                                                        <th class="text-center">Marriage Leave </th>
-                                                        <td class="text-center">
-                                                            <?php echo $leaveInfo->marriage_leave_earned;  ?></td>
-                                                        <th class="text-center">Remaining </th>
-                                                        <td><?php echo $leaveInfo->marriage_leave_earned-$leaveInfo->marriage_leave_used; ?>
-                                                        </td>
-                                                        <th width="130" class="text-center">Used </th>
-                                                        <td width="80">
-                                                            <?php echo $leaveInfo->marriage_leave_used; ?>
-                                                        </td>
-                                                    </tr>
+                                                    <?php if (!empty($leaveInfo->marriage_leave_earned)) { ?>
+                                                        <tr>
+                                                            <th class="text-center">Marriage Leave </th>
+                                                            <td class="text-center">
+                                                                <?php echo $leaveInfo->marriage_leave_earned;  ?></td>
+                                                            <th class="text-center">Remaining </th>
+                                                            <td><?php echo $leaveInfo->marriage_leave_earned - $used_leave_marl->total_days_leave; ?>
+                                                            </td>
+                                                            <th width="130" class="text-center">Used </th>
+                                                            <td width="80">
+                                                                <?php echo $used_leave_marl->total_days_leave; ?>
+                                                            </td>
+                                                        </tr>
                                                     <?php } ?>
 
-                                                    <?php if(!empty($leaveInfo->paternity_leave_earned)){ ?>
-                                                    <tr>
-                                                        <th class="text-center">Paternity Leave </th>
-                                                        <td class="text-center">
-                                                            <?php echo $leaveInfo->paternity_leave_earned;  ?></td>
-                                                        <th class="text-center">Remaining </th>
-                                                        <td><?php echo $leaveInfo->paternity_leave_earned-$leaveInfo->paternity_leave_used; ?>
-                                                        </td>
-                                                        <th width="130" class="text-center">Used </th>
-                                                        <td width="80">
-                                                            <?php echo $leaveInfo->paternity_leave_used; ?>
-                                                        </td>
-                                                    </tr>
+                                                    <?php if (!empty($leaveInfo->paternity_leave_earned)) { ?>
+                                                        <tr>
+                                                            <th class="text-center">Paternity Leave </th>
+                                                            <td class="text-center">
+                                                                <?php echo $leaveInfo->paternity_leave_earned;  ?></td>
+                                                            <th class="text-center">Remaining </th>
+                                                            <td><?php echo $leaveInfo->paternity_leave_earned - $used_leave_pl->total_days_leave; ?>
+                                                            </td>
+                                                            <th width="130" class="text-center">Used </th>
+                                                            <td width="80">
+                                                                <?php echo $used_leave_pl->total_days_leave; ?>
+                                                            </td>
+                                                        </tr>
                                                     <?php } ?>
 
-                                                    <?php if(!empty($leaveInfo->maternity_leave_earned)){ ?>
+                                                    <?php if (!empty($leaveInfo->maternity_leave_earned)) { ?>
+                                                        <tr>
+                                                            <th class="text-center">Maternity Leave </th>
+                                                            <td class="text-center">
+                                                                <?php echo $leaveInfo->maternity_leave_earned;  ?></td>
+                                                            <th class="text-center">Remaining </th>
+                                                            <td><?php echo $leaveInfo->maternity_leave_earned - $used_leave_matl->total_days_leave; ?>
+                                                            </td>
+                                                            <th width="130" class="text-center">Used </th>
+                                                            <td width="80">
+                                                                <?php echo $used_leave_matl->total_days_leave; ?>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    <?php if (!empty($leaveInfo->earned_leave)) { ?>
+                                                        <tr>
+                                                            <th class="text-center">Earned Leave </th>
+                                                            <td class="text-center">
+                                                                <?php echo $leaveInfo->earned_leave;  ?></td>
+                                                            <th class="text-center">Remaining </th>
+                                                            <td><?php echo $leaveInfo->earned_leave - $used_leave_el->total_days_leave; ?>
+                                                            </td>
+                                                            <th width="130" class="text-center">Used </th>
+                                                            <td width="80">
+                                                                <?php echo $used_leave_el->total_days_leave; ?>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    <?php if(!empty($leaveInfo->official_duty_earned)){ ?>
                                                     <tr>
-                                                        <th class="text-center">Maternity Leave </th>
+                                                        <th class="text-center">Official Duty </th>
                                                         <td class="text-center">
-                                                            <?php echo $leaveInfo->maternity_leave_earned;  ?></td>
+                                                            <?php echo $leaveInfo->official_duty_earned;  ?></td>
                                                         <th class="text-center">Remaining </th>
-                                                        <td><?php echo $leaveInfo->maternity_leave_earned-$leaveInfo->maternity_leave_used; ?>
+                                                        <td><?php echo $leaveInfo->official_duty_earned - $used_leave_od->total_days_leave; ?>
                                                         </td>
                                                         <th width="130" class="text-center">Used </th>
                                                         <td width="80">
-                                                            <?php echo $leaveInfo->maternity_leave_used; ?>
+                                                            <?php echo $used_leave_od->total_days_leave; ?>
                                                         </td>
                                                     </tr>
                                                     <?php } ?>
                                                     <tr class="color-red">
                                                         <th colspan="2" class="text-center">Total Loss of Pay </th>
                                                         <td colspan="2" class="text-center color-red">
-                                                            <?php echo $leaveInfo->lop_leave;  ?></td>
+                                                            <?php echo $used_leave_lop->total_days_leave;  ?></td>
                                                     </tr>
                                                 </tbody>
                                                 <?php } ?>
@@ -382,18 +421,18 @@ input[type=number]::-webkit-outer-spin-button {
 
 
 <!-- The Modal -->
-<!-- <div class="modal" id="assignClassModel">
+ <div class="modal" id="assignClassModel">
     <div class="modal-dialog">
-        <div class="modal-content"> -->
+        <div class="modal-content"> 
 
             <!-- Modal Header -->
-            <!-- <div class="modal-header ">
+            <div class="modal-header ">
                 <h4 class="modal-title">Work Assign during my absence.</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div> -->
+            </div>
 
             <!-- Modal body -->
-            <!-- <div class="modal-body" style="padding:0px;">
+             <div class="modal-body" style="padding:0px;">
                 <div class="card-body contents-body">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-12">
@@ -480,10 +519,10 @@ input[type=number]::-webkit-outer-spin-button {
                     </div>
 
 
-                    <hr class="mt-1 mb-1"> -->
+                    <hr class="mt-1 mb-1"> 
                     <!-- Modal footer -->
 
-                    <!-- <div class="row">
+                    <div class="row">
                         <div class="col-lg-12 col-md-12 col-12">
                             <button type="button" class="btn pull-right btn-primary text-white" id="add" name="add"
                                 onClick="productAddToTable();">ADD</button>
@@ -494,7 +533,7 @@ input[type=number]::-webkit-outer-spin-button {
             </div>
         </div>
     </div>
-</div> -->
+</div>
 
 
 
@@ -566,6 +605,14 @@ input[type=number]::-webkit-outer-spin-button {
                                         <td id="maternity_pending"></td>
                                     </tr>
                                     <tr class="table-success">
+                                        <td>Earned Leave</td>
+                                        <td id="earned_pending"></td>
+                                    </tr>
+                                    <tr class="table-primary">
+                                        <td>Official Duty</td>
+                                        <td id="official_duty_pending"></td>
+                                    </tr>
+                                    <tr class="table-success">
                                         <td>Loss Of Pay Used</td>
                                         <td id="loss_of_pay_used"></td>
                                     </tr>
@@ -576,7 +623,7 @@ input[type=number]::-webkit-outer-spin-button {
                     </div>
                     <hr class="mt-1 mb-1">
 
-                    <!-- <div class="row">
+                    <div class="row">
                         <div class="col-lg-12 col-md-12 col-12">
                             <h6 class="mb-1 text-center">Work Assign during absence time.</h6>
                             <hr class="mt-0 mb-0" />
@@ -597,7 +644,7 @@ input[type=number]::-webkit-outer-spin-button {
                                 </tbody>
                             </table>
                         </div>
-                    </div> -->
+                    </div>
 <!-- 
                     <hr class="mt-1 mb-1"> -->
                     <!-- Modal footer -->
@@ -613,6 +660,39 @@ input[type=number]::-webkit-outer-spin-button {
         </div>
     </div>
 </div>
+<script>
+
+</script>
+<script>
+    $(document).ready(function() {
+        
+        $('#leaveType').change(function() {
+            var leaveType = $(this).val();
+            if (leaveType === '') {
+                $('#days_no, #fromDate').prop('disabled', true);
+            } else {
+                $('#days_no, #fromDate').prop('disabled', false);
+            }
+           
+        }).change();
+
+        $('.dateTo').hide();
+        $('#days_no').on('input', function() {
+            var days = this.value;
+            if (days > 1) {
+                $('.dateTo').show();
+                $('#toDate').prop('required', true);
+            } else {
+                $('.dateTo').hide();
+                $('#toDate').prop('required', false);
+            }
+        });
+       
+        $('#toDate').on('change', validateDates);
+
+
+    });
+</script>
 <script>
 jQuery(document).ready(function() {
 
@@ -685,8 +765,8 @@ jQuery(document).ready(function() {
         autoclose: true,
         orientation: "bottom",
         format: "dd-mm-yyyy",
-        startDate: new Date('2021-06-01'),
-        endDate: new Date('2023-06-01')
+        // startDate: new Date('2021-06-01'),
+        // endDate: new Date('2023-06-01')
     });
 
     $('#medical_certificate_upload').hide();
@@ -704,6 +784,38 @@ jQuery(document).ready(function() {
 });
 </script>
 <script>
+function validateDates() {
+  
+    var fromDate = new Date(document.getElementById('fromDate').value);
+    var toDate = new Date(document.getElementById('toDate').value);
+    var totalDays = parseFloat(document.getElementById('days_no').value);
+
+    if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime()) || isNaN(totalDays)) {
+        return;
+    }
+
+   
+    var dayCount = 0;
+    var currentDate = new Date(fromDate);
+
+    while (currentDate <= toDate) {
+        var dayOfWeek = currentDate.getDay();
+        if (dayOfWeek !== 0) { // Exclude Sundays (0 is Sunday)
+            dayCount++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    if (dayCount !== totalDays) {
+        
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Date Range',
+            text: 'Please ensure the selected dates cover exactly ' + totalDays + ' working days.',
+        });
+        document.getElementById('toDate').value = '';
+    }
+}
 function productAddToTable() {
     if ($("#staffAssignTableNew tbody").length == 0) {
         $("#staffAssignTableNew").append("<tbody></tbody>");
@@ -802,17 +914,22 @@ function viewMoreInfo(row_id) {
             $("#leave_type_view").html(leave_type);
             $("#reason_view").html(data.leaveInfo.leave_reason);
 
-            $("#casual_pending").html(data.leavePending.casual_leave_earned - data.leavePending
-                .casual_leave_used);
-            $("#medical_pending").html(data.leavePending.sick_leave_earned - data.leavePending
-                .sick_leave_used);
-                $("#marriage_pending").html(data.leavePending.marriage_leave_earned - data.leavePending
-                .marriage_leave_used);
-            $("#paternity_pending").html(data.leavePending.paternity_leave_earned - data.leavePending
-                .paternity_leave_used);
-            $("#maternity_pending").html(data.leavePending.maternity_leave_earned - data.leavePending
-                .maternity_leave_used);
-            $("#loss_of_pay_used").html(data.leavePending.lop_leave);
+            $("#casual_pending").html(data.leavePending.casual_leave_earned - data.used_leave_cl.total_days_leave);
+
+            $("#medical_pending").html(data.leavePending.sick_leave_earned - data.used_leave_ml.total_days_leave);
+
+            $("#marriage_pending").html(data.leavePending.marriage_leave_earned - data.used_leave_marl.total_days_leave);
+
+            $("#paternity_pending").html(data.leavePending.paternity_leave_earned - data.used_leave_pl.total_days_leave);
+
+            $("#maternity_pending").html(data.leavePending.maternity_leave_earned - data.used_leave_matl.total_days_leave);
+
+            $("#earned_pending").html(data.leavePending.earned_leave - data.used_leave_el.total_days_leave);
+            $("#official_duty_pending").html(data.leavePending.official_duty_earned - data.used_leave_od.total_days_leave);
+
+
+
+            $("#loss_of_pay_used").html(data.used_leave_lop.total_days_leave);
 
 
 

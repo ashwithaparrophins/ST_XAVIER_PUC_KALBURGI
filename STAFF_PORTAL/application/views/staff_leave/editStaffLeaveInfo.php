@@ -81,7 +81,7 @@ if ($error) {
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Total Number of Leave</label>
                                     <input placeholder="Total Number of Leave" class=" form-control"
-                                    value="<?php echo $AppliedLeaveInfo->total_days_leave; ?>" name="total_leave_days" type="text" list="leaves" required />
+                                    value="<?php echo $AppliedLeaveInfo->total_days_leave; ?>" name="total_leave_days" id="days_no" type="text" list="leaves" required />
                                     <datalist id="leaves">
                                         <option value="0.5">Half Day</option>
                                         <option value="1">One Day</option>
@@ -113,22 +113,30 @@ if ($error) {
                                     <label for="leave_type">Leave Type</label>
                                     <select name="leave_type" class="form-control" id="leaveType" required>
                                         <option value="<?php echo $AppliedLeaveInfo->leave_type; ?>">Selected: <?php echo $AppliedLeaveInfo->leave_type; ?></option>
-                                        <?php if(($leaveInfo->casual_leave_earned - $leaveInfo->casual_leave_used) != 0 ){ ?>
-                                        <option value="CL">Casual Leave(CL)</option>
+                                        <?php if(($leaveInfo->casual_leave_earned - $used_leave_cl->total_days_leave) != 0 ){ ?>
+                                        <option value="CL">Casual Leave(CL) (rem :<?php echo $leaveInfo->casual_leave_earned - $used_leave_cl->total_days_leave; ?>)</option>
                                         <?php } ?>
-                                        <?php if(($leaveInfo->sick_leave_earned - $leaveInfo->sick_leave_used) != 0 ){ ?>
-                                        <option value="ML">Medical Leave(ML)</option>
+                                        <?php if(($leaveInfo->sick_leave_earned - $used_leave_ml->total_days_leave) != 0 ){ ?>
+                                        <option value="ML">Medical Leave(ML) (rem :<?php echo $leaveInfo->sick_leave_earned - $used_leave_ml->total_days_leave; ?>)</option>
                                         <?php } ?>
-                                        <?php if(($leaveInfo->marriage_leave_earned - $leaveInfo->marriage_leave_used) != 0 ){ ?>
-                                        <option value="MARL">Marriage Leave(ML)</option>
+                                        <?php if(($leaveInfo->marriage_leave_earned - $used_leave_marl->total_days_leave) != 0 ){ ?>
+                                        <option value="MARL">Marriage Leave(ML) (rem :<?php echo $leaveInfo->marriage_leave_earned - $used_leave_marl->total_days_leave; ?>)</option>
                                         <?php } ?>
-                                        <?php if(($leaveInfo->paternity_leave_earned - $leaveInfo->paternity_leave_used) != 0 ){ ?>
+                                        <?php if(($leaveInfo->paternity_leave_earned - $used_leave_pl->total_days_leave) != 0 ){ ?>
 
-                                        <option value="PL">Paternity Leave(PL)</option>
+                                        <option value="PL">Paternity Leave(PL) (rem :<?php echo $leaveInfo->paternity_leave_earned - $used_leave_pl->total_days_leave;?>)</option>
                                         <?php } ?>
-                                        <?php if(($leaveInfo->maternity_leave_earned - $leaveInfo->maternity_leave_used) != 0 ){ ?>
+                                        <?php if(($leaveInfo->maternity_leave_earned - $used_leave_matl->total_days_leave) != 0 ){ ?>
 
-                                        <option value="MATL">Maternity Leave(ML)</option>
+                                        <option value="MATL">Maternity Leave(ML) (rem :<?php echo $leaveInfo->maternity_leave_earned - $used_leave_matl->total_days_leave; ?>)</option>
+                                        <?php } ?>
+                                        <?php if(($leaveInfo->earned_leave - $used_leave_el->total_days_leave) != 0 ){ ?>
+
+                                        <option value="EL">Earned Leave(EL) (rem : <?php echo $leaveInfo->earned_leave - $used_leave_el->total_days_leave; ?>)</option>
+                                        <?php } ?>
+                                        <?php if(($leaveInfo->official_duty_earned - $used_leave_od->total_days_leave) != 0 ){ ?>
+
+                                        <option value="OD">Offical Duty(OD)(rem: <?php echo $leaveInfo->official_duty_earned - $used_leave_od->total_days_leave;?>)</option>
                                         <?php } ?>
                                         <option value='LOP'>Loss Of Pay(LOP)</option>
                                     </select>
@@ -166,7 +174,7 @@ if ($error) {
                                 <span id="certificate_msg" class="text-danger font-weight-bold"></span>
                             </div>
                         </div>
-                        <!-- <div class="card">
+                        <div class="card">
                             <div class="card-header">
                                 <h6 class="mb-1 pull-left">Work Assign during my absence.</h6>
                                 <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
@@ -182,6 +190,7 @@ if ($error) {
                                                     <th>Date</th>
                                                     <th>Period</th>
                                                     <th>Class</th>
+                                                    <th>Stream</th>
                                                     <th>Section</th>
                                                     <th>Staff ID</th>
                                                     <th class="text-center">Actions</th>
@@ -194,6 +203,7 @@ if ($error) {
                                                     <td><?php echo date('d-m-Y',strtotime($record->assigned_date)); ?></td>
                                                     <td><?php echo $record->assigned_period; ?></td>
                                                     <td><?php echo $record->assigned_class_name; ?></td>
+                                                    <td><?php echo $record->assigned_stream_name; ?></td>
                                                     <td><?php echo $record->assigned_class_section; ?></td>
                                                     <td><?php echo $record->assigned_staff_id; ?></td>
                                                     <td><a class="btn btn-sm btn-danger text-white " title="Delete"  onclick="deleteRow(this)"><i class="fa fa-trash"></i></a></td>
@@ -210,7 +220,7 @@ if ($error) {
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
                         <!-- <hr class="mt-0 mb-1"> -->
                         <div class="row">
@@ -240,13 +250,13 @@ if ($error) {
         <div class="modal-content">
 
             <!-- Modal Header -->
-            <!-- <div class="modal-header ">
+            <div class="modal-header ">
                 <h4 class="modal-title">Work Assign during my absence.</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div> -->
+            </div>
 
             <!-- Modal body -->
-            <!-- <div class="modal-body" style="padding:0px;">
+            <div class="modal-body" style="padding:0px;">
                 <div class="card-body contents-body">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-12">
@@ -280,20 +290,20 @@ if ($error) {
                             <label for="role">Select Class</label>
                             <select class="form-control" id="assignedClass">
                                 <option value="">Select Class</option>
-                                <option value="LKG">LKG</option>
-                                <option value="UKG">UKG</option>
-                                <option value="1">I Std</option>
-                                <option value="2">II Std</option>
-                                <option value="3">III Std</option>
-                                <option value="4">IV Std</option>
-                                <option value="5">V Std</option>
-                                <option value="6">VI Std</option>
-                                <option value="7">VII Std</option>
-                                <option value="8">VIII Std</option>
-                                <option value="9">IX Std</option>
-                                <option value="10">X Std</option>
-                                <option value="11">XI Std</option>
-                                <option value="12">XII Std</option>
+                                <option value="I PUC">I PUC</option>
+                                <option value="II PUC">II PUC</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <label for="role">Select Stream</label>
+                            <select class="form-control" id="assignedStream">
+                                <option value="">Select Stream</option>
+                               <?php if(!empty($streamInfo)){
+                                  foreach($streamInfo as $stream){ ?>
+                                    <option value="<?php echo $stream->stream_name ?>">
+                                      <?php echo $stream->stream_name ?>
+                                    </option>
+                                <?php }  } ?>
                             </select>
                         </div>
                         <div class="col-lg-6 col-md-6 col-12">
@@ -333,10 +343,10 @@ if ($error) {
                     </div>
 
 
-                    <hr class="mt-1 mb-1"> -->
+                    <hr class="mt-1 mb-1">
                     <!-- Modal footer -->
 
-                    <!-- <div class="row">
+                    <div class="row">
                         <div class="col-lg-12 col-md-12 col-12">
                             <button type="button" class="btn pull-right btn-primary text-white" id="add" name="add"
                                 onClick="productAddToTable();">ADD</button>
@@ -348,7 +358,7 @@ if ($error) {
             </div>
         </div>
     </div>
-</div> -->
+</div>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/staff.js" charset="utf-8"></script>
 <script>
 jQuery(document).ready(function() {
@@ -375,6 +385,9 @@ jQuery(document).ready(function() {
             $('#vImg').prop('required',false);
         }
     });
+
+    $('#toDate').on('change', validateDates);
+
 });
 </script>
 <script>
@@ -404,6 +417,8 @@ function productAddToTable() {
         .val() + ">" +
             "<input type='hidden' name='assignedClass[]' id='class_assigned' value=" + $("#assignedClass").val() +
             ">" +
+            "<input type='hidden' name='assignedStream[]' id='class_assigned' value=" + $("#assignedStream").val() +
+            ">" +
             "<input type='hidden' name='assignedSection[]' id='section_assigned' value=" + $("#assignedSection")
             .val() + ">" +
             "<input type='hidden' name='assigned_staff_id[]' id='staff_id_assigned' value=" + $(
@@ -412,6 +427,8 @@ function productAddToTable() {
             "<td>" + $("#assignedPeriod").val() +
             "</td>" +
             "<td>" + $("#assignedClass").val() +
+            "</td>" +
+            "<td>" + $("#assignedStream").val() +
             "</td>" +
             "<td>" + $("#assignedSection").val() +
             "</td>" +
@@ -422,6 +439,58 @@ function productAddToTable() {
         );
     }
 }
+function parseDate(dateStr) {
+    // Try to parse date in DD-MM-YYYY format
+    let parts = dateStr.split('-');
+    if (parts.length === 3) {
+        return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+
+    // Try to parse date in MM/DD/YYYY format
+    parts = dateStr.split('/');
+    if (parts.length === 3) {
+        return new Date(parts[2], parts[0] - 1, parts[1]);
+    }
+
+    // Fallback to Date constructor for other formats
+    return new Date(dateStr);
+}
+
+function validateDates() {
+    var fromDateStr = document.getElementById('fromDate').value;
+    var toDateStr = document.getElementById('toDate').value;
+    var totalDays = parseFloat(document.getElementById('days_no').value);
+
+    var fromDate = parseDate(fromDateStr);
+    var toDate = parseDate(toDateStr);
+
+    // Check if the dates are valid
+    if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime()) || isNaN(totalDays)) {
+        console.log('Invalid date(s) or totalDays.');
+        return;
+    }
+
+    var dayCount = 0;
+    var currentDate = new Date(fromDate);
+
+    while (currentDate <= toDate) {
+        var dayOfWeek = currentDate.getDay();
+        if (dayOfWeek !== 0) { // Exclude Sundays (0 is Sunday)
+            dayCount++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    if (dayCount !== totalDays) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Date Range',
+            text: 'Please ensure the selected dates cover exactly ' + totalDays + ' working days.',
+        });
+        document.getElementById('toDate').value = '';
+    }
+}
+
 
 function deleteRow(btn) {
     var row = btn.parentNode.parentNode;

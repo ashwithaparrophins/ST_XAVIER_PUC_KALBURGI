@@ -948,6 +948,12 @@
                                     <span>Leave Info</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?php echo base_url(); ?>viewWorkAssigned">
+                                    <i class="material-icons">work</i>
+                                    <span>Work Assigned</span>
+                                </a>
+                            </li>
                         <?php } ?>
                     </ul>
                 </li>

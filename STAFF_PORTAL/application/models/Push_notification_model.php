@@ -575,4 +575,80 @@ class Push_notification_model extends CI_Model{
         $query = $this->db->get(); 
         return $query->result();
     }
+
+    public function getStaffTokenforLeaveApprove(){
+        $this->db->select('token');
+        $this->db->from('tbl_staff_token as token'); 
+        $this->db->join('tbl_staff as staff', 'staff.staff_id = token.staff_id','left'); 
+        $this->db->join('tbl_roles as Role', 'Role.roleId = staff.role','left');
+        $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','left');
+        $this->db->where('staff.leave_approved_status',1);
+        $this->db->where('staff.is_deleted',0);
+        $query = $this->db->get();
+        if($this->db->affected_rows() <= 0){
+            return array();
+        }else{
+            $all_users_token=$query->result_array();
+            $sorted_registration_ids = array();
+            foreach ($all_users_token as $value) {
+               array_push($sorted_registration_ids,$value['token']);
+            }
+            return $sorted_registration_ids;
+        }        
+    }
+
+    public function getStaffTokenforApprove($staff_id){
+        $this->db->select('token');
+        $this->db->from('tbl_staff_token as token'); 
+        $this->db->join('tbl_staff as staff', 'staff.staff_id = token.staff_id','left'); 
+        $this->db->where('token.staff_id', $staff_id);
+        $this->db->where('staff.is_deleted',0);
+        $query = $this->db->get();
+        if($this->db->affected_rows() <= 0){
+            return array();
+        }else{
+            $all_users_token=$query->result_array();
+            $sorted_registration_ids = array();
+            foreach ($all_users_token as $value) {
+               array_push($sorted_registration_ids,$value['token']);
+            }
+            return $sorted_registration_ids;
+        }        
+    }
+
+    public function sendStaffMessage($title,$body,$user_tokens,$user_type){
+        if( is_array($user_tokens) && count($user_tokens) > 0){
+            $fcm_data=array(
+                'title' => $title,
+                'body'=> $body,
+                'image'=> STAFF_NOTIFICATION_LOGO, 
+                'user_type'=>$user_type         
+            );
+            $fcm_fields= array(
+                'registration_ids' => $user_tokens,
+                'notification' => $fcm_data,
+            );
+            $fcm_result_array=$this->fcmPushNotificationStaff($fcm_fields);
+            return 1;
+        }else{
+            return 0;
+        }
+    } 
+    
+    private static function fcmPushNotificationStaff($fields=array()){
+        $headers = array(
+            'Authorization: key=' . STAFF_FCM_SERVER_KEY,
+            'Content-Type: application/json'
+        );
+        $ch = curl_init();
+        curl_setopt( $ch,CURLOPT_URL, FCM_URL);
+        curl_setopt( $ch,CURLOPT_POST, true );
+        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+        $result = curl_exec($ch);
+        curl_close( $ch );
+        return json_decode($result,true);
+    }
 }

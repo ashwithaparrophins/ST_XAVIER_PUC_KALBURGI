@@ -1309,9 +1309,9 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                                                         <th>Paternity Leave</th>
                                                         <th>Marriage Leave</th>
                                                         <th>Maternity Leave</th>
-                                                        <th>Loss of Pay</th>
+                                                        <!-- <th>Loss of Pay</th> -->
                                                         <th>Earned Leave</th>
-                                                        <!-- <th>Official Duty</th> -->
+                                                        <th>Official Duty</th>
                                                         <th>Action</th>
 
                                                     </tr>
@@ -1326,15 +1326,15 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                                                  name="row_id_leave"> <input type="hidden"
                                                 value="<?php echo $staffInfo->staff_id; ?>" name="staff_id_leave" />
 
-                                                       <td><input class="text-center"type="text" style="width:100px;" value="<?php echo $leaveInfoNew[$i]->year;?>" readonly disable></td>
-                                                       <td><input class="text-center" type="text" style="width:100px;" name="casual_leave_earned" value="<?php echo $leaveInfoNew[$i]->casual_leave_earned;?>"></td>
-                                                       <td><input class="text-center" type="text" style="width:100px;" name="sick_leave_earned" value="<?php echo $leaveInfoNew[$i]->sick_leave_earned;?>"></td>
-                                                       <td><input class="text-center" type="text" style="width:100px;" name="paternity_leave_earned" value="<?php echo $leaveInfoNew[$i]->paternity_leave_earned;?>"></td>
-                                                       <td><input class="text-center" type="text" style="width:100px;" name="marriage_leave_earned" value="<?php echo $leaveInfoNew[$i]->marriage_leave_earned;?>"></td>
-                                                       <td><input class="text-center" type="text" style="width:100px;" name="maternity_leave_earned" value="<?php echo $leaveInfoNew[$i]->maternity_leave_earned;?>"></td>
-                                                       <td><input class="text-center" type="text" style="width:100px;" name="lop_leave" value="<?php echo $leaveInfoNew[$i]->lop_leave;?>"></td>
-                                                       <td><input class="text-center" type="text" style="width:100px;" name="earned_leave" value="<?php echo $leaveInfoNew[$i]->earned_leave;?>"></td>
-                                                       <!-- <td><input class="text-center" type="text" style="width:100px;" name="official_duty_earned" value="<?php echo $leaveInfoNew[$i]->official_duty_earned;?>"></td> -->
+                                                        <td class="text-center" style="width:100px;"><?php echo $leaveInfoNew[$i]->year; ?></td>
+                                                        <td><input class="text-center" type="text" style="width:100px;" name="casual_leave_earned" value="<?php echo $leaveInfoNew[$i]->casual_leave_earned; ?>"></td>
+                                                        <td><input class="text-center" type="text" style="width:100px;" name="sick_leave_earned" value="<?php echo $leaveInfoNew[$i]->sick_leave_earned; ?>"></td>
+                                                        <td><input class="text-center" type="text" style="width:100px;" name="paternity_leave_earned" value="<?php echo $leaveInfoNew[$i]->paternity_leave_earned; ?>"></td>
+                                                        <td><input class="text-center" type="text" style="width:100px;" name="marriage_leave_earned" value="<?php echo $leaveInfoNew[$i]->marriage_leave_earned; ?>"></td>
+                                                        <td><input class="text-center" type="text" style="width:100px;" name="maternity_leave_earned" value="<?php echo $leaveInfoNew[$i]->maternity_leave_earned; ?>"></td>
+                                                        <!-- <td><input class="text-center" type="text" style="width:100px;" name="lop_leave" value="<?php echo $leaveInfoNew[$i]->lop_leave; ?>"></td> -->
+                                                        <td><input class="text-center" type="text" style="width:100px;" name="earned_leave" value="<?php echo $leaveInfoNew[$i]->earned_leave; ?>"></td>
+                                                        <td><input class="text-center" type="text" style="width:100px;" name="official_duty_earned" value="<?php echo $leaveInfoNew[$i]->official_duty_earned; ?>"></td>
                                                        <?php if($leaveInfoNew[$i]->year == LEAVE_YEAR){ ?>
                                                         <td> <input class="btn btn-success" type="submit" value="Update" /></td>
 
@@ -1376,10 +1376,11 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                                                         <th style="width:100px;" colspan="3">Paternity Leave</th>
                                                         <th style="width:100px;" colspan="3">Marriage Leave</th>
                                                         <th style="width:100px;" colspan="3">Maternity Leave</th>
-                                                        <th style="width:100px;">Loss of Pay</th>
+                                                        <th style="width:100px;" colspan="3">Official Duty</th>
                                                         <th style="width:100px;" colspan="3">Earned Leave</th>
-                                                        <!-- <th style="width:100px;">Official Duty</th> -->
-                                                       
+                                                        <th style="width:100px;">Loss of Pay</th>
+
+
 
                                                     </tr>
                                                     <tr class="tbl-head1">
@@ -1404,13 +1405,15 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                                                         <th>P</th>
 
                                                         <th>T</th>
-                                                      
+                                                        <th>U</th>
+                                                        <th>P</th>
+
                                                         <th>T</th>
                                                         <th>U</th>
                                                         <th>P</th>
 
-                                                        <!-- <th>T</th> -->
-                                                       
+                                                        <th>U</th>
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -1435,32 +1438,94 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                                                 $used_leave_mgml = $leaveModel->getLeaveUsedSum($staffInfo->staff_id,'MGML',$leaveInfoNew[$i]->year); 
                                             ?>
 
-                                                      <td><?php echo $leaveInfoNew[$i]->year;?></td>
-                                                      <td><?php echo $leaveInfoNew[$i]->casual_leave_earned;?></td>
-                                                      <td><?php if(empty($used_leave_cl->total_days_leave)){ echo "0";}else{echo $used_leave_cl->total_days_leave;} ?></td>
-                                                      <td><?php if(empty($leaveInfoNew[$i]->casual_leave_earned - $used_leave_cl->total_days_leave)){ echo "0";}else{echo $leaveInfoNew[$i]->casual_leave_earned - $used_leave_cl->total_days_leave;} ?></td>
-                                                      <td><?php echo $leaveInfoNew[$i]->sick_leave_earned;?></td>
-                                                      <td><?php if(empty($used_leave_ml->total_days_leave)){ echo "0";}else{echo $used_leave_ml->total_days_leave;} ?></td>
-                                                      <td><?php if(empty($leaveInfoNew[$i]->sick_leave_earned - $used_leave_ml->total_days_leave)){ echo "0";}else{echo $staffInfo->sick_leave_earned-$used_leave_ml->total_days_leave;} ?></td>
-                                                      <td><?php echo $leaveInfoNew[$i]->paternity_leave_earned;?></td>
-                                                      <td><?php if(empty($used_leave_pl->total_days_leave)){ echo "0";}else{echo $used_leave_pl->total_days_leave;} ?></td>
-                                                      <td><?php if(empty($leaveInfoNew[$i]->paternity_leave_earned - $used_leave_pl->total_days_leave)){ echo "0";}else{echo $leaveInfoNew[$i]->paternity_leave_earned - $used_leave_pl->total_days_leave;} ?></td>
-                                                      <td><?php echo $leaveInfoNew[$i]->marriage_leave_earned;?></td>
-                                                      <td><?php if(empty($used_leave_marl->total_days_leave)){ echo "0";}else{echo $used_leave_marl->total_days_leave;} ?></td>
-                                                      <td><?php if(empty($leaveInfoNew[$i]->marriage_leave_earned - $used_leave_marl->total_days_leave)){ echo "0";}else{echo $leaveInfoNew[$i]->marriage_leave_earned - $used_leave_marl->total_days_leave;} ?></td>
-                                                      <td><?php echo $leaveInfoNew[$i]->maternity_leave_earned;?></td>
-                                                      <td><?php if(empty($used_leave_matl->total_days_leave)){ echo "0";}else{echo $used_leave_matl->total_days_leave;} ?></td>
-                                                      <td><?php if(empty($leaveInfoNew[$i]->maternity_leave_earned - $used_leave_matl->total_days_leave)){ echo "0";}else{echo $leaveInfoNew[$i]->maternity_leave_earned - $used_leave_matl->total_days_leave;} ?></td>
-                                                      <td><?php if(empty($used_leave_lop->total_days_leave)){ echo "0";}else{echo $used_leave_lop->total_days_leave;} ?></td>
-                                                      <td><?php echo $leaveInfoNew[$i]->earned_leave;?></td>
-                                                      <td><?php if(empty($used_leave_el->total_days_leave)){ echo "0";}else{echo $used_leave_el->total_days_leave;} ?></td>
-                                                      <td><?php if(empty($leaveInfoNew[$i]->maternity_leave_earned - $used_leave_el->total_days_leave)){ echo "0";}else{echo $leaveInfoNew[$i]->maternity_leave_earned - $used_leave_el->total_days_leave;} ?></td>
-                                                      <!-- <td><?php if(empty($used_leave_od->total_days_leave)){ echo "0";}else{echo $used_leave_od->total_days_leave;} ?></td> -->
-                                                     
-                                                     
+                                                    <td><?php echo $leaveInfoNew[$i]->year; ?></td>
+                                                    <td><?php echo $leaveInfoNew[$i]->casual_leave_earned; ?></td>
+                                                    <td><?php if (empty($used_leave_cl->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $used_leave_cl->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php if (empty($leaveInfoNew[$i]->casual_leave_earned - $used_leave_cl->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $leaveInfoNew[$i]->casual_leave_earned - $used_leave_cl->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php echo $leaveInfoNew[$i]->sick_leave_earned; ?></td>
+                                                    <td><?php if (empty($used_leave_ml->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $used_leave_ml->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php if (empty($leaveInfoNew[$i]->sick_leave_earned - $used_leave_ml->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $staffInfo->sick_leave_earned - $used_leave_ml->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php echo $leaveInfoNew[$i]->paternity_leave_earned; ?></td>
+                                                    <td><?php if (empty($used_leave_pl->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $used_leave_pl->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php if (empty($leaveInfoNew[$i]->paternity_leave_earned - $used_leave_pl->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $leaveInfoNew[$i]->paternity_leave_earned - $used_leave_pl->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php echo $leaveInfoNew[$i]->marriage_leave_earned; ?></td>
+                                                    <td><?php if (empty($used_leave_marl->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $used_leave_marl->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php if (empty($leaveInfoNew[$i]->marriage_leave_earned - $used_leave_marl->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $leaveInfoNew[$i]->marriage_leave_earned - $used_leave_marl->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php echo $leaveInfoNew[$i]->maternity_leave_earned; ?></td>
+                                                    <td><?php if (empty($used_leave_matl->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $used_leave_matl->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php if (empty($leaveInfoNew[$i]->maternity_leave_earned - $used_leave_matl->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $leaveInfoNew[$i]->maternity_leave_earned - $used_leave_matl->total_days_leave;
+                                                        } ?></td>
+                                                    
+                                                    <td><?php echo $leaveInfoNew[$i]->official_duty_earned; ?></td>
+                                                    <td><?php if (empty($used_leave_od->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $used_leave_od->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php if (empty($leaveInfoNew[$i]->official_duty_earned - $used_leave_od->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $leaveInfoNew[$i]->official_duty_earned - $used_leave_od->total_days_leave;
+                                                        } ?></td>
+                                                    
+                                                    <td><?php echo $leaveInfoNew[$i]->earned_leave; ?></td>
+                                                    <td><?php if (empty($used_leave_el->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $used_leave_el->total_days_leave;
+                                                        } ?></td>
+                                                    <td><?php if (empty($leaveInfoNew[$i]->earned_leave - $used_leave_el->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $leaveInfoNew[$i]->earned_leave - $used_leave_el->total_days_leave;
+                                                        } ?></td>
 
+                                                    <td><?php if (empty($used_leave_lop->total_days_leave)) {
+                                                            echo "0";
+                                                        } else {
+                                                            echo $used_leave_lop->total_days_leave;
+                                                        } ?></td>
                                                      
-                                                       
+                                   
                                                    </form>
 
                                                     </tr>
@@ -2851,19 +2916,16 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                         <div class="col-lg-12 col-md-8 col-12">
                             <form role="form" action="<?php echo base_url() ?>updateLeaveInfo" method="post">
 
-                                <input type="hidden" value="<?php echo $staffInfo->row_id; ?>" id="row_id_leave"
-                                    name="row_id_leave">
-                                <input type="hidden" value="<?php echo $staffInfo->staff_id; ?>"
-                                    name="staff_id_leave" />
+                                <input type="hidden" value="<?php echo $staffInfo->row_id; ?>" id="row_id_leave" name="row_id_leave">
+                                <input type="hidden" value="<?php echo $staffInfo->staff_id; ?>" name="staff_id_leave" />
                                 <div class="row">
                                     <div class="col-12 col-lg-6 col-md-6">
                                         <label for="cl">Year</label>
-                                        <select class="form-control input-sm selectpicker" id="leave_year"
-                                            name="leave_year" required data-live-search="true" required>
+                                        <select class="form-control input-sm selectpicker" id="leave_year" name="leave_year" required data-live-search="true" required>
                                             <option value="">Select Year</option>
-                                            <option value="2023">2023</option>
-                                            <option value="2024">2024</option>
-                                            <option value="2025">2025</option>
+                                            <option value="2023">2023-24</option>
+                                            <option value="2024" selected>2024-25</option>
+                                            <option value="2025">2025-26</option>
                                         </select>
                                     </div>
 
@@ -2871,59 +2933,51 @@ $date_of_birth = date('d-m-Y',strtotime($date_of_birth));
                                 <div class="row">
                                     <div class="col-12 col-lg-6 col-md-6">
                                         <label for="cl">Casual Leave</label>
-                                        <input type="text" class="form-control required digits" id="casual_leave"
-                                            value="0" name="casual_leave" maxlength="5" placeholder="Add Casual Leave"
-                                            onkeypress="return isNumberKey(event)" required autocomplete="off">
+                                        <input type="text" class="form-control required digits" id="casual_leave" value="0" name="casual_leave" maxlength="5" placeholder="Add Casual Leave" onkeypress="return isNumberKey(event)" required autocomplete="off">
                                     </div>
                                     <div class="col-12 col-lg-6 col-md-6">
                                         <label for="cl">Medical Leave</label>
-                                        <input type="text" class="form-control required digits" id="sick_leave"
-                                            value="0" name="sick_leave" maxlength="5" placeholder="Add Medical Leave"
-                                            onkeypress="return isNumberKey(event)" autocomplete="off">
+                                        <input type="text" class="form-control required digits" id="sick_leave" value="0" name="sick_leave" maxlength="5" placeholder="Add Medical Leave" onkeypress="return isNumberKey(event)" autocomplete="off">
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-12 col-lg-6 col-md-6">
                                         <label for="pl">Paternity Leave</label>
-                                        <input type="text" class="form-control required digits" id="paternity_leave"
-                                            value="0" name="paternity_leave" maxlength="5"
-                                            placeholder="Add Paternity Leave" onkeypress="return isNumberKey(event)"
-                                            autocomplete="off">
+                                        <input type="text" class="form-control required digits" id="paternity_leave" value="0" name="paternity_leave" maxlength="5" placeholder="Add Paternity Leave" onkeypress="return isNumberKey(event)" autocomplete="off">
                                     </div>
                                     <div class="col-12 col-lg-6 col-md-6">
                                         <label for="marriage_leave">Marriage Leave</label>
-                                        <input type="text" class="form-control required digits" id="marriage_leave"
-                                            value="0" name="marriage_leave" maxlength="5"
-                                            placeholder="Add Marriage Leave" onkeypress="return isNumberKey(event)"
-                                            autocomplete="off">
+                                        <input type="text" class="form-control required digits" id="marriage_leave" value="0" name="marriage_leave" maxlength="5" placeholder="Add Marriage Leave" onkeypress="return isNumberKey(event)" autocomplete="off">
                                     </div>
                                 </div>
-                                <?php  $active; ?>
+                                <?php $active; ?>
                                 <div class="row">
                                     <div class="col-12 col-lg-6 col-md-6">
                                         <label for="cl">Maternity Leave</label>
-                                        <input type="text" class="form-control required digits" id="maternity_leave"
-                                            value="0" name="maternity_leave" maxlength="5"
-                                            placeholder="Add Maternity Leave" onkeypress="return isNumberKey(event)"
-                                            autocomplete="off">
+                                        <input type="text" class="form-control required digits" id="maternity_leave" value="0" name="maternity_leave" maxlength="5" placeholder="Add Maternity Leave" onkeypress="return isNumberKey(event)" autocomplete="off">
+                                    </div>
+                                    <!-- <div class="col-12 col-lg-6 col-md-6">
+                                                <label for="cl">Loss of Pay</label>
+                                                <input type="text" class="form-control required digits" id="lop" value="0"
+                                                    name="lop" maxlength="5" placeholder="Add Loss of Pay"
+                                                    onkeypress="return isNumberKey(event)" autocomplete="off">
+                                            </div> -->
+                                    <div class="col-12 col-lg-6 col-md-6">
+                                        <label for="el">Earned Leave</label>
+                                        <input type="text" class="form-control required digits" id="earned_leave_earned" value="0" name="earned_leave_earned" maxlength="5" placeholder="Add Earned Leave" onkeypress="return isNumberKey(event)" autocomplete="off">
                                     </div>
                                     <div class="col-12 col-lg-6 col-md-6">
-                                        <label for="cl">Loss of Pay</label>
-                                        <input type="text" class="form-control required digits" id="lop" value="0"
-                                            name="lop" maxlength="5" placeholder="Add Loss of Pay"
+                                        <label for="el">Official Duty</label>
+                                        <input type="text" class="form-control required digits"
+                                            id="official_duty"
+                                            value="0"
+                                            name="official_duty" maxlength="5"
+                                            placeholder="Add Official Duty"
                                             onkeypress="return isNumberKey(event)" autocomplete="off">
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12 col-lg-6 col-md-6">
-                                        <label for="el">Earned Leave</label>
-                                        <input type="text" class="form-control required digits" id="earned_leave_earned"
-                                            value="0" name="earned_leave_earned" maxlength="5"
-                                            placeholder="Add Earned Leave" onkeypress="return isNumberKey(event)"
-                                            autocomplete="off">
-                                    </div>
-                                </div>
+                                
 
                                 <div class="row mt-2">
                                     <div class="col-12 col-lg-12 col-md-12">

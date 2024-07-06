@@ -702,7 +702,7 @@ public function getStaffAttendanceInfoByRowId($row_id){
 
     public function getAllStaffInfo()
     {
-        $this->db->select('staff.type, staff.row_id, staff.staff_id, 
+        $this->db->select('staff.type, staff.row_id, staff.staff_id, staff.mobile_one,
         staff.email, staff.name,dept.name as department,staff.employee_id,
          staff.mobile, Role.role, staff.address,staff.dob');
         $this->db->from('tbl_staff as staff'); 
@@ -1410,6 +1410,18 @@ public function getStaffByRole($filter) {
         
         $count = $this->db->count_all_results();
         return $count;
+    }
+
+    public function getStaffNameInfo($staff_id)
+    {
+        $this->db->select('staff.name,role.role, staff.row_id, staff.staff_id,dept.name as department, staff.mobile_one, staff.address,staff.department_id');
+        $this->db->from('tbl_staff as staff'); 
+        $this->db->join('tbl_department as dept', 'dept.dept_id = staff.department_id','right');
+        $this->db->join('tbl_roles as role', 'role.roleId = staff.role','left');
+        $this->db->where('staff.staff_id', $staff_id);
+        $this->db->where('staff.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
     }
 
    

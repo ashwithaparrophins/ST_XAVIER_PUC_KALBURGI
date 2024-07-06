@@ -283,7 +283,7 @@ public function getLeaveInfoByStaffIdNew($staff_id)
         $this->db->where('leave.staff_id', $staff_id);
         $this->db->where('leave.leave_type', $type);
         $this->db->where('leave.is_deleted', 0);
-        $this->db->where('leave.approved_status', 1);
+        $this->db->where('leave.approved_status !=', 2);
         $this->db->where('leave.year', $year);
         $query = $this->db->get();
         return $query->row();
@@ -306,6 +306,170 @@ public function getLeaveInfoByStaffIdNew($staff_id)
         $this->db->update('tbl_staff_leave_management', $leaveInfo);
         return TRUE;
     } 
+
+    public function getviewWorkAssignedInfo($filter, $page, $segment)
+
+    {
+
+         $this->db->select('work.row_id,work.assigned_date,work.assigned_stream_name, work.assigned_period, work.assigned_class_name, work.assigned_class_section,staff.name as assignedStaff,staffAb.name as absentStaff');
+
+        $this->db->from('tbl_staff_assigned_work_info as work'); 
+
+        $this->db->join('tbl_staff_applied_leave as leave', 'leave.row_id = work.rel_leave_row_id','left');
+
+         $this->db->join('tbl_staff as staff', 'staff.staff_id = work.assigned_staff_id','left');
+
+        $this->db->join('tbl_staff as staffAb', 'staffAb.staff_id = leave.staff_id','left');
+
+      
+
+        if(!empty($filter['absentStaff'])){
+
+            $likeCriteria = "(staffAb.name  LIKE '%" . $filter['absentStaff'] . "%')";
+
+            $this->db->where($likeCriteria);
+
+        }
+
+
+        if(!empty($filter['assignedStaff'])){
+
+            $likeCriteria = "(staff.name  LIKE '%" . $filter['assignedStaff'] . "%')";
+
+            $this->db->where($likeCriteria);
+
+        }
+
+          if(!empty($filter['by_date'])){
+
+            $this->db->where('work.assigned_date', $filter['by_date']);
+
+        }
+
+
+        if(!empty($filter['assigned_class_name'])){
+
+            $this->db->where('work.assigned_class_name', $filter['assigned_class_name']);
+
+        }
+
+        if(!empty($filter['assigned_class_section'])){
+
+            $this->db->where('work.assigned_class_section', $filter['assigned_class_section']);
+
+        } 
+
+        if(!empty($filter['assigned_stream_name'])){
+
+            $this->db->where('work.assigned_stream_name', $filter['assigned_stream_name']);
+
+        } 
+
+
+        if(!empty($filter['staff_id'])){
+
+            $this->db->where('staff.staff_id', $filter['staff_id']);
+
+        }
+
+         $this->db->order_by('work.assigned_date', 'DESC');
+
+        $this->db->where('work.is_deleted', 0);
+
+        $this->db->where('leave.approved_status', 1);
+
+        $this->db->limit($page, $segment);
+
+        $query = $this->db->get();
+
+        $result = $query->result();        
+
+        return $result;
+
+    }
+
+
+    public function getviewWorkAssignedCount($filter)
+
+    {
+
+        $this->db->select('work.row_id,work.assigned_date, work.assigned_period, work.assigned_class_name, work.assigned_class_section,staff.name as assignedStaff,staffAb.name as absentStaff');
+
+        $this->db->from('tbl_staff_assigned_work_info as work'); 
+
+        $this->db->join('tbl_staff_applied_leave as leave', 'leave.row_id = work.rel_leave_row_id','left');
+
+        $this->db->join('tbl_staff as staff', 'staff.staff_id = work.assigned_staff_id','left');
+
+        $this->db->join('tbl_staff as staffAb', 'staffAb.staff_id = leave.staff_id','left');
+      
+
+        if(!empty($filter['assignedStaff'])){
+
+            $likeCriteria = "(staff.name  LIKE '%" . $filter['assignedStaff'] . "%')";
+
+            $this->db->where($likeCriteria);
+
+        }
+
+        if(!empty($filter['absentStaff'])){
+
+            $likeCriteria = "(staffAb.name  LIKE '%" . $filter['absentStaff'] . "%')";
+
+            $this->db->where($likeCriteria);
+
+        }
+
+        if(!empty($filter['assigned_class_name'])){
+
+            $this->db->where('work.assigned_class_name', $filter['assigned_class_name']);
+
+        }
+
+        if(!empty($filter['assigned_class_section'])){
+
+            $this->db->where('work.assigned_class_section', $filter['assigned_class_section']);
+
+        } 
+
+        if(!empty($filter['assigned_stream_name'])){
+
+            $this->db->where('work.assigned_stream_name', $filter['assigned_stream_name']);
+
+        } 
+
+        if(!empty($filter['by_date'])){
+
+            $this->db->where('work.assigned_date', $filter['by_date']);
+
+        }
+
+        if(!empty($filter['staff_id'])){
+
+            $this->db->where('staff.staff_id', $filter['staff_id']);
+
+        }
+
+
+
+        $this->db->order_by('work.assigned_date', 'DESC');
+
+        $this->db->where('work.is_deleted', 0);
+
+        $this->db->where('leave.approved_status', 1);
+
+        $query = $this->db->get();
+
+        return $query->num_rows();
+
+    }
+
+    function updateWorkedAssign($workInfo, $row_id)
+    {
+        $this->db->where('row_id', $row_id);
+        $this->db->update('tbl_staff_assigned_work_info', $workInfo);
+        return TRUE;
+    }
 
     
 

@@ -70,13 +70,13 @@ if ($error) {
 
                             <div class="col-lg-4 col-sm-4 col-12">
                                 <div class="btn-group pull-right" role="group" aria-label="New Action">
-                                    <!-- <?php if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR) { ?>
+                                    <!-- <?php if($role == ROLE_ADMIN || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR) { ?>
                                         <button data-toggle="modal" data-target="#downloadStaffLeaveReport" type="button"
                                         class="btn btn-info"><i class="material-icons">cloud_download</i>
                                         Report</button>
                                     <?php } ?> -->
-                                    <a onclick="showLoader();window.history.back();" class="btn primary_color mobile-btn float-right text-white "
-                                    value="Back"><i class="fa fa-arrow-circle-left"></i> Back </a>
+                                    <a onclick="showLoader();window.history.back();" class="btn primary_color float-right text-white pt-2"
+                                    value="Back"><i class="fa fa-arrow-circle-left"></i>Back </a>
                                 </div>
                             </div>
                         </div>
@@ -198,7 +198,7 @@ if ($error) {
                                         <td>Medical Leave</td>
                                         <td id="medical_pending"></td>
                                     </tr>
-                                    <tr class="table-primary">
+                                     <tr class="table-primary">
                                         <td>Marriage Leave</td>
                                         <td id="marriage_pending"></td>
                                     </tr>
@@ -210,6 +210,14 @@ if ($error) {
                                         <td>Maternity Leave</td>
                                         <td id="maternity_pending"></td>
                                     </tr>
+                                     <tr class="table-success">
+                                        <td>Earned Leave</td>
+                                        <td id="earned_pending"></td>
+                                    </tr>
+                                    <tr class="table-primary">
+                                        <td>Official Duty</td>
+                                        <td id="official_duty_pending"></td>
+                                    </tr>
                                     <tr class="table-success">
                                         <td>Loss Of Pay Used</td>
                                         <td id="loss_of_pay_used"></td>
@@ -219,7 +227,7 @@ if ($error) {
                         </div>
 
                     </div>
-                    <!-- <hr class="mt-1 mb-1">
+                    <!-- <hr class="mt-1 mb-1"> -->
 
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-12">
@@ -242,14 +250,14 @@ if ($error) {
                                 </tbody>
                             </table>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="col-12 text-center">
                         <div id="medicalCertificate"></div>
                     </div>
 
                     <hr class="mt-1 mb-1">
                     <!-- Modal footer -->
-                    <?php if($role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_ADMIN || $role == ROLE_MANAGEMENT){ ?>
+                    <?php if($role == ROLE_PRIMARY_ADMINISTRATOR || $staffID == '123456' || $leave_approved_status == '1'){ ?>
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-12">
                             <span id="approveButton"></span>
@@ -308,6 +316,7 @@ if ($error) {
                                      <option value="MARL">Marriage Leave(ML)</option>
                                      <option value="PL">Paternity Leave(PL)</option>
                                      <option value="MATL">Maternity Leave(ML)</option>
+                                      <option value="EL">Earned Leave(EL)</option>
                                      <option value='LOP'>Loss Of Pay(LOP)</option>
                                 </select>
                                 </div>
@@ -452,6 +461,7 @@ jQuery(document).ready(function() {
         autoclose: true,
         orientation: "bottom",
         format: "dd-mm-yyyy",
+        startDate : "01-01-2021"
         
     });
 
@@ -459,8 +469,13 @@ jQuery(document).ready(function() {
 });
 </script>
 <script type="text/javascript">
+
+// $('.casual_pending').hide();
+// $('.medical_pending').hide();
+//$('.marriage_pending').hide();
+// $('.earned_pending').hide();
+
 function viewMoreInfo(row_id) {
-  
     $("#staffAssignTable tbody").html("");
     $.ajax({
         url: '<?php echo base_url(); ?>/getStaffLeaveInfoById',
@@ -486,14 +501,19 @@ function viewMoreInfo(row_id) {
                 leave_type = "LOSS OF PAY";
             } else if (data.leaveInfo.leave_type == 'CL') {
                 leave_type = "CASUAL LEAVE";
-            } else if (data.leaveInfo.leave_type == 'MARL') {
+            }
+             else if (data.leaveInfo.leave_type == 'MARL') {
                 leave_type = "MARRIAGE LEAVE";
             } else if (data.leaveInfo.leave_type == 'PL') {
                 leave_type = "PATERNITY LEAVE";
             } else if (data.leaveInfo.leave_type == 'MATL') {
                 leave_type = "MATERNITY LEAVE";
-            } else if (data.leaveInfo.leave_type == 'ML') {
+            }
+             else if (data.leaveInfo.leave_type == 'ML') {
                 leave_type = "MEDICAL LEAVE";
+             } 
+             else if (data.leaveInfo.leave_type == 'EL') {
+                leave_type = "EARNED LEAVE";
             }
             $("#staff_name_view").html(data.leaveInfo.name);
             $("#date_from_view").html(formatted_date_from_date);
@@ -502,17 +522,34 @@ function viewMoreInfo(row_id) {
             $("#leave_type_view").html(leave_type);
             $("#reason_view").html(data.leaveInfo.leave_reason);
            
-            $("#casual_pending").html(data.leavePending.casual_leave_earned - data.leavePending
-                .casual_leave_used);
-            $("#medical_pending").html(data.leavePending.sick_leave_earned - data.leavePending
-                .sick_leave_used);
-                $("#marriage_pending").html(data.leavePending.marriage_leave_earned - data.leavePending
-                .marriage_leave_used);
-            $("#paternity_pending").html(data.leavePending.paternity_leave_earned - data.leavePending
-                .paternity_leave_used);
-            $("#maternity_pending").html(data.leavePending.maternity_leave_earned - data.leavePending
-                .maternity_leave_used);
-            $("#loss_of_pay_used").html(data.leavePending.lop_leave);
+          
+
+              
+            $("#casual_pending").html(data.leavePending.casual_leave_earned - data.used_leave_cl.total_days_leave);
+
+            $("#medical_pending").html(data.leavePending.sick_leave_earned - data.used_leave_ml.total_days_leave);
+
+            $("#marriage_pending").html(data.leavePending.marriage_leave_earned - data.used_leave_marl.total_days_leave);
+
+            $("#paternity_pending").html(data.leavePending.paternity_leave_earned - data.used_leave_pl.total_days_leave);
+
+            $("#maternity_pending").html(data.leavePending.maternity_leave_earned - data.used_leave_matl.total_days_leave);
+
+            $("#earned_pending").html(data.leavePending.earned_leave - data.used_leave_el.total_days_leave);
+            $("#official_duty_pending").html(data.leavePending.official_duty_earned - data.used_leave_od.total_days_leave);
+
+
+
+            $("#loss_of_pay_used").html(data.used_leave_lop.total_days_leave);
+               
+                // if(data.leavePending.lop_leave != '' && data.leavePending.lop_leave != 0){
+                //     $('.loss_of_pay_used').show();
+                // $("#loss_of_pay_used").html(data.leavePending.lop_leave - data.leavePending
+                //     .lop_leave_used);
+                // }
+
+                // $("#loss_of_pay_used").html(data.leavePending.lop_leave);
+        
             $("#approved_by").html(data.leaveInfo.approved_by);
             $("#rejected_by").html(data.leaveInfo.rejected_by); 
             
@@ -548,7 +585,7 @@ function viewMoreInfo(row_id) {
             if (Object.keys(data.workAssign).length == 0) {
                 $("#staffAssignTable tbody").append(
                     "<tr>" +
-                    "<td class='text-center' colspan='6'> Work assign not found! </td>" +
+                    "<td class='text-center' colspan='5'> Work assign not found! </td>" +
                     "</tr>"
                 );
             }

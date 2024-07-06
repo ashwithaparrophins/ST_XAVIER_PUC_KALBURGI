@@ -92,37 +92,30 @@
                                             {
                                                 ?>
                                             <option value="<?php echo $rl->staff_id ?>">
-                                                <?php echo $rl->name ?></option>
+                                                <?php echo strtoupper($rl->name); ?></option>
                                             <?php
                                                 }
                                             }
                                         ?>
                                         </select>
                                     </div>
-
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Leave Date From</label>
-                                            <input type="text" class="ldatefrom form-control" name="fromDate"
-                                                id="fromDate" placeholder="Date From" required autocomplete="off">
+                                            <label for="leave_type">Leave Type</label>
+                                            <select name="leave_type" class="form-control"
+                                                id="leave_type" required>
+                                             
+                                                <option value="">Select One</option>
+                                              
+                                                            
+                                            </select>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-4 col-md-4 col-12">
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Leave Date To</label>
-                                            <input type="text" class="ldateto form-control" name="toDate" id="toDate"
-                                                placeholder="Date To" required autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Total Number of
                                                 Leave</label>
-                                            <input  min="0" max="31" step=".10" placeholder="Total Number of Leave" class=" form-control"
+                                            <input  min="0" max="31" step=".10" id="days_no" placeholder="Total Number of Leave" class=" form-control"
                                                 name="total_leave_days" type="number" list="leaves" required />
                                             <datalist id="leaves">
                                                 <option value="0.5">Half Day</option>
@@ -152,33 +145,26 @@
 
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="form-group">
-                                            <label for="leave_type">Leave Type</label>
-                                            <select name="leave_type" class="form-control"
-                                                id="leave_type" required>
-                                             
-                                                <?php if(($leaveInfo->casual_leave_earned - $leaveInfo->casual_leave_used) != 0 ){ ?>
-                                                <option value="CL">Casual Leave(CL)</option>
-                                                <?php } ?>
-                                                <?php if(($leaveInfo->sick_leave_earned - $leaveInfo->sick_leave_used) != 0 ){ ?>
-                                                <option value="ML">Medical Leave(ML)</option>
-                                                <?php } ?>
-                                                <?php if(($leaveInfo->marriage_leave_earned - $leaveInfo->marriage_leave_used) != 0 ){ ?>
-                                                <option value="MARL">Marriage Leave(ML)</option>
-                                                <?php } ?>
-                                                <?php if(($leaveInfo->paternity_leave_earned - $leaveInfo->paternity_leave_used) != 0 ){ ?>
+                                            <label for="exampleInputEmail1">Leave Date From</label>
+                                            <input type="text" class="ldatefrom form-control" name="fromDate"
+                                                id="fromDate" placeholder="Date From" required autocomplete="off">
+                                        </div>
+                                    </div>
 
-                                                <option value="PL">Paternity Leave(PL)</option>
-                                                <?php } ?>
-                                                <?php if(($leaveInfo->maternity_leave_earned - $leaveInfo->maternity_leave_used) != 0 ){ ?>
-
-                                                <option value="MATL">Maternity Leave(ML)</option>
-                                                <?php } ?>
-                                                <option value='LOP'>Loss Of Pay(LOP)</option>
-                                                            
-                                            </select>
+                                    <div class="col-lg-4 col-md-4 col-12 dateTo">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Leave Date To</label>
+                                            <input type="text" class="ldateto form-control" name="toDate" id="toDate"
+                                                placeholder="Date To" required autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- <div class="row"> -->
+                                    
+
+                                    
+                                <!-- </div> -->
 
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-12">
@@ -206,7 +192,7 @@
                                         <span id="certificate_msg" class="text-danger font-weight-bold"></span>
                                     </div>
                                 </div>
-<!-- 
+
                                 <div class="card">
                                     <div class="card-header" style="padding: 6px;">
                                         <h6 class="mb-1 pull-left">Work assign during staff absence.</h6>
@@ -233,7 +219,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> -->
+                                </div>
 
                                 <!-- <hr class="mt-0 mb-1"> -->
                                 <div class="row">
@@ -385,7 +371,28 @@ jQuery(document).ready(function() {
         orientation: "bottom",
         format: "dd-mm-yyyy"
     });
+    $('#leave_type').change(function() {
+        var leave_type = $(this).val();
+        if (leave_type === '') {
+            $('#days_no, #fromDate').prop('disabled', true);
+        } else {
+            $('#days_no, #fromDate').prop('disabled', false);
+        }
+        
+    }).change();
 
+    $('.dateTo').hide();
+    $('#days_no').on('input', function() {
+        var days = this.value;
+        if(days > 1){
+            $('.dateTo').show();
+            $('#toDate').prop('required', true);
+        } else {
+            $('.dateTo').hide();
+            $('#toDate').prop('required', false);
+        }
+    });
+    $('#toDate').on('change', validateDates);
 
     $('#applied_staff_id').on('change', function() {
         var staff_id = this.value;
@@ -399,11 +406,13 @@ jQuery(document).ready(function() {
         },
         success: function(data) {
             if(data.leaveInfo != null || data.leaveInfo != ""){
-                var cl_rem = data.leaveInfo.casual_leave_earned - data.leaveInfo.casual_leave_used;
-                var ml_rem = data.leaveInfo.sick_leave_earned - data.leaveInfo.sick_leave_used;
-                var mdl_rem = data.leaveInfo.marriage_leave_earned - data.leaveInfo.marriage_leave_used;
-                var pl_rem = data.leaveInfo.paternity_leave_earned - data.leaveInfo.paternity_leave_used;
-                var mtl_rem = data.leaveInfo.maternity_leave_earned - data.leaveInfo.maternity_leave_used;
+                var cl_rem = data.leaveInfo.casual_leave_earned - data.used_leave_cl.total_days_leave;
+                var ml_rem = data.leaveInfo.sick_leave_earned - data.used_leave_ml.total_days_leave;
+                var mdl_rem = data.leaveInfo.marriage_leave_earned - data.used_leave_marl.total_days_leave;
+                var pl_rem = data.leaveInfo.paternity_leave_earned - data.used_leave_pl.total_days_leave;
+                var mtl_rem = data.leaveInfo.maternity_leave_earned - data.used_leave_matl.total_days_leave;
+                var el_rem = data.leaveInfo.earned_leave - data.used_leave_el.total_days_leave;
+                var od_rem = data.leaveInfo.official_duty_earned - data.used_leave_od.total_days_leave;
                 
                 if(cl_rem != 0){
                     $("#leave_type").append(new Option('CASUAL LEAVE (Rem: '+cl_rem+')',
@@ -424,6 +433,14 @@ jQuery(document).ready(function() {
                 if(mtl_rem != 0){
                     $("#leave_type").append(new Option('MATERNITY LEAVE (Rem: '+mtl_rem+')',
                                 'MATL'));
+                }
+                if(el_rem != 0){
+                    $("#leave_type").append(new Option('EARNED LEAVE (Rem: '+el_rem+')',
+                                'EL'));
+                }
+                if(od_rem != 0){
+                    $("#leave_type").append(new Option('OFFICIAL DUTY (Rem: '+od_rem+')',
+                                'OD'));
                 }
             }
         },
@@ -507,6 +524,35 @@ function productAddToTable() {
     }
 }
 
+function validateDates() {
+    var fromDate = new Date(document.getElementById('fromDate').value);
+    var toDate = new Date(document.getElementById('toDate').value);
+    var totalDays = parseFloat(document.getElementById('days_no').value);
+
+    if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime()) || isNaN(totalDays)) {
+        return;
+    }
+
+    var dayCount = 0;
+    var currentDate = new Date(fromDate);
+
+    while (currentDate <= toDate) {
+        var dayOfWeek = currentDate.getDay();
+        if (dayOfWeek !== 0) { // Exclude Sundays (0 is Sunday)
+            dayCount++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    if (dayCount !== totalDays) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Date Range',
+            text: 'Please ensure the selected dates cover exactly ' + totalDays + ' working days.',
+        });
+        document.getElementById('toDate').value = '';
+    }
+}
 
 function deleteRow(btn) {
     var row = btn.parentNode.parentNode;

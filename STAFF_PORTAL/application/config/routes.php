@@ -139,6 +139,9 @@ $route['get_single_staff_applied_leave_info'] = "leave/get_single_staff_applied_
 
 $route['viewAdminApplyLeavePage'] = "leave/viewAdminApplyLeavePage";
 $route['applyStaffLeaveByAdmin'] = "leave/applyStaffLeaveByAdmin";
+
+$route['viewWorkAssigned'] = "leave/viewWorkAssigned";
+$route['deleteWorkAssigned'] = "leave/deleteWorkAssigned";
 //download staff leave report
 $route['downloadStaffLeaveReport'] = "reports/downloadStaffLeaveReport";
 
