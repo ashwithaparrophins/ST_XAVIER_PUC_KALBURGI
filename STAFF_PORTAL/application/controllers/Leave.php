@@ -731,7 +731,7 @@ public function updateStaffLeaveInfoByAdmin(){
                     $leave_valid_status = false;
                 }
             }  else if ($leave_type == 'EL') {
-                $el_rem = $leaveDetails->earned_leave_earned  - $used_leave_el->total_days_leave;
+                $el_rem = $leaveDetails->earned_leave  - $used_leave_el->total_days_leave;
                 if ($total_leave_days <= $el_rem) {
                     $leave_valid_status = true;
                 } else {

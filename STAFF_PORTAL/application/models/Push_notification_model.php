@@ -641,7 +641,7 @@ class Push_notification_model extends CI_Model{
             'Content-Type: application/json'
         );
         $ch = curl_init();
-        curl_setopt( $ch,CURLOPT_URL, FCM_URL);
+        curl_setopt( $ch,CURLOPT_URL, STAFF_FCM_URL);
         curl_setopt( $ch,CURLOPT_POST, true );
         curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
         curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
