@@ -127,12 +127,12 @@ class ApiStaff extends CI_Controller
             $staffID
         );
 
-        // log_message(
-        //     'debug',
-        //     'fetchLeaveManagement is -->' . print_r($fetchLeaveManagement, true)
-        // );
+        log_message(
+            'debug',
+            'fetchLeaveManagement is -->' . print_r($fetchLeaveManagement, true)
+        );
 
-        $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP'];
+        $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP','EL'];
 
         $leaveCounts = [];
         foreach ($leaveTypes as $type) {
@@ -178,7 +178,16 @@ class ApiStaff extends CI_Controller
                 $maternityLeaveRemaining =
                     $fetchLeaveManagement[0]->maternity_leave_earned -
                     $leaveCount;
-            } elseif ($type == 'LOP') {
+            } elseif ($type == 'EL') {
+                $earnedLeaveEarned =
+                    $fetchLeaveManagement[0]->earned_leave;
+                $earnedLeaveUsed = $leaveCount;
+                $earnedLeaveRemaining =
+                    $fetchLeaveManagement[0]->earned_leave -
+                    $leaveCount;
+            } 
+            
+            elseif ($type == 'LOP') {
                 $lopUsed = $leaveCount ?? 0;
             }
 
@@ -199,6 +208,8 @@ class ApiStaff extends CI_Controller
 
         $maternityLeaveRemaining = $maternityLeaveRemaining ?? 0;
 
+       
+
         // Display casual leave if remaining is not zero
         if ($casualLeaveRemaining != 0) {
             $formattedLeaveTypes[] = (object) [
@@ -209,6 +220,8 @@ class ApiStaff extends CI_Controller
                 'count' => $casualLeaveRemaining,
             ];
         }
+
+
 
         if ($sickLeaveRemaining != 0) {
             $formattedLeaveTypes[] = (object) [
@@ -256,6 +269,16 @@ class ApiStaff extends CI_Controller
             ];
         }
 
+        if ($earnedLeaveRemaining != 0) {
+            $formattedLeaveTypes[] = (object) [
+                'leave_type' =>
+                    'Earned Leave(EL)' . ' (' . $earnedLeaveRemaining . ')',
+                'leave_name' => 'Earned Leave(EL)',
+                'leave_short' => 'EL',
+                'count' => $earnedLeaveRemaining,
+            ];
+        }
+
         // Display other leave types
         $formattedLeaveTypes[] = (object) [
             'leave_type' => 'Loss Of Pay(LOP)' . ' (' . $lopUsed . ' used )',
@@ -286,7 +309,7 @@ class ApiStaff extends CI_Controller
             $staffID
         );
 
-        $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP'];
+        $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP' ,'EL'];
 
         $leaveCounts = [];
         foreach ($leaveTypes as $type) {
@@ -294,7 +317,7 @@ class ApiStaff extends CI_Controller
                 $staffID,
                 $type
             )->total_days_leave;
-            //log_message('debug', 'leaveCount' . print_r($leaveCount, true));
+            log_message('debug', 'leaveCount' . print_r($leaveCount, true));
 
             $leaveCounts[$type] = $leaveCount;
 
@@ -332,7 +355,15 @@ class ApiStaff extends CI_Controller
                 $maternityLeaveRemaining =
                     $fetchLeaveManagement[0]->maternity_leave_earned -
                     $leaveCount;
-            } elseif ($type == 'LOP') {
+            } elseif ($type == 'EL') {
+                $earnedLeaveEarned =
+                    $fetchLeaveManagement[0]->earned_leave;
+                $earnedLeaveUsed = $leaveCount;
+                $earnedLeaveRemaining =
+                    $fetchLeaveManagement[0]->earned_leave -
+                    $leaveCount;
+            } 
+            elseif ($type == 'LOP') {
                 $lopUsed = $leaveCount ?? 0;
             }
 
@@ -407,6 +438,17 @@ class ApiStaff extends CI_Controller
                 'remaining' => $maternityLeaveRemaining,
             ];
         }
+
+        if ($earnedLeaveRemaining != 0) {
+            $formattedLeaveTypes[] = (object) [
+                'leave_type' => 'Earned Leave(EL)',
+                'leave_short' => 'EL',
+                'earned' => $earnedLeaveEarned ?? 0,
+                'used' => $earnedLeaveUsed ?? 0,
+                'remaining' => $earnedLeaveRemaining,
+            ];
+        }
+
 
         // Display other leave types
         // if (!empty($fetchLeaveManagement)) {
@@ -674,6 +716,7 @@ class ApiStaff extends CI_Controller
         echo json_encode($msg);
     }
 
+
     public function listLeaveHistory()
     {
         $json = file_get_contents('php://input');
@@ -822,7 +865,6 @@ class ApiStaff extends CI_Controller
         echo json_encode($msg);
     }
 
-
     function dashboardMenu()
     {
         $json = file_get_contents('php://input');
@@ -839,7 +881,7 @@ class ApiStaff extends CI_Controller
 
         $db_data = [];
         foreach ($dashboardInfo as $info) {
-            if ($info->title == 'STUDENTS INFO') {
+            if ($info->title == 'STUDENTS INFO' || $info->title == 'STUDENT SUGGESTION' ) {
                 if (
                     $role == ROLE_ADMIN ||
                     $role == ROLE_PRINCIPAL ||
@@ -858,13 +900,21 @@ class ApiStaff extends CI_Controller
                 }else{
                     continue;
                 }
-            } elseif($info->title == 'SEND NOTIFICATION'){
+            }
+           
+            elseif($info->title == 'SEND NOTIFICATION'){
                 if($role == ROLE_PRINCIPAL || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR ){
                     $db_data[] = $info;
                 }else{
                     continue;
                 }
-            }
+            }elseif($info->title == 'DOCUMENT INFO'){
+                if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR ){
+                    $db_data[] = $info;
+                }else{
+                    continue;
+                }
+            } 
             elseif (
                 $info->title == 'TAKE ATTENDANCE' ||
                 $info->title == 'ABSENT INFO' ||
@@ -1008,6 +1058,7 @@ class ApiStaff extends CI_Controller
         $this->webLogin($staff_id);
         redirect('viewFeeDashboard');
     }
+
     function staffSendNotification()
     {
         $staff_id = $_GET['staffId'];
@@ -1015,7 +1066,44 @@ class ApiStaff extends CI_Controller
         redirect('pushNotification');
     }
 
+    function staffViewHoliday()
+    {
+        $staff_id = $_GET['staffId'];
+       // log_message('debug','staff_id-->'.print_r($staff_id,true));
 
+        $this->webLogin($staff_id);
+        redirect('viewHolidayList');
+    }
+
+    function staffDocumentInfo()
+    {
+        $staff_id = $_GET['staffId'];
+       // log_message('debug','staff_id-->'.print_r($staff_id,true));
+
+        $this->webLogin($staff_id);
+        redirect('viewDocumentInfo');
+    }
+
+    function staffCalendar()
+    {
+        $staff_id = $_GET['staffId'];
+        $this->webLogin($staff_id);
+        redirect('calendar');
+    }
+
+    function staffAppStudentSuggetion()
+    {
+        $staff_id = $_GET['staffId'];
+        $this->webLogin($staff_id);
+        redirect('suggestionListing');
+    }
+
+    function staffDashboard()
+    {
+        $staff_id = $_GET['staffId'];
+        $this->webLogin($staff_id);
+        redirect('dashboard');
+    }
 
     public function approveLeaveList()
     {
@@ -1047,11 +1135,11 @@ class ApiStaff extends CI_Controller
                 $info->staff_id
             );
 
-            $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP'];
+            $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP' , 'EL'];
 
             $leaveCounts = [];
             foreach ($leaveTypes as $type) {
-                $leaveCount = $this->app_staff_login->getLeaveUsedSum(
+                $leaveCount = $this->app_staff_login->getSumLeaveInfo(
                     $info->staff_id,
                     $type
                 )->total_days_leave;
@@ -1097,7 +1185,15 @@ class ApiStaff extends CI_Controller
                     $maternityLeaveRemaining =
                         $fetchLeaveManagement[0]->maternity_leave_earned -
                         $leaveCount;
-                } elseif ($type == 'LOP') {
+                } elseif ($type == 'EL') {
+                    $earnedLeaveEarned =
+                        $fetchLeaveManagement[0]->earned_leave;
+                    $earnedLeaveUsed = $leaveCount;
+                    $earnedLeaveRemaining =
+                        $fetchLeaveManagement[0]->earned_leave -
+                        $leaveCount;
+                } 
+                elseif ($type == 'LOP') {
                     $lopUsed = $leaveCount;
                 }
 
@@ -1142,6 +1238,10 @@ class ApiStaff extends CI_Controller
             $info->maternityLeaveEarned = $maternityLeaveEarned ?? 0;
             $info->maternityLeaveUsed = $maternityLeaveUsed ?? 0;
             $info->maternityLeaveRemain = $maternityLeaveRemaining ?? 0;
+
+            $info->earnedLeaveEarned = $earnedLeaveEarned??0;
+            $info->earnedLeaveUsed = $earnedLeaveUsed??0;
+            $info->earnedLeaveRemaining = $earnedLeaveRemaining??0;
 
             //LOP
             $info->lopused = $lopUsed ?? '0';
@@ -1500,11 +1600,11 @@ class ApiStaff extends CI_Controller
                 $info->staff_id
             );
 
-            $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP'];
+            $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP', 'EL'];
 
             $leaveCounts = [];
             foreach ($leaveTypes as $type) {
-                $leaveCount = $this->app_staff_login->getLeaveUsedSum(
+                $leaveCount = $this->app_staff_login->getSumLeaveInfo(
                     $info->staff_id,
                     $type
                 )->total_days_leave;
@@ -1550,7 +1650,15 @@ class ApiStaff extends CI_Controller
                     $maternityLeaveRemaining =
                         $fetchLeaveManagement[0]->maternity_leave_earned -
                         $leaveCount;
-                } elseif ($type == 'LOP') {
+                } elseif ($type == 'EL') {
+                    $earnedLeaveEarned =
+                        $fetchLeaveManagement[0]->earned_leave;
+                    $earnedLeaveUsed = $leaveCount;
+                    $earnedLeaveRemaining =
+                        $fetchLeaveManagement[0]->earned_leave -
+                        $leaveCount;
+                } 
+                 elseif ($type == 'LOP') {
                     $lopUsed = $leaveCount;
                 }
 
@@ -1596,6 +1704,10 @@ class ApiStaff extends CI_Controller
             $info->maternityLeaveUsed = $maternityLeaveUsed ?? 0;
             $info->maternityLeaveRemain = $maternityLeaveRemaining ?? 0;
 
+            $info->earnedLeaveEarned = $earnedLeaveEarned??0;
+            $info->earnedLeaveUsed = $earnedLeaveUsed??0;
+            $info->earnedLeaveRemaining = $earnedLeaveRemaining??0;
+
             //LOP
             $info->lopused = $lopUsed ?? '0';
 
@@ -1607,7 +1719,7 @@ class ApiStaff extends CI_Controller
         echo $data;
     }
 
-
+    
     public function listallStaff()
     {
         $json = file_get_contents('php://input');
@@ -1653,27 +1765,45 @@ class ApiStaff extends CI_Controller
 
     }
 
-
     public function listAllNotification()
     {
         $json = file_get_contents('php://input');
         $obj = json_decode($json, true);
         $staff_id = $obj['staff_id'];
-      //  log_message('debug', 'staff_id-->' . print_r($staff_id, true));
     
+        // Fetch staff info
         $fetchStaffInfo = $this->app_staff_login->fetchStaffById($staff_id);
     
+        // Get all notifications for the staff's department
         $fetchNotification = $this->app_staff_login->getAllNotification($fetchStaffInfo[0]->dept_id);
-        
     
+        // Add time ago for each notification
         foreach ($fetchNotification as &$notification) {
             $notification->time_ago = $this->timeAgo($notification->date_time);
+            $notification->timestamp = strtotime($notification->date_time); // Add timestamp for sorting
         }
     
-       // log_message('debug', 'fetchNotification with time_ago-->' . print_r($fetchNotification, true));
+        // Get single notification for the staff member
+        $fetchSingleNotification = $this->app_staff_login->getSingleNotification($fetchStaffInfo[0]->row_id);
     
-        $data = json_encode($fetchNotification);
-        echo $data;
+        // Add time ago for the single notification
+        foreach ($fetchSingleNotification as &$singleNotification) {
+            $singleNotification->time_ago = $this->timeAgo($singleNotification->updated_date_time);
+            $singleNotification->timestamp = strtotime($singleNotification->updated_date_time); // Add timestamp for sorting
+        }
+    
+        // Combine both notifications into one array
+        $combinedNotifications = array_merge($fetchNotification, $fetchSingleNotification);
+
+        log_message("debug","combined string -->".print_r($combinedNotifications,true));
+    
+        // Sort the combined notifications by timestamp (latest first)
+        usort($combinedNotifications, function ($a, $b) {
+            return $b->timestamp - $a->timestamp;
+        });
+    
+        // Encode the data into JSON and echo it
+        echo json_encode($combinedNotifications);
     }
     
     private function timeAgo($datetime)
@@ -1698,5 +1828,42 @@ class ApiStaff extends CI_Controller
             return 'Just now';
         }
     }
+
+    public function pucSubjectList()
+    {
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json, true);
+        //log_message('debug', 'obj-->' . print_r($obj, true));
+        $staff_id = $obj['staff_id'];
+        //  log_message('debug', 'staff_id-->' . print_r($staff_id, true));
+
+        $fetchAssignedSubjects = $this->app_staff_login->fetchPucSubjectList($staff_id);
+       
+      //  log_message('debug', 'fetchAssignedSubjects-->' . print_r($fetchAssignedSubjects, true));
+
+        $data = json_encode($fetchAssignedSubjects);
+        echo $data;
+    }
+
+
+    public function sectionList()
+    {
+        $json = file_get_contents('php://input');
+        $obj = json_decode($json, true);
+        //log_message('debug', 'obj-->' . print_r($obj, true));
+        $staff_id = $obj['staff_id'];
+        //  log_message('debug', 'staff_id-->' . print_r($staff_id, true));
+
+        $fetchAssignedSubjects = $this->app_staff_login->fetchSectionList($staff_id);
+       
+      //  log_message('debug', 'fetchAssignedSubjects-->' . print_r($fetchAssignedSubjects, true));
+
+        $data = json_encode($fetchAssignedSubjects);
+        echo $data;
+    }
+    
+    
+
+
 }
 ?>

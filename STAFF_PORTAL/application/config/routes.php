@@ -1218,6 +1218,19 @@ $route['listAllNotification']='apistaff/listAllNotification';
 
 $route['staffSendNotification']='apistaff/staffSendNotification';
 
+$route['staffViewHoliday']='apistaff/staffViewHoliday';
+
+$route['staffDocumentInfo']='apistaff/staffDocumentInfo';
+
+$route['staffCalendar']='apistaff/staffCalendar';
+
+$route['staffAppStudentSuggetion']='apistaff/staffAppStudentSuggetion';
+
+$route['staffDashboard']='apistaff/staffDashboard';
+
+$route['pucSubjectList']='apistaff/pucSubjectList';
+
+$route['sectionList']='apistaff/sectionList';
 
 
 $route['adminDashboard'] = 'user/adminDashboard';

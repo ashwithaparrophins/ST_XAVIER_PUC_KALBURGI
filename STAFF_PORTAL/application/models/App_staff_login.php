@@ -39,6 +39,8 @@ class App_staff_login extends CI_Model
         return $query->result();
     }
 
+   
+
     function getStaffName($staff_id)
     {
         // log_message('debug','model_mbl_number'.print_r($mblNumber,true));
@@ -85,10 +87,10 @@ class App_staff_login extends CI_Model
     function getApproveLeaveList($staff_id)
     {
         $this->db->from('tbl_staff_applied_leave');
+        $this->db->where('year',LEAVE_YEAR);
         $this->db->where('staff_id !=', $staff_id); // Modified line
         $this->db->order_by('created_date_time', 'desc'); // Sort by created_date_time in descending order
         $this->db->where('is_deleted', 0);
-        $this->db->where('year',LEAVE_YEAR);
         $query = $this->db->get();
         return $query->result();
     }
@@ -127,9 +129,9 @@ class App_staff_login extends CI_Model
         $this->db->from('tbl_staff_applied_leave as leave');
         $this->db->where('leave.staff_id', $staff_id);
         $this->db->where('leave.leave_type', $type);
+        $this->db->where('leave.year',LEAVE_YEAR );
         $this->db->where('leave.is_deleted', 0);
-        $this->db->where('leave.year',LEAVE_YEAR);
-        $this->db->where('leave.approved_status', 1);
+        $this->db->where('leave.approved_status',[0, 1]);
         // $this->db->where('leave.date_from >=', LEAVE_DATE_FROM);
         // $this->db->where('leave.date_to <=', LEAVE_DATE_TO);
         $query = $this->db->get();
@@ -141,8 +143,8 @@ class App_staff_login extends CI_Model
         $this->db->select_sum('leave.total_days_leave');
         $this->db->from('tbl_staff_applied_leave as leave');
         $this->db->where('leave.staff_id', $staff_id);
-        $this->db->where('leave.leave_type', $type);
         $this->db->where('leave.year',LEAVE_YEAR);
+        $this->db->where('leave.leave_type', $type);
         $this->db->where('leave.is_deleted', 0);
         $this->db->where_in('leave.approved_status', [0, 1]); // Include both approved statuses
         // $this->db->where('leave.date_from >=', LEAVE_DATE_FROM);
@@ -344,7 +346,7 @@ class App_staff_login extends CI_Model
     {
         // log_message('debug','model_mbl_number'.print_r($mblNumber,true));
         $this->db->select(
-            'staff.name,staff.is_deleted,staff.staff_id,staff.row_id,staff.user_name,staff.type,staff.mobile_one,staff.mobile_two,staff.email,staff.address,staff.photo_url,staff.dob,staff.doj,staff.aadhar_no,staff.pan_no,staff.voter_no,staff.gender,staff.qualification,staff.blood_group,dept.name as department_name,Roles.role'
+            'staff.name,staff.retirement_status,staff.resignation_status,staff.is_deleted,staff.staff_id,staff.row_id,staff.user_name,staff.type,staff.mobile_one,staff.mobile_two,staff.email,staff.address,staff.photo_url,staff.dob,staff.doj,staff.aadhar_no,staff.pan_no,staff.voter_no,staff.gender,staff.qualification,staff.blood_group,dept.name as department_name,Roles.role'
         );
         $this->db->from('tbl_staff as staff');
         $this->db->join('tbl_roles as Roles', 'Roles.roleId = staff.role');
@@ -407,12 +409,11 @@ class App_staff_login extends CI_Model
         $this->db->where('leave.staff_id !=', $staff_id); // Modified line
         $this->db->order_by('leave.created_date_time', 'desc'); // Sort by created_date_time in descending order
         $this->db->where('leave.is_deleted', 0);
-        $this->db->where('leave.year',LEAVE_YEAR);
+        $this->db->where('leave.year',LEAVE_YEAR );
         $this->db->where('staff.management_view_status', 1);
         $query = $this->db->get();
         return $query->result();
     }
-
 
     function getAllStaffList()
     {
@@ -439,7 +440,6 @@ class App_staff_login extends CI_Model
         return $insert_id;
     }
 
-    
     function fetchStaffById($staffId)
     {
         // log_message('debug','model_mbl_number'.print_r($mblNumber,true));
@@ -463,14 +463,59 @@ class App_staff_login extends CI_Model
     {
         $this->db->from('tbl_staff_notifications');
         $this->db->where('is_deleted', 0);
+
+        $this->db->group_start(); // Start grouping conditions
         $this->db->where('department', $dept_id);
-        $this->db->order_by('date_time', 'DESC'); // Sort by created_date_time in descending order
+        $this->db->or_where('department', 'ALL');
+        $this->db->group_end(); // End grouping conditions
+
+        $this->db->order_by('date_time', 'DESC'); // Sort by date_time in descending order
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    
+    function getSingleNotification($row_id)
+    {
+        $this->db->from('tbl_staff_bulk_notification');
+        $this->db->where('is_deleted', 0);
+        $this->db->where('staffId', $row_id);
+        $this->db->order_by('updated_date_time', 'DESC'); // Sort by date_time in descending order
         $query = $this->db->get();
         return $query->result();
     }
 
 
+    function fetchPucSubjectList($staffId)
+    {
+        // log_message('debug','model_mbl_number'.print_r($mblNumber,true));
+        $this->db->distinct();
+        $this->db->select('teaching.subject_type,subject.name as subject_name,subject.subject_code,department.name as department');
+        $this->db->from('tbl_staff_teaching_subjects as teaching');
+        $this->db->join('tbl_subjects as subject', 'subject.subject_code = teaching.subject_code');
+        $this->db->join('tbl_department as department', 'department.dept_id = subject.department_id');
+        $this->db->where('teaching.staff_id', $staffId);
+        $this->db->where('teaching.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+        
+    }
 
+
+    function fetchSectionList($staffId)
+    {
+        // log_message('debug','model_mbl_number'.print_r($mblNumber,true));
+        $this->db->distinct();
+        $this->db->select('info.term_name,info.section_name,stream.stream_name');
+        $this->db->from('tbl_staff_sections as sections');
+        $this->db->join('tbl_section_info as info', 'info.row_id = sections.section_id');
+        $this->db->join('tbl_stream_info as stream', 'stream.row_id = info.stream_id');
+        $this->db->where('sections.staff_id', $staffId);
+        $this->db->where('sections.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->result();
+        
+    }
 
     
 }
