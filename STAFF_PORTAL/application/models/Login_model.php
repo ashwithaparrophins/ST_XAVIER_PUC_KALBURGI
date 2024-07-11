@@ -210,6 +210,19 @@ class Login_model extends CI_Model
         $query = $this->db->get();
         return $query->row();
     }
+
+    public function getRedirectionUrl($type) {
+        $this->db->select('redirect_url');
+        $this->db->from('tbl_redirection_types');
+        $this->db->where('url_type', $type);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            return $query->row()->redirect_url;
+        } else {
+            return 'adminDashboard'; // default redirection if type not found
+        }
+    }
 }
 
 ?>

@@ -279,106 +279,111 @@ class Login extends CI_Controller
             unset($sessionArray['userId'], $sessionArray['isLoggedIn'], $sessionArray['lastLogin']);
             $loginInfo = array("userId"=>$result->staff_id, "sessionData" => json_encode($sessionArray), "machineIp"=>$_SERVER['REMOTE_ADDR'], "userAgent"=>getBrowserAgent(), "agentString"=>$this->agent->agent_string(), "platform"=>$this->agent->platform());
             $this->login->lastLogin($loginInfo); 
-            if($type== "viewFeeDashboard"){
-                redirect('viewFeeDashboard');
+            $redirectUrl = $this->login->getRedirectionUrl($type);
+
+            // Redirect to the retrieved URL
+                redirect($redirectUrl);
+                
+            // if($type== "viewFeeDashboard"){
+            //     redirect('viewFeeDashboard');
         
-            }else if($type == "schoolStaffDetails" || $type == "staffDetails"){
-                redirect('staffDetails');
-            }else if($type== "staffDetailsResigned"){
-                redirect('staffDetailsResigned');
-            }else if($type== "deletedStaff" || $type == "deletedStaffDetails"){
-                redirect('deletedStaffDetails');
-            }else if($type== "staffDetailsRetired"){
-                redirect('staffDetailsRetired');
-            }else if($type== "salarySlipListing"){
-                redirect('salarySlipListing');
-            }else if($type== "getStaffAttendanceInfo"){
-                redirect('getStaffAttendanceInfo');
+            // }else if($type == "schoolStaffDetails" || $type == "staffDetails"){
+            //     redirect('staffDetails');
+            // }else if($type== "staffDetailsResigned"){
+            //     redirect('staffDetailsResigned');
+            // }else if($type== "deletedStaff" || $type == "deletedStaffDetails"){
+            //     redirect('deletedStaffDetails');
+            // }else if($type== "staffDetailsRetired"){
+            //     redirect('staffDetailsRetired');
+            // }else if($type== "salarySlipListing"){
+            //     redirect('salarySlipListing');
+            // }else if($type== "getStaffAttendanceInfo"){
+            //     redirect('getStaffAttendanceInfo');
         
-            }else if($type== "studentDetails"){
-                redirect('studentDetails');
-            }else if($type== "studentAlumniDetails" || $type=="studentAlumniInfo" || $type=="alumniStudents"){
-                redirect('studentAlumniInfo');
-            }else if($type== "viewStudentsAppliedForTC" || $type=="getStudentAppliedForTc" || $type=="applyForTc"){
-                redirect('getStudentAppliedForTc');
-            }else if($type== "getCertificate"){
-                redirect('getCertificate');
+            // }else if($type== "studentDetails"){
+            //     redirect('studentDetails');
+            // }else if($type== "studentAlumniDetails" || $type=="studentAlumniInfo" || $type=="alumniStudents"){
+            //     redirect('studentAlumniInfo');
+            // }else if($type== "viewStudentsAppliedForTC" || $type=="getStudentAppliedForTc" || $type=="applyForTc"){
+            //     redirect('getStudentAppliedForTc');
+            // }else if($type== "getCertificate"){
+            //     redirect('getCertificate');
          
-            }else if($type== "viewAdmissionDashboard" || $type== "viewAdmissionDashboard_22" || $type== "admissionDashboard" || $type=="viewTwentyTwoAdmissionDashboard"){
-                redirect('admissionDashboard');
-            }else if($type== "viewAdmissionRegisteredStudent" || $type=="getAdmissionRegisteredStudent" || $type== "getAdmissionRegisteredStudent_22" || $type=="getOverallRegisteredApplication"){
-                redirect('getAdmissionRegisteredStudent');
-            }else if($type== "viewApplicationStack" || $type== "viewApplicationStack_22" || $type=="getAllApplicationInfo_22" || $type=="getAllApplicationInfo"){
-                redirect('getAllApplicationInfo');
-            }else if($type== "viewApplicationFeePending" || $type=="viewPendingApplicationStack"){
-                redirect('viewApplicationFeePending');
-            }else if($type== "viewApprovedApplication" || $type== "viewApprovedApplication_22" || $type=="newAdmission_22" || $type=="newAdmission"){
-                redirect('newAdmission');
-            }else if($type== "viewRejectedApplication" || $type== "viewRejectedApplication_22" || $type=="getRejectedApplicationInfo_22" || $type=="getRejectedApplicationInfo"){
-                redirect('getRejectedApplicationInfo');
-            }else if($type== "viewGrievance" || $type== "viewGrievancePreKG"){
-                redirect('viewGrievance');
-            }else if($type== "AdmissionReportDashboard"){
-                redirect('AdmissionReportDashboard');
+            // }else if($type== "viewAdmissionDashboard" || $type== "viewAdmissionDashboard_22" || $type== "admissionDashboard" || $type=="viewTwentyTwoAdmissionDashboard"){
+            //     redirect('admissionDashboard');
+            // }else if($type== "viewAdmissionRegisteredStudent" || $type=="getAdmissionRegisteredStudent" || $type== "getAdmissionRegisteredStudent_22" || $type=="getOverallRegisteredApplication"){
+            //     redirect('getAdmissionRegisteredStudent');
+            // }else if($type== "viewApplicationStack" || $type== "viewApplicationStack_22" || $type=="getAllApplicationInfo_22" || $type=="getAllApplicationInfo"){
+            //     redirect('getAllApplicationInfo');
+            // }else if($type== "viewApplicationFeePending" || $type=="viewPendingApplicationStack"){
+            //     redirect('viewApplicationFeePending');
+            // }else if($type== "viewApprovedApplication" || $type== "viewApprovedApplication_22" || $type=="newAdmission_22" || $type=="newAdmission"){
+            //     redirect('newAdmission');
+            // }else if($type== "viewRejectedApplication" || $type== "viewRejectedApplication_22" || $type=="getRejectedApplicationInfo_22" || $type=="getRejectedApplicationInfo"){
+            //     redirect('getRejectedApplicationInfo');
+            // }else if($type== "viewGrievance" || $type== "viewGrievancePreKG"){
+            //     redirect('viewGrievance');
+            // }else if($type== "AdmissionReportDashboard"){
+            //     redirect('AdmissionReportDashboard');
         
-            }else if($type== "reportDashboard"){
-                redirect('reportDashboard');
-            }else if($type== "viewDocumentInfo"){
-                redirect('viewDocumentInfo');
-            }else if($type== "jobDashboard"){
-                redirect('jobDashboard');
-            }else if($type== "jobPortal"){
-                redirect('jobPortal');
-            }else if($type== "approvedJobApplication"){
-                redirect('approvedJobApplication');
-            }else if($type== "shorlistedJobApplication"){
-                redirect('shorlistedJobApplication');
-            }else if($type== "rejectedJobApplication"){
-                redirect('rejectedJobApplication');
+            // }else if($type== "reportDashboard"){
+            //     redirect('reportDashboard');
+            // }else if($type== "viewDocumentInfo"){
+            //     redirect('viewDocumentInfo');
+            // }else if($type== "jobDashboard"){
+            //     redirect('jobDashboard');
+            // }else if($type== "jobPortal"){
+            //     redirect('jobPortal');
+            // }else if($type== "approvedJobApplication"){
+            //     redirect('approvedJobApplication');
+            // }else if($type== "shorlistedJobApplication"){
+            //     redirect('shorlistedJobApplication');
+            // }else if($type== "rejectedJobApplication"){
+            //     redirect('rejectedJobApplication');
 
-            }else if($type== "viewLibraryDashboard"){
-                redirect('viewLibraryDashboard');
-            }else if($type== "libraryManagementSystem"){
-                redirect('libraryManagementSystem');
-            }else if($type== "viewIssueBook"){
-                redirect('viewIssueBook');
-            }else if($type== "viewIssuedBooks"){
-                redirect('viewIssuedBooks');
-            }else if($type== "viewLibrarySettings"){
-                redirect('viewLibrarySettings');
-            }else if($type== "viewBarCodeGenerater"){
-                redirect('viewBarCodeGenerater');
+            // }else if($type== "viewLibraryDashboard"){
+            //     redirect('viewLibraryDashboard');
+            // }else if($type== "libraryManagementSystem"){
+            //     redirect('libraryManagementSystem');
+            // }else if($type== "viewIssueBook"){
+            //     redirect('viewIssueBook');
+            // }else if($type== "viewIssuedBooks"){
+            //     redirect('viewIssuedBooks');
+            // }else if($type== "viewLibrarySettings"){
+            //     redirect('viewLibrarySettings');
+            // }else if($type== "viewBarCodeGenerater"){
+            //     redirect('viewBarCodeGenerater');
 
-            }else if($type== "PartyDetails"){
-                redirect('PartyDetails');
-            }else if($type== "PurchaseOrderListing"){
-                redirect('PurchaseOrderListing');
+            // }else if($type== "PartyDetails"){
+            //     redirect('PartyDetails');
+            // }else if($type== "PurchaseOrderListing"){
+            //     redirect('PurchaseOrderListing');
 
-            }else if($type== "viewBusListing"){
-                redirect('viewBusListing');
-            }else if($type== "viewStudentTransportListing"){
-                redirect('viewStudentTransportListing');
-            }else if($type== "cancelBusListing"){
-                redirect('cancelBusListing');
-            }else if($type== "viewBusFeeConcession"){
-                redirect('viewBusFeeConcession');
+            // }else if($type== "viewBusListing"){
+            //     redirect('viewBusListing');
+            // }else if($type== "viewStudentTransportListing"){
+            //     redirect('viewStudentTransportListing');
+            // }else if($type== "cancelBusListing"){
+            //     redirect('cancelBusListing');
+            // }else if($type== "viewBusFeeConcession"){
+            //     redirect('viewBusFeeConcession');
 
-            }else if($type== "getMyAttendanceInfoPage"){
-                redirect('getMyAttendanceInfoPage');
+            // }else if($type== "getMyAttendanceInfoPage"){
+            //     redirect('getMyAttendanceInfoPage');
         
-            }else if($type== "viewFeePaidInfo" || $type == "feePaidInfo" || $type=="getAllFeePaymentInfo" || $type=="feePaidDetails"){
-                redirect('getAllFeePaymentInfo');
-            }else if($type == "viewFeeConcession"){
-                redirect('viewFeeConcession');
-            }else if($type == "viewScholarship"){
-                redirect('viewScholarship');
-            }else if($type == "miscellaneousFeeListing"){
-                redirect('miscellaneousFeeListing');
-            }else if($type == "viewMyProfile"){
-                redirect('viewMyProfile');
-            }else{
-              redirect('adminDashboard');
-             }
+            // }else if($type== "viewFeePaidInfo" || $type == "feePaidInfo" || $type=="getAllFeePaymentInfo" || $type=="feePaidDetails"){
+            //     redirect('getAllFeePaymentInfo');
+            // }else if($type == "viewFeeConcession"){
+            //     redirect('viewFeeConcession');
+            // }else if($type == "viewScholarship"){
+            //     redirect('viewScholarship');
+            // }else if($type == "miscellaneousFeeListing"){
+            //     redirect('miscellaneousFeeListing');
+            // }else if($type == "viewMyProfile"){
+            //     redirect('viewMyProfile');
+            // }else{
+            //   redirect('adminDashboard');
+            //  }
         } else {
             $this->session->set_flashdata('error', 'Username or Password Mismatch');
             $this->index();
