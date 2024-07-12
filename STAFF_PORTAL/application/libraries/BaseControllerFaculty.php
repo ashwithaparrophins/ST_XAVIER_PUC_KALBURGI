@@ -4,6 +4,7 @@ class BaseController extends CI_Controller {
 	public function __construct() {
         parent:: __construct();   
 		$this->load->model('push_notification_model');
+        $this->load->model('staff_model','staff');
     }
 	protected $role = '';
 	protected $vendorId = '';
@@ -124,6 +125,7 @@ class BaseController extends CI_Controller {
      * @return {null} $result : null
      */
     function loadViews($viewName = "", $headerInfo = NULL, $pageInfo = NULL, $footerInfo = NULL){
+		$headerInfo['institutionList'] = $this->staff->getAllInstitutionInfo();
         $this->load->view('includes/header', $headerInfo);
         $this->load->view($viewName, $pageInfo);
         $this->load->view('includes/footer', $footerInfo);

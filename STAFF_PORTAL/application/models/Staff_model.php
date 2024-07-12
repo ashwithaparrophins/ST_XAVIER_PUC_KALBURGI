@@ -1424,7 +1424,13 @@ public function getStaffByRole($filter) {
         return $query->row();
     }
 
-   
+    public function getAllInstitutionInfo(){
+        $this->db->from('tbl_institutions_info as inst');
+        $this->db->where('inst.is_deleted', 0);
+        $this->db->order_by('inst.priority','asc');
+        $query = $this->db->get();
+        return $query->result();
+    }
 
 
 }
