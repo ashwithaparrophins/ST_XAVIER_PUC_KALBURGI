@@ -1508,7 +1508,7 @@
                             <?php if(!empty($institutionList)){   
                                             foreach($institutionList as $inst){ ?>
                                             <a class="dropdown-item"
-                                                href="<?php echo $inst->api; ?>directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
+                                                href="<?php echo $inst->staff_api; ?>directLogin/<?php echo $this->staff_id; ?>/<?php echo uri_string(); ?>">
                                              <div class="notification__icon-wrapper">
                                                 <div class="notification__icon">
                                                   <img src="<?php echo $inst->institution_logo; ?>"
