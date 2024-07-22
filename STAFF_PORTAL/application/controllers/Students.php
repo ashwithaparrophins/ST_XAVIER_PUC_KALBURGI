@@ -607,6 +607,7 @@ class Students extends BaseController
             $feeInfo = $this->fee->getTotalFeeAmountForReport($student->term_name,$student->stream_name,CURRENT_YEAR);
             $data['total_fee'] = $feeInfo->total_fee;
             $data['bill_model'] = $this->fee;
+            $data['transport'] = $this->transport;
             $data['active'] = '';
             $this->global['pageTitle'] = ''.TAB_TITLE.' : View Student Details';
             $this->loadViews("students/viewStudent", $this->global, $data, null);
@@ -630,8 +631,7 @@ class Students extends BaseController
             // $data['motherTongueInfo'] = $this->student->getMotherTongueInfo();
             $data['streamInfo'] = $this->student->getAllStreamName();
             $data['routeInfo'] = $this->transport->getTransportNameInfo();
-           
-            
+            $data['transport'] = $this->transport;
             $this->global['pageTitle'] = ''.TAB_TITLE.' : Edit Student Details';
             $this->loadViews("students/editStudent", $this->global, $data, null);
         }
@@ -682,6 +682,7 @@ class Students extends BaseController
                 $dob = $this->security->xss_clean($this->input->post('dob'));
                 $sub_caste = $this->security->xss_clean($this->input->post('sub_caste'));
                 $route = $this->input->post('route');
+                $routeII = $this->input->post('routeII');
 
                 $state = $this->security->xss_clean($this->input->post('state'));
                 $pincode = $this->security->xss_clean($this->input->post('pincode'));
@@ -752,6 +753,7 @@ class Students extends BaseController
                     'taluk' => $taluk,
                     'district' => $district,
                     'route_id' => $route,
+                    'route_id_II' => $routeII,
                     'updated_by'=>$this->staff_id, 
                     'updated_date_time'=>date('Y-m-d H:i:s'),
                     'photo_url' => $image_path

@@ -1211,6 +1211,15 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Year</label>
+                            <select class="form-control input-md required" name="year">
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+                    </div>
                     <!-- Modal footer -->
                     <div class="modal-footer" style="padding:5px;">
                         <div class="row">
@@ -1520,7 +1529,7 @@
                                 <option value="">Select Bus No.</option>
                                 <?php if (!empty($busNoInfo)) {
                                     foreach ($busNoInfo as $busno) { ?>
-                                        <option value="<?php echo $busno->bus_no; ?>"><?php echo $busno->bus_no ?></option>
+                                        <option value="<?php echo $busno->name; ?>"><?php echo $busno->name ?></option>
                                 <?php }
                                 } ?>
                             </select>
@@ -1528,6 +1537,17 @@
                         </div>
 
                        
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Select Year</label>
+                                <select class="form-control" name="year" id="year" required>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>                 
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer" style="padding:5px;">
@@ -1576,14 +1596,22 @@
                                 <option value="">Select Bus No.</option>
                                 <?php if (!empty($busNoInfo)) {
                                     foreach ($busNoInfo as $busno) { ?>
-                                        <option value="<?php echo $busno->bus_no; ?>"><?php echo $busno->bus_no ?></option>
+                                        <option value="<?php echo $busno->name; ?>"><?php echo $busno->name ?></option>
                                 <?php }
                                 } ?>
-                            </select>
-                            
+                            </select>                        
                         </div>
-
-                       
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Select Year</label>
+                                <select class="form-control" name="year" id="year" required>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>                 
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer" style="padding:5px;">

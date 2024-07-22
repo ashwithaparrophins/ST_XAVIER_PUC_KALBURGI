@@ -92,6 +92,7 @@ if ($error) {
                                                         <?php if(!empty($feeInfo->con_year)){ ?>
                                                             <option value="<?php echo $feeInfo->con_year; ?>">SELECTED:<?php echo $feeInfo->con_year; ?></option>
                                                         <?php } ?>
+                                                        <option value="2024">2024</option>
                                                         <option value="2023">2023</option>
                                                         <!-- <option value="2022">2022</option>
                                                         <option value="2021">2021</option> -->

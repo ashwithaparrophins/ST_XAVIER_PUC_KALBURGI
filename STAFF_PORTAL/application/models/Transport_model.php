@@ -410,11 +410,13 @@ class Transport_model extends CI_Model
     public function getAllStudentTransportInfo($filter, $page, $segment){
         $this->db->select('studentBus.row_id, studentBus.receipt_no, studentBus.bus_number, studentBus.payment_date,studentBus.ref_receipt_no,studentBus.month,
         studentBus.bus_fees, studentBus.route_from, studentBus.route_to, studentBus.from_date,studentBus.payment_type,
-        studentBus.to_date,student.sat_number,student.student_name,transName.name as route_name,transName.rate,transName.bus_no,student.student_id');
+        studentBus.to_date,student.sat_number,student.student_name,transName.name as route_name,transName.rate,end_route.name as bus_no,student.student_id');
         $this->db->from('tbl_student_bus_management_details as studentBus'); 
         // $this->db->join('tbl_bus_management_details as bus', 'bus.vehicle_number = studentBus.bus_number','left');
         $this->db->join('tbl_students_info as student', 'student.row_id = studentBus.student_id','left');
         $this->db->join('tbl_student_transport_rate_info as transName','transName.row_id = student.route_id','left');
+        $this->db->join('tbl_student_transport_fee_structure as fee', 'transName.row_id = fee.pickup_point_id','left');
+        $this->db->join('tbl_end_route_info as end_route', 'end_route.row_id = transName.route_id','left');
         
         if(!empty($filter['receipt_no'])){
             $likeCriteria = "(studentBus.ref_receipt_no  LIKE '%" . $filter['receipt_no'] . "%')";
@@ -466,6 +468,7 @@ class Transport_model extends CI_Model
         }
 
         // $this->db->where('bus.is_deleted', 0);
+        $this->db->group_by('studentBus.row_id');
         $this->db->where('studentBus.is_deleted', 0);
         $this->db->order_by('studentBus.created_date_time', 'DESC');
         $this->db->limit($filter['page'], $filter['segment']);
@@ -537,12 +540,13 @@ class Transport_model extends CI_Model
     }
 
     public function getStudentTransportInfoById($row_id) {
-        $this->db->select('stdbus.row_id, stdbus.bus_number, stdbus.receipt_no,stdbus.payment_date, stdbus.bus_fees, stdbus.route_from,student.admission_no,stdbus.upi_ref_no,stdbus.transaction_number,stdbus.dd_number,student.register_no,student.application_no,stdbus.ref_receipt_no,stdbus.month,
-        stdbus.route_to, stdbus.from_date, stdbus.to_date, bus.vehicle_number,student.sat_number,student.student_name,student.father_name,stdbus.intake_year,stdbus.payment_type,stdbus.payment_status,stdbus.term_name,stdbus.created_date_time,rate.bus_no,student.student_id,rate.name as route_name');
+        $this->db->select('stdbus.row_id, stdbus.bus_number,end_route.name as bus_no, stdbus.receipt_no,stdbus.payment_date, stdbus.bus_fees, stdbus.route_from,student.admission_no,stdbus.upi_ref_no,stdbus.transaction_number,stdbus.dd_number,student.register_no,student.application_no,stdbus.ref_receipt_no,stdbus.month,
+        stdbus.route_to, stdbus.from_date, stdbus.to_date, bus.vehicle_number,student.sat_number,student.student_name,student.father_name,stdbus.intake_year,stdbus.payment_type,stdbus.payment_status,stdbus.term_name,stdbus.created_date_time,student.student_id,rate.name as route_name');
         $this->db->from('tbl_student_bus_management_details as stdbus');
         $this->db->join('tbl_bus_management_details as bus', 'bus.vehicle_number = stdbus.bus_number','left');
         $this->db->join('tbl_students_info as student', 'student.row_id = stdbus.student_id','left');
         $this->db->join('tbl_student_transport_rate_info as rate', 'rate.row_id = student.route_id','left');
+        $this->db->join('tbl_end_route_info as end_route', 'end_route.row_id = rate.route_id','left');
         $this->db->where('stdbus.row_id', $row_id);
         $this->db->where('stdbus.is_deleted', 0);
         $query = $this->db->get();
@@ -575,16 +579,30 @@ class Transport_model extends CI_Model
 
     // Transport type
     public function getTransportNameInfo(){
+        $this->db->select('trans.row_id,end_route.name as route_name,trans.name as pickup_point');
         $this->db->from('tbl_student_transport_rate_info as trans');
+        $this->db->join('tbl_end_route_info as end_route', 'end_route.row_id = trans.route_id','left');
         $this->db->where('trans.is_deleted', 0);
+        $this->db->where('end_route.is_deleted', 0);
+        $this->db->group_by('trans.row_id');
+        $this->db->order_by('end_route.row_id','ASC');
         $query = $this->db->get();
         return $query->result();
     }
-
+    public function getStudentPickUpInfo($pickup_point_id) {
+        $this->db->select('route.name as route_name,pickup_point.name as pickup_point_name');
+        $this->db->from('tbl_end_route_info as route');
+        $this->db->join('tbl_student_transport_rate_info as pickup_point', 'route.row_id = pickup_point.route_id','left');
+        $this->db->where('route.is_deleted', 0);
+        $this->db->where('pickup_point.row_id', $pickup_point_id);
+        $this->db->where('pickup_point.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
     public function getTransportBusNo(){
-        $this->db->from('tbl_student_transport_rate_info as trans');
+        $this->db->from('tbl_end_route_info as trans');
         $this->db->where('trans.is_deleted', 0);
-        $this->db->group_by('trans.bus_no');
+        $this->db->group_by('trans.name');
         $query = $this->db->get();
         return $query->result();
     }
@@ -850,6 +868,44 @@ class Transport_model extends CI_Model
         return $query->result();
     }
 
+    public function getStudentInfoById($row_id=''){
+        $this->db->from('tbl_students_info as student'); 
+        $this->db->where('student.row_id', $row_id);
+        $this->db->where('student.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+
+    public function getStudentTransportRateInfo($pickup_point_id,$year) {
+        $this->db->select('fee.row_id,route.name as route_name,pickup_point.name as pickup_point_name,fee.rate,fee.year');
+        $this->db->from('tbl_end_route_info as route');
+        $this->db->join('tbl_student_transport_rate_info as pickup_point', 'route.row_id = pickup_point.route_id','left');
+        $this->db->join('tbl_student_transport_fee_structure as fee', 'pickup_point.row_id = fee.pickup_point_id','left');
+        $this->db->where('route.is_deleted', 0);
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('fee.year', $year);
+        $this->db->where('pickup_point.row_id', $pickup_point_id);
+        $this->db->where('pickup_point.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function getStudentTransportRateInfoForReport($pickup_point_id,$year,$bus_no) {
+        $this->db->select('fee.row_id,route.name as route_name,pickup_point.name as pickup_point_name,fee.rate,fee.year');
+        $this->db->from('tbl_end_route_info as route');
+        $this->db->join('tbl_student_transport_rate_info as pickup_point', 'route.row_id = pickup_point.route_id','left');
+        $this->db->join('tbl_student_transport_fee_structure as fee', 'pickup_point.row_id = fee.pickup_point_id','left');
+        $this->db->where('route.is_deleted', 0);
+        $this->db->where('fee.is_deleted', 0);
+        $this->db->where('fee.year', $year);
+        $this->db->where('route.name', $bus_no);
+        $this->db->where('pickup_point.row_id', $pickup_point_id);
+        $this->db->where('pickup_point.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
     public function getLastReceiptNoFromTransport($year){
         $this->db->from('tbl_student_bus_management_details as std');
         $this->db->where('std.intake_year', $year);
@@ -909,12 +965,13 @@ class Transport_model extends CI_Model
 
     public function getTransportFeeBulkReceipt($filter='') {
         
-        $this->db->select('student.row_id as student_row_id,student.student_name,student.father_name,student.student_id,bus.ref_receipt_no,student.term_name,rate.bus_no,rate.name as route_name,bus.dd_number,bus.from_date,bus.to_date,
+        $this->db->select('student.row_id as student_row_id,student.student_name,end_route.name as bus_no,student.father_name,student.student_id,bus.ref_receipt_no,student.term_name,rate.name as route_name,bus.dd_number,bus.from_date,bus.to_date,
         student.stream_name,month.month,month.amount,student.route_id,bus.total_amount,bus.pending_balance,bus.bus_fees,bus.created_date_time,bus.payment_type,bus.transaction_number,bus.upi_ref_no');
         
         $this->db->from('tbl_student_bus_management_details as bus');
         $this->db->join('tbl_students_info as student','student.row_id  = bus.student_id','left');
         $this->db->join('tbl_student_transport_rate_info as rate', 'rate.row_id = student.route_id','left');
+        $this->db->join('tbl_end_route_info as end_route', 'end_route.row_id = rate.route_id','left');
         $this->db->join('tbl_transport_month_payment as month','month.payment_id  = bus.row_id','left');
         
         if(!empty($filter['date_from'])){
@@ -1138,6 +1195,38 @@ class Transport_model extends CI_Model
         $this->db->where('fee.con_year', $year);
         $this->db->where('fee.is_deleted', 0);
         $this->db->where('fee.approved_status', 1);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function getTransTotalFeeAmount($filter){
+ 
+        $this->db->select('SUM(fee.rate) as total_fee');
+        $this->db->from('tbl_student_transport_fee_structure as fee');
+        $this->db->where_in('fee.route_row_id', [$filter['route_id']]);
+        $this->db->where('fee.year', $filter['fee_year']);
+        $this->db->where('fee.is_deleted', 0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+    function getStudentInformationById($row_id,$year){
+        $this->db->select('student.row_id,student.student_name,student.category_name,student.photo_url,student.dob, student.gender,student.blood_group,
+        student.previous_class,student.sat_number,student.permanent_address,student.present_address,student.place_of_birth,
+        student.district,student.taluk,student.state,student.mother_tongue,student.religion_name,student.category_name,
+        student.nationality_name,student.father_name,student.mother_name,student.father_mobile_one,student.mother_mobile_one,yearwise.cancel_bus_status,
+        student.father_mobile_two,student.mother_mobile_two,student.guardian_name,student.guardian_mobile_no,student.aadhar_no,
+        yearwise.class as term_name,academic.section_name,academic.elective_sub,academic.date_of_admission,student.caste,student.sub_caste,
+        academic.student_id,student.email,student.mother_email,student.admission_no,student.father_email,student.father_aadhar,fee.rate,yearwise.route_id,
+        student.father_profession,student.mother_profession,student.mother_aadhar,student.guardian_email,student.name_for_emergency,
+        student.emergency_mobile,student.relation_type,student.student_from,
+        student.bus_status,academic.house_name,student.previous_school,student.previous_tc_no,student.intake_year,route.name as route_name,
+        student.tc_recieved_date,student.parent_annual_income,student.no_of_dependent,student.admission_status,student.admission_no,student.application_no');
+        $this->db->from('tbl_student_info as student'); 
+        $this->db->join('tbl_student_transport_rate_info as route', 'route.row_id = student.IPU_route_id','left');
+        $this->db->join('tbl_student_transport_fee_structure as fee', 'route.row_id = fee.route_row_id','left');
+        $this->db->where('student.row_id', $row_id);
+        $this->db->where('fee.year', $year);
+        $this->db->where('student.is_deleted', 0);
         $query = $this->db->get();
         return $query->row();
     }

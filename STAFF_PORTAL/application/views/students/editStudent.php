@@ -316,24 +316,6 @@ if ($error) {
 
                                                         </tr>
                                                         <tr>
-                                                            <th class="tbl-head" >Transport Route</th>
-                                                            <th width="240">
-                                                                <div class="form-group mb-0 input_mobile_width">
-                                                                    <select class="form-control " id="route" name="route" autocomplete="off">
-                                                                        <?php if (!empty($studentInfo->route_name)) { ?>
-                                                                            <option value="<?php echo $studentInfo->route_id; ?>">
-                                                                                Selected: <?php echo $studentInfo->route_name; ?>
-                                                                            </option>
-                                                                        <?php } ?>
-                                                                        <option value="">Select Transport Route</option>
-                                                                        <?php foreach($routeInfo as $route){ ?>
-                                                                            <option value="<?php echo $route->row_id; ?>"><?php echo $route->name; ?></option>
-                                                                        <?php } ?>
-                                                                    </select>
-                                                                </div>
-                                                            </th>
-
-
                                                             <th class="tbl-head">Primary Mobile</th>
                                                             <th>
                                                             <div class="form-group mb-0">
@@ -344,6 +326,42 @@ if ($error) {
                                                                     </div>
                                                                 </div>
                                                             </th>
+                                                            <?php $RouteName = $transport->getStudentPickUpInfo($studentInfo->route_id);?>
+                                                            <th class="tbl-head" >I PUC Route</th>
+                                                            <th width="240">
+                                                                <div class="form-group mb-0 input_mobile_width">
+                                                                    <select class="form-control " id="route" name="route" autocomplete="off">
+                                                                        <?php if (!empty($studentInfo->route_id)) { ?>
+                                                                            <option value="<?php echo $studentInfo->route_id; ?>">
+                                                                                Selected: <?php echo $RouteName->pickup_point_name; ?>
+                                                                            </option>
+                                                                        <?php } ?>
+                                                                        <option value="">Select Transport Route</option>
+                                                                        <?php foreach($routeInfo as $route){ ?>
+                                                                            <option value="<?php echo $route->row_id; ?>"><?php echo $route->pickup_point; ?></option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </div>
+                                                            </th>
+                                                            <?php if ($studentInfo->term_name == 'II PUC') { ?>
+                                                            <?php $RouteNameII = $transport->getStudentPickUpInfo($studentInfo->route_id_II);?>
+                                                            <th class="tbl-head" >II PUC Route</th>
+                                                            <th width="240">
+                                                                <div class="form-group mb-0 input_mobile_width">
+                                                                    <select class="form-control " id="routeII" name="routeII" autocomplete="off">
+                                                                        <?php if (!empty($studentInfo->route_id_II)) { ?>
+                                                                            <option value="<?php echo $studentInfo->route_id_II; ?>">
+                                                                                Selected: <?php echo $RouteNameII->pickup_point_name; ?>
+                                                                            </option>
+                                                                        <?php } ?>
+                                                                        <option value="">Select Transport Route</option>
+                                                                        <?php foreach($routeInfo as $route){ ?>
+                                                                            <option value="<?php echo $route->row_id; ?>"><?php echo $route->pickup_point; ?></option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </div>
+                                                            </th>
+                                                            <?php } ?>
                                                         </tr>
                                                     </table>
                                                 </div>

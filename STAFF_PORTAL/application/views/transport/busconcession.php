@@ -383,7 +383,7 @@
 
                                 <tr>
 
-                                    <th colspan="8" class="text-center">Scholarship Record Not Found</th>
+                                    <th colspan="8" class="text-center">Concession Record Not Found</th>
 
                                 </tr>
 
@@ -489,7 +489,7 @@
                                 <div class="form-group mb-2">
                                     <label for="exampleInputEmail1">Year<span class="text-danger required_star">*</span></label>
                                     <select class="form-control text-dark" name="con_year">
-                                        <!-- <option value="2024">2024</option> -->
+                                        <option value="2024">2024</option>
                                         <option value="2023">2023</option>
                                         <!-- <option value="2022">2022</option> -->
                                     </select>

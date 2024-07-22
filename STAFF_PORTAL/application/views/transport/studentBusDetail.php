@@ -79,6 +79,7 @@ if ($error) {
                                     <option value="<?php echo $year; ?>" selected><b><?php echo $year; ?></b>
                                     </option>
                                     <?php } ?>
+                                    <option value="2024">2024</option>
                                     <option value="2023">2023</option>
                                     <option value="2022">2022</option>
                               
@@ -156,16 +157,16 @@ if ($error) {
                                             </select>
                                         </div>
                                     </td> -->
-                                    <?php if($year == CURRENT_YEAR){ ?>
+                                    <?php //if($year == CURRENT_YEAR){ ?>
                                     <td>
                                         <div class="form-group mb-0">
-                                            <input type="text" value="<?php echo $payment_date; ?>" name="date_from" id="date_from" class="form-control input-sm datepicker" placeholder="Search Month From" autocomplete="off">
+                                            <input type="text" value="<?php echo $month_from; ?>" name="date_from" id="date_from" class="form-control input-sm datepicker" placeholder="Search Month From" autocomplete="off">
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="form-group mb-0">
-                                            <input type="text" value="<?php echo $payment_date; ?>" name="date_to" id="date_to" class="form-control input-sm datepicker" placeholder="Search Month To" autocomplete="off">
+                                            <input type="text" value="<?php echo $month_to; ?>" name="date_to" id="date_to" class="form-control input-sm datepicker" placeholder="Search Month To" autocomplete="off">
                                         </div>
                                     </td>
                                    
@@ -190,7 +191,7 @@ if ($error) {
                                             <input type="text" value="<?php echo $bus_no; ?>" name="bus_no" id="bus_no" class="form-control input-sm datepicker" placeholder="Search Bus No." autocomplete="off">
                                         </div>
                                     </td>
-                                    <?php } ?>
+                                    <?php //} ?>
                                     <td>
                                         <div class="form-group mb-0">
                                         <select class="form-control text-dark" id="payment_type"
@@ -234,13 +235,11 @@ if ($error) {
                                     <th class="text-center">Student ID</th>
                                     <th class="text-center">Name</th>
                                     <!-- <th class="text-center">Vehicle Number</th> -->
-                                    <?php if($year == CURRENT_YEAR){ ?>
                                     <th class="text-center">Month From</th>
                                     <th class="text-center">Month To</th>
                                   
                                     <th class="text-center">Route</th>
                                     <th class="text-center">Bus No.</th>
-                                    <?php } ?>
                                     <th class="text-center">Payment Type</th>
                                     <!-- <th class="text-center">From Date</th>
                                     <th class="text-center">To Date</th> -->
@@ -256,13 +255,11 @@ if ($error) {
                                         <th class="text-center"><?php echo $trans->student_id; ?></th>
                                          <th><?php echo strtoupper($trans->student_name); ?></th>
                                         <!-- <th class="text-center"><?php echo $trans->vehicle_number; ?></th> -->
-                                        <?php if($year == CURRENT_YEAR){ ?>
                                         <th class="text-center"><?php echo date('M-Y',strtotime($trans->from_date)); ?></th>
                                         <th class="text-center"><?php echo date('M-Y',strtotime($trans->to_date)); ?></th>
                                        
                                         <th><?php echo $trans->route_name; ?></th>
                                         <th class="text-center"><?php echo $trans->bus_no; ?></th>
-                                        <?php } ?>
                                         <th class="text-center"><?php echo $trans->payment_type; ?></th>
                                         
                                         <!-- <th><?php echo $trans->route_to; ?></th> -->
@@ -313,20 +310,16 @@ jQuery(document).ready(function() {
         format: "dd-mm-yyyy"
 
     });
-    $('.datepicker').datepicker({
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: false,
-            dateFormat: "MM yy",
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-                calculateMonthDifference();
-            }
-
-            // $('.ui-datepicker-calender').css("display","none");
-
-        });
-        $('.ui-datepicker-calender').css("display","none");
+    $('#payment_date, #to_date').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: false,
+        dateFormat: "MM yy",
+        onClose: function(dateText, inst) {
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        }
+    });
+    $('.ui-datepicker-calender').css("display","none");
 
     $('[data-toggle="popover"]').popover( { "container":"body", "trigger":"focus", "html":true });
     $('[data-toggle="popover"]').mouseenter(function(){

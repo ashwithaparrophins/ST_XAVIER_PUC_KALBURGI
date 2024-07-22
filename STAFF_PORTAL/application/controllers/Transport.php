@@ -1213,60 +1213,134 @@ class Transport extends BaseController
         }
     }
         
+    // public function getStudentTransFeePaymentInfo(){
+    //     if ($this->isAdmin() == true ) {
+    //         $this->loadThis();
+    //     } else {
+    //         $filter = array();
+    //         $year = $this->security->xss_clean($this->input->post('year'));
+    //         if($year == '2022'){
+    //             $student_row_id = $this->security->xss_clean($this->input->post('student_row_id22'));
+    //         }else{
+    //             $student_row_id = $this->security->xss_clean($this->input->post('student_row_id23'));
+    //         }
+        
+    //         if(empty($student_row_id)){
+    //             $student_row_id = $_SESSION['studentRowID'];
+    //             $year = $_SESSION['year'];
+    //         }
+    //         $data['studentInfo'] = $this->student->getCurrentStudentInfoForTrans();
+    //         $data['studentInfo22'] = $this->student->getStudentPreviousPendingAmt();
+    //         if(!empty($student_row_id)){
+
+    //             $data['studentInfo'] = $this->student->getCurrentStudentInfoForTrans(); 
+    //             $data['total_fee_pending'] = 0.00;
+    //             $data['total_fee_paid'] = 0.00;
+    //             $studentData = $this->student->getStudentsInfoById($student_row_id);
+    //             $total_fee = $data['total_fee'] = $studentData->rate;
+    //             if($year == CURRENT_YEAR){
+    //                 $total_fee_amount = $studentData->rate;
+    //             }else{
+    //                 $previousbal = $this->transport->getStdPreviousBalByID($student_row_id);
+    //                 $total_fee_amount = $previousbal->amount;
+    //             }
+               
+    //             $feePaidInfo = $this->transport->getTransportTotalPaidAmount($student_row_id,$year);
+    //             if(!empty($feePaidInfo->paid_amount)){
+    //                 $total_fee_amount -= $feePaidInfo->paid_amount;
+    //             }
+    //             $feeConcession = $this->transport->getFeeConcessionInfo($student_row_id,$year); 
+    //             if(!empty($feeConcession)){
+    //                 $total_fee_amount -= $feeConcession->fee_amt;
+    //                 $data['feeConcession'] = $feeConcession;
+    //             }
+    //             $data['stdFeePaymentInfo'] = $this->transport->getStudentOverallTransFeePaymentInfo($student_row_id,$year);
+    //             $data['feePaidInfo'] = $feePaidInfo;
+    //             $data['studentData'] = $studentData;
+    //             $data['previousbal'] = $previousbal;
+               
+               
+    //             $data['fee_amount'] = $total_fee_amount;
+    //             $data['year'] = $year;
+    //             if($total_fee_amount == 0 || $total_fee_amount < 0){
+    //                 $data['installment_amt'] = 0;
+    //                 $data['fee_pending_status'] = false;
+    //                 $this->session->set_flashdata('success','Selected student fee is already paid!');
+    //             //  $data['feeInfo'] = $this->admission->getFeePaidInfo($studentInfo->application_number);
+    //             }else{
+    //                 $data['fee_pending_status'] = true;
+    //             }
+    //             $this->global['pageTitle'] = ''.TAB_TITLE.' : Fee Payment Portal' ;
+    //             $this->loadViews("transport/busPaymentPortal", $this->global, $data, null);
+    //         }else{
+    //             redirect('transFeePayNow');
+    //         }
+            
+    //     }
+    // }
+
     public function getStudentTransFeePaymentInfo(){
         if ($this->isAdmin() == true ) {
             $this->loadThis();
         } else {
             $filter = array();
+            $student_row_id = $this->security->xss_clean($this->input->post('student_row_id'));
             $year = $this->security->xss_clean($this->input->post('year'));
-            if($year == '2022'){
-                $student_row_id = $this->security->xss_clean($this->input->post('student_row_id22'));
-            }else{
-                $student_row_id = $this->security->xss_clean($this->input->post('student_row_id23'));
-            }
-        
             if(empty($student_row_id)){
                 $student_row_id = $_SESSION['studentRowID'];
                 $year = $_SESSION['year'];
             }
-            $data['studentInfo'] = $this->student->getCurrentStudentInfoForTrans();
-            $data['studentInfo22'] = $this->student->getStudentPreviousPendingAmt();
             if(!empty($student_row_id)){
 
                 $data['studentInfo'] = $this->student->getCurrentStudentInfoForTrans(); 
                 $data['total_fee_pending'] = 0.00;
                 $data['total_fee_paid'] = 0.00;
-                $studentData = $this->student->getStudentsInfoById($student_row_id);
-                $total_fee = $data['total_fee'] = $studentData->rate;
-                if($year == CURRENT_YEAR){
-                    $total_fee_amount = $studentData->rate;
+                $studentData = $this->transport->getStudentInfoById($student_row_id);
+
+                if($studentData->term_name == 'I PUC'){
+                    $filter['fee_year'] = $year = trim($studentData->intake_year_id);
+                    $RateInfo = $this->transport->getStudentTransportRateInfo($studentData->route_id,$year);
                 }else{
-                    $previousbal = $this->transport->getStdPreviousBalByID($student_row_id);
-                    $total_fee_amount = $previousbal->amount;
+                    $filter['fee_year'] = $year = trim($studentData->intake_year_id) + 1;
+                    $RateInfo = $this->transport->getStudentTransportRateInfo($studentData->route_id_II,$year);
+
+                    // I PUC PENDING FEE
+                    $IPUC_year = trim($studentData->intake_year_id);
+
+                    $IPUCRateInfo = $this->transport->getStudentTransportRateInfo($studentData->route_id,$IPUC_year);
+                    $IPUC_total_fee_amount = $IPUCRateInfo->rate;
+                    $IPUCfeePaidInfo = $this->transport->getTransportTotalPaidAmount($student_row_id,$IPUC_year);
+                    if(!empty($IPUCfeePaidInfo->paid_amount)){
+                        $IPUC_total_fee_amount -= $IPUCfeePaidInfo->paid_amount;
+                    }
+                    $data['stdIPUCFeePaymentInfo'] = $this->transport->getStudentOverallTransFeePaymentInfo($student_row_id,$IPUC_year);
+                    $data['IPUCfeePaidInfo'] = $IPUCfeePaidInfo;
+                    $data['IPUCfee_amount'] = $IPUC_total_fee_amount;
                 }
-               
-                $feePaidInfo = $this->transport->getTransportTotalPaidAmount($student_row_id,$year);
-                if(!empty($feePaidInfo->paid_amount)){
-                    $total_fee_amount -= $feePaidInfo->paid_amount;
-                }
-                $feeConcession = $this->transport->getFeeConcessionInfo($student_row_id,$year); 
-                if(!empty($feeConcession)){
-                    $total_fee_amount -= $feeConcession->fee_amt;
-                    $data['feeConcession'] = $feeConcession;
-                }
-                $data['stdFeePaymentInfo'] = $this->transport->getStudentOverallTransFeePaymentInfo($student_row_id,$year);
-                $data['feePaidInfo'] = $feePaidInfo;
-                $data['studentData'] = $studentData;
-                $data['previousbal'] = $previousbal;
-               
-               
-                $data['fee_amount'] = $total_fee_amount;
-                $data['year'] = $year;
+                    $data['RateInfo'] = $RateInfo;
+                    $total_fee = $data['total_fee'] = $RateInfo->rate;
+                    $total_fee_amount = $RateInfo->rate;
+                    $feePaidInfo = $this->transport->getTransportTotalPaidAmount($student_row_id,$year);
+                    if(!empty($feePaidInfo->paid_amount)){
+                        $total_fee_amount -= $feePaidInfo->paid_amount;
+                    }
+                    $feeConcession = $this->transport->getFeeConcessionInfo($student_row_id,$year); 
+                    if(!empty($feeConcession)){
+                        $total_fee_amount -= $feeConcession->fee_amt;
+                        $data['feeConcession'] = $feeConcession;
+                    }
+                    $data['stdFeePaymentInfo'] = $this->transport->getStudentOverallTransFeePaymentInfo($student_row_id,$year);
+                    $data['feePaidInfo'] = $feePaidInfo;
+                    $data['studentData'] = $studentData;
+                    $data['fee_amount'] = $total_fee_amount;
+                    $data['year'] = $year;
+                
+                $_SESSION['student_row_id'] = $data['student_row_id'] = $student_row_id;
+
                 if($total_fee_amount == 0 || $total_fee_amount < 0){
                     $data['installment_amt'] = 0;
                     $data['fee_pending_status'] = false;
                     $this->session->set_flashdata('success','Selected student fee is already paid!');
-                //  $data['feeInfo'] = $this->admission->getFeePaidInfo($studentInfo->application_number);
                 }else{
                     $data['fee_pending_status'] = true;
                 }
@@ -1275,11 +1349,8 @@ class Transport extends BaseController
             }else{
                 redirect('transFeePayNow');
             }
-            
         }
     }
-
-
 
     public function addTransFeePaymentInfo(){
         if($this->isAdmin() == TRUE){
@@ -1312,6 +1383,8 @@ class Transport extends BaseController
             $to_date = $this->security->xss_clean($this->input->post('month_to'));
             $month = $this->security->xss_clean($this->input->post('month_diff'));
             $ref_receipt_no = $this->security->xss_clean($this->input->post('receipt_no'));
+            $term_name_selected = $this->security->xss_clean($this->input->post('term_name_selected'));
+
             $isExist = $this->transport->checkReceiptNoExists($ref_receipt_no,$year);
             if(!empty($isExist)){
                 $this->session->set_flashdata('error', 'Receipt No. Already Exists');
@@ -1345,15 +1418,17 @@ class Transport extends BaseController
                 $tran_date = '';
             }
          
-            $studentInfo = $this->student->getStudentsInfoById($student_row_id);
-            if($year == CURRENT_YEAR){
-                $total_fee = $studentInfo->rate;
-                $term_name = $studentInfo->term_name;
+            $studentData = $this->transport->getStudentInfoById($student_row_id);
+            if($term_name_selected == 'I PUC'){
+                $year = trim($studentData->intake_year_id);
+                $RateInfo = $this->transport->getStudentTransportRateInfo($studentData->route_id,$year);
             }else{
-                $previousbal = $this->transport->getStdPreviousBalByID($student_row_id);
-                $total_fee = $previousbal->amount;
-                $term_name = $previousbal->term_name;
+                $year = trim($studentData->intake_year_id) + 1;
+                $RateInfo = $this->transport->getStudentTransportRateInfo($studentData->route_id_II,$year);
             }
+            $total_fee = $RateInfo->rate;
+
+            
             $total_fee_pending_to_pay = $total_fee;
 
             $feePaidInfo = $this->transport->getTransportTotalPaidAmount($student_row_id,$year);
@@ -1390,7 +1465,7 @@ class Transport extends BaseController
                     'payment_date' => date('Y-m-d',strtotime($payment_date)),
                     'from_date' => date('Y-m',strtotime($from_date)),
                     'to_date' => date('Y-m',strtotime($to_date)),
-                    'term_name' => $term_name,
+                    'term_name' => $term_name_selected,
                     'bus_fees' => $paid_fee_amount,
                     'pending_balance' => $pending_fee_balance,
                     'payment_type' => $payment_type,
@@ -1407,7 +1482,6 @@ class Transport extends BaseController
                     'created_date_time' => date('Y-m-d H:i:s'));
     
             $receipt_number = $this->transport->addNewStudentTransport($overallFee);
-            if($year == CURRENT_YEAR){
                 $start    = new DateTime($from_date);
                 $start->modify('first day of this month');
                 $end      = new DateTime($to_date);
@@ -1422,8 +1496,7 @@ class Transport extends BaseController
                         'month' => $dt->format("m"),
                         'amount' => $paid_fee_amount / $month);
                         $result = $this->transport->addTransportMonth($overallMonth);
-                }
-            }     
+                }  
                 
             $data['studentData'] = $studentInfo;
             $_SESSION['studentRowID'] = $student_row_id;
@@ -1545,17 +1618,28 @@ class Transport extends BaseController
                     } else {
                         $data['end_date'] = '';
                     }
+                    $stdDetails = $this->student->getStudentInfoById($row_id);   
 
-                // log_message('debug','row'.$row_id);
-                $busInfo = array(
-                    'cancel_bus_status' => 1,
-                    'bus_joined_date' => date('Y-m-d',strtotime($join_date)),
-                    'bus_end_date' => date('Y-m-d',strtotime($end_date)),
-                    'updated_by' => $this->staff_id,
-                    'updated_date_time' => date('Y-m-d H:i:s')
-                );
-                $return_id = $this->student->updateStudentInfo($busInfo, $row_id);
-
+                    if($stdDetails->term_name == 'I PUC'){
+                        $busInfo = array(
+                            'cancel_bus_status' => 1,
+                            'bus_joined_date' => date('Y-m-d',strtotime($join_date)),
+                            'bus_end_date' => date('Y-m-d',strtotime($end_date)),
+                            'updated_by' => $this->staff_id,
+                            'updated_date_time' => date('Y-m-d H:i:s')
+                        );
+                        $return_id = $this->student->updateStudentInfo($busInfo, $row_id);
+                    }else{
+                        $busInfo = array(
+                            'cancel_bus_statusII' => 1,
+                            'bus_joined_date' => date('Y-m-d',strtotime($join_date)),
+                            'bus_end_date' => date('Y-m-d',strtotime($end_date)),
+                            'updated_by' => $this->staff_id,
+                            'updated_date_time' => date('Y-m-d H:i:s')
+                        );
+                        $return_id = $this->student->updateStudentInfo($busInfo, $row_id);
+                    }
+                // log_message('debug','row'.$row_id);`
                 if ($return_id) {
                     $this->session->set_flashdata('success', 'Cancelled Bus Info Updated Successfully');
                 } else {
