@@ -102,10 +102,12 @@ class Staffs extends BaseController
                 }
             }
             $staff_name = strtoupper($staff->name);
+            $machine_id = substr($staff->employee_id, -4);
             $data_array_new[] = array(
                 $checkbox,
                 $staff->staff_id,
                 $staff->employee_id,
+                $machine_id,
                 strtoupper($staff_name),
                 $staff->department,
                 $staff->role,
