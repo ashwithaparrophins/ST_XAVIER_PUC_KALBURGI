@@ -676,7 +676,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row Department_Select">
                             <div class="col-lg-12">
                                 <div class="form-group ">
                                     <label for="team_id">Department Sort</label>
@@ -3441,6 +3441,26 @@ jQuery(document).ready(function() {
 
         return true;
     }
+
+    function toggleDepartmentSelect() {
+        if ($('#staffIdd').val() === 'ALL') {
+            $('.Department_Select').show();
+            $('#departmentStaffId').attr('required', true);
+        } else {
+            $('.Department_Select').hide();
+            $('#departmentStaffId').attr('required', false);
+        }
+    }
+
+    // Initial check
+    toggleDepartmentSelect();
+
+    // Handle change event
+    $('#staffIdd').on('change', function() {
+        toggleDepartmentSelect();
+    });
+
+
 
 });
 </script>

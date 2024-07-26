@@ -1330,7 +1330,7 @@ public function downloadStaffAttendanceMonthlyReportPdf(){
         $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir().DIRECTORY_SEPARATOR.'mpdf','default_font' => 'helvetica','format' => 'A4-L',
         'pagenumPrefix' => 'Page number ',]);
         $mpdf->SetTitle('Attendance Monthly Report');
-        $html = $this->load->view('report/attendanceMonthlyReport',$data,true);
+        $html = $this->load->view('reports/attendanceMonthlyReport',$data,true);
         $mpdf->setFooter('{PAGENO}');
         $mpdf->AddPage('L','','','','',10,10,20,20,15,15);
         $mpdf->WriteHTML($html);

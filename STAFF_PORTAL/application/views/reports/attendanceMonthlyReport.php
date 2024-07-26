@@ -82,12 +82,13 @@
     <?php
     setcookie('isDownloading', 0);
     $totalStaffCount = count($department_list);
+    $totalStaffCount1 = count($department_list);
     $page = 0;
     foreach($department_list as $dept){
     ?>
         <table class="border_full w-100 px-0 mx-0 text-center">
             <tr>
-                <th class="text-center" style="font-size: 24px;" colspan="2">ST JOSEPH'S INDIAN PRIMARY SCHOOL</th>
+                <th class="text-center" style="font-size: 24px;" colspan="2"><?php echo TITLE; ?></th>
             </tr>
             <tr>
                 <th class="text-center" style="font-size: 20px;" colspan="2"><?php echo $dept->name; ?> MONTHLY ATTENDANCE INFORMATION 2024-25</th>
@@ -220,7 +221,7 @@
               
               
                 $attInfo = getSingleStaffAttendanceInfo($con,$staff->staff_id,$date_attendance);
-                if(!empty($attInfo)){    
+                // if(!empty($attInfo)){    
                     // $in_time_punch = date("H:i",strtotime($attInfo['in_time'].'+7 hour'));
                     // $out_time_punch = date("H:i",strtotime($attInfo['out_time'].'+7 hour'));
                     $in_time_punch = $attInfo['in_time'];
@@ -258,10 +259,9 @@
                         $print_v = 'AB';
                     }else if(!empty($in_time_punch)){ //&& !empty($out_time_punch)
                         $working_day++;
-                        if($in_time_punch == $out_time_punch){
+                        if($out_time_punch == "00:00:00"){
                             $print_v = $in_time_punch.'- NOP';
                             $nop++;
-                            // $holiday_count++;
                         }
                     }
                  
@@ -282,11 +282,10 @@
                     }else{
                         echo '<td style="text-align: center;border-bottom: 1px solid black;border-right: 1px solid black;border-top: 1px solid black;margin: 0rem">'.$days_v.': '.$print_v.'</td>';
                     }
-                }
+               // }
                 
                 $col_count++;
                 $days_v++;
-                
                 if($print_v == 'AB'){
                     $absent_count++;
                 // }else if($print_v == 'CL'){
@@ -329,8 +328,14 @@
             </tr>
         <?php } ?>
     </table>
+    <?php
+    $totalStaffCount1--;
+    ?>
+    <?php if($totalStaffCount1 != 0){ ?>
     <div class="page-break"></div>
-    <?php }?>
+    <?php } ?>
+    <?php 
+}?>
     
 </div>
 

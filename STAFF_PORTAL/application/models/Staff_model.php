@@ -320,7 +320,7 @@ public function getStaffAttendanceInfoByRowId($row_id){
  
     public function getStaffInfoForProfile($staff_id)
     {
-        $this->db->select('staff.doj, staff.gender, staff.dob, staff.type, staff.row_id,staff.blood_group, 
+        $this->db->select('staff.doj, staff.gender, staff.dob, staff.type, staff.row_id,staff.blood_group,dept.dept_id,
         staff.staff_id, staff.email, staff.name,dept.name as department, staff.mobile_one,staff.mobile,
         Role.role, staff.role as role_id, staff.photo_url, staff.address, staff.department_id');
         $this->db->from('tbl_staff as staff');
