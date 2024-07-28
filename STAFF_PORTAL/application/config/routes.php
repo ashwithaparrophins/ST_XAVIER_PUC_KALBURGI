@@ -1232,6 +1232,7 @@ $route['pucSubjectList']='apistaff/pucSubjectList';
 
 $route['sectionList']='apistaff/sectionList';
 
+$route['staffAppStaffAttendance']='apistaff/staffAppStaffAttendance';
 
 $route['adminDashboard'] = 'user/adminDashboard';
 

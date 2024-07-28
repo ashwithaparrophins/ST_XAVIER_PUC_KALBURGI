@@ -127,12 +127,7 @@ class ApiStaff extends CI_Controller
             $staffID
         );
 
-        log_message(
-            'debug',
-            'fetchLeaveManagement is -->' . print_r($fetchLeaveManagement, true)
-        );
-
-        $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP','EL'];
+        $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP','EL', 'OD'];
 
         $leaveCounts = [];
         foreach ($leaveTypes as $type) {
@@ -185,7 +180,15 @@ class ApiStaff extends CI_Controller
                 $earnedLeaveRemaining =
                     $fetchLeaveManagement[0]->earned_leave -
                     $leaveCount;
-            } 
+            } elseif($type =='OD'){
+
+                $officialLeaveEarned =
+                $fetchLeaveManagement[0]->official_duty_earned;
+                $officialLeaveUsed = $leaveCount;
+                $officialLeaveRemaining =
+                    $fetchLeaveManagement[0]->official_duty_earned -
+                    $leaveCount;
+            }
             
             elseif ($type == 'LOP') {
                 $lopUsed = $leaveCount ?? 0;
@@ -208,7 +211,9 @@ class ApiStaff extends CI_Controller
 
         $maternityLeaveRemaining = $maternityLeaveRemaining ?? 0;
 
-       
+        $earnedLeaveRemaining =$earnedLeaveRemaining??0;
+
+        $officialLeaveRemaining = $officialLeaveRemaining??0;
 
         // Display casual leave if remaining is not zero
         if ($casualLeaveRemaining != 0) {
@@ -272,10 +277,23 @@ class ApiStaff extends CI_Controller
         if ($earnedLeaveRemaining != 0) {
             $formattedLeaveTypes[] = (object) [
                 'leave_type' =>
-                    'Earned Leave(EL)' . ' (' . $earnedLeaveRemaining . ')',
+                'Earned Leave(EL)' . ' (' . $earnedLeaveRemaining . ')',
                 'leave_name' => 'Earned Leave(EL)',
                 'leave_short' => 'EL',
                 'count' => $earnedLeaveRemaining,
+            ];
+        }
+
+        if ($officialLeaveRemaining != 0) {
+            $formattedLeaveTypes[] = (object) [
+                'leave_type' =>
+                    'Official Duty(OD)' .
+                    ' (' .
+                    $officialLeaveRemaining .
+                    ')',
+                'leave_name' => 'Official Duty(OD)',
+                'leave_short' => 'OD',
+                'count' => $officialLeaveRemaining,
             ];
         }
 
@@ -309,7 +327,9 @@ class ApiStaff extends CI_Controller
             $staffID
         );
 
-        $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP' ,'EL'];
+       // $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP' ];
+
+        $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP','EL', 'OD'];
 
         $leaveCounts = [];
         foreach ($leaveTypes as $type) {
@@ -317,7 +337,7 @@ class ApiStaff extends CI_Controller
                 $staffID,
                 $type
             )->total_days_leave;
-            log_message('debug', 'leaveCount' . print_r($leaveCount, true));
+            //log_message('debug', 'leaveCount' . print_r($leaveCount, true));
 
             $leaveCounts[$type] = $leaveCount;
 
@@ -355,14 +375,21 @@ class ApiStaff extends CI_Controller
                 $maternityLeaveRemaining =
                     $fetchLeaveManagement[0]->maternity_leave_earned -
                     $leaveCount;
-            } elseif ($type == 'EL') {
+            }elseif ($type == 'EL') {
                 $earnedLeaveEarned =
                     $fetchLeaveManagement[0]->earned_leave;
                 $earnedLeaveUsed = $leaveCount;
                 $earnedLeaveRemaining =
                     $fetchLeaveManagement[0]->earned_leave -
                     $leaveCount;
-            } 
+            }  elseif($type =='OD'){
+                $officialLeaveEarned =
+                $fetchLeaveManagement[0]->official_duty_earned;
+                $officialLeaveUsed = $leaveCount;
+                $officialLeaveRemaining =
+                    $fetchLeaveManagement[0]->official_duty_earned -
+                    $leaveCount;
+            }
             elseif ($type == 'LOP') {
                 $lopUsed = $leaveCount ?? 0;
             }
@@ -387,6 +414,10 @@ class ApiStaff extends CI_Controller
         $paternityLeaveRemaining = $paternityLeaveRemaining ?? 0;
 
         $maternityLeaveRemaining = $maternityLeaveRemaining ?? 0;
+
+        $earnedLeaveRemaining =$earnedLeaveRemaining??0;
+
+        $officialLeaveRemaining = $officialLeaveRemaining??0;
 
         // Display casual leave if remaining is not zero
         if ($casualLeaveEarned != 0) {
@@ -439,6 +470,17 @@ class ApiStaff extends CI_Controller
             ];
         }
 
+        if ($officialLeaveEarned != 0) {
+            $formattedLeaveTypes[] = (object) [
+                'leave_type' => 'Official Duty(OD)',
+                'leave_short' => 'OD',
+                'earned' => $officialLeaveEarned ?? 0,
+                'used' => $officialLeaveEarned ?? 0,
+                'remaining' => $officialLeaveRemaining,
+                
+            ];
+        }
+
         if ($earnedLeaveRemaining != 0) {
             $formattedLeaveTypes[] = (object) [
                 'leave_type' => 'Earned Leave(EL)',
@@ -471,6 +513,7 @@ class ApiStaff extends CI_Controller
 
         echo json_encode($formattedLeaveTypes);
     }
+
 
     public function applyLeaveWithoutDoc()
     {
@@ -914,7 +957,13 @@ class ApiStaff extends CI_Controller
                 }else{
                     continue;
                 }
-            } 
+            } elseif($info->title == 'STAFF ATTENDANCE'){
+                if($role == ROLE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR ){
+                    $db_data[] = $info;
+                }else{
+                    continue;
+                }
+            }
             elseif (
                 $info->title == 'TAKE ATTENDANCE' ||
                 $info->title == 'ABSENT INFO' ||
@@ -947,7 +996,7 @@ class ApiStaff extends CI_Controller
         echo $data;
     }
 
-    function webLogin($staff_id)
+    function webLogin($staff_id,$headShow)
     {
         $result = $this->login_model->loginMe($staff_id, PASSWORD);
 
@@ -986,7 +1035,11 @@ class ApiStaff extends CI_Controller
                 $sessionArray['lastLogin']
             );
 
-            $_SESSION['loggedIn_type'] = 'Mobile';
+            if($headShow!='show'){
+                $_SESSION['loggedIn_type'] = 'Mobile';
+            }else{
+                $_SESSION['loggedIn_type'] = 'Web';
+            }
 
             $loginInfo = [
                 'userId' => $result->staff_id,
@@ -1004,49 +1057,56 @@ class ApiStaff extends CI_Controller
     function staffAppStudentDetails()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('studentDetails');
     }
 
     function staffAppStaffDetails()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('staffDetails');
     }
 
     function staffAppTakeAttendance()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('getAttendanceDetails');
     }
 
     function staffAppAbsentInfo()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('viewAttendanceInfo');
     }
 
     function staffAppClassComplete()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('viewClassCompletedInfo');
     }
 
     function staffAppExamMark()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('addInternalMark');
     }
 
     function staffAppStudyMaterial()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('viewStudyMaterials');
     }
 
@@ -1055,14 +1115,16 @@ class ApiStaff extends CI_Controller
         $staff_id = $_GET['staffId'];
        // log_message('debug','staff_id-->'.print_r($staff_id,true));
 
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('viewFeeDashboard');
     }
 
     function staffSendNotification()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('pushNotification');
     }
 
@@ -1071,7 +1133,8 @@ class ApiStaff extends CI_Controller
         $staff_id = $_GET['staffId'];
        // log_message('debug','staff_id-->'.print_r($staff_id,true));
 
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('viewHolidayList');
     }
 
@@ -1080,29 +1143,41 @@ class ApiStaff extends CI_Controller
         $staff_id = $_GET['staffId'];
        // log_message('debug','staff_id-->'.print_r($staff_id,true));
 
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('viewDocumentInfo');
     }
 
     function staffCalendar()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('calendar');
     }
 
     function staffAppStudentSuggetion()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
         redirect('suggestionListing');
     }
 
     function staffDashboard()
     {
         $staff_id = $_GET['staffId'];
-        $this->webLogin($staff_id);
+        $headShow='show';
+        $this->webLogin($staff_id,$headShow);
         redirect('dashboard');
+    }
+
+    function staffAppStaffAttendance()
+    {
+        $staff_id = $_GET['staffId'];
+        $headShow='noshow';
+        $this->webLogin($staff_id,$headShow);
+        redirect('getStaffAttendanceInfo');
     }
 
     public function approveLeaveList()
@@ -1135,7 +1210,7 @@ class ApiStaff extends CI_Controller
                 $info->staff_id
             );
 
-            $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP' , 'EL'];
+            $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP' , 'EL' ,'OD'];
 
             $leaveCounts = [];
             foreach ($leaveTypes as $type) {
@@ -1192,7 +1267,14 @@ class ApiStaff extends CI_Controller
                     $earnedLeaveRemaining =
                         $fetchLeaveManagement[0]->earned_leave -
                         $leaveCount;
-                } 
+                }  elseif($type =='OD'){
+                    $officialLeaveEarned =
+                    $fetchLeaveManagement[0]->official_duty_earned;
+                    $officialLeaveUsed = $leaveCount;
+                    $officialLeaveRemaining =
+                        $fetchLeaveManagement[0]->official_duty_earned -
+                        $leaveCount;
+                }
                 elseif ($type == 'LOP') {
                     $lopUsed = $leaveCount;
                 }
@@ -1243,6 +1325,9 @@ class ApiStaff extends CI_Controller
             $info->earnedLeaveUsed = $earnedLeaveUsed??0;
             $info->earnedLeaveRemaining = $earnedLeaveRemaining??0;
 
+            $info->officialLeaveEarned = $officialLeaveEarned??0;
+            $info->officialLeaveUsed = $officialLeaveUsed??0;
+            $info->officialLeaveRemaining = $officialLeaveRemaining??0;
             //LOP
             $info->lopused = $lopUsed ?? '0';
 
@@ -1253,6 +1338,7 @@ class ApiStaff extends CI_Controller
         $data = json_encode($db_data);
         echo $data;
     }
+
 
     public function approveLeave()
     {
@@ -1600,7 +1686,7 @@ class ApiStaff extends CI_Controller
                 $info->staff_id
             );
 
-            $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP', 'EL'];
+            $leaveTypes = ['CL', 'ML', 'MARL', 'PL', 'MATL', 'LOP', 'EL' ,'OD'];
 
             $leaveCounts = [];
             foreach ($leaveTypes as $type) {
@@ -1657,6 +1743,13 @@ class ApiStaff extends CI_Controller
                     $earnedLeaveRemaining =
                         $fetchLeaveManagement[0]->earned_leave -
                         $leaveCount;
+                } elseif($type =='OD'){
+                    $officialLeaveEarned =
+                    $fetchLeaveManagement[0]->official_duty_earned;
+                    $officialLeaveUsed = $leaveCount;
+                    $officialLeaveRemaining =
+                        $fetchLeaveManagement[0]->official_duty_earned -
+                        $leaveCount;
                 } 
                  elseif ($type == 'LOP') {
                     $lopUsed = $leaveCount;
@@ -1708,6 +1801,10 @@ class ApiStaff extends CI_Controller
             $info->earnedLeaveUsed = $earnedLeaveUsed??0;
             $info->earnedLeaveRemaining = $earnedLeaveRemaining??0;
 
+            $info->officialLeaveEarned = $officialLeaveEarned??0;
+            $info->officialLeaveUsed = $officialLeaveUsed??0;
+            $info->officialLeaveRemaining = $officialLeaveRemaining??0;
+
             //LOP
             $info->lopused = $lopUsed ?? '0';
 
@@ -1719,13 +1816,14 @@ class ApiStaff extends CI_Controller
         echo $data;
     }
 
+
     
     public function listallStaff()
     {
         $json = file_get_contents('php://input');
         $obj = json_decode($json, true);
         $fetchAllSTaff = $this->app_staff_login->getAllStaffList();
-        log_message('debug', 'fetchAllSTaff-->' . print_r($fetchAllSTaff, true));
+       // log_message('debug', 'fetchAllSTaff-->' . print_r($fetchAllSTaff, true));
         $data = json_encode($fetchAllSTaff);
         echo $data;
     }
@@ -1795,7 +1893,7 @@ class ApiStaff extends CI_Controller
         // Combine both notifications into one array
         $combinedNotifications = array_merge($fetchNotification, $fetchSingleNotification);
 
-        log_message("debug","combined string -->".print_r($combinedNotifications,true));
+      //  log_message("debug","combined string -->".print_r($combinedNotifications,true));
     
         // Sort the combined notifications by timestamp (latest first)
         usort($combinedNotifications, function ($a, $b) {
