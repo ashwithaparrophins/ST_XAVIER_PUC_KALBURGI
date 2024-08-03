@@ -924,7 +924,7 @@ class ApiStaff extends CI_Controller
 
         $db_data = [];
         foreach ($dashboardInfo as $info) {
-            if ($info->title == 'STUDENTS INFO' || $info->title == 'STUDENT SUGGESTION' ) {
+            if ($info->title == 'STUDENTS INFO' ) {
                 if (
                     $role == ROLE_ADMIN ||
                     $role == ROLE_PRINCIPAL ||
@@ -939,6 +939,12 @@ class ApiStaff extends CI_Controller
                 }
             } elseif($info->title == 'STAFF INFO'){
                 if($role == ROLE_ADMIN || $role == ROLE_PRINCIPAL || $role == ROLE_VICE_PRINCIPAL || $role == ROLE_PRIMARY_ADMINISTRATOR || $role == ROLE_OFFICE){
+                    $db_data[] = $info;
+                }else{
+                    continue;
+                }
+            }elseif($info->title == 'STUDENT SUGGESTION'){
+                if($role == ROLE_PRINCIPAL|| $role == ROLE_PRIMARY_ADMINISTRATOR){
                     $db_data[] = $info;
                 }else{
                     continue;
